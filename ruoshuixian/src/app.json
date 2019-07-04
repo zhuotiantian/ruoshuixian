@@ -1,0 +1,36 @@
+{
+  "pages": [
+    "pages/firstPage/virtualEvents/main",
+    "pages/firstPage/main",
+    "pages/my_teacher/work/main",
+    "pages/my_teacher/notice/main",
+    "pages/my_teacher/students/main",
+    "pages/my_teacher/message/other/main",
+    "pages/my_teacher/message/toRecord/main",
+    "pages/my_teacher/message/main",
+    "pages/my_teacher/main",
+    "pages/my/ranking/main",
+    "pages/help/main",
+    "pages/my/message/main",
+    "pages/my/record/main",
+    "pages/hongbao/main",
+    "pages/index/main",
+    "pages/login/main",
+    "pages/regist/main",
+    "pages/record/main",
+    "pages/my/main",
+    "pages/my/ranking_not/main",
+    "pages/my/hongbao/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "若水轩",
+    "navigationBarTextStyle": "black"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  }
+}
