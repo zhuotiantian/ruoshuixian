@@ -1,10 +1,6 @@
 <template>
   <div class="container">
-    <div class="title">
-      <p class="btn default-btn">帮助</p>
-      <p>00：00：{{seconds}}</p>
-      <p class="btn primary-btn">跳过</p>
-    </div>
+    <CardTitle :seconds="seconds" type="jump"></CardTitle>
     <div class="content">
       <p>本轮记忆时间：{{memaryTime}}分钟</p>
       <p :class="{proccess,acticve,active:seconds>3&&seconds<=60}">一分钟准备</p>
@@ -18,7 +14,11 @@
   </div>
 </template>
 <script>
+  import CardTitle from "@/components/gameTitle"
   export default {
+    components: {
+      CardTitle
+    },
     beforeCreate() {
 
     },

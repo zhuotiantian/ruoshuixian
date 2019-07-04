@@ -1,10 +1,6 @@
 <template>
   <div class="container">
-    <div class="title">
-      <p class="btn default-btn">帮助</p>
-      <p>00：{{memaryTime}}：{{seconds<10?'0'+seconds:seconds}}</p>
-      <p class="btn submit-btn">记忆完成</p>
-    </div>
+    <CardTitle :seconds="seconds" :minutes="minutes" type="finish"></CardTitle>
     <div class="list">
       <p class="list-title">
         <span>序号</span>
@@ -16,25 +12,17 @@
 </template>
 
 <script>
+  import CardTitle from "@/components/gameTitle"
   export default {
+    components: {
+      CardTitle
+    },
     mounted() {
-      this.seconds = 60;
-      this.memaryTime = this.memaryTime - 1;;
-      this.timer = setInterval(() => {
-        this.seconds--;
-        if (this.seconds == 0) {
-          if (this.memaryTime > 0) {
-            this.memaryTime--;
-            this.seconds = 60;
-          } else {
-            clearInterval(this.timer);
-          }
-        }
-      }, 1000);
+
     },
     data() {
       return {
-        memaryTime: 15,
+        minutes: 15,
         seconds: 0,
       }
     }
