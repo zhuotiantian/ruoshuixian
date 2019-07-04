@@ -1,0 +1,90 @@
+@function tovmin($rpx) {
+  //$rpx为需要转换的字号
+  @return #{$rpx * 100 / 750}vmin;
+}
+
+
+page {
+  height: 100%;
+  width: 100%;
+  font-size: tovmin(30);
+  font-family: "Noto Sans S Chinese";
+  background-color: $deep-blue;
+  -webkit-text-size-adjust: 100%;
+}
+
+.container {
+  height: 100%;
+}
+
+.fog {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: $fog;
+  opacity: $opacity;
+  color: white;
+}
+
+.btn {
+  widows: tovmin(90);
+  height: tovmin(50);
+  padding: 0 tovmin(22);
+  display: inline-block;
+  border-radius: tovmin(26);
+}
+
+.default-btn {
+  border: tovmin(2) solid white;
+}
+
+.primary-btn {
+  background: $middle-blue;
+  color: white;
+}
+
+.submit-btn {
+  background: $yellow;
+}
+
+.radio {
+  position: relative;
+}
+
+.radio::before {
+  content: "";
+  width: tovmin(26);
+  height: tovmin(26);
+  border-radius: tovmin(26);
+  border: tovmin(2) solid white;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: tovmin(10)
+}
+
+.radio.active::before {
+  content: "";
+  width: tovmin(26);
+  height: tovmin(26);
+  border-radius: tovmin(26);
+  border: tovmin(2) solid $yellow;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: tovmin(10)
+}
+
+.radio.active::after {
+  content: "";
+  width: tovmin(14);
+  height: tovmin(14);
+  border-radius: tovmin(14);
+  background: $yellow;
+  position: absolute;
+  display: inline-block;
+  vertical-align: middle;
+  left: tovmin(9);
+  top: tovmin(18);
+}

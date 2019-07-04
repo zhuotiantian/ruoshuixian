@@ -1,22 +1,30 @@
 <template>
-  <ul class="footer">
+  <ul class="footer" v-if="ratio">
     <li @click="toFisrstPage">
-      <image class="icon" src="/static/images/icon5.png"></image>
+      <image class="icon footer1" :src="'/static/images/firstPage/footer1@'+ratio+'x.png'"></image>
       <span>首页</span>
     </li>
     <li @click="toMoney">
-      <image class="icon" src="/static/images/icon6.png"></image><span>红包</span>
+      <image class="icon footer2" :src="'/static/images/firstPage/footer2@'+ratio+'x.png'"></image><span>红包</span>
     </li>
     <li @click="toRecord">
-      <image class="icon" src="/static/images/icon7.png"></image><span>打卡</span>
+      <image class="icon footer3" :src="'/static/images/firstPage/footer3@'+ratio+'x.png'"></image><span>打卡</span>
     </li>
     <li @click="toMy">
-      <image class="icon" src="/static/images/icon8.png"></image><span>我的</span>
+      <image class="icon footer4" :src="'/static/images/firstPage/footer4@'+ratio+'x.png'"></image><span>我的</span>
     </li>
   </ul>
 </template>
 <script>
   export default {
+    beforeMount() {
+      this.ratio = this.globalData.ratio;
+    },
+    data() {
+      return {
+        ratio: 1,
+      }
+    },
     methods: {
       toFisrstPage: function () {
         let url = "../firstPage/main";
@@ -46,21 +54,22 @@
   }
 
 </script>
-<style scoped>
+<style lang="scss" scoped>
   .footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     display: flex;
     width: 100%;
     justify-content: center;
     align-items: center;
-    background-color: #092657;
+    background-color: $footer;
+    font-size: tovmin(22)
   }
 
   .footer li {
     flex: 1;
     text-align: center;
-    height: 50px;
+    height: tovmin(100);
     color: white;
     display: flex;
     flex-direction: column;
@@ -68,9 +77,24 @@
     align-items: center;
   }
 
-  .icon {
-    height: 25px;
-    width: 25px;
+  .footer1 {
+    height: tovmin(44);
+    width: tovmin(44);
+  }
+
+  .footer2 {
+    height: tovmin(42);
+    width: tovmin(38);
+  }
+
+  .footer3 {
+    height: tovmin(42);
+    width: tovmin(42);
+  }
+
+  .footer4 {
+    height: tovmin(44);
+    width: tovmin(42);
   }
 
 </style>

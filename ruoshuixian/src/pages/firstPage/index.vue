@@ -1,60 +1,31 @@
 <template>
   <div class="container">
-    <div class="content">
+    <div class="content" v-if="ratio">
+      <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'"></image>
       <div class="top">
-        <image src="/static/images/top.png" class="top-image"></image>
+        <image class="top-image" :src="'/static/images/firstPage/top@'+ratio+'x.png'" />
       </div>
       <div class="middle">
         <ul>
           <li>
-            <image class="icon" src="/static/images/icon1.png"></image>
+            <image class="icon ranking" :src="'/static/images/firstPage/排行榜@'+ratio+'x.png'" />
             <span class="flex-span">排行榜</span>
-
           </li>
           <li>
-            <image class="icon" src="/static/images/icon2.png"></image>
+            <image class="icon redPocket" :src="'/static/images/firstPage/红包@'+ratio+'x.png'" />
             <span class="flex-span">红包</span>
           </li>
           <li>
-            <image class="icon" src="/static/images/icon4.png"></image>
+            <image class="icon share" :src="'/static/images/firstPage/share@'+ratio+'x.png'" />
             <span class="flex-span">分享</span>
           </li>
         </ul>
       </div>
       <div class="bottom">
-        <ul>
-          <li @click="toGame1">
-            <image class="item" src="/static/images/1.png"></image>
-          </li>
-          <li>
-            <image class="item" src="/static/images/2.png"></image>
-          </li>
-          <li>
-            <image class="item" src="/static/images/3.png"></image>
-          </li>
-          <li>
-            <image class="item" src="/static/images/4.png"></image>
-          </li>
-          <li>
-            <image class="item" src="/static/images/5.png"></image>
-          </li>
-          <li>
-            <image class="item" src="/static/images/6.png"></image>
-          </li>
-          <li>
-            <image class="item" src="/static/images/7.png"></image>
-          </li>
-          <li>
-            <image class="item" src="/static/images/8.png"></image>
-          </li>
-          <li>
-            <image class="item" src="/static/images/9.png"></image>
-          </li>
-          <li>
-            <image class="item" src="/static/images/10.png"></image>
-          </li>
-          <li @click="toVirtualEvents">
-            <image class="item" src="/static/images/11.png"></image>
+        <ul v-if="games.length>0">
+          <li @click="toGame1" v-for="(item,index) in games" :key="index">
+            <image class="item" :src="'/static/images/firstPage/'+(index/1+1)+'@'+ratio+'x.png'" />
+            <span>{{item}}</span>
           </li>
         </ul>
       </div>
@@ -69,14 +40,17 @@
       CardFooter,
 
     },
+    beforeMount() {
+      this.ratio = this.globalData.ratio;
+      this.games = this.globalData.games
+    },
     data() {
       return {
-
+        ratio: 1,
+        games: [],
       }
     },
-    mounted() {
-
-    },
+    mounted() {},
     methods: {
       toVirtualEvents: function () {
         let url = "../firstPage/virtualEvents/main";
@@ -91,38 +65,33 @@
   }
 
 </script>
-<style scoped>
-  .container {
-    height: 100%;
-    width: 100%;
-    background: #183973;
-    padding: 0;
-  }
-
+<style lang="scss" scoped>
   .content {
-    padding: 15px;
+    padding: tovmin(40);
     display: grid;
     grid-template-rows: 130px 80px auto;
     grid-template-columns: 100%;
-    grid-gap: 15px;
+    grid-gap: tovmin(30);
     height: calc(100% - 80px);
   }
 
   .top-image {
-    width: 100%;
-    height: 100%;
+    width: tovmin(670);
+    height: tovmin(240);
   }
 
   .middle ul {
+    height: tovmin(160);
+    width: tovim(660);
+    border-radius: tovmin(18);
     display: flex;
     width: 100%;
     color: #303133;
     background: white;
     height: 100%;
-    border-radius: 8px;
     justify-content: center;
     align-items: center;
-
+    font-size: tovmin(24);
   }
 
   .middle ul li {
@@ -135,24 +104,20 @@
   }
 
   .icon {
-    height: 30px;
-    width: 30px;
+    height: tovmin(50);
+    width: tovmin(46);
     background-repeat: no-repeat;
+    margin-bottom: tovmin(24);
   }
 
   .flex-span {
     flex: 1;
   }
 
-  .item {
-    height: 100%;
-    width: 100%;
-  }
-
   .bottom {
     color: white;
     width: 100%;
-    font-size: 10px;
+    font-size: tovmin(20);
   }
 
   .bottom ul {
@@ -161,7 +126,7 @@
     grid-template-rows: 30% 30% 30%;
     justify-content: center;
     align-items: center;
-    grid-gap: 15px;
+    grid-gap: tovmin(30);
     height: 100%;
   }
 
@@ -173,7 +138,45 @@
     text-align: center;
     height: 100%;
     border-radius: 4px;
-    border: 2px solid #303133
+    border: 2px solid #303133;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .bottom ul li span {
+    margin-top: tovmin(12)
+  }
+
+  .item {
+    height: tovmin(116);
+    width: tovmin(116);
+    margin: 0 auto;
+  }
+
+  .ranking {
+    height: tovmin(54);
+    width: tovmin(52);
+  }
+
+  .redPocket {
+    height: tovmin(56);
+    width: tovmin(48);
+  }
+
+  .share {
+    height: tovmin(46);
+    width: tovmin(62);
+  }
+
+  .background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -6;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 
 </style>

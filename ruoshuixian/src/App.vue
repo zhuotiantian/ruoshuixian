@@ -1,45 +1,28 @@
 <script>
   export default {
+    beforeCreate() {
 
+    },
+    mounted() {
+
+    },
+    data() {
+      return {
+
+      }
+    }
   }
 
 </script>
 
-<style>
-  page {
-    height: 100%;
-    width: 100%;
-    font-size: 14px;
-    font-family: "Noto Sans S Chinese";
-    color: #333333;
-    -webkit-text-size-adjust: 100%;
-  }
-
+<style lang="scss" scope>
   .icon {
     display: inline-block;
     background-size: 100%;
   }
 
-  .fog {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 99;
-    background: #959595;
-    opacity: 0.8;
-    color: white;
-  }
-
-  .container {
-    background: #FCFCFC;
-    padding: 15px;
-    height: calc(100% - 30px);
-  }
-
   .checkBox {
-    border: 1px solid #C6C6C6;
+    border: 1px solid #c6c6c6;
     display: inline-block;
     height: 12px;
     width: 12px;
@@ -48,7 +31,7 @@
   }
 
   .checkBox.active {
-    border: 1px solid #FFC400;
+    border: 1px solid #ffc400;
   }
 
   .checkBox.active::after {
@@ -56,14 +39,14 @@
     display: inline-block;
     height: 6px;
     width: 6px;
-    background: #FFC400;
+    background: #ffc400;
     position: relative;
     top: -4px;
     left: 4px;
   }
 
   textarea {
-    border: 1px solid #E4E7ED;
+    border: 1px solid #e4e7ed;
     background: #fcfcfc;
     border-radius: 4px;
     width: 100%;
@@ -82,13 +65,13 @@
   }
 
   .down {
-    animation: slide-down .5s;
-    animation-fill-mode: forwards
+    animation: slide-down 0.5s;
+    animation-fill-mode: forwards;
   }
 
   .up {
-    animation: slide-up .5s;
-    animation-fill-mode: forwards
+    animation: slide-up 0.5s;
+    animation-fill-mode: forwards;
   }
 
   @keyframes slide-down {

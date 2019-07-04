@@ -1,5 +1,7 @@
 {
   "pages": [
+    "pages/firstPage/virtualEvents/anwser/main",
+    "pages/firstPage/virtualEvents/memary/main",
     "pages/firstPage/virtualEvents/main",
     "pages/firstPage/main",
     "pages/my_teacher/work/main",

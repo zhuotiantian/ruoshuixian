@@ -42,12 +42,13 @@ exports.cssLoaders = function (options) {
     loader: 'sass-resources-loader',
     options: {
       resources: [
-        path.resolve(__dirname, '../src/assets/variables.scss'),
+        path.resolve(__dirname, '../static/style/variable.scss'),
+        path.resolve(__dirname, '../static/style/common.scss'),
       ]
     }
   }
   // generate loader string to be used with extract text plugin
-  function generateLoaders(loader, loaderOptions, anotherLoader) {
+  function generateLoaders(loader, loaderOptions) {
     var loaders = [cssLoader, px2rpxLoader, postcssLoader]
     if (loader) {
       loaders.push({
@@ -57,7 +58,7 @@ exports.cssLoaders = function (options) {
         })
       })
     }
-    if (!!anotherLoader) loaders.push(anotherLoader)
+    if ('sass' === loader) loaders.push(sassResourceLoader)
     // Extract CSS when that option is specified
     // (which is the case during production build)
     if (options.extract) {
