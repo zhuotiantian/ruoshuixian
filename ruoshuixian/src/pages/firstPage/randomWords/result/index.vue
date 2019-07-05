@@ -1,12 +1,8 @@
 <template>
   <div class="container">
-    <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成"></CardTitle>
+    <CardTitle :isResult="true"></CardTitle>
     <div class="list">
-      <p class="list-title">
-        <span>序号</span>
-        <span>时间</span>
-        <span style="flex:3;">事件</span>
-      </p>
+      <span v-for="(item,index) in words" :key="index+1">词语{{index+1}}</span>
     </div>
   </div>
 </template>
@@ -21,10 +17,13 @@
 
     },
     data() {
+      let words = new Array(200);
       return {
-        minutes: 15,
-        seconds: 0,
+        words: words,
       }
+    },
+    methods: {
+
     }
   }
 
@@ -43,21 +42,22 @@
   }
 
   .list {
-    margin: tovmin(150) tovmin(30) auto tovmin(130);
+    margin: tovmin(150) tovmin(30) tovmin(30) tovmin(30);
   }
 
-  .list p {
-    display: flex;
+  .list {
+    display: grid;
+    grid-template-columns: tovmin(200) tovmin(200) tovmin(200) tovmin(200) tovmin(200);
+    grid-gap: tovmin(20);
+    font-size: tovmin(26);
+    justify-content: center;
     align-items: center;
-    text-align: left;
+    color: $grey-text;
   }
 
-  .list p span {
-    flex: 1;
-  }
-
-  .list-title {
-    color: $yellow;
+  .list span {
+    border: tovmin(2) solid $blue-border;
+    text-align: center;
   }
 
 </style>

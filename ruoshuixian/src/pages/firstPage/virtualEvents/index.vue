@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle :seconds="seconds" type="jump"></CardTitle>
+    <CardTitle :seconds="seconds" type="index"></CardTitle>
     <div class="content">
       <p>本轮记忆时间：{{memaryTime}}分钟</p>
       <p :class="{proccess,acticve,active:seconds>3&&seconds<=60}">一分钟准备</p>
@@ -53,11 +53,8 @@
     color: white;
   }
 
-  .title {
-    font-size: tovmin(30);
-    display: flex;
-    justify-content: space-between;
-    margin: tovmin(40) tovmin(30) tovmin(80) tovmin(30);
+  .content {
+    margin-top: tovmin(150);
   }
 
   .content p {

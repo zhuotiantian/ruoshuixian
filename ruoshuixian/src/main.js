@@ -43,6 +43,22 @@ export default {
       "pages/firstPage/virtualEvents/main",
       "pages/firstPage/virtualEvents/memary/main",
       "pages/firstPage/virtualEvents/anwser/main",
+      "pages/firstPage/virtualEvents/result/main",
+      "pages/firstPage/listenAndRemember/listen/main",
+      "pages/firstPage/listenAndRemember/answer/main",
+      "pages/firstPage/listenAndRemember/result/main",
+      "pages/firstPage/randomWords/memary/main",
+      "pages/firstPage/randomWords/answer/main",
+      "pages/firstPage/randomWords/result/main",
+      "pages/firstPage/fastNumber/memary/main",
+      "pages/firstPage/fastNumber/answer/main",
+      "pages/firstPage/fastNumber/result/main",
+      "pages/firstPage/marathonNumber/memary/main",
+      "pages/firstPage/marathonNumber/answer/main",
+      "pages/firstPage/marathonNumber/result/main",
+      "pages/firstPage/binaryNumber/memary/main",
+      "pages/firstPage/binaryNumber/answer/main",
+      "pages/firstPage/binaryNumber/result/main",
     ]
   }
 }

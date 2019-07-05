@@ -2,17 +2,12 @@
   <div class="container">
     <div class="fog" v-if="showFog"></div>
     <alertBox :text="text" v-if="showFog" @hideFog="hideFog"></alertBox>
-    <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish">
-    </CardTitle>
+    <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
     <div class="list">
-      <p class="list-title">
-        <span>序号</span>
-        <span>时间</span>
-        <span style="flex:5;">事件</span>
-      </p>
-      <p><span>1</span><span><input type="text" class="input" @focus="focus" @blur="blur"></span><span
-          style="flex:5;">事件事件</span>
-      </p>
+      <div class="row" v-for="(rows,_index) in rows" :key="_index">
+        <span class="item" v-for="(item,index) in number" :key="index">{{index+1}}</span>
+        <span>row&nbsp;&nbsp;{{_index+1}}</span>
+      </div>
     </div>
     <Keybord :showKeybord="showKeybord"></Keybord>
   </div>
@@ -28,21 +23,19 @@
       alertBox
     },
     data() {
+      let array = new Array(30);
+      let rows = new Array(3);
       return {
         seconds: 0,
         minutes: 15,
-        showKeybord: false,
-        showFog: true,
-        text: "确定结束作答吗？"
+        showKeybord: true,
+        showFog: false,
+        text: "确定结束作答吗？",
+        number: array,
+        rows: rows,
       }
     },
     methods: {
-      focus: function () {
-        this.showKeybord = true;
-      },
-      blur: function () {
-        this.showKeybord = false;
-      },
       finish: function () {
         this.showFog = true;
       },
@@ -50,7 +43,7 @@
         this.showFog = false;
       }
     }
-  };
+  }
 
 </script>
 <style lang="scss" scoped>
@@ -65,32 +58,28 @@
   }
 
   .list {
-    height: calc(100% - 150rpx);
-    margin: tovmin(150) tovmin(30) auto tovmin(30);
+    margin-top: tovmin(200);
   }
 
-  .list p {
+  .row {
     display: flex;
-    align-items: center;
-    text-align: center;
-    height: tovmin(86);
-  }
-
-  .list p span {
-    flex: 1;
-    text-align: center;
-  }
-
-  .list-title {
-    color: $yellow;
-  }
-
-  .input {
-    width: tovmin(164);
-    height: tovmin(66);
-    border: tovmin(2) solid $blue-border;
-    border-radius: tovmin(8);
+    width: 80%;
     margin: 0 auto;
+    margin-bottom: tovmin(30);
+  }
+
+  .item {
+    flex: 1;
+    border: tovmin(2) solid $middle-blue;
+    border-right: none;
+    height: tovmin(40);
+    width: tovmin(28);
+    text-align: center;
+  }
+
+  .item:nth-last-child(2) {
+    border-right: tovmin(2) solid $middle-blue;
+    margin-right: tovmin(20);
   }
 
 </style>
