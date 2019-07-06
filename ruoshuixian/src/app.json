@@ -1,25 +1,69 @@
 {
   "pages": [
+    "pages/firstPage/main",
+    "pages/my/main",
+    "pages/hongbao/redPocketList/main",
+    "pages/hongbao/main",
+    "pages/firstPage/ranking/main",
+
+    "pages/firstPage/flashPocker/result/main",
+    "pages/firstPage/flashPocker/answer/main",
+    "pages/firstPage/flashPocker/recall/main",
+    "pages/firstPage/flashPocker/memary/main",
+    "pages/firstPage/flashPocker/main",
+
+    "pages/firstPage/marathonPocker/result/main",
+    "pages/firstPage/marathonPocker/answer/main",
+    "pages/firstPage/marathonPocker/recall/main",
+    "pages/firstPage/marathonPocker/memary/main",
+    "pages/firstPage/marathonPocker/main",
+
+    "pages/firstPage/fastPocker/result/main",
+    "pages/firstPage/fastPocker/answer/main",
+    "pages/firstPage/fastPocker/recall/main",
+    "pages/firstPage/fastPocker/memary/main",
+    "pages/firstPage/fastPocker/main",
+
+    "pages/firstPage/peoplePic/result/main",
+    "pages/firstPage/peoplePic/answer/main",
+    "pages/firstPage/peoplePic/memary/main",
+    "pages/firstPage/peoplePic/main",
+
+    "pages/firstPage/abstractPic/answer/main",
+    "pages/firstPage/abstractPic/result/main",
+    "pages/firstPage/abstractPic/memary/main",
+    "pages/firstPage/abstractPic/main",
+
     "pages/firstPage/binaryNumber/answer/main",
     "pages/firstPage/binaryNumber/memary/main",
     "pages/firstPage/binaryNumber/result/main",
+    "pages/firstPage/binaryNumber/main",
+
     "pages/firstPage/marathonNumber/memary/main",
     "pages/firstPage/marathonNumber/answer/main",
     "pages/firstPage/marathonNumber/result/main",
+    "pages/firstPage/marathonNumber/main",
+
     "pages/firstPage/fastNumber/result/main",
     "pages/firstPage/fastNumber/answer/main",
     "pages/firstPage/fastNumber/memary/main",
+    "pages/firstPage/fastNumber/main",
+
     "pages/firstPage/randomWords/result/main",
     "pages/firstPage/randomWords/answer/main",
     "pages/firstPage/randomWords/memary/main",
+    "pages/firstPage/randomWords/main",
+
     "pages/firstPage/listenAndRemember/result/main",
     "pages/firstPage/listenAndRemember/answer/main",
     "pages/firstPage/listenAndRemember/listen/main",
+    "pages/firstPage/listenAndRemember/main",
+
     "pages/firstPage/virtualEvents/result/main",
     "pages/firstPage/virtualEvents/anwser/main",
     "pages/firstPage/virtualEvents/memary/main",
     "pages/firstPage/virtualEvents/main",
-    "pages/firstPage/main",
+
     "pages/my_teacher/work/main",
     "pages/my_teacher/notice/main",
     "pages/my_teacher/students/main",
@@ -31,12 +75,10 @@
     "pages/help/main",
     "pages/my/message/main",
     "pages/my/record/main",
-    "pages/hongbao/main",
     "pages/index/main",
     "pages/login/main",
     "pages/regist/main",
     "pages/record/main",
-    "pages/my/main",
     "pages/my/ranking_not/main",
     "pages/my/hongbao/main"
   ],

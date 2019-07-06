@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <CardTitle :seconds="seconds" :minutes="minutes" :type="type" @nextPage="nextPage"></CardTitle>
+    <CardTitle :seconds="seconds" :minutes="minutes" @finishMemary="finishMemary" :type="type" @nextPage="nextPage">
+    </CardTitle>
     <div class="list">
       <span v-for="(item,index) in words" :key="index+1">词语{{index+1}}</span>
     </div>
@@ -28,6 +29,11 @@
     methods: {
       nextPage: function () {
         this.type = "记忆完成"
+      },
+      finishMemary: function () {
+        wx.navigateTo({
+          url: "../answer/main"
+        });
       }
     }
   }

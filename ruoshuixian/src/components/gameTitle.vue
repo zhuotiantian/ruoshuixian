@@ -3,49 +3,66 @@
     <div class="fog" v-if="showPannel" @click="showPannel=false"></div>
     <div class="title">
       <template v-if="isResult">
-        <p>得分：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标准分：</p>
         <p>
-          <span class="btn primary-btn" style="margin-right:30rpx">再次训练</span>
+          <span v-if="isPocker&&showTime">用时：</span>
+          <span v-else>得分：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标准分：</span>
+        </p>
+        <p>
+          <span class="btn default-btn" style="margin-right:15rpx" v-if="isPocker" @click="showTimeHandle">
+            <span v-if="showTime">显示得分</span>
+            <span v-else>显示用时</span>
+          </span>
+          <span class="btn primary-btn" style="margin-right:15rpx">再次训练</span>
           <span class="btn default-btn">分享</span>
         </p>
       </template>
       <template v-else>
         <p>
-          <span class="btn default-btn" style="margin-right:30rpx">帮助</span>
-          <span class="btn default-btn arrow" v-if="showType" @click="showPannel=true">显示方式</span>
+          <span class="btn default-btn" style="margin-right:30rpx" @click="toHelpPage">帮助</span>
+          <span class="btn default-btn type arrow" v-if="showType" @click="showPannel=true">{{selectType}}</span>
         </p>
-        <p v-if="type=='jump'">00：00：{{seconds}}</p>
-        <p v-else>00：{{minutes}}：{{seconds<10?'0'+seconds:seconds}}</p>
-        <p class="btn primary-btn" v-if="type=='跳过'">跳过</p>
+        <p v-if="seconds&&type=='跳过'">00：00：{{seconds}}</p>
+        <p v-if="minutes&&seconds">00：{{minutes<10?'0'+minutes:minutes}}：{{seconds<10?'0'+seconds:seconds}}</p>
+        <p class="btn primary-btn" v-if="type=='跳过'" @click="toNextPage">跳过</p>
         <p class="btn primary-btn" v-if="type=='下一页'" @click="nextPage">下一页</p>
-        <p class="btn submit-btn" v-if="type=='记忆完成'">记忆完成</p>
+        <p class="btn submit-btn" v-if="type=='记忆完成'" @click="finishMemary">记忆完成</p>
         <p class="btn submit-btn" v-if="type=='作答完成'" @click="finish">作答完成</p>
+        <p class="btn submit-btn" v-if="type=='开始'" @click="startGame">开始</p>
       </template>
     </div>
     <div :class="{pannel:true,down:showPannel,up:!showPannel}">
       <p>显示方式</p>
-      <p @click="group('0')">不划线</p>
-      <p @click="group('3')">三个一组</p>
-      <p @click="group('6')">六个一组</p>
+      <p v-for="(item,index) in pannelContent" :key="index" @click="group(item)">{{item}}</p>
     </div>
   </div>
 </template>
 <script>
   export default {
-    props: ["seconds", "minutes", "type", "isResult", "showType"],
+    props: [
+      "seconds",
+      "minutes",
+      "type",
+      "isResult",
+      "showType",
+      "pannelContent",
+      "isPocker",
+      "showTime"
+    ],
     mounted() {
       this.timer();
+      this.pannelContent && this.group(this.pannelContent[0]);
     },
     data() {
       return {
         seconds: this.seconds,
         minutes: this.minutes,
         showPannel: false,
-      }
+        selectType: this.pannelContent && this.pannelContent[0],
+        showTime: this.showTime
+      };
     },
     methods: {
       timer: function () {
-
         if (this.minutes) {
           this.seconds = 60;
           this.minutes = this.minutes - 1;
@@ -78,10 +95,28 @@
       },
       group: function (count) {
         this.showPannel = false;
+        this.selectType = count;
         this.$emit("group", count);
+      },
+      toNextPage: function () {
+        this.$emit("toNextPage");
+      },
+      toHelpPage: function () {
+        wx.navigateTo({
+          url: "/pages/help/main"
+        });
+      },
+      startGame: function () {
+        this.$emit("startGame");
+      },
+      showTimeHandle: function () {
+        this.showTime = !this.showTime;
+      },
+      finishMemary: function () {
+        this.$emit("finishMemary");
       }
     }
-  }
+  };
 
 </script>
 <style lang="scss" scoped>
@@ -97,28 +132,14 @@
     color: white;
   }
 
-  .arrow::after {
-    content: "";
-    height: tovmin(15);
-    width: tovmin(15);
-    border: tovmin(4) solid white;
-    border-top-color: transparent;
-    border-right-color: transparent;
-    display: inline-block;
-    transform: rotate(-45deg);
-    margin-left: tovmin(20);
-    position: relative;
-    top: tovmin(-6);
-  }
-
   .pannel {
     position: fixed;
-    height: tovmin(420);
+    // height: tovmin(420);
     width: 100%;
     background: white;
     color: $black;
     z-index: 10001;
-    bottom: tovmin(-500);
+    bottom: tovmin(-1000);
     text-align: center;
   }
 
@@ -129,6 +150,11 @@
 
   .pannel p:first-child {
     background: $light-blue;
+  }
+
+  .type {
+    width: tovmin(170);
+    text-align: center;
   }
 
   .down {
@@ -143,7 +169,7 @@
 
   @keyframes slide-down {
     from {
-      bottom: tovmin(-500);
+      bottom: tovmin(-1000);
     }
 
     to {
@@ -158,7 +184,7 @@
     }
 
     to {
-      bottom: tovmin(-500);
+      bottom: tovmin(-1000);
       display: none;
     }
   }

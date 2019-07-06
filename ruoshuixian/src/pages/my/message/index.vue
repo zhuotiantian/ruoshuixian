@@ -26,19 +26,25 @@
   }
 
 </script>
-<style scoped>
+<style lang="scss" scoped>
   .container {
-    padding: 15px;
+    padding: tovmin(30);
+    background: white;
+    position: absolute;
+    height: calc(100% - 60rpx);
   }
 
   .text {
-    color: #909399
+    color: #E0E0E0;
+    font-size: tovmin(24);
   }
 
   .header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
+    margin-bottom: tovmin(30);
+    font-size: tovmin(26);
+
   }
 
   .header>span {
@@ -50,10 +56,10 @@
   }
 
   .item {
-    padding: 15px;
-    border: 1px solid #E4E7ED;
-    border-radius: 8px;
-    margin-bottom: 15px;
+    padding: tovmin(30);
+    border: 1px solid $border;
+    border-radius: tovmin(12);
+    margin-bottom: tovmin(30);
   }
 
 </style>

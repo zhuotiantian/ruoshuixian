@@ -1,6 +1,6 @@
 <template>
   <div class="contanier">
-    <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成"></CardTitle>
+    <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成" @finishMemary="finishMemary"></CardTitle>
     <div v-if="ratio" class="content">
       <image class="play" :src="'/static/images/firstPage/play@'+ratio+'x.png'"></image>
       <image class="slider" :src="'/static/images/firstPage/slider@'+ratio+'x.png'"></image>
@@ -24,6 +24,13 @@
         seconds: 0,
         minutes: 15,
         ratio: 1,
+      }
+    },
+    methods: {
+      finishMemary: function () {
+        wx.navigateTo({
+          url: "../answer/main"
+        });
       }
     }
   }

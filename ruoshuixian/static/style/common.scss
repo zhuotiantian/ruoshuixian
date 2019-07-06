@@ -3,7 +3,6 @@
   @return #{$rpx * 100 / 750}vmin;
 }
 
-
 page {
   // height: 100%;
   width: 100%;
@@ -27,6 +26,8 @@ page {
   background: $fog;
   opacity: $opacity;
   color: white;
+  height: 100%;
+  width: 100%;
 }
 
 .btn {
@@ -39,6 +40,7 @@ page {
 
 .default-btn {
   border: tovmin(2) solid white;
+  background: white;
 }
 
 .primary-btn {
@@ -88,4 +90,26 @@ page {
   vertical-align: middle;
   left: tovmin(9);
   top: tovmin(18);
+}
+
+.arrow::after {
+  content: "";
+  height: tovmin(15);
+  width: tovmin(15);
+  border: tovmin(4) solid white;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  display: inline-block;
+  transform: rotate(-45deg);
+  margin-left: tovmin(20);
+  position: relative;
+  top: tovmin(-6);
+}
+
+.arrow-left::after {
+  transform: rotate(45deg);
+}
+
+.arrow-right::after {
+  transform: rotate(-135deg);
 }

@@ -1,23 +1,41 @@
 <template>
   <div>
-    <div class="content">
+    <div class="content" v-if="ratio">
       <h3>红包领取规则</h3>
-      <p>该项活动暂时还未启动，具体的领取规则淘宝也并没有公布。借鉴以往的活动经验，可以猜想12月12日当天的整点，平台和店铺会限量派发红包优惠券，需要大家拼手气和网速争抢获取</p>
-      <image class="image" src="/static/images/money_image1.png" @click="getMoney"></image>
-      <image class="image" src="/static/images/money_image2.png"></image>
+      <p class="text">该项活动暂时还未启动，具体的领取规则淘宝也并没有公布。借鉴以往的活动经验，可以猜想12月12日当天的整点，平台和店铺会限量派发红包优惠券，需要大家拼手气和网速争抢获取</p>
+      <div class="img_div">
+        <image class="image" :src="'/static/images/redPocket/bg2@'+ratio+'x.png'" @click="getMoney"></image>
+        <div>
+          <div class="btn default-btn" @click="showRedPocket">已完成任务，点击领取</div>
+          <div class="small-fog"></div>
+        </div>
+      </div>
+      <div class="img_div">
+        <image class="image" :src="'/static/images/redPocket/bg1@'+ratio+'x.png'"></image>
+        <div>
+          <div class="btn submit-btn">去完成任务</div>
+          <div class="small-fog"></div>
+        </div>
+      </div>
     </div>
     <div class="fog" v-if="showFog"></div>
-    <image class="image1" src="/static/images/money_image3.png" v-if="showFog"></image>
-    <image class="image2" src="/static/images/money_image4.png" v-if="showFog" @click="hideFog"></image>
+    <image class="image1" :src="'/static/images/redPocket/redPocket@'+ratio+'x.png'" v-if="showFog" />
+    <image class="image2" :src="'/static/images/redPocket/close@'+ratio+'x.png'" v-if="showFog" @click="hideFog" />
+    <p class="success" v-if="showFog">恭喜完成任务</p>
+    <p class="redPocketBtn" v-if="showFog" @click="toGetRedPocket">点击领取红包</p>
     <CardFooter></CardFooter>
   </div>
 </template>
 <script>
-  import CardFooter from "../../components/footer"
+  import CardFooter from "@/components/footer"
   export default {
+    mounted() {
+      this.ratio = this.globalData.ratio;
+    },
     data() {
       return {
-        showFog: false
+        showFog: false,
+        ratio: 1,
       }
     },
     components: {
@@ -29,57 +47,116 @@
       },
       hideFog: function () {
         this.showFog = false;
+      },
+      showRedPocket: function () {
+        this.showFog = true;
+      },
+      toGetRedPocket: function () {
+        wx.navigateTo({
+          url: "./redPocketList/main"
+        })
       }
     }
   }
 
 </script>
-<style scoped>
+<style lang="scss" scoped>
   .content {
-    padding: 15px;
+    padding: tovmin(30);
+    background: $grey-background;
+    height: calc(100% - 60rpx);
+    position: absolute;
   }
 
   p {
     margin-top: 10px;
-    color: #909399
+    color: $black;
+  }
+
+  .img_div {
+    width: tovmin(690);
+    height: tovmin(180);
+    overflow: hidden;
+    margin-bottom: tovmin(30);
+    border-radius: tovmin(12);
+    position: relative;
   }
 
   .image {
-    width: 100%;
-    height: 120px;
+    width: tovmin(750);
+    height: tovmin(608);
+    position: absolute;
+    top: -120%;
+    z-index: 1;
   }
 
-  .fog {
+  .text {
+    color: #666666;
+    margin-bottom: tovmin(30);
+  }
+
+  .btn {
     position: absolute;
+    z-index: 999;
+    top: tovmin(62);
+    left: tovmin(180);
+    width: tovmin(310);
+    text-align: center;
+    font-size: tovmin(24);
+    height: tovmin(60);
+    line-height: tovmin(60);
+  }
+
+  .default-btn {
+    color: $green;
+  }
+
+  .small-fog {
+    width: tovmin(750);
+    height: tovmin(608);
+    position: absolute;
+    z-index: 998;
     top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #636363;
-    opacity: 0.8;
-    z-index: 1000;
+    background: $black;
+    opacity: $opacity;
   }
 
   .image1 {
+    width: tovmin(438);
+    height: tovmin(478);
     position: absolute;
-    z-index: 1001;
-    width: 200px;
-    height: 226px;
-    margin-top: -113px;
-    top: 30%;
-    margin-left: -100px;
+    z-index: 1000;
+    top: 40%;
+    margin-top: tovmin(-239);
     left: 50%;
+    margin-left: tovmin(-219);
   }
 
   .image2 {
+    width: tovmin(78);
+    height: tovmin(78);
     position: absolute;
-    z-index: 1001;
-    width: 30px;
-    height: 30px;
-    margin-top: -15px;
-    top: 55%;
-    margin-left: -15px;
+    z-index: 1000;
+    top: 70%;
+    margin-top: tovmin(-39);
     left: 50%;
+    margin-left: tovmin(-39);
+  }
+
+  .success {
+    position: absolute;
+    color: $red;
+    top: 30%;
+    left: 37%;
+    z-index: 1000;
+  }
+
+  .redPocketBtn {
+    position: absolute;
+    top: 49.4%;
+    left: 40.5%;
+    z-index: 1000;
+    font-size: tovmin(24);
   }
 
 </style>

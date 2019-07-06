@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="fog" v-if="showFog"></div>
-    <alertBox :text="text" v-if="showFog" @hideFog="hideFog"></alertBox>
+    <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
     <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in rows" :key="_index">
@@ -41,6 +41,11 @@
       },
       hideFog: function () {
         this.showFog = false;
+      },
+      confirm: function () {
+        wx.navigateTo({
+          url: "../result/main"
+        });
       }
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="fog" v-if="showFog"></div>
-    <alertBox :text="text" v-if="showFog" @hideFog="hideFog"></alertBox>
+    <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
     <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish">
     </CardTitle>
     <div class="list">
@@ -32,7 +32,7 @@
         seconds: 0,
         minutes: 15,
         showKeybord: false,
-        showFog: true,
+        showFog: false,
         text: "确定结束作答吗？"
       }
     },
@@ -48,6 +48,11 @@
       },
       hideFog: function () {
         this.showFog = false;
+      },
+      confirm: function () {
+        wx.navigateTo({
+          url: "../result/main"
+        })
       }
     }
   };

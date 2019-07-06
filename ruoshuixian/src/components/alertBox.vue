@@ -2,7 +2,7 @@
   <div class="alertBox">
     <p>{{text}}</p>
     <p>
-      <span>确认</span>
+      <span @click="confirm">确认</span>
       <span class="red" @click="cancle">取消</span>
     </p>
   </div>
@@ -18,6 +18,9 @@
     methods: {
       cancle: function () {
         this.$emit("hideFog");
+      },
+      confirm: function () {
+        this.$emit("confirm");
       }
     }
   }
@@ -51,7 +54,7 @@
 
   .alertBox p:last-child {
     display: flex;
-    height: calc(100% - 66rpx);
+    height: calc(100% - 106rpx);
     align-items: center;
   }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成"></CardTitle>
+    <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成" @finishMemary="finishMemary"></CardTitle>
     <div class="list">
       <p class="list-title">
         <span>序号</span>
@@ -24,6 +24,13 @@
       return {
         minutes: 15,
         seconds: 0,
+      }
+    },
+    methods: {
+      finishMemary: function () {
+        wx.navigateTo({
+          url: "../anwser/main"
+        })
       }
     }
   }

@@ -7,14 +7,14 @@
       </div>
       <div class="middle">
         <ul>
-          <li>
+          <li @click="toRanking">
             <image class="icon ranking" :src="'/static/images/firstPage/排行榜@'+ratio+'x.png'" />
             <span class="flex-span">排行榜</span>
           </li>
-          <li>
+          <!-- <li>
             <image class="icon redPocket" :src="'/static/images/firstPage/红包@'+ratio+'x.png'" />
             <span class="flex-span">红包</span>
-          </li>
+          </li> -->
           <li>
             <image class="icon share" :src="'/static/images/firstPage/share@'+ratio+'x.png'" />
             <span class="flex-span">分享</span>
@@ -23,9 +23,9 @@
       </div>
       <div class="bottom">
         <ul v-if="games.length>0">
-          <li @click="toGame1" v-for="(item,index) in games" :key="index">
+          <li @click="toGame(item.url)" v-for="(item,index) in games" :key="index">
             <image class="item" :src="'/static/images/firstPage/'+(index/1+1)+'@'+ratio+'x.png'" />
-            <span>{{item}}</span>
+            <span>{{item.name}}</span>
           </li>
         </ul>
       </div>
@@ -42,7 +42,7 @@
     },
     beforeMount() {
       this.ratio = this.globalData.ratio;
-      this.games = this.globalData.games
+      this.games = this.globalData.games;
     },
     data() {
       return {
@@ -52,11 +52,13 @@
     },
     mounted() {},
     methods: {
-      toVirtualEvents: function () {
-        let url = "../firstPage/virtualEvents/main";
-        this.to(url);
+      toGame: function (url) {
+        wx.navigateTo({
+          url
+        })
       },
-      to: function (url) {
+      toRanking: function () {
+        let url = "./ranking/main"
         wx.navigateTo({
           url
         })

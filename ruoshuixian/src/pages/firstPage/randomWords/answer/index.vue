@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="fog" v-if="showFog"></div>
-    <alertBox :text="text" v-if="showFog" @hideFog="hideFog"></alertBox>
+    <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
     <CardTitle :seconds="seconds" :minutes="minutes" :type="type" @finish="finish" @nextPage="nextPage"></CardTitle>
     <div class="list">
       <span v-for="(item,index) in words" :key="index+1"><span>{{index+1}}</span><input type="text"
@@ -42,6 +42,11 @@
       },
       hideFog: function () {
         this.showFog = false;
+      },
+      confirm: function () {
+        wx.navigateTo({
+          url: "../result/main"
+        })
       }
     }
   }

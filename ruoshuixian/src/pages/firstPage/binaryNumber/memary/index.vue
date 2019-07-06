@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <alertBox :text="text" v-if="showFog" @hideFog="hideFog"></alertBox>
-    <CardTitle :seconds="seconds" :showType="true" :minutes="minutes" type="记忆完成" @group="group"></CardTitle>
+    <CardTitle :seconds="seconds" :showType="true" :minutes="minutes" type="记忆完成" @finishMemary="finishMemary"
+      @group="group" :pannelContent="pannelContent"></CardTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in rows" :key="_index">
         <span :class="{item:true,border:counts&&((index+1)%counts==0)&&(index+1)!=number.length}"
@@ -27,11 +28,21 @@
         number: array,
         rows: rows,
         counts: 0,
+        pannelContent: ["不划线", "三个一组", "六个一组"],
       }
     },
     methods: {
       group: function (data) {
-        this.counts = data;
+        if (data == '三个一组') {
+          this.counts = 3;
+        } else if (data == '六个一组') {
+          this.counts = 6;
+        }
+      },
+      finishMemary: function () {
+        wx.navigateTo({
+          url: "../answer/main"
+        });
       }
     }
   }

@@ -8,10 +8,18 @@
 </template>
 <script>
   export default {
-    props: ["showKeybord"],
+    props: ["showKeybord", "counts"],
     data() {
+      let number = null;
+      if (this.counts == "5") {
+        number = [1, 2, 3, 4, 5];
+      } else if (this.counts == "2") {
+        number = [0, 1];
+      } else {
+        number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+      }
       return {
-        number: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
+        number: number,
         showKeybord: false,
       }
     }
@@ -21,18 +29,19 @@
 <style lang="scss" scoped>
   .keybord {
     position: fixed;
-    height: tovmin(240);
+    // height: tovmin(240);
     width: 100%;
     background: white;
     z-index: 101;
-    bottom: tovmin(-500)
+    bottom: tovmin(-500);
+    padding: tovmin(40);
   }
 
   .number {
     width: 28%;
     display: grid;
     grid-template-columns: 19% 19% 19% 19% 19%;
-    grid-template-rows: tovmin(80) tovmin(80);
+    // grid-template-rows: tovmin(80) tovmin(80);
     grid-gap: tovmin(30);
     justify-content: center;
     align-items: center;
@@ -56,7 +65,7 @@
     background: white;
     color: $black;
     position: absolute;
-    top: tovmin(26);
+    top: tovmin(46);
     right: tovmin(380);
     border: tovmin(2) solid #363636;
     box-sizing: border-box;

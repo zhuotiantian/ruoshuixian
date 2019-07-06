@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <alertBox :text="text" v-if="showFog" @hideFog="hideFog"></alertBox>
-    <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成"></CardTitle>
+    <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成" @finishMemary="finishMemary"></CardTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in rows" :key="_index">
         <span class="item" v-for="(item,index) in number" :key="index">{{index+1}}</span>
@@ -28,7 +28,11 @@
       }
     },
     methods: {
-
+      finishMemary: function () {
+        wx.navigateTo({
+          url: "../answer/main"
+        })
+      }
     }
   }
 
