@@ -20,57 +20,63 @@
   }
 
 </script>
-<style scoped>
+<style lang="scss" scoped>
+  .container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: $grey-background;
+  }
+
   .item {
-    padding: 15px;
-    width: calc(100% - 30px);
+    padding: tovmin(30);
+    box-sizing: content-box;
     background: white;
-    border-radius: 4px;
-    margin-bottom: 15px;
+    border-radius: tovmin(6);
+    margin: tovmin(30) tovmin(40);
+    height: tovmin(396);
   }
 
   .title {
     display: flex;
     justify-content: space-between;
     position: relative;
-    margin-bottom: 10px;
+    margin-bottom: tovmin(20);
   }
 
   .remind {
-    font-size: 12px;
+    font-size: tovmin(24);
     display: inline-block;
-    height: 23px;
-    width: 60px;
-    line-height: 23px;
+    height: tovmin(48);
+    width: tovmin(108);
+    line-height: tovmin(48);
     text-align: center;
-    border-radius: 3px;
+    border-radius: tovmin(6);
     position: absolute;
-    right: -15px;
+    right: tovmin(-30);
     background: #ebebeb;
-    color: #606266;
   }
 
   .remind.active {
-    background: #ffc400;
-
+    background: $yellow;
   }
 
   .work-item {
-    font-size: 12px;
+    font-size: tovmin(26);
     color: white;
-    background: #24bcff;
+    background: $middle-blue;
     display: inline-block;
-    padding: 3px 6px;
-    border-radius: 15px;
-    margin-right: 12px;
+    padding: tovmin(4) tovmin(18);
+    border-radius: tovmin(44);
+    margin-right: tovmin(20);
   }
 
   textarea {
-    border: 1px solid #E4E7ED;
-    background: #fcfcfc;
-    border-radius: 4px;
+    border: tovmin(2) solid #F6F6F6;
+    background: $grey-background;
+    border-radius: tovmin(12);
     width: 100%;
-    padding: 5px 8px;
+    padding: tovmin(10) tovmin(18);
     box-sizing: border-box;
   }
 

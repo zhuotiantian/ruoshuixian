@@ -68,6 +68,10 @@
     position: absolute;
   }
 
+  .default-btn {
+    background: white;
+  }
+
   p {
     margin-top: 10px;
     color: $black;

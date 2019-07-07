@@ -4,7 +4,6 @@
 }
 
 page {
-  // height: 100%;
   width: 100%;
   font-size: tovmin(30);
   font-family: "Noto Sans S Chinese";
@@ -31,16 +30,17 @@ page {
 }
 
 .btn {
-  widows: tovmin(90);
+  min-width: tovmin(90);
   height: tovmin(50);
   padding: 0 tovmin(22);
   display: inline-block;
   border-radius: tovmin(26);
+  text-align: center;
 }
 
 .default-btn {
   border: tovmin(2) solid white;
-  background: white;
+  // background: white;
 }
 
 .primary-btn {

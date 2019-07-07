@@ -1,32 +1,24 @@
 <template>
   <div class="container">
+    <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'" v-if="ratio"></image>
     <div class="login-form">
-      <div class="input-wrapper">
-        <input type="text" class="input" placeholder="请输入手机号" />
-        <i class="icon" style="background-image:url('../../../static/style/phone.svg')"></i>
-        <template v-if="!codeLogin">
-          <span class="getCode" @click="getCode" v-if="!clickGetCode">获取验证码</span>
-          <span class="getCode" style="color:#c0c4cc" v-else>{{seconds}}s后重新获取</span>
-        </template>
-      </div>
-      <div class="input-wrapper" v-if="codeLogin">
-        <input type="text" class="input" placeholder="密码" />
-        <i class="icon" style="background-image:url('../../../static/style/password.svg')"></i>
-      </div>
-      <div class="input-wrapper" v-else>
-        <input type="text" class="input" placeholder="验证码" />
-        <i class="icon" style="background-image:url('../../../static/style/key.svg')"></i>
-      </div>
-      <button class="btn">
-        <h3>登 录</h3>
-      </button>
+      <input type="text" class="input" placeholder="请输入手机号" placeholder-style="color:#ccc" />
+      <template v-if="!codeLogin">
+        <span class="getCode" @click="getCode" v-if="!clickGetCode">获取验证码</span>
+        <span class="getCode" style="color:#c0c4cc" v-else>{{seconds}}s后重新获取</span>
+      </template>
+      <input type="text" class="input" v-if="codeLogin" placeholder="密码" placeholder-style="color:#ccc" />
+      <input type="text" class="input" v-else placeholder="验证码" placeholder-style="color:#ccc" />
+      <p style="text-align:center">
+        <span class="btn submit-btn">登 录</span>
+      </p>
       <p class="info">
         <span @click="switchLoginWay">
           <span v-if="!codeLogin">密码登陆</span><span v-else>验证码登陆</span>
         </span>
         <span>忘记密码</span></p>
-      <p id="info">还没有若水轩账号？<span style="color:#f8b551" @click="toRegist">立即注册</span></p>
     </div>
+    <p id="info">还没有若水轩账号？<span style="color:#f8b551" @click="toRegist">立即注册</span></p>
   </div>
 </template>
 <script>
@@ -36,7 +28,11 @@
         clickGetCode: false,
         seconds: 60,
         codeLogin: false,
+        ratio: 1,
       }
+    },
+    mounted() {
+      this.ratio = this.globalData.ratio;
     },
     methods: {
       // 跳转到注册页面
@@ -46,8 +42,8 @@
           url
         })
       },
-      // 获取验证码
       getCode: function () {
+        // 获取验证码
         this.clickGetCode = true;
         this.timer = setInterval(() => {
           this.seconds--;
@@ -68,12 +64,14 @@
   };
 
 </script>
-<style scoped>
+<style lang="scss" scoped>
   .container {
     height: 100%;
     width: 100%;
     background-size: 100% 100%;
     background-repeat: no-repeat;
+    font-size: tovmin(28);
+    position: absolute;
   }
 
   .login-form {
@@ -83,55 +81,58 @@
     transform: translate(13%, 50%);
   }
 
-  .input-wrapper {
-    margin-bottom: 15px;
-    position: relative;
-  }
-
   .input {
-    color: #c0c4cc;
     background-color: white;
-    border-radius: 8px;
-    height: 40px;
-    padding-left: 40px;
-    padding-right: 100px;
+    border-radius: tovmin(12);
+    height: tovmin(86);
+    width: tovmin(530);
+    margin-bottom: tovmin(28);
+    padding-left: tovmin(70);
   }
 
   .btn {
-    border-radius: 30px;
-    margin-top: 40px;
-    font-size: 18px;
+    border-radius: tovmin(50);
+    margin-top: tovmin(104);
+    font-size: tovmin(40);
+    height: tovmin(98);
+    width: tovmin(530);
+    line-height: tovmin(98);
   }
 
   .info {
     color: #C0C4CC;
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
+    margin-top: tovmin(24);
   }
 
   #info {
-    color: #C0C4CC;
+    color: $grey-background;
     position: absolute;
-    bottom: -15px;
+    bottom: tovmin(74);
     text-align: center;
     width: 100%;
-  }
 
-  .icon {
-    height: 50rpx;
-    width: 50rpx;
-    background-size: 100%;
-    top: 8px;
-    left: 8px;
   }
 
   .getCode {
-    font-size: 12px;
+    font-size: tovmin(24);
     position: absolute;
-    right: 5px;
-    top: 13px;
-    color: #606266;
+    right: tovmin(10);
+    top: tovmin(26);
+    color: #ccc;
+    z-index: 30;
+  }
+
+  .background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -6;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 
 </style>

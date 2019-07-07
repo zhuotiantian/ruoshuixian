@@ -19,43 +19,44 @@ wx.getSystemInfo({
 getApp().globalData.ratio = pixelRatio;
 getApp().globalData.games = [{
   name: "闪现扑克牌",
-  url: "../firstPage/flashPocker/main"
+  url: "../flashPocker/main"
 }, {
   name: "快速扑克牌",
-  url: "../firstPage/fastPocker/main"
+  url: "../fastPocker/main"
 }, {
   name: "马拉松扑克牌",
-  url: "../firstPage/marathonPocker/main"
+  url: "../marathonPocker/main"
 }, {
   name: "二进制数字",
-  url: "../firstPage/binaryNumber/main"
+  url: "../binaryNumber/main"
 }, {
   name: "快速数字",
-  url: "../firstPage/fastNumber/main"
+  url: "../fastNumber/main"
 }, {
   name: "马拉松数字",
-  url: "../firstPage/marathonNumber/main"
+  url: "../marathonNumber/main"
 }, {
   name: "随机词语",
   url: "../firstPage/randomWords/main"
 }, {
   name: "人名头像",
-  url: "../firstPage/peoplePic/main"
+  url: "../peoplePic/main"
 }, {
   name: "抽象图形",
-  url: "../firstPage/abstractPic/main"
+  url: "../abstractPic/main"
 }, {
   name: "听记数字",
-  url: "../firstPage/listenAndRemember/main"
+  url: "../listenAndRemember/main"
 }, {
   name: "虚拟事件和日期",
-  url: "../firstPage/virtualEvents/main"
+  url: "../virtualEvents/main"
 }];
 export default {
   config: {
     pages: [
       "pages/firstPage/main",
-
+      "pages/hongbao/redPocketList/main",
+      "pages/hongbao/main",
       "pages/firstPage/ranking/main",
 
       "pages/firstPage/flashPocker/result/main",
@@ -116,7 +117,17 @@ export default {
       "pages/firstPage/virtualEvents/memary/main",
       "pages/firstPage/virtualEvents/main",
 
-      "pages/hongbao/redPocketList/main",
+      "pages/my_custom/ranking/main",
+      "pages/my_custom/hongbao/main",
+      "pages/my_custom/record/main",
+      "pages/my_custom/message/main",
+      "pages/my_custom/main",
+
+      "pages/my/record/main",
+      "pages/my/message/main",
+      "pages/my/ranking/main",
+      "pages/my_custom/main",
+      "pages/my/main",
 
 
       "pages/my_teacher/work/main",
@@ -125,20 +136,14 @@ export default {
       "pages/my_teacher/message/other/main",
       "pages/my_teacher/message/toRecord/main",
       "pages/my_teacher/message/main",
+      "pages/my_teacher/students/comment/main",
       "pages/my_teacher/main",
-      "pages/my/ranking/main",
+
       "pages/help/main",
-      "pages/my/message/main",
-      "pages/my/record/main",
-      "pages/hongbao/main",
       "pages/index/main",
       "pages/login/main",
       "pages/regist/main",
-      "pages/record/main",
-      "pages/my/main",
-      "pages/my/ranking_not/main",
-      "pages/my/hongbao/main"
-
+      "pages/record/main"
     ]
   }
 }

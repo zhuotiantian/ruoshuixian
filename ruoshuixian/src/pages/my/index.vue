@@ -18,10 +18,6 @@
           </image>
           <span>分享邀请</span>
         </li>
-        <!-- <li @click="toHongbao">
-          <image class="item" :src="'/static/images/my_icon4@'+ratio+'x.png'"></image>
-          <span>红包</span>
-        </li> -->
         <li @click="toRecord">
           <image class="item" style="height:48rpx;width:38rpx;" :src="'/static/images/my/my_icon4@'+ratio+'x.png'">
           </image>
@@ -38,7 +34,7 @@
   </div>
 </template>
 <script>
-  import CardFooter from "../../components/footer"
+  import CardFooter from "@/components/footer"
   export default {
     components: {
       CardFooter
@@ -53,19 +49,19 @@
     },
     methods: {
       toRanking: function () {
-        let url = "../my/ranking_not/main";
+        let url = "./ranking/main";
         this.to(url)
       },
       toHongbao: function () {
-        let url = "../my/hongbao/main";
+        let url = "./hongbao/main";
         this.to(url)
       },
       toRecord: function () {
-        let url = "../my/record/main";
+        let url = "./record/main";
         this.to(url)
       },
       toMessage: function () {
-        let url = "../my/message/main";
+        let url = "./message/main";
         this.to(url)
       },
       to: function (url) {

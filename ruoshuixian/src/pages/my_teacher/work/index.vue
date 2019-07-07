@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <div class="fog" v-if="showDrop" @click="showDrop=false"></div>
+    <div class="fog" v-if="showDrop||showSuccessBox" @click="showDrop=false"></div>
+    <div class="alertBox" v-if="showSuccessBox&&ratio">
+      <image class="image" :src="'/static/images/my/check@'+ratio+'x.png'"></image>
+      <span>发布成功</span>
+    </div>
     <div class="top">
       <input placeholder-style="color: #AFAFAF;" type="text" placeholder="请输入作业名称">
       <p class="item" @click="showDrop=true">组别</p>
@@ -9,64 +13,24 @@
     <div class="middle">
       <p class="title">选择游戏：</p>
       <ul class="gameList">
-        <li>
-          <em class="checkBox active"></em>
-          <span>闪现扑克牌</span>
-        </li>
-        <li>
+        <li v-for="(item,index) in game" :key="index">
           <em class="checkBox"></em>
-          <span>快速扑克牌</span>
-        </li>
-        <li>
-          <em class="checkBox"></em>
-          <span>二进制数字</span>
-        </li>
-        <li>
-          <em class="checkBox"></em>
-          <span>快速数字</span>
-        </li>
-        <li>
-          <em class="checkBox"></em>
-          <span>马拉松扑克牌</span>
-        </li>
-        <li>
-          <em class="checkBox"></em>
-          <span>马拉松数字</span>
-        </li>
-        <li>
-          <em class="checkBox"></em>
-          <span>随机词语</span>
-        </li>
-        <li>
-          <em class="checkBox"></em>
-          <span>人名头像</span>
-        </li>
-        <li>
-          <em class="checkBox"></em>
-          <span>抽象图形</span>
-        </li>
-        <li>
-          <em class="checkBox"></em>
-          <span>听记数字</span>
-        </li>
-        <li>
-          <em class="checkBox"></em>
-          <span style="font-size:12px">虚拟事件和日期</span>
+          <!-- <image class="checkBox" :src="'/static/images/my/checkbox@'+ratio+'x.png'" /> -->
+          <span>{{item.name}}</span>
         </li>
       </ul>
     </div>
     <textarea name="" id="" cols="30" rows="10" placeholder="备注"></textarea>
-    <button class="yellow_btn" @click="sendMessage">发送</button>
+    <p style="text-align:center"><button class="submit-btn btn" @click="sendMessage">点评</button></p>
     <div :class="{drop_up:true,up:showDrop,down:!showDrop}">
       <p class="title">组别选择</p>
-      <scroll-view :style="{'height': '193px'}" scroll-y="true">
+      <scroll-view :style="{'height': '384rpx'}" scroll-y="true">
         <ul class="list">
-          <li>一组</li>
-          <li>两组</li>
-          <li>三组</li>
-          <li>四组</li>
-          <li>四组</li>
-          <li>四组</li>
+          <li>一组
+            <image class="icon" :src="'/static/images/my/select.png'"></image>
+          </li>
+          <li>两组
+          </li>
         </ul>
       </scroll-view>
     </div>
@@ -77,31 +41,50 @@
     data() {
       return {
         showDrop: false,
+        game: [],
+        ratio: 1,
+        showSuccessBox: false,
+      }
+    },
+    mounted() {
+      this.game = this.globalData.games;
+      this.ratio = this.globalData.ratio;
+    },
+    methods: {
+      sendMessage: function () {
+        this.showSuccessBox = true;
+        setTimeout(() => {
+          this.showSuccessBox = false;
+        }, 1500);
       }
     }
   }
 
 </script>
-<style scoped>
+<style lang="scss" scoped>
   .top input,
   .top .item {
     border-bottom: 1px solid #F3F3F3;
-    height: 40px;
-    color: #AFAFAF;
-    font-size: 15px;
-    line-height: 40px;
+    height: tovmin(100);
+    line-height: tovmin(100);
+
+  }
+
+  .top .item {
+    color: #c6c6c6;
   }
 
   .container {
-    padding: 20px;
-    height: calc(100% - 80rpx);
-
+    padding: tovmin(60);
+    position: fixed;
+    height: calc(100% - 120rpx);
+    width: calc(100% - 120rpx);
+    background: $grey-background;
+    box-sizing: content-box;
   }
 
   .title {
-    color: #333333;
-    font-size: 15px;
-    font-weight: bold;
+    color: $black;
   }
 
   .middle {
@@ -115,49 +98,87 @@
     grid-gap: 10px;
     justify-content: center;
     align-items: center;
-    margin-top: 19px;
-    font-size: 13px;
+    margin-top: tovmin(38);
+    font-size: tovmin(26);
+  }
+
+  .gameList {
+    white-space: nowrap;
   }
 
   textarea {
-    margin-top: 30px;
+    margin-top: tovmin(60);
+    font-size: tovmin(26);
   }
 
   .btn {
-    background-color: #ffc400;
-    width: 181px;
-    height: 44px;
-    border-radius: 22px;
-    border: 1px solid transparent;
+    width: tovmin(362);
+    height: tovmin(88);
+    line-height: tovmin(88);
+    border-radius: tovmin(44);
+    border: tovmin(2) solid transparent;
     font-size: 14px;
+    margin: 0 auto;
   }
 
   .drop_up {
-    height: 230px;
+    height: tovmin(460);
     background: white;
     position: absolute;
-    z-index: 99;
-    margin: 0 -35px;
-    padding: 0 15px;
+    z-index: 1001;
     bottom: 0;
+    left: 0;
     width: 100%;
+    font-size: tovmin(28);
   }
 
   .drop_up .title {
     color: #B4B4B4;
-    font-size: 12px;
-    line-height: 37px;
-    text-indent: 11px;
+    font-size: tovmin(24);
+    line-height: tovmin(74);
+    text-indent: tovmin(22);
+  }
+
+  .list {
+    width: 100%;
   }
 
   .list li {
-    height: 44px;
-    line-height: 44px;
-    padding-left: 29px;
+    height: tovmin(88);
+    line-height: tovmin(88);
+    padding: 0 tovmin(30);
   }
 
   .list li:nth-child(2n) {
     background: #F8FBFF;
+  }
+
+  .icon {
+    height: tovmin(28);
+    width: tovmin(32);
+    float: right;
+  }
+
+  .image {
+    width: tovmin(88);
+    height: tovmin(88);
+    margin-bottom: tovmin(40);
+  }
+
+  .alertBox {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    height: tovmin(272);
+    width: tovmin(272);
+    border-radius: tovmin(22);
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    margin-left: tovmin(-136);
+    z-index: 1001;
+    justify-content: center;
+    align-items: center;
   }
 
   .down {
@@ -172,22 +193,22 @@
 
   @keyframes slide-down {
     from {
-      transform: translateY(0px);
+      transform: translateY(0);
     }
 
     to {
-      transform: translateY(500px);
+      transform: translateY(tovmin(1000));
       display: block;
     }
   }
 
   @keyframes slide-up {
     from {
-      transform: translateY(500px);
+      transform: translateY(tovmin(1000));
     }
 
     to {
-      transform: translateY(0px);
+      transform: translateY(0);
       display: none;
     }
   }

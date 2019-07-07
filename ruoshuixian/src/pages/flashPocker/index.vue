@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <PockerIndex :type="type" titleBtn="跳过"></PockerIndex>
+    <PockerIndex :type="type" titleBtn="跳过" :nextPage="nextPage"></PockerIndex>
   </div>
 </template>
 <script>
@@ -14,16 +14,10 @@
     },
     data() {
       return {
-        type: "time"
-
+        type: "time",
+        nextPage: "../flashPocker/memary/main"
       }
     },
-    mounted() {
-
-    },
-    methods: {
-
-    }
   }
 
 </script>

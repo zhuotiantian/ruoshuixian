@@ -37,57 +37,7 @@
           <span>
             <span>66</span>
             <span>
-              <image class="image" src="/static/images/share.png"></image>
-            </span>
-            <span>分享</span>
-          </span>
-        </li>
-        <li>
-          <span>2019.1.25</span>
-          <span>
-            <span>66</span>
-            <span>
-              <image class="image" src="/static/images/share.png"></image>
-            </span>
-            <span>分享</span>
-          </span>
-        </li>
-        <li>
-          <span>2019.1.25</span>
-          <span>
-            <span>66</span>
-            <span>
-              <image class="image" src="/static/images/share.png"></image>
-            </span>
-            <span>分享</span>
-          </span>
-        </li>
-        <li>
-          <span>2019.1.25</span>
-          <span>
-            <span>66</span>
-            <span>
-              <image class="image" src="/static/images/share.png"></image>
-            </span>
-            <span>分享</span>
-          </span>
-        </li>
-        <li>
-          <span>2019.1.25</span>
-          <span>
-            <span>66</span>
-            <span>
-              <image class="image" src="/static/images/share.png"></image>
-            </span>
-            <span>分享</span>
-          </span>
-        </li>
-        <li>
-          <span>2019.1.25</span>
-          <span>
-            <span>66</span>
-            <span>
-              <image class="image" src="/static/images/share.png"></image>
+              <image class="image" v-if="ratio" :src="'/static/images/my/share@'+ratio+'x.png'"></image>
             </span>
             <span>分享</span>
           </span>
@@ -100,27 +50,34 @@
   export default {
     data() {
       return {
-        active: "打卡记录"
+        active: "打卡记录",
+        ratio: 1,
       }
+    },
+    mounted() {
+      this.ratio = this.globalData.ratio;
     }
   }
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .container {
     height: 100%;
+    position: absolute;
+    width: 100%;
   }
 
   .content {
-    padding: 15px;
-    background: #f7f7f7;
-    height: calc(100% - 90px);
+    padding: tovmin(30);
+    background: $grey-background;
+    height: calc(100% - 172rpx);
+    font-size: tovmin(28);
   }
 
   .header {
-    height: 60px;
-    background: #173771;
+    height: tovmin(110);
+    background: $deep-blue;
     display: flex;
     justify-content: center;
     color: white;
@@ -133,19 +90,19 @@
   }
 
   .header span.active {
-    color: #24bcff;
+    color: $middle-blue;
     position: relative;
   }
 
   .header span.active::after {
     content: "";
-    height: 0px;
-    width: 0px;
+    height: 0;
+    width: 0;
     border-color: transparent transparent white transparent;
     border-style: dashed dashed solid dashed;
-    border-width: 10px;
+    border-width: tovmin(20);
     position: absolute;
-    top: 20px;
+    top: tovmin(35);
     right: 45%;
   }
 
@@ -159,8 +116,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 50px;
-    border-bottom: 1px solid #E4E7ED;
+    height: tovmin(90);
+    border-bottom: tovmin(2) solid $grey-background;
   }
 
   .list li:last-child {
@@ -180,9 +137,11 @@
   }
 
   .image {
-    width: 22px;
-    height: 22px;
+    width: tovmin(28);
+    height: tovmin(28);
     vertical-align: middle;
+    margin-right: tovmin(10);
+    margin-left: tovmin(20);
   }
 
 </style>

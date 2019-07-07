@@ -1,84 +1,58 @@
 <template>
   <div class="container">
+    <div class="fog" v-if="showDropdown"></div>
     <div class="header">
       <span :class="{active:active=='打卡时间'}" @click="active='打卡时间'">打卡时间</span>
       <span :class="{active:active=='成绩'}" @click="active='成绩'">成绩</span>
     </div>
-    <div class="content">
+    <div class="content" v-if="ratio">
       <div>
         <p class="header-btn" v-if="active=='成绩'">
           <span :class="{active:activeBtn=='全校'}" @click="activeBtn='全校'">全校</span>
           <span :class="{active:activeBtn=='班级'}" @click="activeBtn='班级'">班级</span>
-          <span :class="{active:activeBtn=='单项排名'}" @click="showDropdownFunc">单项排名</span>
+          <span :class="{active:activeBtn=='单项排名',arrow:true}" @click="showDropdownFunc">单项排名</span>
         </p>
         <div :class="{'drop-down':true,'down':showDropdown,'up':!showDropdown}">
           <ul>
-            <li>闪现扑克牌</li>
-            <li>快速扑克牌</li>
-            <li>二进制数字</li>
-            <li>快速数字</li>
-            <li>马拉松数字</li>
-            <li>单项排名</li>
-            <li>随机词语</li>
-            <li>人名头像</li>
-            <li>抽象图形</li>
-            <li>听记数字</li>
-            <li>虚拟事件和日期</li>
+            <li v-for="(item,index) in games" :key="index">{{item.name}}
+              <image class="icon" :src="'/static/images/my/select.png'"></image>
+            </li>
           </ul>
         </div>
       </div>
       <p class="list-item">
         <span style="flex:1">
-          <image class="image" src="/static/images/ranking_image6.png"></image>
+          <image class="image" :src="'/static/images/ranking/people@'+ratio+'x.png'">></image>
         </span>
         <span style="flex:6">我</span>
         <span style="flex:1">04</span>
       </p>
-
       <ul class="list">
         <li>
           <span style="flex:1">
-            <image class="image" src="/static/images/ranking_image3.png"></image>
+            <image class="image" :src="'/static/images/ranking/people@'+ratio+'x.png'"></image>
           </span>
           <span style="flex:6">小明</span>
           <span style="flex:1">
-            <image class="icon" src="/static/images/ranking_image2.png"></image>
+            <image class="icon" :src="'/static/images/ranking/ranking1@'+ratio+'x.png'"></image>
           </span>
         </li>
         <li>
           <span style="flex:1">
-            <image class="image" src="/static/images/ranking_image3.png"></image>
+            <image class="image" :src="'/static/images/ranking/people@'+ratio+'x.png'"></image>
           </span>
           <span style="flex:6">小明</span>
           <span style="flex:1">
-            <image class="icon" src="/static/images/ranking_image4.png"></image>
+            <image class="icon" :src="'/static/images/ranking/ranking2@'+ratio+'x.png'"></image>
           </span>
         </li>
         <li>
           <span style="flex:1">
-            <image class="image" src="/static/images/ranking_image3.png"></image>
+            <image class="image" :src="'/static/images/ranking/people@'+ratio+'x.png'"></image>
           </span>
           <span style="flex:6">小明</span>
           <span style="flex:1">
-            <image class="icon" src="/static/images/ranking_image5.png"></image>
-          </span>
-        </li>
-        <li>
-          <span style="flex:1">
-            <image class="image" src="/static/images/ranking_image3.png"></image>
-          </span>
-          <span style="flex:6">小明</span>
-          <span style="flex:1">
-            <span class="number">04</span>
-          </span>
-        </li>
-        <li>
-          <span style="flex:1">
-            <image class="image" src="/static/images/ranking_image3.png"></image>
-          </span>
-          <span style="flex:6">小明</span>
-          <span style="flex:1">
-            <span class="number">05</span>
+            <image class="icon" :src="'/static/images/ranking/ranking3@'+ratio+'x.png'"></image>
           </span>
         </li>
       </ul>
@@ -92,6 +66,8 @@
         active: "成绩",
         activeBtn: "全校",
         showDropdown: false,
+        ratio: 1,
+        games: [],
       }
     },
     methods: {
@@ -99,29 +75,35 @@
         this.activeBtn = "单项排名";
         this.showDropdown = !this.showDropdown;
       }
+    },
+    mounted() {
+      this.ratio = this.globalData.ratio;
+      this.games = this.globalData.games;
     }
   }
 
 </script>
-<style scoped>
+<style lang="scss" scoped>
   .container {
     height: 100%;
+    position: absolute;
+    width: 100%;
+    background: $grey-background;
   }
 
   .content {
-    background: #f7f7f7;
-    height: calc(100% - 60px);
+    height: calc(100% - 132rpx);
   }
 
   .header {
-    height: 60px;
-    background: #173771;
+    height: tovmin(130);
+    background: $deep-blue;
     display: flex;
     justify-content: center;
     color: white;
     align-items: center;
     position: relative;
-    z-index: 11;
+    z-index: 1001;
   }
 
   .header span {
@@ -130,7 +112,7 @@
   }
 
   .header span.active {
-    color: #24bcff;
+    color: $middle-blue;
     position: relative;
   }
 
@@ -140,9 +122,9 @@
     width: 0px;
     border-color: transparent transparent white transparent;
     border-style: dashed dashed solid dashed;
-    border-width: 10px;
+    border-width: tovmin(20);
     position: absolute;
-    top: 20px;
+    top: tovmin(45);
     right: 45%;
   }
 
@@ -150,76 +132,107 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 15px;
+    padding: 0 tovmin(60);
   }
 
   .image {
-    width: 45px;
-    height: 45px;
+    height: tovmin(60);
+    width: tovmin(60);
+    border-radius: tovmin(60);
+    vertical-align: middle;
   }
 
   .icon {
-    height: 30px;
-    width: 30px
+    height: tovmin(28);
+    width: tovmin(32);
+    float: right;
+    margin-right: tovmin(30);
   }
 
-  .list {
+  .content .list {
     background: white;
-    margin: 15px 15px 10px 15px;
-    /* height: calc(100% - 120px); */
+    color: $black;
+    box-sizing: content-box;
+    margin: tovmin(30);
   }
 
   .list li {
     display: flex;
+    padding: tovmin(20) tovmin(30);
     align-items: center;
-    height: 60px;
   }
 
-  .list li:nth-child(2n),
-  .drop-down li:nth-child(2n) {
-    background: #f8fbff;
+  .list li:nth-child(2n) {
+    background: $light-blue;
   }
 
   .header-btn {
     background: white;
     display: flex;
     justify-content: space-around;
-    height: 45px;
+    height: tovmin(98);
     align-items: center;
     position: relative;
     z-index: 11;
+    z-index: 1001;
   }
 
   .header-btn span {
     display: inline-block;
-    height: 20px;
-    padding: 5px 10px;
-    border: 1px solid #E4E7ED;
-    border-radius: 20px;
-    line-height: 20px;
-    font-size: 14px;
-    color: #999999;
+    width: tovmin(154);
+    height: tovmin(56);
+    border: tovmin(2) solid #ccc;
+    border-radius: tovmin(34);
+    line-height: tovmin(56);
+    color: #999;
+    text-align: center;
   }
 
   .header-btn span.active {
-    color: #24bcff;
-    background: #e0f6ff;
+    color: $middle-blue;
+    background: $light-blue;
     border: 1px solid transparent;
+  }
+
+  .arrow {
+    width: tovmin(168) !important;
+    position: relative;
+  }
+
+  .arrow::after {
+    content: "";
+    border: tovmin(2) solid #ccc;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    margin-left: tovmin(20);
+    position: absolute;
+    top: tovmin(20);
+    right: tovmin(10);
+    height: tovmin(10);
+    width: tovmin(10);
+  }
+
+  .list-item {
+    height: tovmin(108);
   }
 
   .drop-down {
     position: absolute;
     width: 100%;
     background: white;
-    border-top: 1px solid #E4E7ED;
+    border-top: tovmin(2) solid #E4E7ED;
     text-align: center;
-    z-index: 10;
-    transform: translateY(1000px);
+    z-index: 1000;
+    font-size: tovmin(28);
   }
 
   .drop-down li {
     height: 40px;
     line-height: 40px;
+  }
+
+  .drop-down li:nth-child(2n) {
+    background: #F8FBFF;
   }
 
   .down {

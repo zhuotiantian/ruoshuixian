@@ -34,7 +34,7 @@
   </div>
 </template>
 <script>
-  import CardFooter from "../../components/footer"
+  import CardFooter from "@/components/footer"
   export default {
     components: {
       CardFooter,

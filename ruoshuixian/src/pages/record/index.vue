@@ -1,10 +1,14 @@
 <template>
   <div class="container">
-    <div class="content">
-      <image class="image" src="/static/images/recode_image1.png"></image>
+    <div class="content" v-if="ratio">
+      <div class="img_div">
+        <image class="image" :src="'/static/images/redPocket/bg2@'+ratio+'x.png'"></image>
+      </div>
       <p class="p">这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录
       </p>
-      <image class="image" src="/static/images/recode_image2.png"></image>
+      <div class="img_div">
+        <image class="image" :src="'/static/images/redPocket/bg1@'+ratio+'x.png'"></image>
+      </div>
       <p class="p">这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录
       </p>
     </div>
@@ -12,28 +16,53 @@
   </div>
 </template>
 <script>
-  import CardFooter from "../../components/footer"
+  import CardFooter from "@/components/footer"
   export default {
     components: {
       CardFooter
+    },
+    data() {
+      return {
+        ratio: 1,
+      }
+    },
+    mounted() {
+      this.ratio = this.globalData.ratio;
     }
   }
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .content {
-    padding: 15px;
-  }
-
-  .image {
-    height: 130px;
-    width: 100%;
-    margin: 15px 0;
+    padding: tovmin(30);
+    background: white;
+    font-size: tovmin(26);
+    position: absolute;
+    height: 100%;
   }
 
   .p {
-    color: #909399
+    color: #666666;
+    margin-bottom: tovmin(30);
+  }
+
+  .img_div {
+    width: tovmin(670);
+    height: tovmin(318);
+    overflow: hidden;
+    margin-bottom: tovmin(30);
+    border-radius: tovmin(10);
+    position: relative;
+  }
+
+  .image {
+    width: tovmin(690);
+    height: tovmin(518);
+    position: absolute;
+    top: -52%;
+    z-index: 1;
+    margin: tovmin(30) 0;
   }
 
 </style>
