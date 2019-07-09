@@ -30,7 +30,6 @@
         minutes: 15,
         showKeybord: true,
         showFog: false,
-        text: "确定结束作答吗？",
         number: array,
         rows: rows,
       }

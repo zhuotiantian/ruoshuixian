@@ -10,10 +10,14 @@
     </div>
     <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
     <div class="result">
+      <image class="pocker" @click="backHandler(index,item.rowIndex,item.columnIndex)"
+        :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url">
+      </image>
     </div>
     <div class="list">
-      <div class="row" v-for="(item,index) in rows" :key="index">
-        <image class="pocker" v-for="(item,_index) in columns" :key="_index"
+      <div class="row" v-for="(item,index) in pocker" :key="index">
+        <image @click="selectPocker($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show}"
+          v-for="(_item,_index) in item" :key="_index"
           :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'@'+ratio+'x.png'"></image>
       </div>
     </div>
@@ -34,17 +38,25 @@
 
     },
     data() {
-      let rows = new Array(4);
-      let columns = new Array(13);
+      let pocker = [];
+      for (let j = 0; j < 4; j++) {
+        let columns = [];
+        for (let i = 0; i < 13; i++) {
+          columns.push({
+            show: true
+          });
+        };
+        pocker.push(columns);
+      }
       return {
         seconds: 0,
         minutes: 15,
-        rows: rows,
-        columns: columns,
+        pocker: pocker,
         ratio: 1,
         showFog: false,
         showTip: false,
-        text: "确定结束作答吗？",
+        result: [],
+        lastClick: 0,
       }
     },
     mounted() {
@@ -70,6 +82,26 @@
         this.showFog = false;
         this.showTip = false;
       },
+      selectPocker: function (e, index, _index) {
+        this.result.push({
+          url: '/static/images/pocker/' + (_index / 1 + 1) + '-' + (index / 1 + 1) + '@' + this.ratio +
+            'x.png',
+          rowIndex: index,
+          columnIndex: _index
+        });
+        let hidden = this.pocker[index];
+        hidden[_index].show = false;
+        this.$set(this.pocker, "index", hidden);
+      },
+      backHandler: function (index, row, column) {
+        let currentTime = new Date().getTime();
+        if (currentTime - this.lastClick < 300) {
+          this.result.splice(index, 1);
+          this.$set(this.pocker[row][column], "show", true);
+        } else {
+          this.lastClick = new Date().getTime();
+        }
+      },
       confirm: function () {
         wx.navigateTo({
           url: "../result/main"
@@ -80,14 +112,18 @@
 
 </script>
 <style lang="scss" scoped>
+  .hidden {
+    visibility: hidden;
+  }
+
   .container {
-    padding-top: tovmin(300);
+    padding-top: tovmin(380);
     color: white;
     text-align: center;
   }
 
   .tips {
-    position: absolute;
+    position: fixed;
     top: tovmin(150);
     padding: 0 tovmin(100);
     z-index: 1002;
@@ -120,6 +156,17 @@
 
   .fog {
     height: 200% !important;
+  }
+
+  .result {
+    position: absolute;
+    bottom: tovmin(0);
+    width: 100%;
+  }
+
+  .result image {
+    position: absolute;
+    bottom: tovmin(0);
   }
 
 </style>

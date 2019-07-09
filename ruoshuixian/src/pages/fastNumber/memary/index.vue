@@ -5,7 +5,7 @@
     <div class="list">
       <div class="row" v-for="(rows,_index) in rows" :key="_index">
         <span class="item" v-for="(item,index) in number" :key="index">{{index+1}}</span>
-        <span>row&nbsp;&nbsp;{{_index+1}}</span>
+        <span style="width:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
   </div>

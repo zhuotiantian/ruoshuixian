@@ -35,7 +35,7 @@
   }
 
   .text {
-    color: #E0E0E0;
+    color: #999999;
     font-size: tovmin(24);
   }
 

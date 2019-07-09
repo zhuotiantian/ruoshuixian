@@ -3,7 +3,7 @@
     <CardTitle :seconds="seconds" :minutes="minutes" type="开始" @startGame="startGame"></CardTitle>
     <div class="tips">
       <p>回忆这些扑克牌</p>
-      <p>5分钟开始正式答题</p>
+      <p>5分钟后开始正式答题</p>
     </div>
     <div class="list">
       <div class="row" v-for="(item,index) in rows" :key="index">

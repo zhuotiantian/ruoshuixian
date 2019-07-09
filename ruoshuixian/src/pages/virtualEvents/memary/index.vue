@@ -7,6 +7,15 @@
         <span>时间</span>
         <span style="flex:3;">事件</span>
       </p>
+      <p><span>1</span><span class="year">1974</span><span style="flex:3;">事件事件</span></p>
+      <p><span>2</span><span class="year">1974</span><span style="flex:3;">事件事件</span>
+      </p>
+      <p><span>3</span><span class="year">1974</span><span style="flex:3;">事件事件</span></p>
+      <p><span>4</span><span class="year">1974</span><span style="flex:3;">事件事件</span>
+      </p>
+      <p><span>5</span><span class="year">1974</span><span style="flex:3;">事件事件</span></p>
+      <p><span>6</span><span class="year">1974</span><span style="flex:3;">事件事件</span>
+      </p>
     </div>
   </div>
 </template>
@@ -42,6 +51,10 @@
     color: white;
   }
 
+  .year {
+    color: $grey-text;
+  }
+
   .title {
     font-size: tovmin(30);
     display: flex;
@@ -57,6 +70,9 @@
     display: flex;
     align-items: center;
     text-align: left;
+    height: tovmin(80);
+    line-height: tovmin(80);
+    color: #D6D6D6;
   }
 
   .list p span {
@@ -64,7 +80,7 @@
   }
 
   .list-title {
-    color: $yellow;
+    color: $yellow !important;
   }
 
 </style>

@@ -2,7 +2,7 @@
   <div class="container">
     <CardTitle :seconds="seconds" :minutes="minutes" :type="titleBtn" @toNextPage="toNextPage"></CardTitle>
     <div class="content" v-if="type=='time'">
-      <span class="label">请选择闪现时间：</span>
+      <span class="label">请选择闪视时间：</span>
       <div class="btn-group">
         <span :class="{active:activeIndex==0.2}" @click="activeIndex=0.2">0.2S</span><span
           :class="{active:activeIndex==0.5}" @click="activeIndex=0.5">0.5S</span><span :class="{active:activeIndex==1}"
@@ -10,14 +10,14 @@
       </div>
     </div>
     <div class="content" v-else>
-      <span>请选择闪现时间：</span>
+      <span class="label">请选择显示方式：</span>
       <div class="btn-group">
-        <span :class="{active:activeIndex=='All'}" @click="activeIndex='All'">All</span><span
+        <span :class="{active:activeIndex=='all'}" @click="activeIndex='all'">all</span><span
           :class="{active:activeIndex==2}" @click="activeIndex=2">2</span><span :class="{active:activeIndex==4}"
           @click="activeIndex=4">4</span><span :class="{active:activeIndex==8}" @click="activeIndex=8">8</span>
       </div>
     </div>
-    <div class="btn submit-btn" @click="toNextPage">{{activeIndex}}</div>
+    <div class="btn submit-btn" @click="toNextPage">{{type=='time'?activeIndex+"S":"确定"}}</div>
   </div>
 </template>
 <script>
@@ -30,7 +30,7 @@
     data() {
       return {
         seconds: 60,
-        activeIndex: this.type == 'time' ? 0.2 : "All",
+        activeIndex: this.type == 'time' ? 0.2 : "all",
         minutes: 0,
       }
     },
@@ -74,6 +74,8 @@
   .label {
     height: tovmin(56);
     line-height: tovmin(56);
+    font-weight: bold;
+    font-size: tovmin(28);
   }
 
   .btn-group span {
@@ -81,6 +83,7 @@
     width: tovmin(100);
     height: tovmin(56);
     display: inline-block;
+    font-size: tovmin(26);
   }
 
   .btn-group .active {

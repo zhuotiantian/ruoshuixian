@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle :isResult="true" :sconds="seconds" :minutes="minutes"></CardTitle>
+    <CardTitle :isResult="true"></CardTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in rows" :key="_index">
         <div class="image_div" v-for="(item,index) in number" :key="index">

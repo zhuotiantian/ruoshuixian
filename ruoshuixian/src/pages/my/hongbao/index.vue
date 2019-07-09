@@ -73,7 +73,7 @@
   }
 
   .header>div p {
-    margin: tovmin(10) 0;
+    margin: tovmin(4) 0;
   }
 
   .header::after {
@@ -85,7 +85,7 @@
     top: 0;
     z-index: -1;
     border-radius: 0 0 60% 60%;
-    background: $red;
+    background: $light-red;
   }
 
   .content {
@@ -115,6 +115,7 @@
     position: absolute;
     bottom: tovmin(118);
     left: tovmin(180);
+    color: #FFC400;
   }
 
 </style>

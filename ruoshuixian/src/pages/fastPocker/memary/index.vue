@@ -1,12 +1,20 @@
 <template>
   <div class="container">
-    <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" type="记忆完成" @finishMemary="finishMemary">
+    <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
     </CardTitle>
     <div class="list" v-if="ratio">
-      <em class="arrow arrow-left"></em>
-      <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :style="{'left':item+'rpx'}"
-        :src="'/static/images/firstPage/pockerbg@'+ratio+'x.png'" />
-      <em class="arrow arrow-right"></em>
+      <template v-if="pocker.length==0">
+        <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}"
+          :src="'/static/images/firstPage/pockerbg@'+ratio+'x.png'" />
+      </template>
+      <template v-else>
+        <em class="arrow arrow-left"></em>
+        <scroll-view :style="{width:'510px',height:'196px','white-space':'nowrap'}" scroll-x>
+          <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index"
+            :src="'/static/images/pocker/'+(index+1)+'-1@'+ratio+'x.png'" />
+        </scroll-view>
+        <em class="arrow arrow-right"></em>
+      </template>
     </div>
   </div>
 </template>
@@ -19,28 +27,33 @@
     data() {
       return {
         pannelContent: ["ALL", "1", "2", "4", "8"],
-        pockerCount: 23,
-        ratio: 1,
+        pockerCount: 0,
+        bg: 23,
         left: 100,
+        pocker: [],
+        ratio: 1,
+        type: null
       }
     },
     mounted() {
       this.ratio = this.globalData.ratio;
     },
     computed: {
-      pocker: function () {
-        let pocker = [];
-        let left0 = this.pockerCount == 23 ? 100 : (350 - 10 * this.pockerCount);
-        for (let i = 0; i < this.pockerCount; i++) {
+      bgCounts: function () {
+        let bgCounts = [];
+        let left0 = this.pockerCount == 23 ? 100 : (350 - 10 * this.bg);
+        for (let i = 0; i < this.bg; i++) {
           let left = left0 + 20 * i;
-          pocker.push(left)
+          bgCounts.push(left)
         };
-        return pocker;
+        return bgCounts;
       }
     },
     methods: {
       group: function (data) {
-        this.pockerCount = data == 'ALL' ? this.pockerCount = 23 : data;
+        this.pockerCount = data == 'ALL' ? this.pockerCount = 52 : data;
+        this.pocker = new Array(parseInt(this.pockerCount));
+        this.type = "记忆完成"
       },
       finishMemary: function () {
         wx.navigateTo({
@@ -56,8 +69,7 @@
     text-align: center;
     margin: 0 auto;
     position: relative;
-    height: auto;
-    height: tovmin(30);
+    height: tovmin(382);
     display: flex;
     justify-content: space-between;
   }
@@ -67,6 +79,12 @@
   }
 
   .pocker {
+    height: tovmin(382);
+    width: tovmin(248);
+    margin-right: tovmin(30);
+  }
+
+  .pocker-bg {
     height: tovmin(382);
     width: tovmin(248);
     position: absolute;

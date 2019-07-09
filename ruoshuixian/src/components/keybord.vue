@@ -1,7 +1,7 @@
 <template>
   <div :class="{down:showKeybord,up:!showKeybord,keybord:true}">
     <div class="number">
-      <span class="item" v-for="item in number" :key="item">{{item}}</span>
+      <span :class="{item:true, active:item==null}" v-for="item in number" :key="item">{{item}}</span>
     </div>
     <span class="item delete">X</span>
   </div>
@@ -14,7 +14,7 @@
       if (this.counts == "5") {
         number = [1, 2, 3, 4, 5];
       } else if (this.counts == "2") {
-        number = [0, 1];
+        number = [0, , , , 1];
       } else {
         number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
       }
@@ -35,20 +35,20 @@
     z-index: 101;
     bottom: tovmin(-500);
     padding: tovmin(40);
+    display: flex;
+    align-items: center;
   }
 
   .number {
     width: 28%;
     display: grid;
     grid-template-columns: 19% 19% 19% 19% 19%;
-    // grid-template-rows: tovmin(80) tovmin(80);
     grid-gap: tovmin(30);
     justify-content: center;
     align-items: center;
     margin: 0 auto;
     position: relative;
     height: 100%;
-    transform: translateY(10%);
   }
 
   .item {
@@ -61,11 +61,16 @@
     line-height: tovmin(80);
   }
 
+  .item.active {
+    color: transparent;
+    background: transparent;
+  }
+
   .delete {
     background: white;
     color: $black;
     position: absolute;
-    top: tovmin(46);
+    top: tovmin(40);
     right: tovmin(380);
     border: tovmin(2) solid #363636;
     box-sizing: border-box;

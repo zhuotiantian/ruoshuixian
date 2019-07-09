@@ -30,17 +30,18 @@ page {
 }
 
 .btn {
-  min-width: tovmin(90);
   height: tovmin(50);
-  padding: 0 tovmin(22);
+  line-height: tovmin(50);
   display: inline-block;
-  border-radius: tovmin(26);
+  border-radius: tovmin(34);
+  font-size: tovmin(26);
   text-align: center;
+  padding: 0 tovmin(15);
+  width: auto;
 }
 
 .default-btn {
   border: tovmin(2) solid white;
-  // background: white;
 }
 
 .primary-btn {

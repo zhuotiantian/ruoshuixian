@@ -1,6 +1,6 @@
 <template>
   <div class="alertBox">
-    <p>{{text}}</p>
+    <p>确定结束回答吗？</p>
     <p>
       <span @click="confirm">确认</span>
       <span class="red" @click="cancle">取消</span>

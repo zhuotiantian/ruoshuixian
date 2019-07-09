@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="content" v-if="ratio">
-      <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'"></image>
+      <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'" />
       <div class="top">
         <image class="top-image" :src="'/static/images/firstPage/top@'+ratio+'x.png'" />
       </div>
@@ -11,10 +11,6 @@
             <image class="icon ranking" :src="'/static/images/firstPage/排行榜@'+ratio+'x.png'" />
             <span class="flex-span">排行榜</span>
           </li>
-          <!-- <li>
-            <image class="icon redPocket" :src="'/static/images/firstPage/红包@'+ratio+'x.png'" />
-            <span class="flex-span">红包</span>
-          </li> -->
           <li>
             <image class="icon share" :src="'/static/images/firstPage/share@'+ratio+'x.png'" />
             <span class="flex-span">分享</span>
@@ -54,11 +50,11 @@
     methods: {
       toGame: function (url) {
         wx.navigateTo({
-          url
+          url: url
         })
       },
       toRanking: function () {
-        let url = "./ranking/main"
+        let url = "../ranking/main"
         wx.navigateTo({
           url
         })
@@ -146,7 +142,7 @@
   }
 
   .bottom ul li span {
-    margin-top: tovmin(12)
+    margin-top: tovmin(12);
   }
 
   .item {

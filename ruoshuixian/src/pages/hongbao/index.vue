@@ -109,6 +109,8 @@
     font-size: tovmin(24);
     height: tovmin(60);
     line-height: tovmin(60);
+    border-radius: tovmin(44);
+    font-weight: bold;
   }
 
   .default-btn {

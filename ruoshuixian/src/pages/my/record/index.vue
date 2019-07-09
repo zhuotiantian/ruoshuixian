@@ -33,7 +33,7 @@
       </ul>
       <ul class="list" v-else>
         <li>
-          <span>2019.1.25</span>
+          <span>人名头像</span>
           <span>
             <span>66</span>
             <span>

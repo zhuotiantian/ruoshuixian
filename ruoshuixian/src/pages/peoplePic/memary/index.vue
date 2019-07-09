@@ -6,8 +6,9 @@
       <div class="row" v-for="(rows,_index) in rows" :key="_index">
         <div class="image" v-for="(item,index) in number" :key="index">
           <image class="image" :src="'/static/images/firstPage/people@'+ratio+'x.png'" />
+          <span class="name">刘德华</span>
         </div>
-        <span>row&nbsp;&nbsp;{{_index+1}}</span>
+        <span class="rowName">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
   </div>
@@ -65,10 +66,15 @@
     display: flex;
     width: 80%;
     margin: 0 auto;
-    height: tovmin(140);
-    line-height: tovmin(140);
+    height: tovmin(200);
     color: $grey-text;
     margin-bottom: tovmin(44);
+    text-align: center;
+  }
+
+  .rowName {
+    height: tovmin(140);
+    line-height: tovmin(140);
   }
 
   .image {
@@ -76,6 +82,12 @@
     width: tovmin(140);
     background: white;
     margin-right: tovmin(40);
+  }
+
+  .name {
+    height: tovmin(40);
+    line-height: tovmin(40) !important;
+    color: white;
   }
 
 </style>

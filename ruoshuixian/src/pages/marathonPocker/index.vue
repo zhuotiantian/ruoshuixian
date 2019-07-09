@@ -12,7 +12,7 @@
     data() {
       return {
         type: "counts",
-        nextPage: "../marathonPocker/memary/main"
+        nextPage: "./ready/main"
       }
     }
   }

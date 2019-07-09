@@ -5,9 +5,11 @@
       @group="group" :pannelContent="pannelContent"></CardTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in rows" :key="_index">
-        <span :class="{item:true,border:counts&&((index+1)%counts==0)&&(index+1)!=number.length}"
-          v-for="(item,index) in number" :key="index">{{index+1}}</span>
-        <span>row&nbsp;&nbsp;{{_index+1}}</span>
+        <div v-for="(item,index) in number" :key="index"
+          :class="{item:true,border:counts&&((index+1)%counts==0)&&(index+1)!=number.length}">
+          <span>{{index+1}}</span>
+        </div>
+        <span style="width:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
   </div>
@@ -20,7 +22,7 @@
     },
     data() {
       let array = new Array(30);
-      let rows = new Array(3);
+      let rows = new Array(12);
       return {
         seconds: 0,
         minutes: 15,
@@ -37,6 +39,8 @@
           this.counts = 3;
         } else if (data == '六个一组') {
           this.counts = 6;
+        } else {
+          this.counts = 0;
         }
       },
       finishMemary: function () {
@@ -79,6 +83,7 @@
     line-height: tovmin(60);
     width: tovmin(28);
     text-align: center;
+    box-sizing: border-box;
   }
 
   .item.border {
@@ -87,6 +92,11 @@
 
   .item:nth-last-child(2) {
     margin-right: tovmin(20);
+  }
+
+  .pannel {
+    height: tovmin(510) !important;
+    background: red;
   }
 
 </style>

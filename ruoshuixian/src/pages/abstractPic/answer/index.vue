@@ -8,7 +8,6 @@
         <div class="image_div" v-for="(item,index) in number" :key="index">
           <image class="image" :src="'/static/images/firstPage/abstract@'+ratio+'x.png'" />
           <input type="text" class="input" placeholder="序号" @focus="focus" @blur="blur" />
-          <image class="icon" :src="'/static/images/my/select.png'"></image>
         </div>
         <span>row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
@@ -114,17 +113,6 @@
     color: $grey-text;
     height: tovmin(40);
     line-height: tovmin(40) !important;
-  }
-
-  .icon {
-    height: tovmin(28);
-    width: tovmin(32);
-    float: right;
-    margin-right: tovmin(30);
-    position: relative;
-    top: -20px;
-    left: 20px;
-
   }
 
 </style>

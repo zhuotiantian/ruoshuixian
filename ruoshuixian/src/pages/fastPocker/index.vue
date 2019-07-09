@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <PockerIndex :type="type" titleBtn="跳过" :nextPage="nextPage"></PockerIndex>
+  <div class="container" v-if="ratio">
+    <PockerIndex :type="type" :nextPage="nextPage"></PockerIndex>
   </div>
 </template>
 <script>
@@ -9,12 +9,16 @@
     components: {
       PockerIndex
     },
+    created() {
+      this.ratio = this.globalData.ratio;
+    },
     data() {
       return {
         type: "counts",
-        nextPage: "../fastPocker/memary/main"
+        nextPage: "./memary/main",
+        ratio: 1,
       }
-    }
+    },
   }
 
 </script>
