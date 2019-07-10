@@ -1,6 +1,6 @@
 <template>
   <div class="container" v-if="show">
-    <CardTitle :seconds="seconds" type="跳过" @toNextPage="toNextPage"></CardTitle>
+    <CardTitle :seconds="seconds" :minutes="minutes" type="跳过" @toNextPage="toNextPage"></CardTitle>
     <div class="content">
       <p>本轮记忆时间：{{memaryTime}}分钟</p>
       <p :class="{proccess,acticve,active:seconds>3&&seconds<=60}">一分钟准备</p>
@@ -32,6 +32,7 @@
         seconds: 60,
         memaryTime: 15,
         show: false,
+        minutes: 0,
       }
     },
     mounted() {
@@ -65,7 +66,7 @@
   }
 
   .content {
-    margin-top: tovmin(150);
+    margin-top: tovmin(180);
   }
 
   .content p {

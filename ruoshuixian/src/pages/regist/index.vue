@@ -2,14 +2,32 @@
   <div class="container">
     <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'" v-if="ratio"></image>
     <div class="login-form">
-      <input type="text" class="input" placeholder="请输入手机号" placeholder-style="color:#ccc" />
-      <template>
-        <span class="getCode" @click="getCode" v-if="!clickGetCode">获取验证码</span>
-        <span class="getCode" style="color:#c0c4cc" v-else>{{seconds}}s后重新获取</span>
-      </template>
-      <input type="text" class="input" placeholder="验证码" placeholder-style="color:#ccc" />
-      <input type="text" class="input" placeholder="密码" placeholder-style="color:#ccc" />
-      <input type="text" class="input" placeholder="确认密码" placeholder-style="color:#ccc" />
+      <div class="input-div">
+        <input type="text" class="input" placeholder="请输入手机号" placeholder-style="color:#ccc" />
+        <image :src="'/static/images/my/phone@'+ratio+'x.png'" v-if="ratio" class="icon"
+          style="height:42rpx;width:34rpx">
+        </image>
+        <template>
+          <span class="getCode" @click="getCode" v-if="!clickGetCode">获取验证码</span>
+          <span class="getCode" style="color:#c0c4cc" v-else>{{seconds}}s后重新获取</span>
+        </template>
+      </div>
+      <div class="input-div">
+        <input type="text" class="input" placeholder="验证码" placeholder-style="color:#ccc" />
+        <image :src="'/static/images/my/keys@'+ratio+'x.png'" v-if="ratio" class="icon"
+          style="height:54rpx;width:38rpx">
+        </image>
+      </div>
+      <div class="input-div">
+        <input type="text" class="input" placeholder="密码" placeholder-style="color:#ccc" />
+        <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon"
+          style="height:42rpx;width:34rpx"></image>
+      </div>
+      <div class="input-div">
+        <input type="text" class="input" placeholder="确认密码" placeholder-style="color:#ccc" />
+        <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon"
+          style="height:42rpx;width:34rpx"></image>
+      </div>
       <p style="text-align:center">
         <span class="btn submit-btn">注 册</span>
       </p>
@@ -74,6 +92,10 @@
     transform: translate(13%, 40%);
   }
 
+  .input-div {
+    position: relative;
+  }
+
   .input {
     background-color: white;
     border-radius: tovmin(12);
@@ -119,6 +141,12 @@
     bottom: 0;
     left: 0;
     right: 0;
+  }
+
+  .icon {
+    position: absolute;
+    top: tovmin(20);
+    left: tovmin(20);
   }
 
 </style>

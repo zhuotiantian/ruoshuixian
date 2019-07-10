@@ -23,40 +23,46 @@
   export default {
     beforeMount() {
       this.ratio = this.globalData.ratio;
+
     },
     props: ["index"],
     data() {
       return {
         ratio: 1,
-      }
+        active: 1
+      };
+    },
+    mounted() {
+
     },
     methods: {
-      toFisrstPage: function () {
+      toFisrstPage: function (index) {
         let url = "../firstPage/main";
-        this.to(url)
+        this.to(url, index);
       },
-      toMoney: function () {
+      toMoney: function (index) {
         let url = "../hongbao/main";
-        this.to(url)
-
+        this.to(url, index);
       },
-      toRecord: function () {
+      toRecord: function (index) {
         let url = "../record/main";
-        this.to(url)
-
+        this.to(url, index);
       },
-      toMy: function () {
+      toMy: function (index) {
         let url = "../my/main";
-        this.to(url)
+        this.to(url, index);
+      },
+      tomy_custom: function (index) {
+        let url = "../my_custom/main";
+        this.to(url, index);
       },
       to: function (url) {
         wx.switchTab({
           url
-        })
+        });
       }
     }
-
-  }
+  };
 
 </script>
 <style lang="scss" scoped>
@@ -68,7 +74,7 @@
     justify-content: center;
     align-items: center;
     background-color: $footer;
-    font-size: tovmin(22)
+    font-size: tovmin(22);
   }
 
   .footer li {

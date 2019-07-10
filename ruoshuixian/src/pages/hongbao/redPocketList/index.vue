@@ -115,7 +115,7 @@
     position: absolute;
     bottom: tovmin(118);
     left: tovmin(180);
-    color: #FFC400;
+    background: #FFC400;
   }
 
 </style>

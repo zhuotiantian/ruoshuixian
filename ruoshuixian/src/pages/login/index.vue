@@ -2,15 +2,31 @@
   <div class="container">
     <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'" v-if="ratio"></image>
     <div class="login-form">
-      <input type="text" class="input" placeholder="请输入手机号" placeholder-style="color:#ccc" />
+      <div class="input_div">
+        <input type="text" class="input" placeholder="请输入手机号" placeholder-style="color:#ccc" />
+        <image :src="'/static/images/my/phone@'+ratio+'x.png'" v-if="ratio" class="icon"
+          style="height:42rpx;width:34rpx">
+        </image>
+      </div>
       <template v-if="!codeLogin">
         <span class="getCode" @click="getCode" v-if="!clickGetCode">获取验证码</span>
         <span class="getCode" style="color:#c0c4cc" v-else>{{seconds}}s后重新获取</span>
       </template>
-      <input type="text" class="input" v-if="codeLogin" placeholder="密码" placeholder-style="color:#ccc" />
-      <input type="text" class="input" v-else placeholder="验证码" placeholder-style="color:#ccc" />
+      <div class="input-div">
+        <template v-if="codeLogin">
+          <input type="text" class="input" placeholder="密码" placeholder-style="color:#ccc" />
+          <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon"
+            style="height:42rpx;width:34rpx"></image>
+        </template>
+        <template v-else>
+          <input type="text" class="input" placeholder="验证码" placeholder-style="color:#ccc" />
+          <image :src="'/static/images/my/keys@'+ratio+'x.png'" v-if="ratio" class="icon"
+            style="height:54rpx;width:38rpx">
+          </image>
+        </template>
+      </div>
       <p style="text-align:center">
-        <span class="btn submit-btn">登 录</span>
+        <span class="btn submit-btn" @click="login">登 录</span>
       </p>
       <p class="info">
         <span @click="switchLoginWay">
@@ -40,6 +56,11 @@
         let url = "../regist/main";
         wx.navigateTo({
           url
+        })
+      },
+      login: function () {
+        wx.navigateTo({
+          url: "../firstPage/main"
         })
       },
       getCode: function () {
@@ -133,6 +154,16 @@
     bottom: 0;
     left: 0;
     right: 0;
+  }
+
+  .icon {
+    position: absolute;
+    top: tovmin(20);
+    left: tovmin(20);
+  }
+
+  .input-div {
+    position: relative;
   }
 
 </style>

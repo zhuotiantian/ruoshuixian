@@ -31,6 +31,7 @@
   .image {
     height: tovmin(176);
     width: tovmin(178);
+    margin-top: tovmin(30);
   }
 
 </style>

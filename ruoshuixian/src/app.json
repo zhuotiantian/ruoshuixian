@@ -1,6 +1,16 @@
 {
   "pages": [
+    "pages/login/main",
+    "pages/marathonPocker/memary/main",
+    "pages/marathonPocker/main",
+    "pages/marathonPocker/result/main",
+    "pages/marathonPocker/answer/main",
+    "pages/marathonPocker/recall/main",
+    "pages/marathonPocker/ready/main",
+
+    "pages/help/main",
     "pages/firstPage/main",
+    "pages/regist/main",
 
     "pages/abstractPic/result/main",
     "pages/abstractPic/answer/main",
@@ -27,17 +37,11 @@
     "pages/binaryNumber/memary/main",
     "pages/binaryNumber/result/main",
 
-    "pages/marathonPocker/main",
-    "pages/marathonPocker/result/main",
-    "pages/marathonPocker/answer/main",
-    "pages/marathonPocker/recall/main",
-    "pages/marathonPocker/memary/main",
-    "pages/marathonPocker/ready/main",
-
     "pages/fastPocker/main",
     "pages/fastPocker/result/main",
     "pages/fastPocker/answer/main",
     "pages/fastPocker/recall/main",
+    "pages/fastPocker/ready/main",
     "pages/fastPocker/memary/main",
 
     "pages/flashPocker/main",
@@ -56,10 +60,7 @@
     "pages/listenAndRemember/main",
     "pages/listenAndRemember/listen/main",
 
-    "pages/help/main",
     "pages/index/main",
-    "pages/login/main",
-    "pages/regist/main",
 
     "pages/randomWords/main",
     "pages/randomWords/result/main",

@@ -58,6 +58,7 @@
     margin: tovmin(120) auto auto;
     height: tovmin(88);
     width: tovmin(362);
+    line-height: tovmin(88);
   }
 
   .image {

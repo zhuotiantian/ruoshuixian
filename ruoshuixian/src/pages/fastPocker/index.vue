@@ -15,7 +15,7 @@
     data() {
       return {
         type: "counts",
-        nextPage: "./memary/main",
+        nextPage: "./ready/main",
         ratio: 1,
       }
     },

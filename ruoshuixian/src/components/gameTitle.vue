@@ -25,8 +25,7 @@
           <span class="btn default-btn type arrow" v-if="showType" style="margin-left:30rpx"
             @click="showPannel=true">{{selectType}}</span>
         </p>
-        <p style="flex:1;text-align:center" v-if="seconds&&type=='跳过'">00：00：{{seconds<10?'0'+seconds:seconds}}</p>
-        <p style="flex:1;text-align:center" v-if="minutes&&seconds">
+        <p style="flex:1;text-align:center" v-if="seconds||minutes">
           00：{{minutes<10?'0'+minutes:minutes}}：{{seconds<10?'0'+seconds:seconds}}</p>
         <div style="flex:1;text-align:right">
           <p class="btn primary-btn" v-if="type=='跳过'" @click="toNextPage">跳过</p>
@@ -59,6 +58,8 @@
       "showTime"
     ],
     mounted() {
+      console.log(this.seconds);
+      console.log(this.minutes);
       this.timer();
       this.ratio = this.globalData.ratio;
     },

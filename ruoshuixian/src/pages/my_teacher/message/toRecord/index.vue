@@ -78,6 +78,7 @@
     width: 100%;
     padding: tovmin(10) tovmin(18);
     box-sizing: border-box;
+    font-size: tovmin(26);
   }
 
 </style>
