@@ -59,7 +59,7 @@
         })
       },
       login: function () {
-        wx.navigateTo({
+        wx.switchTab({
           url: "../firstPage/main"
         })
       },

@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/login/main",
+    "pages/firstPage/main",
     "pages/marathonPocker/memary/main",
     "pages/marathonPocker/main",
     "pages/marathonPocker/result/main",
@@ -9,7 +10,6 @@
     "pages/marathonPocker/ready/main",
 
     "pages/help/main",
-    "pages/firstPage/main",
     "pages/regist/main",
 
     "pages/abstractPic/result/main",
