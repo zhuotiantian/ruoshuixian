@@ -64,29 +64,13 @@
     "pages/randomWords/main",
     "pages/randomWords/result/main",
     "pages/randomWords/answer/main",
-    "pages/randomWords/memary/main"
+    "pages/randomWords/memary/main",
+
+    "pages/record/main",
+    "pages/hongbao/main",
+    "pages/my/main"
   ],
   "subPackages": [{
-    "root": "pages/hongbao/",
-    "pages": [
-      "main",
-      "redPocketList/main"
-    ]
-  }, {
-    "root": "pages/record/",
-    "pages": [
-      "main"
-    ]
-  }, {
-    "root": "pages/my/",
-    "pages": [
-      "main",
-      "hongbao/main",
-      "message/main",
-      "ranking/main",
-      "record/main"
-    ]
-  }, {
     "root": "pages/my_custom/",
     "pages": [
       "main",
@@ -123,5 +107,24 @@
     "scope.userLocation": {
       "desc": "你的位置信息将用于小程序位置接口的效果展示"
     }
+  },
+  "tabBar": {
+    "list": [{
+        "text": "首页",
+        "pagePath": "pages/firstPage/main"
+      },
+      {
+        "text": "红包",
+        "pagePath": "pages/hongbao/main"
+      },
+      {
+        "text": "排行榜",
+        "pagePath": "pages/record/main"
+      },
+      {
+        "text": "我的",
+        "pagePath": "pages/my/main"
+      }
+    ]
   }
 }
