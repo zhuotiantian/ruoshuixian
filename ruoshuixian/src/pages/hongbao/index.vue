@@ -23,7 +23,7 @@
     <image class="image2" :src="'/static/images/redPocket/close@'+ratio+'x.png'" v-if="showFog" @click="hideFog" />
     <p class="success" v-if="showFog">恭喜完成任务</p>
     <p class="redPocketBtn" v-if="showFog" @click="toGetRedPocket">点击领取红包</p>
-    <CardFooter></CardFooter>
+    <CardFooter :index="2"></CardFooter>
   </div>
 </template>
 <script>
@@ -37,6 +37,9 @@
         showFog: false,
         ratio: 1,
       }
+    },
+    onShow() {
+      wx.hideTabBar();
     },
     components: {
       CardFooter

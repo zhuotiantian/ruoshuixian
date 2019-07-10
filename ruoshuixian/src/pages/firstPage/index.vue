@@ -26,7 +26,7 @@
         </ul>
       </div>
     </div>
-    <CardFooter></CardFooter>
+    <CardFooter :index="1"></CardFooter>
   </div>
 </template>
 <script>
@@ -34,7 +34,9 @@
   export default {
     components: {
       CardFooter,
-
+    },
+    onShow() {
+      wx.hideTabBar();
     },
     beforeMount() {
       this.ratio = this.globalData.ratio;

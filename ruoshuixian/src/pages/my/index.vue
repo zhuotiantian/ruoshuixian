@@ -30,7 +30,7 @@
         </li>
       </ul>
     </div>
-    <CardFooter></CardFooter>
+    <CardFooter :index="4"></CardFooter>
   </div>
 </template>
 <script>
@@ -46,6 +46,9 @@
       return {
         ratio: 1
       }
+    },
+    onShow() {
+      wx.hideTabBar();
     },
     methods: {
       toRanking: function () {

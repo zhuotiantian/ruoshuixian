@@ -12,7 +12,7 @@
       <p class="p">这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录这里是打卡记录
       </p>
     </div>
-    <CardFooter></CardFooter>
+    <CardFooter :index="3"></CardFooter>
   </div>
 </template>
 <script>
@@ -25,6 +25,9 @@
       return {
         ratio: 1,
       }
+    },
+    onShow() {
+      wx.hideTabBar();
     },
     mounted() {
       this.ratio = this.globalData.ratio;

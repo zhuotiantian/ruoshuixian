@@ -1,17 +1,21 @@
 <template>
   <ul class="footer" v-if="ratio">
     <li @click="toFisrstPage">
-      <image class="icon footer1" :src="'/static/images/firstPage/footer1@'+ratio+'x.png'"></image>
+      <image class="icon footer1" :src="'/static/images/firstPage/footer1'+(index==1?'_active':'')+'@'+ratio+'x.png'">
+      </image>
       <span>首页</span>
     </li>
     <li @click="toMoney">
-      <image class="icon footer2" :src="'/static/images/firstPage/footer2@'+ratio+'x.png'"></image><span>红包</span>
+      <image class="icon footer2" :src="'/static/images/firstPage/footer2'+(index==2?'_active':'')+'@'+ratio+'x.png'">
+      </image><span>红包</span>
     </li>
     <li @click="toRecord">
-      <image class="icon footer3" :src="'/static/images/firstPage/footer3@'+ratio+'x.png'"></image><span>打卡</span>
+      <image class="icon footer3" :src="'/static/images/firstPage/footer3'+(index==3?'_active':'')+'@'+ratio+'x.png'">
+      </image><span>打卡</span>
     </li>
     <li @click="toMy">
-      <image class="icon footer4" :src="'/static/images/firstPage/footer4@'+ratio+'x.png'"></image><span>我的</span>
+      <image class="icon footer4" :src="'/static/images/firstPage/footer4'+(index==4?'_active':'')+'@'+ratio+'x.png'">
+      </image><span>我的</span>
     </li>
   </ul>
 </template>
@@ -20,6 +24,7 @@
     beforeMount() {
       this.ratio = this.globalData.ratio;
     },
+    props: ["index"],
     data() {
       return {
         ratio: 1,
@@ -45,7 +50,7 @@
         this.to(url)
       },
       to: function (url) {
-        wx.navigateTo({
+        wx.switchTab({
           url
         })
       }
