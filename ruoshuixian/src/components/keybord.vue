@@ -71,7 +71,7 @@
     color: $black;
     position: absolute;
     top: tovmin(40);
-    right: tovmin(380);
+    right: tovmin(430);
     border: tovmin(2) solid #363636;
     box-sizing: border-box;
   }

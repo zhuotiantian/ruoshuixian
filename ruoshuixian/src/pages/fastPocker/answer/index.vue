@@ -8,7 +8,7 @@
       <p>方式二、单击屏幕上半区的任意一张扑克，然后长按下半区的任意一张扑克，进行“替换位置/从前面插入/从后面插入”操作。</p>
       <p><span class="btn default-btn" @click="shideTip">我知道了</span></p>
     </div>
-    <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
+    <CardTitle :seconds="seconds" :minutes="minutes" :isInsert="true" type="记忆完成" @finish="finish"></CardTitle>
     <div class="result">
       <image class="pocker" @click="backHandler(index,item.rowIndex,item.columnIndex)"
         :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url">

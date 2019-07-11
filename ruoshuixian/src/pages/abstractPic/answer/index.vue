@@ -9,7 +9,7 @@
           <image class="image" :src="'/static/images/firstPage/abstract@'+ratio+'x.png'" />
           <input type="text" class="input" placeholder="序号" @focus="focus" @blur="blur" />
         </div>
-        <span>row&nbsp;&nbsp;{{_index+1}}</span>
+        <span style="margin-left:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
     <Keybord :showKeybord="showKeybord" counts="5"></Keybord>
@@ -79,7 +79,7 @@
   .list {
     margin-top: tovmin(200);
     margin-left: tovmin(180);
-    margin-top: tovmin(230);
+    margin-top: tovmin(180);
   }
 
   .row {
@@ -98,7 +98,7 @@
   .image_div {
     height: tovmin(200);
     width: tovmin(200);
-    margin-right: tovmin(40);
+    margin-right: tovmin(60);
     text-align: center;
   }
 

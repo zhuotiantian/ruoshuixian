@@ -28,6 +28,11 @@
         <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon"
           style="height:42rpx;width:34rpx"></image>
       </div>
+      <p class="info">
+        <span @click="switchLoginWay">
+          <span v-if="!codeLogin">验证码登陆</span><span v-else>验证码登陆</span>
+        </span>
+        <span>忘记密码</span></p>
       <p style="text-align:center">
         <span class="btn submit-btn">注 册</span>
       </p>
@@ -124,7 +129,7 @@
   }
 
   .getCode {
-    font-size: tovmin(24);
+    font-size: tovmin(26);
     position: absolute;
     right: tovmin(10);
     top: tovmin(26);
@@ -147,6 +152,13 @@
     position: absolute;
     top: tovmin(20);
     left: tovmin(20);
+  }
+
+  .info {
+    color: #C0C4CC;
+    display: flex;
+    justify-content: space-between;
+    margin-top: tovmin(24);
   }
 
 </style>

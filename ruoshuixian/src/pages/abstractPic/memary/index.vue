@@ -7,7 +7,7 @@
         <div class="image" v-for="(item,index) in number" :key="index">
           <image class="image" :src="'/static/images/firstPage/abstract@'+ratio+'x.png'" />
         </div>
-        <span>row&nbsp;&nbsp;{{_index+1}}</span>
+        <span style="margin-left:60rpx">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
   </div>
@@ -56,9 +56,9 @@
   }
 
   .list {
-    margin-top: tovmin(200);
+    margin-top: tovmin(160);
     margin-left: tovmin(230);
-    margin-top: tovmin(230);
+    margin-top: tovmin(180);
   }
 
   .row {
@@ -75,7 +75,7 @@
     height: tovmin(140);
     width: tovmin(140);
     background: white;
-    margin-right: tovmin(40);
+    margin-right: tovmin(50);
   }
 
 </style>

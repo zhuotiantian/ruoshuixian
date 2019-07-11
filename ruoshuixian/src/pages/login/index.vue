@@ -137,7 +137,7 @@
   }
 
   .getCode {
-    font-size: tovmin(24);
+    font-size: tovmin(26);
     position: absolute;
     right: tovmin(10);
     top: tovmin(26);

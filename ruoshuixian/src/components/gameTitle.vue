@@ -15,7 +15,8 @@
           </span>
           <span class="btn primary-btn">再次训练</span>
           <image class="share" :src="'/static/images/redPocket/share@'+ratio+'x.png'" />
-          <span class="btn default-btn shareBtn" v-if="ratio"><span>分享</span>
+          <span class="btn default-btn shareBtn" v-if="ratio">
+            <span>分享</span>
           </span>
         </p>
       </template>
@@ -30,6 +31,7 @@
         <div style="flex:1;text-align:right">
           <p class="btn primary-btn" v-if="type=='跳过'" @click="toNextPage">跳过</p>
           <p class="btn primary-btn" v-if="type=='下一页'" @click="nextPage">下一页</p>
+          <p class="btn primary-btn" v-if="isInsert" style="margin-right:15rpx">插入空牌</p>
           <p class="btn submit-btn" v-if="type=='记忆完成'" @click="finishMemary">记忆完成</p>
           <p class="btn submit-btn" v-if="type=='作答完成'" @click="finish">作答完成</p>
           <p class="btn submit-btn" v-if="type=='开始'" @click="startGame">开始</p>
@@ -40,8 +42,7 @@
     <div :class="{pannel:true,down:showPannel,up:!showPannel}">
       <p>显示方式</p>
       <p v-for="(item,index) in pannelContent" :key="index" @click.stop="group(item,index)"
-        :class="{active:active==index}">
-        {{item}}</p>
+        :class="{active:active==index}">{{item}}</p>
     </div>
   </div>
 </template>
@@ -55,11 +56,10 @@
       "showType",
       "pannelContent",
       "isPocker",
-      "showTime"
+      "showTime",
+      "isInsert"
     ],
     mounted() {
-      console.log(this.seconds);
-      console.log(this.minutes);
       this.timer();
       this.ratio = this.globalData.ratio;
     },
@@ -71,7 +71,7 @@
         selectType: "显示方式",
         showTime: this.showTime,
         active: null,
-        ratio: 1,
+        ratio: 1
       };
     },
     methods: {
