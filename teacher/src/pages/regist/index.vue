@@ -1,0 +1,152 @@
+<template>
+  <div class="container">
+    <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'" v-if="ratio"></image>
+    <div class="login-form">
+      <div class="input-div">
+        <input type="text" class="input" placeholder="请输入手机号" placeholder-style="color:#ccc" />
+        <image :src="'/static/images/my/phone@'+ratio+'x.png'" v-if="ratio" class="icon"
+          style="height:42rpx;width:34rpx">
+        </image>
+        <template>
+          <span class="getCode" @click="getCode" v-if="!clickGetCode">获取验证码</span>
+          <span class="getCode" style="color:#c0c4cc" v-else>{{seconds}}s后重新获取</span>
+        </template>
+      </div>
+      <div class="input-div">
+        <input type="text" class="input" placeholder="验证码" placeholder-style="color:#ccc" />
+        <image :src="'/static/images/my/keys@'+ratio+'x.png'" v-if="ratio" class="icon"
+          style="height:54rpx;width:38rpx">
+        </image>
+      </div>
+      <div class="input-div">
+        <input type="text" class="input" placeholder="密码" placeholder-style="color:#ccc" />
+        <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon"
+          style="height:42rpx;width:34rpx"></image>
+      </div>
+      <div class="input-div">
+        <input type="text" class="input" placeholder="确认密码" placeholder-style="color:#ccc" />
+        <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon"
+          style="height:42rpx;width:34rpx"></image>
+      </div>
+      <p style="text-align:center">
+        <span class="btn submit-btn">注 册</span>
+      </p>
+    </div>
+  </div>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        clickGetCode: false,
+        seconds: 60,
+        ratio: 1,
+      }
+    },
+    mounted() {
+      this.ratio = this.globalData.ratio;
+    },
+    methods: {
+      // 跳转到注册页面
+      toRegist: function () {
+        let url = "../regist/main";
+        wx.navigateTo({
+          url
+        })
+      },
+      getCode: function () {
+        // 获取验证码
+        this.clickGetCode = true;
+        this.timer = setInterval(() => {
+          this.seconds--;
+          if (this.seconds == 0) {
+            clearInterval(this.timer);
+            this.clickGetCode = false;
+            this.seconds = 60;
+          }
+        }, 1000);
+      },
+      switchLoginWay: function () {
+        clearInterval(this.timer);
+        this.clickGetCode = false;
+        this.seconds = 60;
+      }
+    }
+  };
+
+</script>
+<style lang="scss" scoped>
+  .container {
+    height: 100%;
+    width: 100%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    font-size: tovmin(28);
+    position: absolute;
+  }
+
+  .login-form {
+    width: 80%;
+    height: 50%;
+    position: relative;
+    transform: translate(13%, 40%);
+  }
+
+  .input-div {
+    position: relative;
+  }
+
+  .input {
+    background-color: white;
+    border-radius: tovmin(12);
+    height: tovmin(86);
+    width: tovmin(530);
+    margin-bottom: tovmin(28);
+    padding-left: tovmin(70);
+  }
+
+  .btn {
+    border-radius: tovmin(50);
+    margin-top: tovmin(104);
+    font-size: tovmin(40);
+    height: tovmin(98);
+    width: tovmin(530);
+    line-height: tovmin(98);
+  }
+
+  #info {
+    color: $grey-background;
+    position: absolute;
+    bottom: tovmin(74);
+    text-align: center;
+    width: 100%;
+
+  }
+
+  .getCode {
+    font-size: tovmin(24);
+    position: absolute;
+    right: tovmin(10);
+    top: tovmin(26);
+    color: #ccc;
+    z-index: 30;
+  }
+
+  .background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -6;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .icon {
+    position: absolute;
+    top: tovmin(20);
+    left: tovmin(20);
+  }
+
+</style>

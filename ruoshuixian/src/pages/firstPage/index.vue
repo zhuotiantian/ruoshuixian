@@ -8,7 +8,7 @@
       <div class="middle">
         <ul>
           <li @click="toRanking">
-            <image class="icon ranking" :src="'/static/images/firstPage/排行榜@'+ratio+'x.png'" />
+            <image class="icon ranking" :src="'/static/images/firstPage/ranking_icon@'+ratio+'x.png'" />
             <span class="flex-span">排行榜</span>
           </li>
           <li>
@@ -67,9 +67,9 @@
 </script>
 <style lang="scss" scoped>
   .content {
-    padding: tovmin(40);
+    padding: tovmin(10) tovmin(40) tovmin(40);
     display: grid;
-    grid-template-rows: 130px 80px auto;
+    grid-template-rows: tovmin(240) tovmin(160) auto;
     grid-template-columns: 100%;
     grid-gap: tovmin(30);
     height: calc(100% - 80px);

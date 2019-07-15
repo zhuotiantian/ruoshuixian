@@ -1,0 +1,20 @@
+{
+  "pages": [
+    "pages/login/main",
+    "pages/regist/main",
+    "pages/my_teacher/main",
+    "pages/my_teacher/notice/main",
+    "pages/my_teacher/message/main",
+    "pages/my_teacher/message/other/main",
+    "pages/my_teacher/message/toRecord/main",
+    "pages/my_teacher/students/main",
+    "pages/my_teacher/students/comment/main",
+    "pages/my_teacher/work/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#173771",
+    "navigationBarTitleText": "若水轩",
+    "navigationBarTextStyle": "white"
+  }
+}
