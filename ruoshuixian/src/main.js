@@ -18,7 +18,7 @@ wx.getSystemInfo({
 });
 getApp().globalData.ratio = pixelRatio;
 getApp().globalData.games = [{
-  name: "闪现扑克牌",
+  name: "闪视扑克牌",
   url: "../flashPocker/main"
 }, {
   name: "快速扑克牌",
