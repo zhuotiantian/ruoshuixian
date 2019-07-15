@@ -9,13 +9,30 @@
     "pages/marathonPocker/recall/main",
     "pages/marathonPocker/ready/main",
 
+    "pages/listenAndRemember/answer/main",
+    "pages/listenAndRemember/result/main",
+    "pages/listenAndRemember/main",
+    "pages/listenAndRemember/listen/main",
+
+    "pages/abstractPic/answer/main",
+    "pages/abstractPic/memary/main",
+    "pages/abstractPic/result/main",
+    "pages/abstractPic/main",
+
+    "pages/fastNumber/answer/main",
+    "pages/fastNumber/main",
+    "pages/fastNumber/result/main",
+    "pages/fastNumber/memary/main",
+
+    "pages/fastPocker/main",
+    "pages/fastPocker/answer/main",
+    "pages/fastPocker/result/main",
+    "pages/fastPocker/recall/main",
+    "pages/fastPocker/ready/main",
+    "pages/fastPocker/memary/main",
+
     "pages/help/main",
     "pages/regist/main",
-
-    "pages/abstractPic/result/main",
-    "pages/abstractPic/answer/main",
-    "pages/abstractPic/main",
-    "pages/abstractPic/memary/main",
 
     "pages/peoplePic/result/main",
     "pages/peoplePic/memary/main",
@@ -27,22 +44,10 @@
     "pages/marathonNumber/answer/main",
     "pages/marathonNumber/memary/main",
 
-    "pages/fastNumber/answer/main",
-    "pages/fastNumber/main",
-    "pages/fastNumber/result/main",
-    "pages/fastNumber/memary/main",
-
     "pages/binaryNumber/main",
     "pages/binaryNumber/answer/main",
     "pages/binaryNumber/memary/main",
     "pages/binaryNumber/result/main",
-
-    "pages/fastPocker/main",
-    "pages/fastPocker/result/main",
-    "pages/fastPocker/answer/main",
-    "pages/fastPocker/recall/main",
-    "pages/fastPocker/ready/main",
-    "pages/fastPocker/memary/main",
 
     "pages/flashPocker/main",
     "pages/flashPocker/answer/main",
@@ -55,10 +60,6 @@
     "pages/virtualEvents/result/main",
     "pages/virtualEvents/anwser/main",
 
-    "pages/listenAndRemember/answer/main",
-    "pages/listenAndRemember/result/main",
-    "pages/listenAndRemember/main",
-    "pages/listenAndRemember/listen/main",
 
     "pages/index/main",
 
