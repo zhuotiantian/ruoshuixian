@@ -1,5 +1,11 @@
 {
   "pages": [
+    "pages/flashPocker/answer/main",
+    "pages/flashPocker/memary/main",
+    "pages/flashPocker/main",
+    "pages/flashPocker/result/main",
+    "pages/flashPocker/recall/main",
+
     "pages/login/main",
     "pages/firstPage/main",
     "pages/marathonPocker/memary/main",
@@ -48,12 +54,6 @@
     "pages/binaryNumber/answer/main",
     "pages/binaryNumber/memary/main",
     "pages/binaryNumber/result/main",
-
-    "pages/flashPocker/main",
-    "pages/flashPocker/answer/main",
-    "pages/flashPocker/memary/main",
-    "pages/flashPocker/result/main",
-    "pages/flashPocker/recall/main",
 
     "pages/virtualEvents/memary/main",
     "pages/virtualEvents/main",
