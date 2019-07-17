@@ -9,7 +9,7 @@
       <p><span class="btn default-btn" @click="shideTip">我知道了</span></p>
     </div>
     <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
-    <scroll-view :style="{width:'80%',height:'260rpx','white-space':'nowrap','margin':'0 auto'}" scroll-x="true">
+    <scroll-view :style="{width:'99%',height:'350rpx','white-space':'nowrap','margin':'0 auto'}" scroll-x="true">
       <div class="result" :style="{width:102+(result.length-1)*20+'rpx'}">
         <image class="pocker" @click="backHandler(index,item.rowIndex,item.columnIndex)"
           :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url">
@@ -140,7 +140,7 @@
   }
 
   .list {
-    margin-top: tovmin(400);
+    // margin-top: tovmin(160);
   }
 
   .pocker {
@@ -162,8 +162,8 @@
 
   .result {
     position: absolute;
-    bottom: tovmin(0);
-    width: 100%;
+    bottom: tovmin(150);
+    min-width: 100%;
     height: 100%;
   }
 

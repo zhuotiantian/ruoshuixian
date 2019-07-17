@@ -9,11 +9,13 @@
       <p><span class="btn default-btn" @click="shideTip">我知道了</span></p>
     </div>
     <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
-    <div class="result">
-      <image class="pocker" @click="backHandler(index,item.rowIndex,item.columnIndex)"
-        :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url">
-      </image>
-    </div>
+    <scroll-view :style="{width:'99%',height:'350rpx','white-space':'nowrap','margin':'0 auto'}" scroll-x="true">
+      <div class="result" :style="{width:102+(result.length-1)*20+'rpx'}">
+        <image class="pocker" @click="backHandler(index,item.rowIndex,item.columnIndex)"
+          :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url">
+        </image>
+      </div>
+    </scroll-view>
     <div class="list">
       <div class="row" v-for="(item,index) in pocker" :key="index">
         <image @click="selectPocker($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show}"
@@ -21,13 +23,13 @@
           :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'@'+ratio+'x.png'"></image>
       </div>
     </div>
-    <p class="operationTips"><span class="btn default-btn" style="float-right" @click="showTips">操作提示</span></p>
     <div class="pageFoot">
       <span class="pageBtn" @click="prevPage">上一页</span>
       <div class="btn-group">
         <span class="item active" v-for="(item,index) in pages" :key="index">{{item}}幅</span>
       </div>
       <span class="pageBtn" @click="nextPage">下一页</span>
+      <span class="btn tips-btn" style="float-right" @click="showTips">操作提示</span>
     </div>
   </div>
 </template>
@@ -152,6 +154,7 @@
     padding-top: tovmin(380);
     color: white;
     text-align: center;
+    padding-bottom: tovmin(150);
   }
 
   .tips {
@@ -170,13 +173,12 @@
   }
 
   .list {
-    margin-top: tovmin(400);
-    margin-bottom: tovmin(30);
+    // margin-top: tovmin(160);
   }
 
   .pocker {
-    width: tovmin(82);
-    height: tovmin(130);
+    width: tovmin(102);
+    height: tovmin(150);
     margin-right: tovmin(10);
     margin-bottom: tovmin(10);
   }
@@ -193,8 +195,9 @@
 
   .result {
     position: absolute;
-    bottom: tovmin(0);
-    width: 100%;
+    bottom: tovmin(150);
+    min-width: 100%;
+    height: 100%;
   }
 
   .result image {
@@ -237,6 +240,11 @@
     color: white;
     background: $middle-blue;
     border: none;
+  }
+
+  .tips-btn {
+    color: $middle-blue;
+    border: tovmin(2) solid $middle-blue;
   }
 
 </style>
