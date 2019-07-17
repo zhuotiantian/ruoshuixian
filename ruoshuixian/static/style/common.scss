@@ -9,6 +9,14 @@ page {
   font-family: "Noto Sans S Chinese";
   background-color: $deep-blue;
   -webkit-text-size-adjust: 100%;
+  overflow-y: auto;
+
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
 }
 
 .container {
@@ -16,7 +24,7 @@ page {
 }
 
 .fog {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;

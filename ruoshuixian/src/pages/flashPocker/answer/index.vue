@@ -9,13 +9,18 @@
       <p><span class="btn default-btn" @click="shideTip">我知道了</span></p>
     </div>
     <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
-    <scroll-view :style="{width:'99%',height:'350rpx','white-space':'nowrap','margin':'0 auto'}" scroll-x="true">
-      <div class="result" :style="{width:102+(result.length-1)*20+'rpx'}">
-        <image class="pocker" @click="backHandler(index,item.rowIndex,item.columnIndex)"
-          :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url">
-        </image>
-      </div>
-    </scroll-view>
+    <div class="result-div">
+      <em class="arrow arrow-left" v-if="result.length>0" style="flex:1;"></em>
+      <scroll-view :style="{width:'99%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}"
+        scroll-x="true">
+        <div class="result" :style="{width:102+(result.length-1)*20+'rpx'}">
+          <image class="pocker" @click="backHandler(index,item.rowIndex,item.columnIndex)"
+            :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url">
+          </image>
+        </div>
+      </scroll-view>
+      <em class="arrow arrow-right" v-if="result.length>0" style="flex:1;"></em>
+    </div>
     <div class="list">
       <div class="row" v-for="(item,index) in pocker" :key="index">
         <image @click="selectPocker($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show}"
@@ -119,7 +124,7 @@
   }
 
   .container {
-    padding-top: tovmin(380);
+    padding-top: tovmin(520);
     color: white;
     text-align: center;
   }
@@ -162,14 +167,21 @@
 
   .result {
     position: absolute;
-    bottom: tovmin(150);
     min-width: 100%;
     height: 100%;
+    bottom: tovmin(75);
+
   }
 
   .result image {
     position: absolute;
     bottom: tovmin(0);
+  }
+
+  .result-div {
+    display: flex;
+    height: tovmin(238);
+    align-items: center;
   }
 
 </style>

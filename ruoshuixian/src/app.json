@@ -2,9 +2,9 @@
   "pages": [
     "pages/login/main",
 
-    "pages/flashPocker/answer/main",
     "pages/flashPocker/memary/main",
     "pages/flashPocker/main",
+    "pages/flashPocker/answer/main",
     "pages/flashPocker/result/main",
     "pages/flashPocker/recall/main",
 
