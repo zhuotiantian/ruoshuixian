@@ -24,6 +24,9 @@
     components: {
       CardTitle
     },
+    onLoad: function (option) {
+      this.time_long = option.time_long;
+    },
     data() {
       return {
         pannelContent: ["ALL", "1", "2", "4", "8"],
@@ -53,7 +56,12 @@
       group: function (data) {
         this.pockerCount = data == 'ALL' ? this.pockerCount = 52 : data;
         this.pocker = new Array(parseInt(this.pockerCount));
-        this.type = "记忆完成"
+        this.type = "记忆完成";
+        if (this.time_long) {
+          setTimeout(() => {
+            this.finishMemary();
+          }, this.time_long);
+        }
       },
       finishMemary: function () {
         wx.navigateTo({

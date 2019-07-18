@@ -6,17 +6,19 @@
       <p style="margin-bottom:30rpx">你可以通过以下两种方式对扑克牌的顺序进行修改</p>
       <p>方式一、双击屏幕上半区的任意一张扑克，将这张扑克牌退回原位。</p>
       <p>方式二、单击屏幕上半区的任意一张扑克，然后长按下半区的任意一张扑克，进行“替换位置/从前面插入/从后面插入”操作。</p>
-      <p><span class="btn default-btn" @click="shideTip">我知道了</span></p>
+      <p>
+        <span class="btn default-btn" @click="shideTip">我知道了</span>
+      </p>
     </div>
-    <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
+    <CardTitle minutes="15" seconds="0" type="作答完成" @finish="finish"></CardTitle>
     <div class="result-div">
       <em class="arrow arrow-left" v-if="result.length>0" style="flex:1;"></em>
       <scroll-view :style="{width:'99%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}"
         scroll-x="true">
         <div class="result" :style="{width:102+(result.length-1)*20+'rpx'}">
           <image class="pocker" @click="backHandler(index,item.rowIndex,item.columnIndex)"
-            :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url">
-          </image>
+            :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index"
+            :src="item.url" />
         </div>
       </scroll-view>
       <em class="arrow arrow-right" v-if="result.length>0" style="flex:1;"></em>
@@ -25,10 +27,12 @@
       <div class="row" v-for="(item,index) in pocker" :key="index">
         <image @click="selectPocker($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show}"
           v-for="(_item,_index) in item" :key="_index"
-          :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'@'+ratio+'x.png'"></image>
+          :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'@'+ratio+'x.png'" />
       </div>
     </div>
-    <p class="operationTips"><span class="btn default-btn" style="float-right" @click="showTips">操作提示</span></p>
+    <p class="operationTips">
+      <span class="btn default-btn" style="float-right" @click="showTips">操作提示</span>
+    </p>
   </div>
 </template>
 <script>
@@ -75,8 +79,12 @@
           url: "../answer/main"
         })
       },
-      finish: function () {
-        this.showFog = true;
+      finish: function (data) {
+        if (data == "timeout") {
+          this.confirm();
+        } else {
+          this.showFog = true;
+        }
       },
       hideFog: function () {
         this.showFog = false;
@@ -170,7 +178,6 @@
     min-width: 100%;
     height: 100%;
     bottom: tovmin(75);
-
   }
 
   .result image {

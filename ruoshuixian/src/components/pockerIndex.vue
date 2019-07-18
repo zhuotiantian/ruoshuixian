@@ -43,14 +43,10 @@
       }, 1000);
     },
     methods: {
-      toNextPage: function () {
+      toNextPage: function (data) {
+        console.log(data);
         wx.navigateTo({
-          url: this.nextPage
-        })
-      },
-      to: function (url) {
-        wx.navigateTo({
-          url
+          url: this.nextPage + "?time_long=" + (this.type == 'time' ? this.activeIndex * 1000 : "") + ""
         })
       }
     }
