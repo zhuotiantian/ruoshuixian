@@ -31,7 +31,7 @@
         <div style="flex:1;text-align:right">
           <p class="btn primary-btn" v-if="type=='跳过'" @click="toNextPage">跳过</p>
           <p class="btn primary-btn" v-if="type=='下一页'" @click="nextPage">下一页</p>
-          <p class="btn primary-btn" v-if="isInsert" style="margin-right:15rpx">插入空牌</p>
+          <p class="btn primary-btn" v-if="isInsert" style="margin-right:15rpx" @click="insertPocker">插入空牌</p>
           <p class="btn submit-btn" v-if="type=='记忆完成'" @click="finishMemary">记忆完成</p>
           <p class="btn submit-btn" v-if="type=='作答完成'" @click="finish">作答完成</p>
           <p class="btn submit-btn" v-if="type=='开始'" @click="startGame">开始</p>

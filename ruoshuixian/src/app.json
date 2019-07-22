@@ -1,5 +1,14 @@
 {
   "pages": [
+    "pages/login/main",
+
+    "pages/fastPocker/answer/main",
+    "pages/fastPocker/ready/main",
+    "pages/fastPocker/memary/main",
+    "pages/fastPocker/main",
+    "pages/fastPocker/result/main",
+    "pages/fastPocker/recall/main",
+
     "pages/randomWords/main",
     "pages/randomWords/result/main",
     "pages/randomWords/answer/main",
@@ -20,13 +29,6 @@
     "pages/binaryNumber/memary/main",
     "pages/binaryNumber/result/main",
 
-    "pages/fastPocker/ready/main",
-    "pages/fastPocker/memary/main",
-    "pages/fastPocker/main",
-    "pages/fastPocker/answer/main",
-    "pages/fastPocker/result/main",
-    "pages/fastPocker/recall/main",
-
     "pages/marathonPocker/recall/main",
     "pages/marathonPocker/memary/main",
     "pages/marathonPocker/ready/main",
@@ -40,7 +42,6 @@
     "pages/flashPocker/answer/main",
     "pages/flashPocker/recall/main",
 
-    "pages/login/main",
 
     "pages/firstPage/main",
 

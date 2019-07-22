@@ -29,7 +29,7 @@
     data() {
       return {
         level: '初级',
-        seconds: 3,
+        seconds: 60,
         memaryTime: 15,
         show: false,
         minutes: 0,
