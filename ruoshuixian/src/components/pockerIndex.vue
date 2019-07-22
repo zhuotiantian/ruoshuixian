@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <CardTitle :seconds="seconds" :minutes="minutes" :type="titleBtn" @toNextPage="toNextPage"></CardTitle>
+    <CardTitle :seconds="seconds" :minutes="minutes" :btnType="btnType" :type="titleBtn" @toNextPage="toNextPage">
+    </CardTitle>
     <div class="content" v-if="type=='time'">
       <span class="label">请选择闪视时间：</span>
       <div class="btn-group">
@@ -23,7 +24,7 @@
 <script>
   import CardTitle from "@/components/gameTitle"
   export default {
-    props: ["type", "titleBtn", "nextPage"],
+    props: ["type", "titleBtn", "nextPage", "btnType"],
     components: {
       CardTitle
     },
@@ -32,6 +33,7 @@
         seconds: 60,
         activeIndex: this.type == 'time' ? 0.2 : "all",
         minutes: 0,
+        btnType: this.btnType
       }
     },
     mounted() {
@@ -44,7 +46,7 @@
     },
     methods: {
       toNextPage: function (data) {
-        console.log(data);
+        clearInterval(this.timer);
         wx.navigateTo({
           url: this.nextPage + "?time_long=" + (this.type == 'time' ? this.activeIndex * 1000 : "") + ""
         })

@@ -7,7 +7,7 @@
       <div class="row" v-for="(rows,_index) in rows" :key="_index">
         <div v-for="(item,index) in number" :key="index"
           :class="{item:true,border:counts&&((index+1)%counts==0)&&(index+1)!=number.length}">
-          <span>{{index+1}}</span>
+          <span>{{item}}</span>
         </div>
         <span style="width:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
@@ -20,17 +20,27 @@
     components: {
       CardTitle
     },
+    onLoad(option) {
+      this.level = option.level;
+      this.minutes = this.level == "0" ? 30 : 15
+    },
     data() {
-      let array = new Array(30);
+      let array = [];
+      let array1 = [0, 1];
+      for (let i = 0; i < 30; i++) {
+        let index = Math.floor((Math.random() * array1.length));
+        array.push(array1[index]);
+      };
       let rows = new Array(12);
       return {
         seconds: 0,
-        minutes: 15,
+        minutes: null,
         text: "确定结束作答吗？",
         number: array,
         rows: rows,
         counts: 0,
         pannelContent: ["不划线", "三个一组", "六个一组"],
+        level: ""
       }
     },
     methods: {

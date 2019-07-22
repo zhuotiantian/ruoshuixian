@@ -24,7 +24,7 @@
     },
     data() {
       let array = new Array(5);
-      let rows = new Array(3);
+      let rows = new Array(10);
       return {
         seconds: 0,
         minutes: 15,

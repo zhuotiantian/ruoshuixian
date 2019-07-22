@@ -29,7 +29,7 @@
     data() {
       return {
         level: '初级',
-        seconds: 60,
+        seconds: 3,
         memaryTime: 15,
         show: false,
         minutes: 0,
@@ -46,7 +46,7 @@
     methods: {
       toNextPage: function () {
         wx.navigateTo({
-          url: this.nextPage
+          url: this.nextPage + "?level=" + (this.level == '初级' ? 0 : 1)
         });
       },
       selLevel: function (level) {

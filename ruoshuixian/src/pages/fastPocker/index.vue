@@ -1,6 +1,6 @@
 <template>
   <div class="container" v-if="ratio">
-    <PockerIndex :type="type" :nextPage="nextPage"></PockerIndex>
+    <PockerIndex :type="type" :nextPage="nextPage" btnType="none"></PockerIndex>
   </div>
 </template>
 <script>
@@ -22,7 +22,3 @@
   }
 
 </script>
-<style lang="scss" scoped>
-
-
-</style>

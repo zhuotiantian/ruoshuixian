@@ -152,10 +152,6 @@
     text-align: center;
   }
 
-  .list {
-    // margin-top: tovmin(160);
-  }
-
   .pocker {
     width: tovmin(102);
     height: tovmin(150);
@@ -167,10 +163,6 @@
     text-align: right;
     padding-right: tovmin(30);
     padding-bottom: tovmin(30);
-  }
-
-  .fog {
-    height: 200% !important;
   }
 
   .result {

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <PockerIndex :type="type" :nextPage="nextPage"></PockerIndex>
+    <PockerIndex :type="type" :nextPage="nextPage" btnType="none"></PockerIndex>
   </div>
 </template>
 <script>

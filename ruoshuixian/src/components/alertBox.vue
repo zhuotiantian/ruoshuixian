@@ -33,7 +33,7 @@
     height: tovmin(298);
     width: tovmin(542);
     margin: 0 auto;
-    position: absolute;
+    position: fixed;
     top: 50%;
     margin-top: tovmin(-149);
     left: 50%;

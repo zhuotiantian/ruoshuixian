@@ -23,7 +23,7 @@
         minutes: 15,
         seconds: 0,
         words: words,
-        type: "下一页"
+        type: "记忆完成"
       }
     },
     methods: {
@@ -53,10 +53,6 @@
   }
 
   .list {
-    margin: tovmin(150) tovmin(30) tovmin(30) tovmin(30);
-  }
-
-  .list {
     display: grid;
     grid-template-columns: tovmin(200) tovmin(200) tovmin(200) tovmin(200) tovmin(200);
     grid-gap: tovmin(20);
@@ -64,6 +60,7 @@
     justify-content: center;
     align-items: center;
     color: $grey-text;
+    margin: tovmin(180) tovmin(30) tovmin(30) tovmin(30);
   }
 
   .list span {

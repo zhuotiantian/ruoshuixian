@@ -62,11 +62,4 @@
     margin-top: tovmin(400);
   }
 
-  .pocker {
-    width: tovmin(82);
-    height: tovmin(130);
-    margin-right: tovmin(10);
-    margin-bottom: tovmin(10);
-  }
-
 </style>

@@ -20,6 +20,17 @@
     components: {
       CardTitle
     },
+    onShareAppMessage: function (res) {
+      return {
+        title: "马拉松扑克牌，一起来玩吧！",
+        success: function () {
+          console.log("分享成功");
+        },
+        error: function () {
+          console.log("分享失败");
+        }
+      }
+    },
     data() {
       return {
         pannelContent: ["ALL", "1", "2", "4", "8"],

@@ -14,10 +14,10 @@
             <span v-else>显示用时</span>
           </span>
           <span class="btn primary-btn">再次训练</span>
-          <image class="share" :src="'/static/images/redPocket/share@'+ratio+'x.png'" />
-          <span class="btn default-btn shareBtn" v-if="ratio">
-            <span>分享</span>
-          </span>
+          <button class="btn default-btn shareBtn" v-if="ratio" open-type="share">
+            <image class="share" :src="'/static/images/redPocket/share@'+ratio+'x.png'" />
+            分享
+          </button>
         </p>
       </template>
       <template v-else>
@@ -57,7 +57,8 @@
       "pannelContent",
       "isPocker",
       "showTime",
-      "isInsert"
+      "isInsert",
+      "btnType",
     ],
     mounted() {
       this.timer();
@@ -83,8 +84,15 @@
     watch: {
       t_seconds: function () {
         if (this.t_minutes == 0 && this.t_seconds == 0) {
-          this[this.event[this.type]]("timeout");
+          if (this.btnType == 'none') {
+            this.toNextPage("timeout");
+          }
+          this.type && this[this.event[this.type]]("timeout");
         }
+      },
+      minutes: function (data) {
+        this.t_minutes = data - 1;
+        this.t_seconds = 60;
       }
     },
     methods: {
@@ -125,7 +133,7 @@
         this.$emit("group", count);
         this.showPannel = false;
       },
-      toNextPage: function () {
+      toNextPage: function (timeout) {
         this.$emit("toNextPage", timeout);
       },
       toHelpPage: function () {
@@ -133,13 +141,13 @@
           url: "/pages/help/main"
         });
       },
-      startGame: function () {
+      startGame: function (timeout) {
         this.$emit("startGame", timeout);
       },
       showTimeHandle: function () {
         this.showTime = !this.showTime;
       },
-      finishMemary: function () {
+      finishMemary: function (timeout) {
         this.$emit("finishMemary", timeout);
       }
     }
@@ -164,14 +172,14 @@
     background: white;
     color: $black;
     text-align: right;
-    width: tovmin(100);
+    width: tovmin(130);
+    vertical-align: middle;
+    margin-left: tovmin(26);
   }
 
   .share {
     width: tovmin(32);
     height: tovmin(26);
-    position: relative;
-    left: tovmin(50);
     top: tovmin(6);
   }
 

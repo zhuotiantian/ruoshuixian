@@ -27,7 +27,7 @@
         minutes: 15,
         seconds: 0,
         words: words,
-        type: "下一页",
+        type: "记忆完成",
         showFog: false,
         text: "确定结束作答吗？",
       }

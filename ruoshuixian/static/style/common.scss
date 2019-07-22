@@ -122,3 +122,10 @@ page {
 .arrow-right::after {
   transform: rotate(-135deg);
 }
+
+.pocker {
+  width: tovmin(102);
+  height: tovmin(150);
+  margin-right: tovmin(10);
+  margin-bottom: tovmin(10);
+}

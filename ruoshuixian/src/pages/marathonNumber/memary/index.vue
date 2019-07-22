@@ -4,7 +4,7 @@
     <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成" @finishMemary="finishMemary"></CardTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in rows" :key="_index">
-        <span class="item" v-for="(item,index) in number" :key="index">{{index+1}}</span>
+        <span class="item" v-for="(item,index) in number" :key="index">{{item}}</span>
         <span>row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
@@ -17,8 +17,12 @@
       CardTitle
     },
     data() {
-      let array = new Array(30);
-      let rows = new Array(3);
+      let array = [];
+      for (let i = 0; i < 40; i++) {
+        let index = Math.floor((Math.random() * 10));
+        array.push(index);
+      };
+      let rows = new Array(12);
       return {
         seconds: 0,
         minutes: 15,

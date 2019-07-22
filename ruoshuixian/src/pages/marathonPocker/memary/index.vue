@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
+    <CardTitle :showType="true" :minutes="minutes" :seconds="seconds" :pannelContent="pannelContent" @group="group"
+      :type="type" @finishMemary="finishMemary">
     </CardTitle>
     <div class="list" v-if="ratio">
       <template v-if="pocker.length==0">
@@ -31,6 +32,9 @@
     components: {
       CardTitle
     },
+    onLoad: function (option) {
+      this.level = option.level;
+    },
     data() {
       return {
         pannelContent: ["ALL", "1", "2", "4", "8"],
@@ -41,6 +45,9 @@
         ratio: 1,
         type: null,
         currentPage: 1,
+        minutes: null,
+        seconds: null,
+        level: "",
         pages: (() => {
           let pages = [];
           for (let i = 1; i <= 10; i++) {
@@ -68,7 +75,9 @@
       group: function (data) {
         this.pockerCount = data == 'ALL' ? this.pockerCount = 52 : data;
         this.pocker = new Array(parseInt(this.pockerCount));
-        this.type = "记忆完成"
+        this.type = "记忆完成";
+        this.minutes = 60;
+        this.seconds = 0;
       },
       finishMemary: function () {
         wx.navigateTo({

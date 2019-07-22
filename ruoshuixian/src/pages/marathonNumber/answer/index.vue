@@ -5,7 +5,7 @@
     <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in rows" :key="_index">
-        <span class="item" v-for="(item,index) in number" :key="index">{{index+1}}</span>
+        <span class="item" v-for="(item,index) in number" :key="index">{{item}}</span>
         <span>row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
@@ -23,7 +23,11 @@
       alertBox
     },
     data() {
-      let array = new Array(30);
+      let array = [];
+      for (let i = 0; i < 40; i++) {
+        let index = Math.floor((Math.random() * 10));
+        array.push(index);
+      };
       let rows = new Array(3);
       return {
         seconds: 0,

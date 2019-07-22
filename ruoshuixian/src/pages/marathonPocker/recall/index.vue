@@ -3,7 +3,7 @@
     <CardTitle :seconds="seconds" :minutes="minutes" type="开始" @startGame="startGame"></CardTitle>
     <div class="tips">
       <p>回忆这些扑克牌</p>
-      <p>5分钟后开始正式答题</p>
+      <p>{{minutes}}分钟后开始正式答题</p>
     </div>
     <div class="list">
       <div class="row" v-for="(item,index) in rows" :key="index">
@@ -19,15 +19,12 @@
     components: {
       CardTitle
     },
-    beforeCreate() {
-
-    },
     data() {
       let rows = new Array(4);
       let columns = new Array(13);
       return {
         seconds: 0,
-        minutes: 5,
+        minutes: 120,
         rows: rows,
         columns: columns,
         ratio: 1,
@@ -60,13 +57,6 @@
 
   .list {
     margin-top: tovmin(400);
-  }
-
-  .pocker {
-    width: tovmin(82);
-    height: tovmin(130);
-    margin-right: tovmin(10);
-    margin-bottom: tovmin(10);
   }
 
 </style>
