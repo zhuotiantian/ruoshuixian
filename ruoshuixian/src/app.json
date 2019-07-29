@@ -1,7 +1,8 @@
 {
   "pages": [
+    "pages/firstPage/main",
     "pages/login/main",
-
+    "pages/regist/main",
     "pages/fastPocker/answer/main",
     "pages/fastPocker/ready/main",
     "pages/fastPocker/memary/main",
@@ -43,7 +44,6 @@
     "pages/flashPocker/recall/main",
 
 
-    "pages/firstPage/main",
 
     "pages/listenAndRemember/answer/main",
     "pages/listenAndRemember/result/main",
@@ -61,7 +61,6 @@
     "pages/fastNumber/memary/main",
 
     "pages/help/main",
-    "pages/regist/main",
 
 
 

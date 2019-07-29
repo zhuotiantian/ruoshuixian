@@ -1,16 +1,43 @@
 <script>
   export default {
-    beforeCreate() {
-
-    },
     mounted() {
-
+      const that = this;
+      wx.getLocation({
+        type: 'wgs84',
+        success: function (data) {
+          const {
+            latitude,
+            longitude
+          } = data;
+          that.init(latitude, longitude);
+        }
+      })
     },
     data() {
       return {
-
+        apiUrl: "http://yxcy.wanzhong.ink"
+      }
+    },
+    methods: {
+      init: function (lat, lng) {
+        this.$http.get({
+          url: "/api/wxapp.common/init",
+          data: {
+            version: "1",
+            lng: lat,
+            lat: lng
+          },
+          success: function (res) {
+            wx.showToast({
+              title: "success",
+              icon: "success"
+            });
+            console.log(res);
+          }
+        });
       }
     }
+
   }
 
 </script>

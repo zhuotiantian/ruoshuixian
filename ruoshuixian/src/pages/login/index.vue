@@ -3,7 +3,7 @@
     <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'" v-if="ratio"></image>
     <div class="login-form">
       <div class="input_div">
-        <input type="text" class="input" placeholder="请输入手机号" placeholder-style="color:#ccc" />
+        <input type="text" class="input" placeholder="请输入手机号" v-model="form.mobile" placeholder-style="color:#ccc" />
         <image :src="'/static/images/my/phone@'+ratio+'x.png'" v-if="ratio" class="icon"
           style="height:42rpx;width:34rpx">
         </image>
@@ -19,7 +19,7 @@
             style="height:42rpx;width:34rpx"></image>
         </template>
         <template v-else>
-          <input type="text" class="input" placeholder="验证码" placeholder-style="color:#ccc" />
+          <input type="text" class="input" placeholder="验证码" v-model="form.captcha" placeholder-style="color:#ccc" />
           <image :src="'/static/images/my/keys@'+ratio+'x.png'" v-if="ratio" class="icon"
             style="height:54rpx;width:38rpx">
           </image>
@@ -45,6 +45,10 @@
         seconds: 60,
         codeLogin: false,
         ratio: 1,
+        form: {
+          mobile: "",
+          captcha: ""
+        }
       }
     },
     mounted() {
@@ -59,9 +63,57 @@
         })
       },
       login: function () {
-        wx.switchTab({
-          url: "../firstPage/main"
-        })
+        const {
+          mobile,
+          captcha
+        } = this.form;
+        this.$http.get({
+          url: "/api/wxapp.sms/check",
+          data: {
+            mobile,
+            captcha
+          },
+          success: function (res) {
+            if (res.code == 1) {
+              this.$http.get({
+                url: "/api/wxapp.user/mobilelogin",
+                data: {
+                  mobile,
+                  captcha,
+                  code: this.wxcode
+                },
+                success: function (res) {
+                  if (res.code == 1) {
+                    wx.showToast({
+                      title: "登陆成功"
+                    });
+                    wx.switchTab({
+                      url: "../firstPage/main"
+                    })
+                  }
+                },
+                fail: function (err) {
+                  wx.showToast({
+                    title: res.msg,
+                    icon: "none"
+                  });
+                }
+              });
+            } else {
+              wx.showToast({
+                title: res.msg,
+                icon: "none"
+              });
+            }
+          },
+          fail: function (err) {
+            wx.showToast({
+              title: res.msg,
+              icon: "none"
+            });
+          }
+        });
+
       },
       getCode: function () {
         // 获取验证码
@@ -74,6 +126,20 @@
             this.seconds = 60;
           }
         }, 1000);
+        this.$http.get({
+          url: "/api/wxapp.sms/send",
+          data: {
+            mobile: this.form.mobile,
+            event: "登陆若水轩小程序"
+          },
+          success: function (data) {
+            if (data.captcha == 1) {
+              wx.showToast({
+                title: "验证码发送成功"
+              })
+            }
+          }
+        });
       },
       switchLoginWay: function () {
         this.codeLogin = !this.codeLogin;

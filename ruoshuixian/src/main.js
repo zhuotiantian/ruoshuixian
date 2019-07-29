@@ -1,12 +1,18 @@
 import Vue from 'vue'
 import App from './App'
-
+import http from "./untils/request"
 Vue.config.productionTip = false
 Vue.config._mpTrace = true
 App.mpType = 'app'
 const app = new Vue(App);
 app.$mount();
 Vue.prototype.globalData = getApp().globalData;
+Vue.prototype.$http = http;
+wx.login({
+  success: function (res) {
+    Vue.prototype.wxcode = res.code;
+  }
+});
 let pixelRatio = 0
 wx.getSystemInfo({
   success: function (res) {
@@ -45,12 +51,40 @@ getApp().globalData.games = [{
   name: "抽象图形",
   url: "../abstractPic/main"
 }, {
-  name: "听记数字",
-  url: "../listenAndRemember/main"
-}, {
   name: "虚拟事件和日期",
   url: "../virtualEvents/main"
+}, {
+  name: "听记数字",
+  url: "../listenAndRemember/main"
 }];
+async function init() {
+  await login();
+  await getGameList();
+}
+
+function login() {
+  http.get({
+    url: "/api/wxapp.user/login",
+    data: {
+      account: "admin",
+      password: "123456"
+    },
+    success: function (res) {
+
+    }
+  });
+}
+
+function getGameList() {
+  http.get({
+    url: "/api/wxapp.game/getGameList",
+    success: function (res) {
+
+    }
+  });
+}
+
+init();
 export default {
   config: {
     "pages": [
