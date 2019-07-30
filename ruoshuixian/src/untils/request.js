@@ -1,42 +1,45 @@
 const domain = "http://yxcy.wanzhong.ink";
 
-function request(url, method, data, header = {}) {
-  wx.showLoading({
-    title: '加载中' // 数据请求前loading
-  })
-  return new Promise((resolve, reject) => {
-    wx.request({
-      url: domain + url, // 仅为示例，并非真实的接口地址
-      method: method,
-      data: data,
-      headers: {
-        'content-type': 'application/json' // 默认值
-      },
-      success: function (res) {
-        wx.hideLoading()
-        resolve(res.data)
-      },
-      fail: function (res) {
-        wx.hideLoading()
-        // reject(false)
-      },
-      complete: function () {
-        wx.hideLoading()
-      }
+function request(url, method, data, contentType, header = {}) {
+    console.log(contentType);
+    wx.showLoading({
+        title: '加载中' // 数据请求前loading
     })
-  })
+    return new Promise((resolve, reject) => {
+        wx.request({
+            url: domain + url, // 仅为示例，并非真实的接口地址
+            method: method,
+            data: data,
+            header: {
+                'content-type': contentType || 'application/json',
+                // 默认值
+                "token": header.token
+            },
+            success: function(res) {
+                wx.hideLoading()
+                resolve(res.data)
+            },
+            fail: function(res) {
+                wx.hideLoading()
+                // reject(false)
+            },
+            complete: function() {
+                wx.hideLoading()
+            }
+        })
+    })
 }
 
 function get(obj) {
-  return request(obj.url, 'GET', obj.data)
+    return request(obj.url, 'GET', obj.data, obj.header)
 }
 
 function post(obj) {
-  return request(obj.url, 'POST', obj.data)
+    return request(obj.url, 'POST', obj.data, obj.contentType, obj.header)
 }
-
 export default {
-  request,
-  get,
-  post
+    request,
+    get,
+    domain,
+    post
 }
