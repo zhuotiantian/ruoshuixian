@@ -129,3 +129,13 @@ page {
   margin-right: tovmin(10);
   margin-bottom: tovmin(10);
 }
+
+.pocker.active {
+  bottom: tovmin(30);
+  border: tovmin(2) solid $yellow;
+  border-radius: tovmin(8);
+}
+
+.btnGroup .btn {
+  margin: 0 tovmin(16)
+}

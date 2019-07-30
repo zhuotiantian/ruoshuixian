@@ -1,137 +1,242 @@
 {
-  "pages": [
-    "pages/firstPage/main",
-    "pages/login/main",
-    "pages/regist/main",
-    "pages/fastPocker/answer/main",
-    "pages/fastPocker/ready/main",
-    "pages/fastPocker/memary/main",
-    "pages/fastPocker/main",
-    "pages/fastPocker/result/main",
-    "pages/fastPocker/recall/main",
-
-    "pages/randomWords/main",
-    "pages/randomWords/result/main",
-    "pages/randomWords/answer/main",
-    "pages/randomWords/memary/main",
-
-    "pages/peoplePic/main",
-    "pages/peoplePic/result/main",
-    "pages/peoplePic/memary/main",
-    "pages/peoplePic/answer/main",
-
-    "pages/marathonNumber/main",
-    "pages/marathonNumber/result/main",
-    "pages/marathonNumber/answer/main",
-    "pages/marathonNumber/memary/main",
-
-    "pages/binaryNumber/answer/main",
-    "pages/binaryNumber/main",
-    "pages/binaryNumber/memary/main",
-    "pages/binaryNumber/result/main",
-
-    "pages/marathonPocker/recall/main",
-    "pages/marathonPocker/memary/main",
-    "pages/marathonPocker/ready/main",
-    "pages/marathonPocker/main",
-    "pages/marathonPocker/result/main",
-    "pages/marathonPocker/answer/main",
-
-    "pages/flashPocker/main",
-    "pages/flashPocker/result/main",
-    "pages/flashPocker/memary/main",
-    "pages/flashPocker/answer/main",
-    "pages/flashPocker/recall/main",
-
-
-
-    "pages/listenAndRemember/answer/main",
-    "pages/listenAndRemember/result/main",
-    "pages/listenAndRemember/main",
-    "pages/listenAndRemember/listen/main",
-
-    "pages/abstractPic/answer/main",
-    "pages/abstractPic/memary/main",
-    "pages/abstractPic/result/main",
-    "pages/abstractPic/main",
-
-    "pages/fastNumber/answer/main",
-    "pages/fastNumber/main",
-    "pages/fastNumber/result/main",
-    "pages/fastNumber/memary/main",
-
-    "pages/help/main",
-
-
-
-    "pages/virtualEvents/memary/main",
-    "pages/virtualEvents/main",
-    "pages/virtualEvents/result/main",
-    "pages/virtualEvents/anwser/main",
-
-    "pages/index/main",
-
-
-
-    "pages/record/main",
-    "pages/hongbao/main",
-    "pages/my/main"
-  ],
-  "subPackages": [{
-    "root": "pages/my_custom/",
     "pages": [
-      "main",
-      "hongbao/main",
-      "message/main",
-      "ranking/main",
-      "record/main"
-    ]
-  }, {
-    "root": "pages/my_teacher/",
-    "pages": [
-      "main",
-      "notice/main",
-      "message/main",
-      "message/other/main",
-      "message/toRecord/main",
-      "students/main",
-      "students/comment/main",
-      "work/main"
-    ]
-  }, {
-    "root": "pages/ranking/",
-    "pages": [
-      "main"
-    ]
-  }],
-  "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#173771",
-    "navigationBarTitleText": "若水轩",
-    "navigationBarTextStyle": "white"
-  },
-  "permission": {
-    "scope.userLocation": {
-      "desc": "你的位置信息将用于小程序位置接口的效果展示"
-    }
-  },
-  "tabBar": {
-    "list": [{
-        "text": "首页",
-        "pagePath": "pages/firstPage/main"
-      },
-      {
-        "text": "红包",
-        "pagePath": "pages/hongbao/main"
-      },
-      {
-        "text": "排行榜",
-        "pagePath": "pages/record/main"
-      },
-      {
-        "text": "我的",
-        "pagePath": "pages/my/main"
-      }
-    ]
-  }
-}
+        "pages/firstPage/main",
+        "pages/login/main",
+        "pages/regist/main",
+        "pages/fastPocker/answer/main",
+        "pages/fastPocker/ready/main",
+        "pages/fastPocker/memary/main",
+        "pages/fastPocker/main",
+        "pages/fastPocker/result/main",
+        "pages/fastPocker/recall/main",
+
+        "pages/randomWords/main",
+        "pages/randomWords/result/main",
+        "pages/randomWords/answer/main",
+        "pages/randomWords/memary/main",
+
+        "pages/peoplePic/main",
+        "pages/peoplePic/result/main",
+        "pages/peoplePic/memary/main",
+        "pages/peoplePic/answer/main",
+
+        "pages/marathonNumber/main",
+        "pages/marathonNumber/result/main",
+        "pages/marathonNumber/answer/main",
+        "pages/marathonNumber/memary/main",
+
+        "pages/binaryNumber/answer/main",
+        "pages/binaryNumber/main",
+        "pages/binaryNumber/memary/main",
+        "pages/binaryNumber/result/main",
+
+        "pages/marathonPocker/recall/main",
+        "pages/marathonPocker/memary/main",
+        "pages/marathonPocker/ready/main",
+        "pages/marathonPocker/main",
+        "pages/marathonPocker/result/main",
+        "pages/marathonPocker/answer/main",
+
+        "pages/flashPocker/main",
+        "pages/flashPocker/result/main",
+        "pages/flashPocker/memary/main",
+        "pages/flashPocker/answer/main",
+        "pages/flashPocker/recall/main",
+
+
+
+        "pages/listenAndRemember/answer/main",
+        "pages/listenAndRemember/result/main",
+        "pages/listenAndRemember/main",
+        "pages/listenAndRemember/listen/main",
+
+        "pages/abstractPic/answer/main",
+        "pages/abstractPic/memary/main",
+        "pages/abstractPic/result/main",
+        "pages/abstractPic/main",
+
+        "pages/fastNumber/answer/main",
+        "pages/fastNumber/main",
+        "pages/fastNumber/result/main",
+        "pages/fastNumber/memary/main",
+
+        "pages/help/main",
+
+
+
+        "pages/virtualEvents/memary/main",
+        "pages/virtualEvents/main",
+        "pages/virtualEvents/result/main",
+        "pages/virtualEvents/anwser/main",
+
+        "pages/index/main",
+
+
+
+        "pages/record/main",
+        "pages/hongbao/main",
+        "pages/my/main"
+    ],
+    "subPackages": [{
+                "root": "pages/my_custom/",
+                "pages": [
+                    "main",
+                    "hongbao/main",
+                    "message/main",
+                    "ranking/main",
+                    "record/main"
+                ]
+            }, {
+                "root": "pages/my_teacher/",
+                "pages": [
+                    "main",
+                    "notice/main",
+                    "message/main",
+                    "message/other/main",
+                    "message/toRecord/main",
+                    "students/main",
+                    "students/comment/main",
+                    "work/main"
+                ]
+            }, {
+                "root": "pages/ranking/",
+                "pages": [
+                    "pages/login/main",
+
+                    "pages/flashPocker/answer/main",
+                    "pages/flashPocker/main",
+                    "pages/flashPocker/result/main",
+                    "pages/flashPocker/memary/main",
+                    "pages/flashPocker/recall/main",
+
+
+                    "pages/fastPocker/answer/main",
+                    "pages/fastPocker/ready/main",
+                    "pages/fastPocker/memary/main",
+                    "pages/fastPocker/main",
+                    "pages/fastPocker/result/main",
+                    "pages/fastPocker/recall/main",
+
+                    "pages/randomWords/main",
+                    "pages/randomWords/result/main",
+                    "pages/randomWords/answer/main",
+                    "pages/randomWords/memary/main",
+
+                    "pages/peoplePic/main",
+                    "pages/peoplePic/result/main",
+                    "pages/peoplePic/memary/main",
+                    "pages/peoplePic/answer/main",
+
+                    "pages/marathonNumber/main",
+                    "pages/marathonNumber/result/main",
+                    "pages/marathonNumber/answer/main",
+                    "pages/marathonNumber/memary/main",
+
+                    "pages/binaryNumber/answer/main",
+                    "pages/binaryNumber/main",
+                    "pages/binaryNumber/memary/main",
+                    "pages/binaryNumber/result/main",
+
+                    "pages/marathonPocker/recall/main",
+                    "pages/marathonPocker/memary/main",
+                    "pages/marathonPocker/ready/main",
+                    "pages/marathonPocker/main",
+                    "pages/marathonPocker/result/main",
+                    "pages/marathonPocker/answer/main",
+
+
+
+
+                    "pages/firstPage/main",
+
+                    "pages/listenAndRemember/answer/main",
+                    "pages/listenAndRemember/result/main",
+                    "pages/listenAndRemember/main",
+                    "pages/listenAndRemember/listen/main",
+
+                    "pages/abstractPic/answer/main",
+                    "pages/abstractPic/memary/main",
+                    "pages/abstractPic/result/main",
+                    "pages/abstractPic/main",
+
+                    "pages/fastNumber/answer/main",
+                    "pages/fastNumber/main",
+                    "pages/fastNumber/result/main",
+                    "pages/fastNumber/memary/main",
+
+                    "pages/help/main",
+                    "pages/regist/main",
+
+
+
+                    "pages/virtualEvents/memary/main",
+                    "pages/virtualEvents/main",
+                    "pages/virtualEvents/result/main",
+                    "pages/virtualEvents/anwser/main",
+
+                    "pages/index/main",
+
+
+
+                    "pages/record/main",
+                    "pages/hongbao/main",
+                    "pages/my/main"
+                ],
+                "subPackages": [{
+                    "root": "pages/my_custom/",
+                    "pages": [
+                        "main",
+                        "hongbao/main",
+                        "message/main",
+                        "ranking/main",
+                        "record/main"
+                    ]
+                }, {
+                    "root": "pages/my_teacher/",
+                    "pages": [
+                        "main",
+                        "notice/main",
+                        "message/main",
+                        "message/other/main",
+                        "message/toRecord/main",
+                        "students/main",
+                        "students/comment/main",
+                        "work/main"
+                    ]
+                }, {
+                    "root": "pages/ranking/",
+                    "pages": [
+                        "main"
+                    ]
+                }],
+                "window": {
+                    "backgroundTextStyle": "light",
+                    "navigationBarBackgroundColor": "#173771",
+                    "navigationBarTitleText": "若水轩",
+                    "navigationBarTextStyle": "white"
+                },
+                "permission": {
+                    "scope.userLocation": {
+                        "desc": "你的位置信息将用于小程序位置接口的效果展示"
+                    }
+                },
+                "tabBar": {
+                    "list": [{
+                            "text": "首页",
+                            "pagePath": "pages/firstPage/main"
+                        },
+                        {
+                            "text": "红包",
+                            "pagePath": "pages/hongbao/main"
+                        },
+                        {
+                            "text": "排行榜",
+                            "pagePath": "pages/record/main"
+                        },
+                        {
+                            "text": "我的",
+                            "pagePath": "pages/my/main"
+                        }
+                    ]
+                }
+            }
