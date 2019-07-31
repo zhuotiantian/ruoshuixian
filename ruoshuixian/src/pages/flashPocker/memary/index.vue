@@ -9,7 +9,7 @@
             <template v-else>
                 <em class="arrow arrow-left"></em>
                 <scroll-view :style="{width:'510px',height:'196px','white-space':'nowrap'}" scroll-x>
-                    <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :src="'/static/images/pocker/'+(index+1)+'-1@'+ratio+'x.png'" />
+                    <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'@'+ratio+'x.png'" />
                 </scroll-view>
                 <em class="arrow arrow-right"></em>
             </template>
@@ -39,7 +39,6 @@
         },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.getGameRules();
         },
         computed: {
             bgCounts: function() {
@@ -53,23 +52,38 @@
             }
         },
         methods: {
-            getGameRules: function() {
-                this.$http.get({
-                    url: "/api/wxapp.game/getGame",
-                    data: {
-                        game_id: this.gameid
-                    },
-                    header: {
-                        token: this.globalData.token
-                    }
-                }).then(result => {
-                    console.log(result);
-                });
-            },
             group: function(data) {
-                this.pockerCount = data == 'ALL' ? this.pockerCount = 52 : data;
-                let pockerIndex = Math.random()
-                this.pocker = new Array(parseInt(this.pockerCount));
+                this.pocker = [];
+                let index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+                let color = [1, 2, 3, 4];
+                if (data == "ALL") {
+                    for (let i = 0; i < index.length; i++) {
+                        for (let j = 0; j < color.length; j++) {
+                            this.pocker.push({
+                                index: i + 1,
+                                color: j + 1
+                            });
+                        }
+                    };
+                    this.pocker.sort(function(a, b) {
+                        return Math.random() > .5 ? -1 : 1;
+                    });
+                } else {
+                    for (let i = 0; i < data; i++) {
+                        let itemIndex = index[Math.ceil(Math.random() * 13)];
+                        let itemColor = color[Math.ceil(Math.random() * 4)];
+                        if (
+                            this.pocker.filter(e => {
+                                return e.index == itemIndex && e.color == itemColor;
+                            }).length == 0
+                        ) {
+                            this.pocker.push({
+                                index: itemIndex,
+                                color: itemColor
+                            });
+                        }
+                    }
+                }
                 this.type = "记忆完成";
                 if (this.time_long) {
                     setTimeout(() => {
@@ -78,6 +92,7 @@
                 }
             },
             finishMemary: function() {
+                wx.setStorageSync("game", this.pocker);
                 wx.navigateTo({
                     url: "../recall/main"
                 })

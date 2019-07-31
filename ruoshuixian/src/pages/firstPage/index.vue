@@ -67,6 +67,9 @@
                     url: item.wxapp_url
                 });
                 wx.setStorageSync("gameid", item.id);
+                wx.setStorageSync("game", "");
+                wx.setStorageSync("result", "");
+                wx.setStorageSync("time", "");
             },
             toRanking: function() {
                 let url = "../ranking/main";

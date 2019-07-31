@@ -67,13 +67,37 @@
                     password
                 } = this.form;
                 if (!this.codeLogin) {
-                    this.$http.get({
+                    this.$http.post({
                         url: "/api/wxapp.sms/check",
                         data: {
                             mobile,
                             captcha
                         }
-                    }).then();
+                    }).then(result => {
+                        if (result.code == 1) {
+                            this.$http.post({
+                                url: "/api/wxapp.user/mobilelogin",
+                                data: {
+                                    mobile,
+                                    captcha
+                                }
+                            }).then(result => {
+                                if (result.code == 1) {
+                                    wx.showToast({
+                                        title: "登陆成功"
+                                    })
+                                    wx.navigateTo({
+                                        url: "../firstPage/main"
+                                    })
+                                } else {
+                                    wx.showToast({
+                                        title: result.msg,
+                                        icon: "none"
+                                    })
+                                }
+                            });
+                        }
+                    });
                 } else {
                     this.$http.get({
                         url: "/api/wxapp.user/login",
@@ -89,6 +113,11 @@
                             })
                             wx.showToast({
                                 title: "登陆成功"
+                            })
+                        } else {
+                            wx.showToast({
+                                title: result.msg,
+                                icon: "none"
                             })
                         }
                     }).catch(err => {
@@ -109,18 +138,22 @@
                         this.seconds = 60;
                     }
                 }, 1000);
-                this.$http.get({
+                this.$http.post({
                     url: "/api/wxapp.sms/send",
                     data: {
                         mobile: this.form.mobile,
                         event: "登陆若水轩小程序"
-                    },
-                    success: function(data) {
-                        if (data.captcha == 1) {
-                            wx.showToast({
-                                title: "验证码发送成功"
-                            })
-                        }
+                    }
+                }).then(result => {
+                    if (result.code == 1) {
+                        wx.showToast({
+                            title: "验证码发送成功"
+                        })
+                    } else {
+                        wx.showToast({
+                            title: result.msg,
+                            icon: "none"
+                        })
                     }
                 });
             },
