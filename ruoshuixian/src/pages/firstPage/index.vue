@@ -19,7 +19,7 @@
             </div>
             <div class="bottom">
                 <ul v-if="games.length>0">
-                    <li @click="toGame(item.url)" v-for="(item,index) in games" :key="index">
+                    <li @click="toGame(item)" v-for="(item,index) in games" :key="index">
                         <image v-if="item['img'+(ratio==1?'':ratio)]" class="item" :src="domain+item['img'+(ratio==1?'':ratio)]" />
                         <span>{{item.name}}</span>
                     </li>
@@ -62,10 +62,11 @@
                     this.topImg = result.data.rotary_planting_map[0].image
                 });
             },
-            toGame: function(url) {
+            toGame: function(item) {
                 wx.navigateTo({
-                    url: url
+                    url: item.wxapp_url
                 });
+                wx.setStorageSync("gameid", item.id);
             },
             toRanking: function() {
                 let url = "../ranking/main";

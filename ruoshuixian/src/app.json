@@ -1,14 +1,20 @@
 {
     "pages": [
+        "pages/flashPocker/memary/main",
+        "pages/firstPage/main",
+        "pages/login/main",
         "pages/regist/main",
+        "pages/flashPocker/main",
+        "pages/flashPocker/result/main",
+        "pages/flashPocker/answer/main",
+        "pages/flashPocker/recall/main",
+
         "pages/my/main",
         "pages/my/message/main",
         "pages/my/ranking/main",
-        "pages/login/main",
         "pages/my/hongbao/main",
         "pages/my/record/main",
 
-        "pages/firstPage/main",
         "pages/fastPocker/answer/main",
         "pages/fastPocker/ready/main",
         "pages/fastPocker/memary/main",
@@ -43,14 +49,6 @@
         "pages/marathonPocker/result/main",
         "pages/marathonPocker/answer/main",
 
-        "pages/flashPocker/main",
-        "pages/flashPocker/result/main",
-        "pages/flashPocker/memary/main",
-        "pages/flashPocker/answer/main",
-        "pages/flashPocker/recall/main",
-
-
-
         "pages/listenAndRemember/answer/main",
         "pages/listenAndRemember/result/main",
         "pages/listenAndRemember/main",
@@ -67,8 +65,6 @@
         "pages/fastNumber/memary/main",
 
         "pages/help/main",
-
-
 
         "pages/virtualEvents/memary/main",
         "pages/virtualEvents/main",

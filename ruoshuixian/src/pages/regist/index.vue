@@ -16,11 +16,11 @@
                 <image :src="'/static/images/my/keys@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:54rpx;width:38rpx" />
             </div>
             <div class="input-div">
-                <input type="text" class="input" v-model="form.password" placeholder="密码" placeholder-style="color:#ccc" />
+                <input type="password" class="input" v-model="form.password" placeholder="密码" placeholder-style="color:#ccc" />
                 <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:42rpx;width:34rpx" />
             </div>
             <div class="input-div">
-                <input type="text" class="input" v-model="form.repassword" placeholder="确认密码" placeholder-style="color:#ccc" />
+                <input type="password" class="input" v-model="form.repassword" placeholder="确认密码" placeholder-style="color:#ccc" />
                 <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:42rpx;width:34rpx" />
             </div>
             <p class="info">
@@ -70,44 +70,18 @@
                     return false;
                 }
                 this.$http
-                    .get({
+                    .post({
                         url: "/api/wxapp.sms/check",
                         data: {
                             mobile,
                             captcha,
-                            password
+                            event: "注册若水轩小程序"
                         },
-                        success: function(res) {
-                            if (res.code == "1") {
-                                this.$http.get({
-                                    url: "/api/wxapp.user/register",
-                                    data: {
-                                        mobile,
-                                        captcha,
-                                        password
-                                    },
-                                    success: function(res) {
-                                        wx.showToast({
-                                            title: "注册成功"
-                                        });
-                                        wx.switchTab({
-                                            url: "../login/main"
-                                        });
-                                    },
-                                    fail: function(err) {
-                                        wx.showToast({
-                                            title: res.msg,
-                                            icon: "none"
-                                        });
-                                    }
-                                });
-                            }
-                        }
                     })
                     .then(result => {
                         if (result.code == 1) {
                             this.$http
-                                .get({
+                                .post({
                                     url: "/api/wxapp.user/register",
                                     data: {
                                         mobile,
@@ -116,12 +90,15 @@
                                     }
                                 })
                                 .then(result => {
-                                    wx.showToast({
-                                        title: "注册成功"
-                                    });
-                                    wx.switchTab({
-                                        url: "../login/main"
-                                    });
+                                    if (result.code == 1) {
+                                        wx.showToast({
+                                            title: "注册成功"
+                                        });
+                                        wx.switchTab({
+                                            url: "../login/main"
+                                        });
+                                    }
+
                                 })
                                 .catch(err => {
                                     console.log(err);
@@ -156,7 +133,6 @@
                 this.$http
                     .post({
                         url: "/api/wxapp.sms/send",
-                        contentType: "application/x-www-form-urlencoded",
                         data: {
                             mobile: this.form.mobile,
                             event: "注册若水轩小程序"

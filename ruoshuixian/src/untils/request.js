@@ -1,7 +1,6 @@
 const domain = "http://yxcy.wanzhong.ink";
 
-function request(url, method, data, contentType, header = {}) {
-    console.log(contentType);
+function request(url, method, data, header = {}) {
     wx.showLoading({
         title: '加载中' // 数据请求前loading
     })
@@ -11,7 +10,7 @@ function request(url, method, data, contentType, header = {}) {
             method: method,
             data: data,
             header: {
-                'content-type': contentType || 'application/json',
+                'content-type': method == 'GET' ? 'application/json' : "application/x-www-form-urlencoded",
                 // 默认值
                 "token": header.token
             },
@@ -35,7 +34,7 @@ function get(obj) {
 }
 
 function post(obj) {
-    return request(obj.url, 'POST', obj.data, obj.contentType, obj.header)
+    return request(obj.url, 'POST', obj.data, obj.header)
 }
 export default {
     request,
