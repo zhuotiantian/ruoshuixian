@@ -1,4 +1,5 @@
 const domain = "http://yxcy.wanzhong.ink";
+const token = wx.getStorageSync("userInfo").token;
 
 function request(url, method, data, header = {}) {
     wx.showLoading({
@@ -12,7 +13,7 @@ function request(url, method, data, header = {}) {
             header: {
                 'content-type': method == 'GET' ? 'application/json' : "application/x-www-form-urlencoded",
                 // 默认值
-                "token": header.token
+                "token": token
             },
             success: function(res) {
                 wx.hideLoading()

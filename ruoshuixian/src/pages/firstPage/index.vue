@@ -37,6 +37,7 @@
         },
         onShow() {
             wx.hideTabBar();
+            console.log("111");
         },
         beforeMount() {
             this.ratio = this.globalData.ratio;
@@ -63,13 +64,18 @@
                 });
             },
             toGame: function(item) {
-                wx.navigateTo({
-                    url: item.wxapp_url
-                });
                 wx.setStorageSync("gameid", item.id);
-                wx.setStorageSync("game", "");
-                wx.setStorageSync("result", "");
-                wx.setStorageSync("time", "");
+                this.$http.get({
+                    url: "/api/wxapp.game/getGame",
+                    data: {
+                        game_id: item.id
+                    }
+                }).then(result => {
+                    wx.setStorageSync("rule", result.data);
+                    wx.navigateTo({
+                        url: item.wxapp_url
+                    });
+                });
             },
             toRanking: function() {
                 let url = "../ranking/main";

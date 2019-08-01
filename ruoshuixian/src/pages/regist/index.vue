@@ -161,6 +161,10 @@
                 clearInterval(this.timer);
                 this.clickGetCode = false;
                 this.seconds = 60;
+                let url = "../firstPage/main";
+                wx.redirectTo({
+                    url
+                });
             }
         }
     };

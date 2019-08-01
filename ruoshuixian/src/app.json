@@ -1,32 +1,33 @@
 {
     "pages": [
+        "pages/regist/main",
+        "pages/login/main",
+        "pages/flashPocker/main",
+        "pages/firstPage/main",
+        "pages/flashPocker/answer/main",
+        "pages/flashPocker/recall/main",
+        "pages/flashPocker/memary/main",
+        "pages/flashPocker/result/main",
+
+        "pages/my/hongbao/main",
+        "pages/my/main",
+        "pages/my/record/main",
+        "pages/my/message/main",
+        "pages/my/ranking/main",
+
+
+
         "pages/binaryNumber/main",
         "pages/binaryNumber/answer/main",
         "pages/binaryNumber/memary/main",
         "pages/binaryNumber/result/main",
 
-        "pages/firstPage/main",
-        "pages/fastPocker/result/main",
         "pages/fastPocker/main",
+        "pages/fastPocker/result/main",
         "pages/fastPocker/answer/main",
         "pages/fastPocker/ready/main",
         "pages/fastPocker/memary/main",
         "pages/fastPocker/recall/main",
-
-        "pages/login/main",
-        "pages/regist/main",
-        "pages/flashPocker/main",
-        "pages/flashPocker/answer/main",
-        "pages/flashPocker/memary/main",
-        "pages/flashPocker/result/main",
-        "pages/flashPocker/recall/main",
-
-        "pages/my/main",
-        "pages/my/message/main",
-        "pages/my/ranking/main",
-        "pages/my/hongbao/main",
-        "pages/my/record/main",
-
 
 
         "pages/randomWords/main",

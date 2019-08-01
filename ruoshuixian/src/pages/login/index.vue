@@ -86,9 +86,7 @@
                                     wx.showToast({
                                         title: "登陆成功"
                                     })
-                                    wx.navigateTo({
-                                        url: "../firstPage/main"
-                                    })
+
                                 } else {
                                     wx.showToast({
                                         title: result.msg,
@@ -99,7 +97,7 @@
                         }
                     });
                 } else {
-                    this.$http.get({
+                    this.$http.post({
                         url: "/api/wxapp.user/login",
                         data: {
                             mobile,
@@ -107,12 +105,15 @@
                         }
                     }).then(result => {
                         if (result.code == 1) {
-                            wx.setStorage({
-                                key: 'userInfo',
-                                data: result.data.userinfo
-                            })
+                            wx.setStorageSync("userInfo", result.data.userinfo)
                             wx.showToast({
-                                title: "登陆成功"
+                                title: "登陆成功",
+                                success: function() {
+
+                                }
+                            });
+                            wx.redirectTo({
+                                url: "../firstPage/main"
                             })
                         } else {
                             wx.showToast({
@@ -123,9 +124,10 @@
                     }).catch(err => {
                         console.log(err);
                     });
-                }
-
-
+                };
+                wx.redirectTo({
+                    url: "../firstPage/main"
+                })
             },
             getCode: function() {
                 // 获取验证码

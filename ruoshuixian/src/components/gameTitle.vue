@@ -58,8 +58,8 @@
             "btnType"
         ],
         mounted() {
-            this.timer && clearInterval(this.timer);
-            this.timer();
+            this.timer && clearInterval(this.timeout);
+            this.showType ? null : this.timer();
             this.ratio = this.globalData.ratio;
             this.game = wx.getStorageSync("game");
             this.result = wx.getStorageSync("result");
@@ -80,7 +80,29 @@
                         }
                     }
                 }
+            };
+            let times = wx.getStorageSync("rule").rules_of_the_game;
+            switch (this.type) {
+                case "记忆完成":
+                    this.t_seconds = wx.getStorageSync("memoryTime");
+                    this.t_minutes = 0;
+                    break;
+                case "开始":
+                    this.t_seconds = times.filter(e => {
+                        return e.type == "recollect_time"
+                    })[0].number;
+                    this.t_minutes = 0;
+                    break;
+                case "作答完成":
+                    this.t_seconds = 0;
+                    this.t_minutes = 15;
+                    break;
+                case "跳过":
+                    this.t_seconds = 60;
+                    this.t_minutes = 0;
+                    break;
             }
+
         },
         data() {
             return {
@@ -100,14 +122,16 @@
                 game: [],
                 result: [],
                 count: 0,
-                time: 0
+                time: 0,
+                memoryTime: 0,
+                recallTime: 0,
             };
         },
         watch: {
             t_seconds: function() {
                 if (this.t_minutes == 0 && this.t_seconds == 0) {
                     if (this.btnType == 'none') {
-                        this.toNextPage("timeout");
+                        this.toNextPage();
                     }
                     this.type && this[this.event[this.type]]("timeout");
                 }
@@ -143,8 +167,9 @@
                     }, 1000);
                 }
             },
-            finish: function(timeout) {
-                this.$emit("finish", timeout);
+            finish: function(data) {
+                clearInterval(this.timeout);
+                this.$emit("finish", data);
             },
             nextPage: function() {
                 this.$emit("nextPage");
@@ -154,23 +179,28 @@
                 this.active = index;
                 this.$emit("group", count);
                 this.showPannel = false;
+                clearInterval(this.timeout);
+                this.timer();
             },
-            toNextPage: function(timeout) {
-                this.$emit("toNextPage", timeout);
+            toNextPage: function() {
+                clearInterval(this.timeout);
+                this.$emit("toNextPage");
             },
             toHelpPage: function() {
                 wx.navigateTo({
                     url: "/pages/help/main"
                 });
             },
-            startGame: function(timeout) {
-                this.$emit("startGame", timeout);
+            startGame: function() {
+                clearInterval(this.timeout);
+                this.$emit("startGame");
             },
             showTimeHandle: function() {
                 this.showTime = !this.showTime;
             },
-            finishMemary: function(timeout) {
-                this.$emit("finishMemary", timeout);
+            finishMemary: function() {
+                clearInterval(this.timeout);
+                this.$emit("finishMemary");
             }
         }
     };

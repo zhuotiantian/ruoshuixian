@@ -24,6 +24,7 @@
         },
         onLoad: function(option) {
             this.time_long = option.time_long;
+
         },
         data() {
             return {
@@ -34,7 +35,6 @@
                 pocker: [],
                 ratio: 1,
                 type: null,
-                gameid: wx.getStorageSync("gameid")
             }
         },
         mounted() {
@@ -53,36 +53,9 @@
         },
         methods: {
             group: function(data) {
-                this.pocker = [];
-                let index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
-                let color = [1, 2, 3, 4];
-                if (data == "ALL") {
-                    for (let i = 0; i < index.length; i++) {
-                        for (let j = 0; j < color.length; j++) {
-                            this.pocker.push({
-                                index: i + 1,
-                                color: j + 1
-                            });
-                        }
-                    };
-                    this.pocker.sort(function(a, b) {
-                        return Math.random() > .5 ? -1 : 1;
-                    });
-                } else {
-                    for (let i = 0; i < data; i++) {
-                        let itemIndex = index[Math.ceil(Math.random() * 13)];
-                        let itemColor = color[Math.ceil(Math.random() * 4)];
-                        if (
-                            this.pocker.filter(e => {
-                                return e.index == itemIndex && e.color == itemColor;
-                            }).length == 0
-                        ) {
-                            this.pocker.push({
-                                index: itemIndex,
-                                color: itemColor
-                            });
-                        }
-                    }
+                this.pocker = wx.getStorageSync("rule").list;
+                if (data !== "ALL") {
+                    this.pocker = this.pocker.splice(0, data);
                 }
                 this.type = "记忆完成";
                 if (this.time_long) {
@@ -92,7 +65,6 @@
                 }
             },
             finishMemary: function() {
-                wx.setStorageSync("game", this.pocker);
                 wx.navigateTo({
                     url: "../recall/main"
                 })
