@@ -87,7 +87,7 @@
                         token: this.token
                     }
                 }).then(result => {
-                    console.log(result);
+
                 });
             },
             getScore: function() {
@@ -97,7 +97,7 @@
                         token: this.token
                     }
                 }).then(result => {
-                    console.log(result);
+
                 });
             }
         },

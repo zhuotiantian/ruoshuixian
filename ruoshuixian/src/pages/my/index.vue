@@ -13,11 +13,14 @@
                     </image>
                     <span>排行榜</span>
                 </li>
-                <li>
-                    <image class="item" style="height:40rpx;width:46rpx;" :src="'/static/images/my/my_icon3@'+ratio+'x.png'">
-                    </image>
-                    <span>分享邀请</span>
-                </li>
+                <button open-type="share">
+                    <li>
+                        <image class="item" style="height:40rpx;width:46rpx;" :src="'/static/images/my/my_icon3@'+ratio+'x.png'">
+                        </image>
+                        <span>分享邀请</span>
+
+                    </li>
+                </button>
                 <li @click="toRecord">
                     <image class="item" style="height:48rpx;width:38rpx;" :src="'/static/images/my/my_icon4@'+ratio+'x.png'">
                     </image>
@@ -41,7 +44,6 @@
         },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.getMenu();
         },
         data() {
             return {
@@ -50,21 +52,24 @@
                 domain: this.$http.domain
             }
         },
+        onShareAppMessage: function(res) {
+            let path = "pages/indexPage/main";
+            return {
+                title: "11种脑力游戏，一起来玩吧！",
+                path: path,
+                success: function() {
+                    console.log("分享成功");
+                },
+                error: function() {
+                    console.log("分享失败");
+                }
+            }
+        },
         onShow() {
             wx.hideTabBar();
             this.userInfo = wx.getStorageSync("userInfo");
         },
         methods: {
-            getMenu: function() {
-                this.$http.get({
-                    url: "/api/wxapp.user/index",
-                    header: {
-                        token: this.globalData.token
-                    }
-                }).then(result => {
-                    console.log(result);
-                })
-            },
             toRanking: function() {
                 let url = "./ranking/main";
                 this.to(url)
@@ -155,5 +160,23 @@
 
     .last {
         border-bottom: none !important;
+    }
+
+    button::after {
+        border: none;
+
+    }
+
+    button {
+        background-color: transparent;
+        font-size: tovmin(28);
+        padding: 0;
+        text-align: left;
+        color: black;
+
+    }
+
+    button image {
+        margin-bottom: 0;
     }
 </style>

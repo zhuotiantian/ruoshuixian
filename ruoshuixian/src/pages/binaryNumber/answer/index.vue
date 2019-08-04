@@ -22,29 +22,38 @@
             Keybord,
             alertBox
         },
-        data() {
-            let array = [];
-            let array1 = [0, 1];
-            for (let i = 0; i < 30; i++) {
-                array.push({
-                    selected: false,
-                    number: ""
-                });
-            };
+        onLoad() {
+            this.numberList = wx.getStorageSync("rule").list.map(e => {
+                return {
+                    number: "",
+                    selected: false
+                }
+            });
+            this.total = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.type == "number"
+            })[0].number;
+            this.per = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.type == "number_per_group"
+            })[0].number;
+        },
+        mounted() {
             let number = [];
-            for (let i = 0; i < 100; i++) {
-                let item = array.map(e => {
-                    return e
-                })
-                number.push(item);
+            for (var i = 0; i < this.total; i += this.per) {
+                number.push(this.numberList.slice(i, i + this.per));
             };
+            this.number = number;
+            this.startTime = new Date().getTime();
+            this.game_records_id = wx.getStorageSync("rule").game_records_id;
+        },
+        data() {
             return {
-                seconds: 0,
-                minutes: 15,
                 showKeybord: true,
                 showFog: false,
-                number: number,
+                number: [],
                 hasSelect: false,
+                total: 0,
+                per: 0,
+                game_records_id: 1
             }
         },
         methods: {
@@ -55,16 +64,32 @@
                 this.showFog = false;
             },
             confirm: function() {
-                let number = this.number;
-                number.forEach(e => {
-                    e.map(m => {
-                        return m.number
+                this.endTime = new Date().getTime();
+                let result = [];
+                this.number.forEach(e => {
+                    e.forEach(m => {
+                        result.push(m.number);
                     })
                 });
-                wx.setStorageSync("result", number);
-                wx.navigateTo({
-                    url: "../result/main"
-                });
+                this.$http.post({
+                    url: "/api/wxapp.game/submitTheGame",
+                    data: {
+                        game_records_id: this.game_records_id,
+                        game_time: (this.endTime - this.startTime) / 1000,
+                        content: JSON.stringify(result)
+                    }
+                }).then(result => {
+                    if (result.code == 1) {
+                        wx.navigateTo({
+                            url: "../result/main"
+                        })
+                    } else {
+                        wx.showToast({
+                            title: result.msg,
+                            icon: "none"
+                        });
+                    }
+                })
             },
             selected: function(row, column) {
                 let number = this.number.map(e => {

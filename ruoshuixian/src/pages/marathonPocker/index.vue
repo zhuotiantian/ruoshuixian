@@ -1,24 +1,13 @@
 <template>
-  <div class="container">
-    <PockerIndex :type="type" :nextPage="nextPage" btnType="none"></PockerIndex>
-  </div>
+    <div class="container">
+        <PockerIndex type="counts" nextPage="./ready/main" btnType="none"></PockerIndex>
+    </div>
 </template>
 <script>
-  import PockerIndex from "@/components/pockerIndex"
-  export default {
-    components: {
-      PockerIndex
-    },
-    data() {
-      return {
-        type: "counts",
-        nextPage: "./ready/main"
-      }
+    import PockerIndex from "@/components/pockerIndex"
+    export default {
+        components: {
+            PockerIndex
+        }
     }
-  }
-
 </script>
-<style lang="scss" scoped>
-
-
-</style>

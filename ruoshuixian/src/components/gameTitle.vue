@@ -12,7 +12,7 @@
                         <span v-if="showTime">显示得分</span>
                         <span v-else>显示用时</span>
                     </span>
-                    <span class="btn primary-btn">再次训练</span>
+                    <span class="btn primary-btn" @click="playAgain">再次训练</span>
                     <button class="btn default-btn shareBtn" v-if="ratio" open-type="share">
                         <image class="share" :src="'/static/images/redPocket/share@'+ratio+'x.png'" />
                         分享
@@ -61,48 +61,8 @@
             this.timer && clearInterval(this.timeout);
             this.showType ? null : this.timer();
             this.ratio = this.globalData.ratio;
-            this.game = wx.getStorageSync("game");
-            this.result = wx.getStorageSync("result");
-            this.time = wx.getStorageSync("time");
-            if (wx.getStorageSync("gameid") == 3) {
-                for (var i = 0; i < this.result.length; i++) {
-                    for (var j = 0; j < this.game.length; j++) {
-                        if (this.game[j] === this.result[i]) {
-                            this.count++
-                        }
-                    }
-                }
-            } else {
-                for (var i = 0; i < this.result.length; i++) {
-                    for (var j = 0; j < this.game.length; j++) {
-                        if (this.game[j].index === this.result[i].index && this.game[j].color === this.result[i].color) {
-                            this.count++
-                        }
-                    }
-                }
-            };
-            let times = wx.getStorageSync("rule").rules_of_the_game;
-            switch (this.type) {
-                case "记忆完成":
-                    this.t_seconds = wx.getStorageSync("memoryTime");
-                    this.t_minutes = 0;
-                    break;
-                case "开始":
-                    this.t_seconds = times.filter(e => {
-                        return e.type == "recollect_time"
-                    })[0].number;
-                    this.t_minutes = 0;
-                    break;
-                case "作答完成":
-                    this.t_seconds = 0;
-                    this.t_minutes = 15;
-                    break;
-                case "跳过":
-                    this.t_seconds = 60;
-                    this.t_minutes = 0;
-                    break;
-            }
-
+            this.times = wx.getStorageSync("rule").rules_of_the_game;
+            this.changeTime();
         },
         data() {
             return {
@@ -125,6 +85,7 @@
                 time: 0,
                 memoryTime: 0,
                 recallTime: 0,
+                times: []
             };
         },
         watch: {
@@ -139,9 +100,40 @@
             minutes: function(data) {
                 this.t_minutes = data - 1;
                 this.t_seconds = 60;
+            },
+            type: function() {
+                this.changeTime();
             }
         },
         methods: {
+            changeTime: function() {
+                switch (this.type) {
+                    case "记忆完成":
+                        this.t_seconds = wx.getStorageSync("memoryTime") || this.times.filter(e => {
+                            return e.type == "memory_time"
+                        })[0] && this.times.filter(e => {
+                            return e.type == "memory_time"
+                        })[0].number || 60;
+                        this.t_minutes = 0;
+                        break;
+                    case "开始":
+                        this.t_seconds = this.times.filter(e => {
+                            return e.type == "recollect_time"
+                        })[0] && this.times.filter(e => {
+                            return e.type == "recollect_time"
+                        })[0].number || 60;
+                        this.t_minutes = 0;
+                        break;
+                    case "作答完成":
+                        this.t_seconds = 60;
+                        this.t_minutes = 14;
+                        break;
+                    case "跳过":
+                        this.t_seconds = 60;
+                        this.t_minutes = 0;
+                        break;
+                }
+            },
             timer: function() {
                 if (this.t_minutes) {
                     this.t_seconds = 60;
@@ -201,6 +193,11 @@
             finishMemary: function() {
                 clearInterval(this.timeout);
                 this.$emit("finishMemary");
+            },
+            playAgain: function() {
+                wx.navigateTo({
+                    url: "../main"
+                });
             }
         }
     };

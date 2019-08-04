@@ -1,5 +1,5 @@
 <template>
-    <div class="container" v-if="memaryTime.length>0">
+    <div class="container" v-if="memaryTime.length>0||memaryNumber.length>0">
         <CardTitle :seconds="seconds" :minutes="minutes" :btnType="btnType" :type="titleBtn" @toNextPage="toNextPage">
         </CardTitle>
         <div class="content" v-if="type=='time'">
@@ -11,7 +11,7 @@
         <div class="content" v-else>
             <span class="label">请选择显示方式：</span>
             <div class="btn-group">
-                <span :class="{active:activeIndex=='all'}" @click="activeIndex='all'">all</span><span :class="{active:activeIndex==2}" @click="activeIndex=2">2</span><span :class="{active:activeIndex==4}" @click="activeIndex=4">4</span><span :class="{active:activeIndex==8}" @click="activeIndex=8">8</span>
+                <span v-for="(item,index) in memaryNumber" :key="index" :class="{active:activeIndex==item}" @click="activeIndex=item">{{item}}</span>
             </div>
         </div>
         <div class="btn submit-btn" @click="toNextPage">{{type=='time'?activeIndex+"S":"确定"}}</div>
@@ -27,10 +27,11 @@
         data() {
             return {
                 seconds: 60,
-                activeIndex: this.type == 'time' ? 0 : "all",
+                activeIndex: 0,
                 minutes: 0,
                 btnType: this.btnType,
                 memaryTime: [],
+                memaryNumber: []
             }
         },
         mounted() {
@@ -41,20 +42,33 @@
                     clearInterval(this.timer);
                 }
             }, 1000);
-            let memaryTime = wx.getStorageSync("rule").rules_of_the_game;
-            this.memaryTime = memaryTime.filter(e => {
-                return e.type == "memory_time"
-            }).map(e => {
-                return e.number
-            }).sort(function(a, b) {
-                return a - b
-            });
-            this.activeIndex = this.memaryTime[0];
+            let rule = wx.getStorageSync("rule").rules_of_the_game;
+            if (this.type == "time") {
+                this.memaryTime = rule.filter(e => {
+                    return e.type == "memory_time"
+                }).map(e => {
+                    return e.number
+                }).sort(function(a, b) {
+                    return a - b
+                });
+                this.activeIndex = this.memaryTime[0];
+            } else {
+                this.memaryNumber = rule.filter(e => {
+                    return e.type == "number"
+                }).map(e => {
+                    return e.number
+                }).sort(function(a, b) {
+                    return a - b
+                });
+                this.activeIndex = this.memaryNumber[0];
+            }
         },
         methods: {
             toNextPage: function(data) {
                 clearInterval(this.timer);
-                wx.setStorageSync("memoryTime", this.activeIndex);
+                if (this.type == "time") {
+                    wx.setStorageSync("memoryTime", this.activeIndex);
+                }
                 wx.navigateTo({
                     url: this.nextPage
                 })

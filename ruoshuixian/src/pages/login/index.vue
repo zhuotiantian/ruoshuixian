@@ -107,13 +107,10 @@
                         if (result.code == 1) {
                             wx.setStorageSync("userInfo", result.data.userinfo)
                             wx.showToast({
-                                title: "登陆成功",
-                                success: function() {
-
-                                }
+                                title: "登陆成功"
                             });
                             wx.redirectTo({
-                                url: "../firstPage/main"
+                                url: "../indexPage/main"
                             })
                         } else {
                             wx.showToast({
@@ -125,9 +122,6 @@
                         console.log(err);
                     });
                 };
-                wx.redirectTo({
-                    url: "../firstPage/main"
-                })
             },
             getCode: function() {
                 // 获取验证码

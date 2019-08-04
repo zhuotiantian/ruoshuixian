@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
+        <CardTitle :showType="false" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
         </CardTitle>
         <div class="list" v-if="ratio">
             <template v-if="pocker.length==0">
@@ -21,10 +21,6 @@
     export default {
         components: {
             CardTitle
-        },
-        onLoad: function(option) {
-            this.time_long = option.time_long;
-
         },
         data() {
             return {

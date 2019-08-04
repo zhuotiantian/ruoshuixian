@@ -24,194 +24,90 @@ wx.getSystemInfo({
 });
 getApp().globalData.token = wx.getStorageSync("userInfo").token;
 getApp().globalData.ratio = pixelRatio;
-getApp().globalData.games = [{
-    name: "闪视扑克牌",
-    url: "../flashPocker/main"
-}, {
-    name: "快速扑克牌",
-    url: "../fastPocker/main"
-}, {
-    name: "马拉松扑克牌",
-    url: "../marathonPocker/main"
-}, {
-    name: "二进制数字",
-    url: "../binaryNumber/main"
-}, {
-    name: "快速数字",
-    url: "../fastNumber/main"
-}, {
-    name: "马拉松数字",
-    url: "../marathonNumber/main"
-}, {
-    name: "随机词语",
-    url: "../randomWords/main"
-}, {
-    name: "人名头像",
-    url: "../peoplePic/main"
-}, {
-    name: "抽象图形",
-    url: "../abstractPic/main"
-}, {
-    name: "虚拟事件和日期",
-    url: "../virtualEvents/main"
-}, {
-    name: "听记数字",
-    url: "../listenAndRemember/main"
-}];
 
 export default {
     config: {
         "pages": [
-            "pages/firstPage/main",
-            "pages/help/main",
-            "pages/index/main",
             "pages/login/main",
-            "pages/regist/main"
-        ],
-        "subPackages": [{
-                "root": "pages/hongbao/",
-                "pages": [
-                    "main",
-                    "redPocketList/main"
-                ]
-            }, {
-                "root": "pages/record/",
-                "pages": [
-                    "main"
-                ]
-            }, {
-                "root": "pages/my/",
-                "pages": [
-                    "main",
-                    "hongbao/main",
-                    "message/main",
-                    "ranking/main",
-                    "record/main"
-                ]
-            }, {
-                "root": "pages/my_custom/",
-                "pages": [
-                    "main",
-                    "hongbao/main",
-                    "message/main",
-                    "ranking/main",
-                    "record/main"
-                ]
-            }, {
-                "root": "pages/my_teacher/",
-                "pages": [
-                    "main",
-                    "notice/main",
-                    "message/main",
-                    "message/other/main",
-                    "message/toRecord/main",
-                    "students/main",
-                    "students/comment/main",
-                    "work/main"
-                ]
-            }, {
-                "root": "pages/flashPocker/",
-                "pages": [
-                    "main",
-                    "result/main",
-                    "answer/main",
-                    "recall/main",
-                    "memary/main"
-                ]
-            }, {
-                "root": "pages/marathonPocker/",
-                "pages": [
-                    "main",
-                    "result/main",
-                    "answer/main",
-                    "recall/main",
-                    "memary/main"
-                ]
-            }, {
-                "root": "pages/fastPocker/",
-                "pages": [
-                    "main",
-                    "result/main",
-                    "answer/main",
-                    "recall/main",
-                    "memary/main"
-                ]
-            }, {
-                "root": "pages/peoplePic/",
-                "pages": [
-                    "main",
-                    "result/main",
-                    "answer/main",
-                    "memary/main"
-                ]
-            }, {
-                "root": "pages/abstractPic/",
-                "pages": [
-                    "main",
-                    "result/main",
-                    "answer/main",
-                    "memary/main"
-                ]
-            },
-            {
-                "root": "pages/binaryNumber/",
-                "pages": [
-                    "main",
-                    "result/main",
-                    "answer/main",
-                    "memary/main"
-                ]
-            },
-            {
-                "root": "pages/marathonNumber/",
-                "pages": [
-                    "main",
-                    "result/main",
-                    "answer/main",
-                    "memary/main"
-                ]
-            },
-            {
-                "root": "pages/fastNumber/",
-                "pages": [
-                    "main",
-                    "result/main",
-                    "answer/main",
-                    "memary/main"
-                ]
-            },
-            {
-                "root": "pages/randomWords/",
-                "pages": [
-                    "main",
-                    "result/main",
-                    "answer/main",
-                    "memary/main"
-                ]
-            },
-            {
-                "root": "pages/listenAndRemember/",
-                "pages": [
-                    "main",
-                    "result/main",
-                    "answer/main",
-                    "listen/main"
-                ]
-            },
-            {
-                "root": "pages/virtualEvents/",
-                "pages": [
-                    "main",
-                    "result/main",
-                    "anwser/main",
-                    "memary/main"
-                ]
-            }, {
-                "root": "pages/ranking/",
-                "pages": [
-                    "main"
-                ]
-            }
+            "pages/firstPage/main",
+            "pages/regist/main",
+            "pages/flashPocker/main",
+            "pages/flashPocker/answer/main",
+            "pages/flashPocker/recall/main",
+            "pages/flashPocker/memary/main",
+            "pages/flashPocker/result/main",
+
+            "pages/my/hongbao/main",
+            "pages/my/main",
+            "pages/my/record/main",
+            "pages/my/message/main",
+            "pages/my/ranking/main",
+
+
+
+            "pages/binaryNumber/main",
+            "pages/binaryNumber/answer/main",
+            "pages/binaryNumber/memary/main",
+            "pages/binaryNumber/result/main",
+
+            "pages/fastPocker/main",
+            "pages/fastPocker/result/main",
+            "pages/fastPocker/answer/main",
+            "pages/fastPocker/ready/main",
+            "pages/fastPocker/memary/main",
+            "pages/fastPocker/recall/main",
+            "pages/indexPage/main",
+
+
+            "pages/randomWords/main",
+            "pages/randomWords/result/main",
+            "pages/randomWords/answer/main",
+            "pages/randomWords/memary/main",
+
+            "pages/peoplePic/main",
+            "pages/peoplePic/result/main",
+            "pages/peoplePic/memary/main",
+            "pages/peoplePic/answer/main",
+
+            "pages/marathonNumber/main",
+            "pages/marathonNumber/result/main",
+            "pages/marathonNumber/answer/main",
+            "pages/marathonNumber/memary/main",
+
+
+            "pages/marathonPocker/recall/main",
+            "pages/marathonPocker/memary/main",
+            "pages/marathonPocker/ready/main",
+            "pages/marathonPocker/main",
+            "pages/marathonPocker/result/main",
+            "pages/marathonPocker/answer/main",
+
+            "pages/listenAndRemember/answer/main",
+            "pages/listenAndRemember/result/main",
+            "pages/listenAndRemember/main",
+            "pages/listenAndRemember/listen/main",
+
+            "pages/abstractPic/answer/main",
+            "pages/abstractPic/memary/main",
+            "pages/abstractPic/result/main",
+            "pages/abstractPic/main",
+
+            "pages/fastNumber/answer/main",
+            "pages/fastNumber/main",
+            "pages/fastNumber/result/main",
+            "pages/fastNumber/memary/main",
+
+            "pages/help/main",
+
+            "pages/virtualEvents/memary/main",
+            "pages/virtualEvents/main",
+            "pages/virtualEvents/result/main",
+            "pages/virtualEvents/anwser/main",
+
+            "pages/index/main",
+
+            "pages/record/main",
+            "pages/hongbao/main"
         ]
     }
 }

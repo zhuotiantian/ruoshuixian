@@ -66,12 +66,13 @@
                 result: [],
                 lastClick: 0,
                 showBtnGroup: false,
-                level: null
+                game_records_id: 1,
             };
         },
         mounted() {
             this.ratio = this.globalData.ratio;
             this.startTime = new Date().getTime();
+            this.game_records_id = wx.getStorageSync("rule").game_records_id;
         },
         methods: {
             finish: function(data) {
@@ -81,7 +82,6 @@
                         color: e.rowIndex + 1,
                     }
                 });
-                wx.setStorageSync("result", result);
                 if (data == "timeout") {
                     this.confirm();
                 } else {
@@ -126,10 +126,32 @@
             },
             confirm: function() {
                 this.endTime = new Date().getTime();
-                wx.setStorageSync("time", this.endTime - this.startTime);
-                wx.navigateTo({
-                    url: "../result/main"
-                });
+                let result = this.result.map(e => {
+                    return {
+                        index: e.columnIndex + 1,
+                        color: e.rowIndex + 1
+                    }
+                })
+                this.$http.post({
+                    url: "/api/wxapp.game/submitTheGame",
+                    data: {
+                        game_records_id: this.game_records_id,
+                        game_time: (this.endTime - this.startTime) / 1000,
+                        content: JSON.stringify(result)
+                    }
+                }).then(result => {
+                    if (result.code == 1) {
+                        wx.navigateTo({
+                            url: "../result/main"
+                        })
+                    } else {
+                        wx.showToast({
+                            title: result.msg,
+                            icon: "none"
+                        });
+                    }
+                })
+
             },
             touchstart: function() {
                 this.touchstartTime = new Date().getTime();

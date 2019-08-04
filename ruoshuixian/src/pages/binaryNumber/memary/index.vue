@@ -1,7 +1,6 @@
 <template>
     <div class="container">
-        <alertBox :text="text" v-if="showFog" @hideFog="hideFog"></alertBox>
-        <CardTitle :seconds="seconds" :showType="true" :minutes="minutes" type="记忆完成" @finishMemary="finishMemary" @group="group" :pannelContent="pannelContent"></CardTitle>
+        <CardTitle :showType="false" type="记忆完成" @finishMemary="finishMemary" @group="group" :pannelContent="pannelContent"></CardTitle>
         <div class="list">
             <div class="row" v-for="(rows,_index) in number" :key="_index">
                 <div v-for="(item,index) in rows" :key="index" :class="{item:true,border:counts&&((index+1)%counts==0)&&(index+1)!=number.length}">
@@ -19,34 +18,29 @@
             CardTitle
         },
         onLoad(option) {
-            this.level = option.level;
-            this.minutes = this.level == "0" ? 30 : 15
+            this.numberList = wx.getStorageSync("rule").list;
+            this.total = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.type == "number"
+            })[0].number;
+            this.per = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.type == "number_per_group"
+            })[0].number;
+        },
+        mounted() {
+            let number = [];
+            for (var i = 0; i < this.total; i += this.per) {
+                number.push(this.numberList.slice(i, i + this.per));
+            };
+            this.number = number;
         },
         data() {
-            let array = [];
-            let array1 = [0, 1];
-            for (let i = 0; i < 30; i++) {
-                let index = Math.floor((Math.random() * array1.length));
-                array.push(array1[index]);
-            };
-            let number = [];
-            for (let i = 0; i < 100; i++) {
-                array.sort(function() {
-                    return Math.random() > .5 ? -1 : 1
-                });
-                let item = array.map(e => {
-                    return e
-                })
-                number.push(item);
-            };
             return {
-                seconds: 0,
-                minutes: null,
-                text: "确定结束作答吗？",
-                number: number,
+                number: [],
                 counts: 0,
+                numberList: [],
                 pannelContent: ["不划线", "三个一组", "六个一组"],
-                level: ""
+                total: 0,
+                per: 0,
             }
         },
         methods: {
@@ -60,7 +54,6 @@
                 }
             },
             finishMemary: function() {
-                wx.setStorageSync("game", this.number);
                 wx.navigateTo({
                     url: "../answer/main"
                 });
@@ -81,6 +74,7 @@
 
     .list {
         margin-top: tovmin(200);
+        margin-bottom: tovmin(30);
     }
 
     .row {
