@@ -46,9 +46,9 @@
         methods: {
             toNextPage: function() {
                 wx.navigateTo({
-                    url: this.nextPage + "?level=" + (this.level == '初级' ? 0 : 1)
+                    url: this.nextPage
                 });
-                wx.setStorageSync("level", this.level == '初级' ? 0 : 1);
+                wx.setStorageSync("level", this.level == '初级' ? "primary" : "senior");
             },
             selLevel: function(level) {
                 this.level = level;

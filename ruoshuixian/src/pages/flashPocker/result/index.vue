@@ -34,15 +34,7 @@
         },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.game.map(e => {
-                if (this.result.indexOf(e)) {
-                    console.log("回答正确");
-                }
-            })
-        },
-        onShow() {
-            this.game = wx.getStorageSync("game");
-            this.result = wx.getStorageSync("result");
+            this.result = getStorageSync("result");
         },
         computed: {
             pocker: function() {

@@ -73,7 +73,10 @@
         mounted() {
             this.ratio = this.globalData.ratio;
             this.startTime = new Date().getTime();
-            this.game_records_id = wx.getStorageSync("rule").game_records_id;
+            this.level = wx.getStorageSync("level");
+            this.game_records_id = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.game_level == "primary"
+            })[0].game_records_id;
         },
         methods: {
             finish: function(data) {
@@ -119,7 +122,8 @@
                     if (result.code == 1) {
                         wx.navigateTo({
                             url: "../result/main"
-                        })
+                        });
+                        wx.setStorageSync("result", result.data);
                     } else {
                         wx.showToast({
                             title: result.msg,

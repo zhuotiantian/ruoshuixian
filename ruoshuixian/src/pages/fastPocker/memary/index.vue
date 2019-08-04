@@ -30,6 +30,7 @@
                 pocker: [],
                 ratio: 1,
                 type: null,
+                level: "primary"
             };
         },
         mounted() {
@@ -48,7 +49,9 @@
         },
         methods: {
             group: function(data) {
-                this.pocker = wx.getStorageSync("rule").list;
+                this.pocker = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                    return e.game_level == this.level
+                })[0].list;
                 if (data !== "ALL") {
                     this.pocker = this.pocker.splice(0, data);
                 }

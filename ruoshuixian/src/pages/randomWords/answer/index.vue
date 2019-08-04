@@ -17,14 +17,20 @@
             CardTitle,
             alertBox
         },
+        created() {
+            this.level = wx.getStorageSync("level");
+        },
         mounted() {
-            this.list = wx.getStorageSync("rule").list.map(e => {
+            let rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0]
+            this.list = rule.list.map(e => {
                 return {
                     text: ""
                 }
             });
             this.startTime = new Date().getTime();
-            this.game_records_id = wx.getStorageSync("rule").game_records_id;
+            this.game_records_id = rule.game_records_id;
         },
         data() {
             return {

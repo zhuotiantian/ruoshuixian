@@ -28,7 +28,7 @@ function request(url, method, data, header = {}) {
                     wx.hideLoading()
                 }
             })
-        }, 200)
+        }, 1000)
 
     })
 }

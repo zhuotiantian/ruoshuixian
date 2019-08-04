@@ -1,6 +1,27 @@
 {
     "pages": [
         "pages/indexPage/main",
+        "pages/binaryNumber/main",
+        "pages/binaryNumber/result/main",
+        "pages/binaryNumber/answer/main",
+        "pages/binaryNumber/memary/main",
+
+
+        "pages/fastPocker/main",
+        "pages/fastPocker/ready/main",
+        "pages/fastPocker/memary/main",
+        "pages/fastPocker/result/main",
+        "pages/fastPocker/answer/main",
+        "pages/fastPocker/recall/main",
+
+        "pages/flashPocker/main",
+        "pages/flashPocker/answer/main",
+        "pages/flashPocker/memary/main",
+        "pages/flashPocker/recall/main",
+        "pages/flashPocker/result/main",
+
+        "pages/login/main",
+
         "pages/abstractPic/memary/main",
         "pages/abstractPic/answer/main",
         "pages/abstractPic/result/main",
@@ -17,23 +38,12 @@
         "pages/randomWords/result/main",
         "pages/randomWords/answer/main",
 
-        "pages/fastNumber/memary/main",
-        "pages/fastNumber/answer/main",
-        "pages/fastNumber/main",
-        "pages/fastNumber/result/main",
-
         "pages/marathonNumber/memary/main",
         "pages/marathonNumber/main",
         "pages/marathonNumber/result/main",
         "pages/marathonNumber/answer/main",
 
-        "pages/binaryNumber/main",
-        "pages/binaryNumber/result/main",
-        "pages/binaryNumber/answer/main",
-        "pages/binaryNumber/memary/main",
-
         "pages/record/main",
-        "pages/login/main",
         "pages/my/main",
         "pages/my/message/main",
         "pages/my/hongbao/main",
@@ -51,18 +61,7 @@
         "pages/marathonPocker/result/main",
         "pages/marathonPocker/answer/main",
 
-        "pages/fastPocker/main",
-        "pages/fastPocker/memary/main",
-        "pages/fastPocker/result/main",
-        "pages/fastPocker/answer/main",
-        "pages/fastPocker/ready/main",
-        "pages/fastPocker/recall/main",
 
-        "pages/flashPocker/main",
-        "pages/flashPocker/answer/main",
-        "pages/flashPocker/recall/main",
-        "pages/flashPocker/memary/main",
-        "pages/flashPocker/result/main",
 
         "pages/regist/main",
 

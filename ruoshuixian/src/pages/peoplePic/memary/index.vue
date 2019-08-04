@@ -18,20 +18,21 @@
         components: {
             CardTitle
         },
+        created() {
+            this.level = wx.getStorageSync("level");
+        },
         onLoad(option) {
-            let list = wx.getStorageSync("rule").list;
-            this.numberList = list.name.map((e, index) => {
+            let rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0];
+            this.numberList = rule.list.name.map((e, index) => {
                 return {
                     name: e,
-                    avatar: list.avatar[index]
+                    avatar: rule.list.avatar[index]
                 }
             });
-            this.total = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.type == "number"
-            })[0].number;
-            this.per = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.type == "number_per_group"
-            })[0].number;
+            this.total = rule.number;
+            this.per = rule.number_per_group;
         },
         mounted() {
             let number = [];
@@ -51,7 +52,8 @@
                 ratio: 1,
                 total: 0,
                 per: 0,
-                domain: this.$http.domain
+                domain: this.$http.domain,
+                level: "primary"
             }
         },
         methods: {

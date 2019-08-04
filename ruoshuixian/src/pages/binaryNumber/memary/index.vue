@@ -17,14 +17,16 @@
         components: {
             CardTitle
         },
+        created() {
+            this.level = wx.getStorageSync("level");
+        },
         onLoad(option) {
-            this.numberList = wx.getStorageSync("rule").list;
-            this.total = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.type == "number"
-            })[0].number;
-            this.per = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.type == "number_per_group"
-            })[0].number;
+            let rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0];
+            this.numberList = rule.list;
+            this.total = rule.number;
+            this.per = rule.number_per_group;
         },
         mounted() {
             let number = [];
@@ -41,6 +43,7 @@
                 pannelContent: ["不划线", "三个一组", "六个一组"],
                 total: 0,
                 per: 0,
+                level: "primary"
             }
         },
         methods: {

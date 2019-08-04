@@ -22,19 +22,21 @@
             Keybord,
             alertBox
         },
+        created() {
+            this.level = wx.getStorageSync("level");
+        },
         onLoad() {
-            this.numberList = wx.getStorageSync("rule").list.map(e => {
+            this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0];
+            this.numberList = this.rule.list.map(e => {
                 return {
                     number: "",
                     selected: false
                 }
             });
-            this.total = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.type == "number"
-            })[0].number;
-            this.per = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.type == "number_per_group"
-            })[0].number;
+            this.total = this.rule.number;
+            this.per = this.rule.number_per_group;
         },
         mounted() {
             let number = [];
@@ -43,7 +45,7 @@
             };
             this.number = number;
             this.startTime = new Date().getTime();
-            this.game_records_id = wx.getStorageSync("rule").game_records_id;
+            this.game_records_id = this.rule.game_records_id;
         },
         data() {
             return {
@@ -53,7 +55,9 @@
                 number: [],
                 total: 0,
                 per: 0,
-                game_records_id: 1
+                game_records_id: 1,
+                rule: {},
+                level: "primary"
             }
         },
         methods: {

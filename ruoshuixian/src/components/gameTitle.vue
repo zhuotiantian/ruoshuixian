@@ -4,8 +4,8 @@
         <div class="title">
             <template v-if="isResult">
                 <p>
-                    <span v-if="isPocker&&showTime">用时：{{time/1000}}S</span>
-                    <span v-else>得分：{{count}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标准分：{{game.length}}</span>
+                    <span v-if="isPocker&&showTime">用时：{{result.game_time}}S</span>
+                    <span v-else>得分：{{result.fraction}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标准分：{{game.length}}</span>
                 </p>
                 <p style="flex:1;text-align:right">
                     <span class="btn default-btn" style="margin-right:15rpx" v-if="isPocker" @click="showTimeHandle">
@@ -57,11 +57,17 @@
             "isInsert",
             "btnType"
         ],
+        created() {
+            this.level = wx.getStorageSync("level");
+        },
         mounted() {
             this.timer && clearInterval(this.timeout);
             this.showType ? null : this.timer();
             this.ratio = this.globalData.ratio;
-            this.times = wx.getStorageSync("rule").rules_of_the_game;
+            this.times = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.game_level == (this.level || "primary")
+            });
+            this.result = wx.getStorageSync("result");
             this.changeTime();
         },
         data() {
@@ -85,7 +91,8 @@
                 time: 0,
                 memoryTime: 0,
                 recallTime: 0,
-                times: []
+                times: [],
+                level: ""
             };
         },
         watch: {
@@ -109,19 +116,11 @@
             changeTime: function() {
                 switch (this.type) {
                     case "记忆完成":
-                        this.t_seconds = wx.getStorageSync("memoryTime") || this.times.filter(e => {
-                            return e.type == "memory_time"
-                        })[0] && this.times.filter(e => {
-                            return e.type == "memory_time"
-                        })[0].number || 60;
+                        this.t_seconds = wx.getStorageSync("memoryTime") || this.times[0].memory_time || 60;
                         this.t_minutes = 0;
                         break;
                     case "开始":
-                        this.t_seconds = this.times.filter(e => {
-                            return e.type == "recollect_time"
-                        })[0] && this.times.filter(e => {
-                            return e.type == "recollect_time"
-                        })[0].number || 60;
+                        this.t_seconds = this.times[0].recollect_time || 60;
                         this.t_minutes = 0;
                         break;
                     case "作答完成":

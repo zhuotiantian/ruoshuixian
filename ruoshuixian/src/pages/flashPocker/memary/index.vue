@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <CardTitle :showType="false" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
+        <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
         </CardTitle>
         <div class="list" v-if="ratio">
             <template v-if="pocker.length==0">
@@ -22,6 +22,9 @@
         components: {
             CardTitle
         },
+        created() {
+            this.level = wx.getStorageSync("level");
+        },
         data() {
             return {
                 pannelContent: ["ALL", "1", "2", "4", "8"],
@@ -31,6 +34,7 @@
                 pocker: [],
                 ratio: 1,
                 type: null,
+                level: "primary"
             }
         },
         mounted() {
@@ -49,7 +53,9 @@
         },
         methods: {
             group: function(data) {
-                this.pocker = wx.getStorageSync("rule").list;
+                this.pocker = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                    return e.game_level == this.level
+                })[0].list;
                 if (data !== "ALL") {
                     this.pocker = this.pocker.splice(0, data);
                 }
