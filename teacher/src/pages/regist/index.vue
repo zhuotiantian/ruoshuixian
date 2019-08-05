@@ -53,6 +53,7 @@
         },
         mounted() {
             this.ratio = this.globalData.ratio;
+            this.token = wx.getStorageSync("userInfo").token;
         },
         methods: {
             regist: function() {
@@ -77,6 +78,9 @@
                             captcha,
                             event: "注册若水轩小程序"
                         },
+                        header: {
+                            token: this.token
+                        }
                     })
                     .then(result => {
                         if (result.code == 1) {
@@ -87,6 +91,9 @@
                                         mobile,
                                         captcha,
                                         password
+                                    },
+                                    header: {
+                                        token: this.token
                                     }
                                 })
                                 .then(result => {

@@ -20,15 +20,15 @@
         },
         created() {
             this.level = wx.getStorageSync("level");
-        },
-        onLoad(option) {
-            let rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+            this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
-            this.numberList = rule.list.date.map((e, index) => {
+        },
+        onLoad(option) {
+            this.numberList = this.rule.list.date.map((e, index) => {
                 return {
                     date: e,
-                    event: rule.list.avatar[index]
+                    event: this.rule.list.event[index]
                 }
             });
         },

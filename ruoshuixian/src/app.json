@@ -2,6 +2,14 @@
     "pages": [
         "pages/indexPage/main",
         "pages/login/main",
+        "pages/firstPage/main",
+
+        "pages/flashPocker/main",
+        "pages/flashPocker/answer/main",
+        "pages/flashPocker/memary/main",
+        "pages/flashPocker/recall/main",
+        "pages/flashPocker/result/main",
+
         "pages/regist/main",
         "pages/rePassword/main",
 
@@ -14,6 +22,10 @@
         "pages/binaryNumber/result/main",
         "pages/binaryNumber/answer/main",
         "pages/binaryNumber/memary/main",
+        "pages/fastNumber/main",
+        "pages/fastNumber/result/main",
+        "pages/fastNumber/answer/main",
+        "pages/fastNumber/memary/main",
 
         "pages/fastPocker/main",
         "pages/fastPocker/ready/main",
@@ -21,12 +33,6 @@
         "pages/fastPocker/result/main",
         "pages/fastPocker/answer/main",
         "pages/fastPocker/recall/main",
-
-        "pages/flashPocker/main",
-        "pages/flashPocker/answer/main",
-        "pages/flashPocker/memary/main",
-        "pages/flashPocker/recall/main",
-        "pages/flashPocker/result/main",
 
         "pages/randomWords/main",
         "pages/randomWords/memary/main",
@@ -46,7 +52,6 @@
         "pages/my/ranking/main",
 
         "pages/help/main",
-        "pages/firstPage/main",
 
         "pages/marathonPocker/main",
         "pages/marathonPocker/memary/main",

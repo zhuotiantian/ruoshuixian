@@ -5,11 +5,14 @@
             <span :class="{active:active=='成绩记录'}" @click="active='成绩记录'">成绩记录</span>
         </div>
         <div class="content">
+
             <ul class="list" v-if="active=='打卡记录'">
-                <li v-for="(item,index) in list" :key="index">
-                    <span>{{item.createtime}}</span>
-                    <span>打卡成功</span>
-                </li>
+                <scroll-view>
+                    <li v-for="(item,index) in list" :key="index">
+                        <span>{{item.createtime}}</span>
+                        <span>打卡成功</span>
+                    </li>
+                </scroll-view>
             </ul>
             <ul class="list" v-else>
                 <li v-for="(item,index) in scores" :key="index">
@@ -132,6 +135,7 @@
         background: white;
         padding: 15px;
         height: calc(100% - 30px);
+        overflow-y: scroll;
     }
 
     .list li {

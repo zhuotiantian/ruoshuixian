@@ -28,15 +28,17 @@
         },
         created() {
             this.level = wx.getStorageSync("level");
-        },
-        onLoad(option) {
+            this.token = wx.getStorageSync("userInfo").token;
             this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
-            this.numberList = rule.list.date.map((e, index) => {
+        },
+        onLoad(option) {
+
+            this.numberList = this.rule.list.date.map((e, index) => {
                 return {
                     date: "",
-                    event: rule.list.avatar[index]
+                    event: this.rule.list.event[index]
                 }
             });
             this.startTime = new Date().getTime();
@@ -76,6 +78,9 @@
                         game_records_id: this.game_records_id,
                         game_time: (this.endTime - this.startTime) / 1000,
                         content: JSON.stringify(result)
+                    },
+                    header: {
+                        token: this.token
                     }
                 }).then(result => {
                     if (result.code == 1) {

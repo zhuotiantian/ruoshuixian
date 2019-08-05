@@ -22,7 +22,7 @@
             <div class="bottom">
                 <ul v-if="games.length>0">
                     <li @click="toGame(item)" v-for="(item,index) in games" :key="index">
-                        <image v-if="item['img'+(ratio==1?'':ratio)]" class="item" :src="domain+item['img'+(ratio==1?'':ratio)]" />
+                        <image class="item" :src="domain+item.img" />
                         <span>{{item.name}}</span>
                     </li>
                 </ul>
@@ -40,7 +40,6 @@
         onShow() {
             wx.hideTabBar();
             this.token = wx.getStorageSync("userInfo").token;
-
         },
         onShareAppMessage: function(res) {
             return {

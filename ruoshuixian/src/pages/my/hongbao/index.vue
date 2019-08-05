@@ -38,6 +38,9 @@
                     url: "/api/wxapp.user/redEnvelopeRecord",
                     header: {
                         token: this.token
+                    },
+                    header: {
+                        token: this.token
                     }
                 }).then(result => {
                     this.list = result.data.list;

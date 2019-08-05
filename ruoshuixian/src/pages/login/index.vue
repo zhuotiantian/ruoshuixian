@@ -51,6 +51,7 @@
         },
         mounted() {
             this.ratio = this.globalData.ratio;
+            this.token = wx.getStorageSync("userInfo").token;
         },
         methods: {
             // 跳转到注册页面
@@ -72,6 +73,9 @@
                         data: {
                             mobile,
                             captcha
+                        },
+                        header: {
+                            token: this.token
                         }
                     }).then(result => {
                         if (result.code == 1) {
@@ -80,6 +84,9 @@
                                 data: {
                                     mobile,
                                     captcha
+                                },
+                                header: {
+                                    token: this.token
                                 }
                             }).then(result => {
                                 if (result.code == 1) {
@@ -102,6 +109,9 @@
                         data: {
                             mobile,
                             password
+                        },
+                        header: {
+                            token: this.token
                         }
                     }).then(result => {
                         if (result.code == 1) {
@@ -109,7 +119,7 @@
                             wx.showToast({
                                 title: "登陆成功"
                             });
-                            wx.redirectTo({
+                            wx.navigateTo({
                                 url: "../indexPage/main"
                             })
                         } else {
@@ -139,6 +149,9 @@
                     data: {
                         mobile: this.form.mobile,
                         event: "登陆若水轩小程序"
+                    },
+                    header: {
+                        token: this.token
                     }
                 }).then(result => {
                     if (result.code == 1) {

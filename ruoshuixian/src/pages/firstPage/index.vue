@@ -12,15 +12,17 @@
                         <span class="flex-span">排行榜</span>
                     </li>
                     <li>
-                        <image class="icon share" :src="'/static/images/firstPage/share@'+ratio+'x.png'" />
-                        <span class="flex-span">分享</span>
+                        <button open-type="share">
+                            <image class="icon share" :src="'/static/images/firstPage/share@'+ratio+'x.png'" />
+                            <span class="flex-span" open-type="share">分享</span>
+                        </button>
                     </li>
                 </ul>
             </div>
             <div class="bottom">
                 <ul v-if="games.length>0">
                     <li @click="toGame(item)" v-for="(item,index) in games" :key="index">
-                        <image v-if="item['img'+(ratio==1?'':ratio)]" class="item" :src="domain+item['img'+(ratio==1?'':ratio)]" />
+                        <image class="item" :src="domain+item.img" />
                         <span>{{item.name}}</span>
                     </li>
                 </ul>
@@ -39,6 +41,17 @@
             wx.hideTabBar();
             this.token = wx.getStorageSync("userInfo").token;
         },
+        onShareAppMessage: function(res) {
+            return {
+                title: "11种脑力游戏，一起来玩吧！",
+                success: function() {
+                    console.log("分享成功");
+                },
+                error: function() {
+                    console.log("分享失败");
+                }
+            }
+        },
         beforeMount() {
             this.ratio = this.globalData.ratio;
         },
@@ -47,11 +60,13 @@
                 ratio: 1,
                 games: [],
                 domain: this.$http.domain,
-                topImg: ""
+                topImg: "",
+                userInfo: null
             };
         },
         mounted() {
             this.getIndexData();
+            this.userInfo = wx.getStorageSync("userInfo");
         },
         methods: {
             getIndexData: function() {
@@ -77,9 +92,11 @@
                     }
                 }).then(result => {
                     wx.setStorageSync("rule", result.data);
-                    wx.navigateTo({
-                        url: item.wxapp_url
-                    });
+                    if (this.userInfo) {
+                        wx.navigateTo({
+                            url: item.wxapp_url
+                        });
+                    }
                 });
             },
             toRanking: function() {
@@ -87,7 +104,8 @@
                 wx.navigateTo({
                     url
                 });
-            }
+            },
+
         }
     };
 </script>
@@ -120,7 +138,8 @@
         font-size: tovmin(24);
     }
 
-    .middle ul li {
+    .middle ul li,
+    .middle ul li button {
         flex: 1;
         text-align: center;
         display: flex;
@@ -203,5 +222,19 @@
         bottom: 0;
         left: 0;
         right: 0;
+    }
+
+    button::after {
+        border: none;
+
+    }
+
+    button {
+        background-color: transparent;
+        font-size: tovmin(28);
+    }
+
+    button image {
+        margin-bottom: 0;
     }
 </style>

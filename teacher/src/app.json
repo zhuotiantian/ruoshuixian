@@ -1,8 +1,8 @@
 {
     "pages": [
+        "pages/my_teacher/main",
         "pages/my_teacher/work/main",
         "pages/login/main",
-        "pages/my_teacher/main",
         "pages/my_teacher/students/main",
         "pages/regist/main",
         "pages/rePassword/main",

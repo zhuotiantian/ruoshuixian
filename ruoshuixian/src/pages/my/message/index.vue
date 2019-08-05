@@ -31,6 +31,9 @@
                     url: "/api/wxapp.user/myNews",
                     header: {
                         token: this.token
+                    },
+                    header: {
+                        token: this.token
                     }
                 }).then(result => {
                     result.data.forEach(e => {
@@ -52,6 +55,7 @@
         position: absolute;
         height: calc(100% - 60rpx);
         width: calc(100% - 60rpx);
+        overflow-y: scroll;
     }
 
     .text {

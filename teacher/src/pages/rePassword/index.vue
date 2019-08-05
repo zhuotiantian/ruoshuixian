@@ -46,6 +46,7 @@
         },
         mounted() {
             this.ratio = this.globalData.ratio;
+            this.token = wx.getStorageSync("userInfo").token;
         },
         methods: {
             regist: function() {
@@ -70,6 +71,9 @@
                             captcha,
                             event: "重置密码"
                         },
+                        header: {
+                            token: this.token
+                        }
                     })
                     .then(result => {
                         if (result.code == 1) {
@@ -80,6 +84,9 @@
                                         mobile,
                                         captcha,
                                         password
+                                    },
+                                    header: {
+                                        token: this.token
                                     }
                                 })
                                 .then(result => {

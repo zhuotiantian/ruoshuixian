@@ -1,5 +1,5 @@
 <template>
-    <div class="container" v-if="memaryTime.length>0||memaryNumber.length>0">
+    <div class="container">
         <CardTitle :seconds="seconds" :minutes="minutes" :btnType="btnType" :type="titleBtn" @toNextPage="toNextPage">
         </CardTitle>
         <div class="content" v-if="type=='time'">

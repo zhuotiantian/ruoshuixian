@@ -17,14 +17,14 @@
         },
         created() {
             this.level = wx.getStorageSync("level");
-        },
-        onLoad(option) {
-            let rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+            this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
-            this.numberList = rule.list;
-            this.total = rule.number;
-            this.per = rule.number_per_group;
+        },
+        onLoad(option) {
+            this.numberList = this.rule.list;
+            this.total = this.rule.number;
+            this.per = this.rule.number_per_group;
         },
         mounted() {
             let number = [];
@@ -41,7 +41,8 @@
                 numberList: [],
                 total: 0,
                 per: 0,
-                level: "primary"
+                level: "primary",
+                rule: {}
             }
         },
         methods: {

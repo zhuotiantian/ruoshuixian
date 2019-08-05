@@ -32,6 +32,7 @@ export default {
             "pages/rePassword/main",
 
             "pages/firstPage/main",
+            "pages/indexPage/main",
             "pages/regist/main",
             "pages/flashPocker/main",
             "pages/flashPocker/answer/main",

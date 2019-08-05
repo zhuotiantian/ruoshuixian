@@ -24,6 +24,7 @@
         },
         created() {
             this.level = wx.getStorageSync("level");
+            this.token = wx.getStorageSync("userInfo").token;
         },
         onLoad() {
             this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
@@ -81,6 +82,9 @@
                         game_records_id: this.game_records_id,
                         game_time: (this.endTime - this.startTime) / 1000,
                         content: JSON.stringify(result)
+                    },
+                    header: {
+                        token: this.token
                     }
                 }).then(result => {
                     if (result.code == 1) {

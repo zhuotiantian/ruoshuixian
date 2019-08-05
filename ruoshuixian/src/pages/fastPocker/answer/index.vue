@@ -71,6 +71,7 @@
             };
         },
         mounted() {
+            this.token = wx.getStorageSync("userInfo").token;
             this.ratio = this.globalData.ratio;
             this.startTime = new Date().getTime();
             this.level = wx.getStorageSync("level");
@@ -142,6 +143,9 @@
                         game_records_id: this.game_records_id,
                         game_time: (this.endTime - this.startTime) / 1000,
                         content: JSON.stringify(result)
+                    },
+                    header: {
+                        token: this.token
                     }
                 }).then(result => {
                     if (result.code == 1) {
