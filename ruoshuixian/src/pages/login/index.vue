@@ -29,7 +29,7 @@
                 <span @click="switchLoginWay">
                     <span v-if="!codeLogin">密码登陆</span><span v-else>验证码登陆</span>
                 </span>
-                <span>忘记密码</span></p>
+                <span @click="toRepassword">忘记密码</span></p>
         </div>
         <p id="info">还没有若水轩账号？<span style="color:#f8b551" @click="toRegist">立即注册</span></p>
     </div>
@@ -158,6 +158,11 @@
                 clearInterval(this.timer);
                 this.clickGetCode = false;
                 this.seconds = 60;
+            },
+            toRepassword: function() {
+                wx.redirectTo({
+                    url: "../rePassword/main"
+                })
             }
         }
     };

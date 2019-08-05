@@ -39,6 +39,8 @@
         },
         onShow() {
             wx.hideTabBar();
+            this.token = wx.getStorageSync("userInfo").token;
+
         },
         onShareAppMessage: function(res) {
             return {
@@ -71,7 +73,9 @@
             getIndexData: function() {
                 this.$http.get({
                     url: "/api/wxapp.index/index",
-
+                    header: {
+                        token: this.token
+                    }
                 }).then(result => {
                     this.games = result.data.game_list;
                     this.topImg = result.data.rotary_planting_map[0].image
@@ -83,6 +87,9 @@
                     url: "/api/wxapp.game/getGame",
                     data: {
                         game_id: item.id
+                    },
+                    header: {
+                        token: this.token
                     }
                 }).then(result => {
                     wx.setStorageSync("rule", result.data);

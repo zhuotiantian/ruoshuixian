@@ -15,24 +15,24 @@
             <ul class="list" v-if="active=='学生成绩'">
                 <li @click="toComment">
                     <span style="flex:1">
-                        <image class="image" :src="'/static/images/ranking/people@'+ratio+'x.png'"></image>
+                        <image class="image" :src="domain+stu.avatar"></image>
                     </span>
-                    <span style="flex:6">小明</span>
+                    <span style="flex:6">{{stu.nickname}}</span>
                     <span style="flex:1">
                         <image class="icon" :src="'/static/images/ranking/ranking1@'+ratio+'x.png'"></image>
                     </span>
                 </li>
             </ul>
             <ul class="students" v-else>
-                <li>
+                <li v-for="(item,index) in stu_list" :key="index">
                     <span class="arrow">&nbsp;&nbsp;&nbsp;</span>
-                    <span>一组</span>
+                    <span>{{item.name}}</span>
                     <ul class="student-list">
-                        <li>
+                        <li v-for="(stu,_index) in item.user" :key="_index">
                             <span style="flex:1">
-                                <image class="image" :src="'/static/images/ranking/people@'+ratio+'x.png'"></image>
+                                <image class="image" :src="domain+stu.avatar"></image>
                             </span>
-                            <span style="flex:6">小明</span>
+                            <span style="flex:6">{{stu.nickname}}</span>
                         </li>
                     </ul>
                 </li>
@@ -48,7 +48,12 @@
                 activeBtn: "组别",
                 showDropdown: false,
                 ratio: 1,
+                stu_list: [],
+                domain: this.$http.domain
             }
+        },
+        onShow() {
+            this.token = wx.getStorageSync("userInfo").token;
         },
         methods: {
             showDropdownFunc: function() {
@@ -62,9 +67,12 @@
             },
             getList: function() {
                 this.$http.get({
-                    url: "/api/wxapp.student/myStudents"
+                    url: "/api/wxapp.student/myStudents",
+                    header: {
+                        token: this.token
+                    }
                 }).then(result => {
-                    console.log(result);
+                    this.stu_list = result.data;
                 });
             }
         },
@@ -159,9 +167,10 @@
         margin: tovmin(40);
         padding: tovmin(40);
         background: white;
+        height: calc(100% - 130rpx);
     }
 
-    .students>ul>li {
+    .students li {
         font-size: tovmin(34);
         height: tovmin(80);
         line-height: tovmin(80);

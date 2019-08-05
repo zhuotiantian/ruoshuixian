@@ -29,6 +29,7 @@
         },
         onShow() {
             wx.hideTabBar();
+            this.token = wx.getStorageSync("userInfo").token;
         },
         mounted() {
             this.ratio = this.globalData.ratio;
@@ -37,7 +38,10 @@
         methods: {
             getList: function() {
                 this.$http.get({
-                    url: "/api/wxapp.user/taskListForCarding"
+                    url: "/api/wxapp.user/taskListForCarding",
+                    header: {
+                        token: this.token
+                    }
                 }).then(result => {
                     console.log(result);
                 });

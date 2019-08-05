@@ -1,11 +1,19 @@
 {
     "pages": [
         "pages/indexPage/main",
+        "pages/login/main",
+        "pages/regist/main",
+        "pages/rePassword/main",
+
+        "pages/abstractPic/main",
+        "pages/abstractPic/memary/main",
+        "pages/abstractPic/answer/main",
+        "pages/abstractPic/result/main",
+
         "pages/binaryNumber/main",
         "pages/binaryNumber/result/main",
         "pages/binaryNumber/answer/main",
         "pages/binaryNumber/memary/main",
-
 
         "pages/fastPocker/main",
         "pages/fastPocker/ready/main",
@@ -20,26 +28,13 @@
         "pages/flashPocker/recall/main",
         "pages/flashPocker/result/main",
 
-        "pages/login/main",
-
-        "pages/abstractPic/memary/main",
-        "pages/abstractPic/answer/main",
-        "pages/abstractPic/result/main",
-        "pages/abstractPic/main",
-
-
-        "pages/peoplePic/memary/main",
-        "pages/peoplePic/main",
-        "pages/peoplePic/result/main",
-        "pages/peoplePic/answer/main",
-
-        "pages/randomWords/memary/main",
         "pages/randomWords/main",
+        "pages/randomWords/memary/main",
         "pages/randomWords/result/main",
         "pages/randomWords/answer/main",
 
-        "pages/marathonNumber/memary/main",
         "pages/marathonNumber/main",
+        "pages/marathonNumber/memary/main",
         "pages/marathonNumber/result/main",
         "pages/marathonNumber/answer/main",
 
@@ -51,7 +46,6 @@
         "pages/my/ranking/main",
 
         "pages/help/main",
-
         "pages/firstPage/main",
 
         "pages/marathonPocker/main",
@@ -62,18 +56,20 @@
         "pages/marathonPocker/answer/main",
 
 
-
-        "pages/regist/main",
-
+        "pages/listenAndRemember/main",
         "pages/listenAndRemember/answer/main",
         "pages/listenAndRemember/result/main",
-        "pages/listenAndRemember/main",
         "pages/listenAndRemember/listen/main",
 
-        "pages/virtualEvents/memary/main",
         "pages/virtualEvents/main",
+        "pages/virtualEvents/memary/main",
         "pages/virtualEvents/result/main",
         "pages/virtualEvents/anwser/main",
+
+        "pages/peoplePic/main",
+        "pages/peoplePic/memary/main",
+        "pages/peoplePic/result/main",
+        "pages/peoplePic/answer/main",
 
         "pages/index/main",
 

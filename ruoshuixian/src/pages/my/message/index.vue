@@ -18,13 +18,20 @@
                 list: [],
             }
         },
+        onShow() {
+            this.token = wx.getStorageSync("userInfo").token;
+        },
         mounted() {
             this.getList();
+
         },
         methods: {
             getList: function() {
                 this.$http.get({
-                    url: "/api/wxapp.user/myNews"
+                    url: "/api/wxapp.user/myNews",
+                    header: {
+                        token: this.token
+                    }
                 }).then(result => {
                     result.data.forEach(e => {
                         let init_time = new Date(e.createtime);

@@ -26,6 +26,9 @@
                 money: 0,
             }
         },
+        onShow() {
+            this.token = wx.getStorageSync("userInfo").token;
+        },
         mounted() {
             this.getList();
         },
@@ -33,7 +36,9 @@
             getList: function() {
                 this.$http.get({
                     url: "/api/wxapp.user/redEnvelopeRecord",
-
+                    header: {
+                        token: this.token
+                    }
                 }).then(result => {
                     this.list = result.data.list;
                     this.money = result.data.money;

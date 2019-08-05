@@ -13,6 +13,9 @@
                 content: ""
             }
         },
+        onShow() {
+            this.token = wx.getStorageSync("userInfo").token;
+        },
         mounted() {
             this.ratio = this.globalData.ratio;
             this.game_id = wx.getStorageSync("gameid");
@@ -24,6 +27,9 @@
                     url: "/api/wxapp.game/help",
                     data: {
                         game_id: this.game_id
+                    },
+                    header: {
+                        token: this.token
                     }
                 }).then(result => {
                     this.content = result.data[0]

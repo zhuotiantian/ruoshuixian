@@ -29,6 +29,8 @@ export default {
     config: {
         "pages": [
             "pages/login/main",
+            "pages/rePassword/main",
+
             "pages/firstPage/main",
             "pages/regist/main",
             "pages/flashPocker/main",

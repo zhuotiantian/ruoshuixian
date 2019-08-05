@@ -1,21 +1,13 @@
 <template>
     <div class="container">
-        <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成" @finishMemary="finishMemary"></CardTitle>
+        <CardTitle type="记忆完成" @finishMemary="finishMemary"></CardTitle>
         <div class="list">
             <p class="list-title">
                 <span>序号</span>
                 <span>时间</span>
                 <span style="flex:3;">事件</span>
             </p>
-            <p><span>1</span><span class="year">1974</span><span style="flex:3;">事件事件</span></p>
-            <p><span>2</span><span class="year">1974</span><span style="flex:3;">事件事件</span>
-            </p>
-            <p><span>3</span><span class="year">1974</span><span style="flex:3;">事件事件</span></p>
-            <p><span>4</span><span class="year">1974</span><span style="flex:3;">事件事件</span>
-            </p>
-            <p><span>5</span><span class="year">1974</span><span style="flex:3;">事件事件</span></p>
-            <p><span>6</span><span class="year">1974</span><span style="flex:3;">事件事件</span>
-            </p>
+            <p v-for="(item,index) in numberList" :key="index"><span>{{index+1}}</span><span class="year">{{item.date}}</span><span style="flex:3;">{{item.event}}</span></p>
         </div>
     </div>
 </template>
@@ -26,13 +18,24 @@
         components: {
             CardTitle
         },
-        mounted() {
-
+        created() {
+            this.level = wx.getStorageSync("level");
+        },
+        onLoad(option) {
+            let rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0];
+            this.numberList = rule.list.date.map((e, index) => {
+                return {
+                    date: e,
+                    event: rule.list.avatar[index]
+                }
+            });
         },
         data() {
             return {
-                minutes: 15,
-                seconds: 0,
+                numberList: [],
+                level: "primary"
             }
         },
         methods: {

@@ -83,6 +83,7 @@
                     }
                 }).then(result => {
                     if (result.code == 1) {
+                        wx.setStorageSync("result", result.data);
                         wx.navigateTo({
                             url: "../result/main"
                         })

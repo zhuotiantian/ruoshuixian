@@ -73,7 +73,7 @@
             }
         },
         onShow() {
-            this.userInfo = wx.getStorageSync("userInfo");
+            this.token = wx.getStorageSync("userInfo").token;
         },
         methods: {
             showDropdownFunc: function() {

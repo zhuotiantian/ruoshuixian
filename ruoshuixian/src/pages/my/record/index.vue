@@ -36,6 +36,9 @@
                 scores: []
             }
         },
+        onShow() {
+            this.token = wx.getStorageSync("userInfo").token;
+        },
         mounted() {
             this.ratio = this.globalData.ratio;
             this.getList();
@@ -44,7 +47,10 @@
         methods: {
             getList: function() {
                 this.$http.get({
-                    url: "/api/wxapp.student/punchInRecord"
+                    url: "/api/wxapp.student/punchInRecord",
+                    header: {
+                        token: this.token
+                    }
                 }).then(result => {
                     if (result.code == 1) {
                         this.list = result.data;
@@ -58,7 +64,10 @@
             },
             getScoreList: function() {
                 this.$http.get({
-                    url: "/api/wxapp.game/achievement"
+                    url: "/api/wxapp.game/achievement",
+                    header: {
+                        token: this.token
+                    }
                 }).then(result => {
                     if (result.code == 1) {
                         this.scores = result.data;
