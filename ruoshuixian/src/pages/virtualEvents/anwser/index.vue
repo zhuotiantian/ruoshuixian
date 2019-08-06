@@ -10,10 +10,12 @@
                 <span>时间</span>
                 <span style="flex:5;">事件</span>
             </p>
-            <p v-for="(item,index) in numberList" :key="index"><span>{{index+1}}</span><span><input type="text" v-model="item.date" class="input" @focus="focus" @blur="blur"></span><span style="flex:5;">{{item.event}}</span>
+            <p v-for="(item,index) in numberList" :key="index">
+                <span>{{index+1}}</span>
+                <span @click="focus(index)" class="input">{{item.date}}</span><span style="flex:5;">{{item.event}}</span>
             </p>
         </div>
-        <Keybord :showKeybord="showKeybord"></Keybord>
+        <Keybord :showKeybord="showKeybord" @selectNumber="selectNumber" @deleteNumber="deleteNumber"></Keybord>
     </div>
 </template>
 <script>
@@ -34,13 +36,12 @@
             })[0];
         },
         onLoad(option) {
-
-            this.numberList = this.rule.list.date.map((e, index) => {
+            this.numberList = this.rule.list ? this.rule.list.date.map((e, index) => {
                 return {
                     date: "",
                     event: this.rule.list.event[index]
                 }
-            });
+            }) : [];
             this.startTime = new Date().getTime();
             this.game_records_id = this.rule.game_records_id;
         },
@@ -54,13 +55,11 @@
             }
         },
         methods: {
-            focus: function() {
+            focus: function(index) {
                 this.showKeybord = true;
+                this.index = index;
             },
-            blur: function() {
-                this.showKeybord = false;
-            },
-            finish: function() {
+            finish: function(index) {
                 this.showFog = true;
             },
             hideFog: function() {
@@ -95,6 +94,15 @@
                         });
                     }
                 })
+            },
+            selectNumber: function(data) {
+                let date = this.numberList[this.index].date;
+                this.$set(this.numberList[this.index], "date", date + data);
+            },
+            deleteNumber: function() {
+                let date = this.numberList[this.index].date.split("");
+                date.pop();
+                this.$set(this.numberList[this.index], "date", date.join(""));
             }
         }
     };
@@ -137,5 +145,6 @@
         border: tovmin(2) solid $blue-border;
         border-radius: tovmin(8);
         margin: 0 auto;
+        display: inline-block;
     }
 </style>

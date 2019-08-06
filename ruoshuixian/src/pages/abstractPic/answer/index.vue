@@ -7,12 +7,13 @@
             <div class="row" v-for="(rows,_index) in number" :key="_index">
                 <div class="image_div" v-for="(item,index) in rows" :key="index">
                     <image class="image" :src="domain+item.image" />
-                    <input type="text" class="input" placeholder="序号" v-model="item.text" @focus="focus" @blur="blur" />
+                    <span class="input" @click="focus(_index,index)">{{item.text}}</span>
+                    <!-- <input type="text" class="input" placeholder="序号" v-model="item.text" @focus="focus" @blur="blur" /> -->
                 </div>
                 <span style="margin-left:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
             </div>
         </div>
-        <Keybord :showKeybord="showKeybord" counts="5"></Keybord>
+        <Keybord :showKeybord="showKeybord" counts="5" @selectNumber="selectNumber" @deleteNumber="deleteNumber"></Keybord>
     </div>
 </template>
 <script>
@@ -28,17 +29,17 @@
         create() {
             this.level = wx.getStorageSync("level");
             this.token = wx.getStorageSync("userInfo").token;
-        },
-        onLoad() {
             this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
-            this.numberList = this.rule.list.map((e, index) => {
+        },
+        onLoad() {
+            this.numberList = this.rule.list ? this.rule.list.map((e, index) => {
                 return {
                     image: e,
-                    text: ""
+                    text: "",
                 }
-            });
+            }) : [];
             this.total = this.rule.number;
             this.per = this.rule.number_per_group;
         },
@@ -62,6 +63,9 @@
         },
         mounted() {
             let number = [];
+            this.numberList = this.numberList.sort(() => {
+                return Math.random() > 0.5 ? -1 : 1
+            })
             for (var i = 0; i < this.total; i += this.per) {
                 number.push(this.numberList.slice(i, i + this.per));
             }
@@ -79,11 +83,10 @@
             hideFog: function() {
                 this.showFog = false;
             },
-            focus: function() {
+            focus: function(_index, index) {
                 this.showKeybord = true;
-            },
-            blur: function() {
-                this.showKeybord = false;
+                this._index = _index;
+                this.index = index;
             },
             confirm: function() {
                 this.endTime = new Date().getTime();
@@ -118,6 +121,18 @@
                             });
                         }
                     });
+            },
+            selectNumber: function(data) {
+                let item = this.number[this._index][this.index];
+                item.text = data;
+                this.$set([this._index], this.index, item);
+            },
+            deleteNumber: function() {
+                let number = this.number;
+                number.forEach(m => {
+                    m.text = ""
+                });
+                this.number = number;
             }
         }
     };
@@ -170,5 +185,6 @@
         color: $grey-text;
         height: tovmin(40);
         line-height: tovmin(40) !important;
+        display: block;
     }
 </style>

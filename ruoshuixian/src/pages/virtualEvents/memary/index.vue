@@ -25,12 +25,12 @@
             })[0];
         },
         onLoad(option) {
-            this.numberList = this.rule.list.date.map((e, index) => {
+            this.numberList = this.rule.list ? this.rule.list.date.map((e, index) => {
                 return {
                     date: e,
                     event: this.rule.list.event[index]
                 }
-            });
+            }) : [];
         },
         data() {
             return {

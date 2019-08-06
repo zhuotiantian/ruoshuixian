@@ -19,12 +19,12 @@
         },
         created() {
             this.level = wx.getStorageSync("level");
-            this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0];
+            this.rule = wx.getStorageSync("rule").rules_of_the_game;
         },
         onLoad(option) {
-            this.numberList = this.rule.list;
+            this.numberList = this.rule ? this.rule.list.filter(e => {
+                return e.game_level == this.level
+            })[0] : [];
             this.total = this.rule.number;
             this.per = this.rule.number_per_group;
         },
