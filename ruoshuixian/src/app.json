@@ -1,7 +1,30 @@
 {
     "pages": [
+        "pages/record/main",
+        "pages/record/details/main",
+
+        "pages/marathonPocker1/memary/main",
+        "pages/marathonPocker1/main",
+        "pages/marathonPocker1/recall/main",
+        "pages/marathonPocker1/ready/main",
+        "pages/marathonPocker1/result/main",
+        "pages/marathonPocker1/answer/main",
+
         "pages/indexPage/main",
+
+        "pages/marathonPocker/memary/main",
+        "pages/marathonPocker/main",
+        "pages/marathonPocker/recall/main",
+        "pages/marathonPocker/ready/main",
+        "pages/marathonPocker/result/main",
+        "pages/marathonPocker/answer/main",
+
+        "pages/listenAndRemember/answer/main",
+        "pages/listenAndRemember/listen/main",
+        "pages/listenAndRemember/main",
+        "pages/listenAndRemember/result/main",
         "pages/login/main",
+
         "pages/firstPage/main",
 
         "pages/flashPocker/main",
@@ -44,7 +67,6 @@
         "pages/marathonNumber/result/main",
         "pages/marathonNumber/answer/main",
 
-        "pages/record/main",
         "pages/my/main",
         "pages/my/message/main",
         "pages/my/hongbao/main",
@@ -52,19 +74,6 @@
         "pages/my/ranking/main",
 
         "pages/help/main",
-
-        "pages/marathonPocker/main",
-        "pages/marathonPocker/memary/main",
-        "pages/marathonPocker/recall/main",
-        "pages/marathonPocker/ready/main",
-        "pages/marathonPocker/result/main",
-        "pages/marathonPocker/answer/main",
-
-
-        "pages/listenAndRemember/main",
-        "pages/listenAndRemember/answer/main",
-        "pages/listenAndRemember/result/main",
-        "pages/listenAndRemember/listen/main",
 
         "pages/virtualEvents/main",
         "pages/virtualEvents/memary/main",

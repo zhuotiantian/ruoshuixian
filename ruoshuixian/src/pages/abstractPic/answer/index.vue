@@ -6,7 +6,7 @@
         <div class="list">
             <div class="row" v-for="(rows,_index) in number" :key="_index">
                 <div class="image_div" v-for="(item,index) in rows" :key="index">
-                    <image class="image" :src="domain+item.image" />
+                    <image class="image" :src="domain+item.image"></image>
                     <span class="input" @click="focus(_index,index)">{{item.text}}</span>
                     <!-- <input type="text" class="input" placeholder="序号" v-model="item.text" @focus="focus" @blur="blur" /> -->
                 </div>

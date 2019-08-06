@@ -41,11 +41,6 @@
                 }).then(result => {
                     this.list = result.data;
                 });
-            },
-            toDetails: function() {
-                wx.navigateTo({
-                    url: "./details/main"
-                });
             }
         }
     }

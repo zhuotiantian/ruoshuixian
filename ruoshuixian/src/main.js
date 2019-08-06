@@ -29,8 +29,14 @@ export default {
     config: {
         "pages": [
             "pages/login/main",
+            "pages/record/details/main",
             "pages/rePassword/main",
-
+            "pages/marathonPocker1/memary/main",
+            "pages/marathonPocker1/main",
+            "pages/marathonPocker1/recall/main",
+            "pages/marathonPocker1/ready/main",
+            "pages/marathonPocker1/result/main",
+            "pages/marathonPocker1/answer/main",
             "pages/firstPage/main",
             "pages/indexPage/main",
             "pages/regist/main",

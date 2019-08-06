@@ -5,7 +5,7 @@
             <template v-if="isResult">
                 <p>
                     <span v-if="isPocker&&showTime">用时：{{result.game_time}}S</span>
-                    <span v-else>得分：{{result.fraction}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;标准分：{{game.length}}</span>
+                    <span v-else>得分：{{result.fraction}}</span>
                 </p>
                 <p style="flex:1;text-align:right">
                     <span class="btn default-btn" style="margin-right:15rpx" v-if="isPocker" @click="showTimeHandle">

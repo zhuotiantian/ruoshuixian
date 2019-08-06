@@ -3,13 +3,13 @@
         <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
         </CardTitle>
         <div class="list" v-if="ratio">
-            <template v-if="pocker.length==0">
+            <template v-if="perPocker.length==0">
                 <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg@'+ratio+'x.png'" />
             </template>
             <template v-else>
                 <em class="arrow arrow-left"></em>
-                <scroll-view :style="{width:'510px',height:'196px','white-space':'nowrap'}" scroll-x>
-                    <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :src="'/static/images/pocker/'+(index+1)+'-1@'+ratio+'x.png'" />
+                <scroll-view :style="{width:'463px',height:'196px','white-space':'nowrap'}" scroll-x>
+                    <image class="pocker" ref="pocker" v-for="(item,index) in perPocker" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'@'+ratio+'x.png'" />
                 </scroll-view>
                 <em class="arrow arrow-right"></em>
             </template>
@@ -17,9 +17,10 @@
         <div class="pageFoot">
             <span class="pageBtn" @click="prevPage">上一页</span>
             <div class="btn-group">
-                <span :class="{item:true,active:item.active}" @click="selectCounts(index)" v-for="(item,index) in pages" :key="index">{{item.index}}幅</span>
+                <span :class="{item:true, active:item.active}" @click="select(index,item)" v-for="(item,index) in groupPage[currentPage]" :key="index">{{item.number}}幅</span>
             </div>
             <span class="pageBtn" @click="nextPage">下一页</span>
+            <span class="btn tips-btn" style="float-right" @click="showTips">操作提示</span>
         </div>
     </div>
 </template>
@@ -29,17 +30,13 @@
         components: {
             CardTitle
         },
-        onLoad: function(option) {
-            this.level = option.level;
+        created() {
+            this.level = wx.getStorageSync("level");
+            this.pocker = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0].list;
         },
         data() {
-            let pages = [];
-            for (let i = 1; i <= 10; i++) {
-                pages.push({
-                    index: i,
-                    active: false
-                });
-            };
             return {
                 pannelContent: ["ALL", "1", "2", "4", "8"],
                 pockerCount: 0,
@@ -48,13 +45,26 @@
                 pocker: [],
                 ratio: 1,
                 type: null,
-                currentPage: 1,
-                level: "",
-                pages: pages,
+                level: "primary",
+                pages: [],
+                perPocker: [],
+                currentPage: 0,
+                groupPage: [],
             }
         },
         mounted() {
             this.ratio = this.globalData.ratio;
+            for (var i = 1; i <= this.pocker.length; i++) {
+                this.pages.push({
+                    number: i,
+                    active: false
+                });
+            };
+            let groupPage = [];
+            for (var i = 0; i < this.pages.length; i += 10) {
+                groupPage.push(this.pages.slice(i, i + 10));
+            };
+            this.groupPage = groupPage;
         },
         computed: {
             bgCounts: function() {
@@ -68,23 +78,22 @@
             }
         },
         methods: {
-            selectCounts: function(index) {
-                this.pages.forEach(e => {
-                    e.active = false;
-                })
-                this.$set(this.pages, index, {
-                    index: index + 1,
-                    active: true
-                });
-            },
             group: function(data) {
-                // this.pocker = wx.getStorageSync("rule").list[];
+                let currentIndex = this.groupPage[this.currentPage].filter(e => {
+                    return e.active
+                })[0].number;
                 if (data !== "ALL") {
-                    this.pocker = this.pocker.splice(0, data);
-                }
+                    this.perPocker = this.pocker[currentIndex].splice(0, data);
+                } else {
+                    this.perPocker = this.pocker[currentIndex]
+                };
+                this.groupData = data;
                 this.type = "记忆完成";
-                this.minutes = 60;
-                this.seconds = 0;
+                if (this.time_long) {
+                    setTimeout(() => {
+                        this.finishMemary();
+                    }, this.time_long);
+                }
             },
             finishMemary: function() {
                 wx.navigateTo({
@@ -92,27 +101,28 @@
                 })
             },
             nextPage: function() {
-                if (this.currentPage > 3) {
-                    return false
-                } else {
+                if (this.currentPage < this.groupPage.length - 1) {
                     this.currentPage++;
-                    this.pages = this.pages.map((e) => {
-                        return {
-                            index: e + 10,
-                            active: false
-                        }
-                    });
                 }
             },
             prevPage: function() {
-                if (this.currentPage > 1) {
-                    this.currentPage--
-                    this.pages = this.pages.map((e) => {
-                        return {
-                            index: e - 10,
-                            active: false
-                        }
-                    });
+                if (this.currentPage > 0) {
+                    this.currentPage--;
+                }
+            },
+            select: function(index, item) {
+                this.$set(this.groupPage, this.currentPage, this.groupPage[this.currentPage].map(e => {
+                    return {
+                        number: e.number,
+                        active: false
+                    }
+                }));
+                this.$set(this.groupPage[this.currentPage], index, {
+                    number: item.number,
+                    active: true
+                });
+                if (this.pocker.length > 0) {
+                    this.perPocker = this.pocker[item.number].splice(0, this.groupData)
                 }
             }
         }
@@ -191,5 +201,10 @@
         color: white;
         background: $middle-blue;
         border: none;
+    }
+
+    .tips-btn {
+        color: $middle-blue;
+        border: tovmin(2) solid $middle-blue;
     }
 </style>

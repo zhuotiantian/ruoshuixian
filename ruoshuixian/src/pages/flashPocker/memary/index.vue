@@ -8,7 +8,7 @@
             </template>
             <template v-else>
                 <em class="arrow arrow-left"></em>
-                <scroll-view :style="{width:'510px',height:'196px','white-space':'nowrap'}" scroll-x>
+                <scroll-view :style="{width:'463px',height:'196px','white-space':'nowrap'}" scroll-x>
                     <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'@'+ratio+'x.png'" />
                 </scroll-view>
                 <em class="arrow arrow-right"></em>

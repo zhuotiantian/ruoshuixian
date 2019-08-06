@@ -1,5 +1,8 @@
 <script>
     export default {
+        created() {
+            this.userInfo = wx.getStorageSync("userInfo");
+        },
         mounted() {
             const that = this;
             wx.getLocation({
@@ -11,11 +14,19 @@
                     } = data;
                     that.init(latitude, longitude);
                 }
-            })
+            });
+            if (this.userInfo.length == 0) {
+                wx.showToast({
+                    title: "请先登陆！"
+                });
+                wx.navigateTo({
+                    url: "./pages/login/main"
+                });
+            }
         },
         data() {
             return {
-                apiUrl: "http://yxcy.wanzhong.ink"
+                userInfo: {}
             }
         },
         methods: {
@@ -32,7 +43,6 @@
                             title: "success",
                             icon: "success"
                         });
-                        console.log(res);
                     }
                 });
             }
