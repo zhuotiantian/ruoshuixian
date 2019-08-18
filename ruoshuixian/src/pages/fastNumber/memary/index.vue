@@ -19,14 +19,12 @@
             this.level = wx.getStorageSync("level");
             this.rule = wx.getStorageSync("rule").rules_of_the_game;
         },
-        onLoad(option) {
-            this.numberList = this.rule ? this.rule.list.filter(e => {
-                return e.game_level == this.level
-            })[0] : [];
-            this.total = this.rule.number;
-            this.per = this.rule.number_per_group;
-        },
         mounted() {
+            this.total = this.rule[0].number;
+            this.per = this.rule[0].number_per_group;
+            this.numberList = this.rule ? this.rule.filter(e => {
+                return e.game_level == this.level
+            })[0].list : [];
             let number = [];
             for (var i = 0; i < this.total; i += this.per) {
                 number.push(this.numberList.slice(i, i + this.per));

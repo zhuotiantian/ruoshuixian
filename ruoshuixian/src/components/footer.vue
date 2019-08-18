@@ -38,23 +38,23 @@
         },
         methods: {
             toFisrstPage: function(index) {
-                let url = "../firstPage/main";
+                let url = "/pages/firstPage/main";
                 this.to(url, index);
             },
             toMoney: function(index) {
-                let url = "../hongbao/main";
+                let url = "/pages/hongbao/main";
                 this.to(url, index);
             },
             toRecord: function(index) {
-                let url = "../record/main";
+                let url = "/pages/record/main";
                 this.to(url, index);
             },
             toMy: function(index) {
                 if (this.isMember) {
-                    let url = "../my/main";
+                    let url = "/pages/my/main";
                     this.to(url, index);
                 } else {
-                    let url = "../my_custom/main";
+                    let url = "/pages/my_custom/main";
                     this.to(url, index);
                 }
             },

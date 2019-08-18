@@ -1,29 +1,44 @@
 {
     "pages": [
-        "pages/record/main",
-        "pages/record/details/main",
-
-        "pages/marathonPocker1/memary/main",
-        "pages/marathonPocker1/main",
-        "pages/marathonPocker1/recall/main",
-        "pages/marathonPocker1/ready/main",
-        "pages/marathonPocker1/result/main",
-        "pages/marathonPocker1/answer/main",
+        "pages/fastNumber/result/main",
+        "pages/fastNumber/main",
+        "pages/fastNumber/answer/main",
+        "pages/fastNumber/memary/main",
 
         "pages/indexPage/main",
 
-        "pages/marathonPocker/memary/main",
+        "pages/virtualEvents/main",
+        "pages/virtualEvents/result/main",
+        "pages/virtualEvents/anwser/main",
+        "pages/virtualEvents/memary/main",
+
+        "pages/binaryNumber/main",
+        "pages/binaryNumber/result/main",
+        "pages/binaryNumber/answer/main",
+        "pages/binaryNumber/memary/main",
+
+        "pages/marathonPocker1/main",
+        "pages/marathonPocker1/answer/main",
+        "pages/marathonPocker1/memary/main",
+        "pages/marathonPocker1/recall/main",
+        "pages/marathonPocker1/ready/main",
+        "pages/marathonPocker1/result/main",
+
+        "pages/login/main",
+        "pages/record/main",
+        "pages/record/details/main",
+
         "pages/marathonPocker/main",
+        "pages/marathonPocker/memary/main",
         "pages/marathonPocker/recall/main",
         "pages/marathonPocker/ready/main",
         "pages/marathonPocker/result/main",
         "pages/marathonPocker/answer/main",
 
+        "pages/listenAndRemember/main",
         "pages/listenAndRemember/answer/main",
         "pages/listenAndRemember/listen/main",
-        "pages/listenAndRemember/main",
         "pages/listenAndRemember/result/main",
-        "pages/login/main",
 
         "pages/firstPage/main",
 
@@ -40,15 +55,6 @@
         "pages/abstractPic/memary/main",
         "pages/abstractPic/answer/main",
         "pages/abstractPic/result/main",
-
-        "pages/binaryNumber/main",
-        "pages/binaryNumber/result/main",
-        "pages/binaryNumber/answer/main",
-        "pages/binaryNumber/memary/main",
-        "pages/fastNumber/main",
-        "pages/fastNumber/result/main",
-        "pages/fastNumber/answer/main",
-        "pages/fastNumber/memary/main",
 
         "pages/fastPocker/main",
         "pages/fastPocker/ready/main",
@@ -74,11 +80,6 @@
         "pages/my/ranking/main",
 
         "pages/help/main",
-
-        "pages/virtualEvents/main",
-        "pages/virtualEvents/memary/main",
-        "pages/virtualEvents/result/main",
-        "pages/virtualEvents/anwser/main",
 
         "pages/peoplePic/main",
         "pages/peoplePic/memary/main",

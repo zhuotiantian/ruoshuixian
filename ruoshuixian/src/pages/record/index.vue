@@ -1,9 +1,10 @@
 <template>
     <div class="container">
         <div class="content" v-if="ratio">
-            <div v-for="(item,index) in list" :key="index" @click="toDetails">
+            <div v-for="(item,index) in list" :key="index" @click="toDetails(item.students_homework_details_id)">
                 <div class="img_div">
-                    <image class="image" :src="'/static/images/redPocket/bg2@'+ratio+'x.png'"></image>
+                    {{item.name}}
+                    <image class="image" :src="'/static/images/firstPage/recordList.png'"></image>
                 </div>
                 <p class="p">{{item.remarks}}</p>
             </div>
@@ -42,9 +43,10 @@
                     this.list = result.data;
                 });
             },
-            toDetails: function() {
+            toDetails: function(id) {
                 wx.navigateTo({
-                    url: "./details/main"
+                    url: "./details/main?students_homework_details_id=" + id,
+
                 });
             }
         }
@@ -69,20 +71,24 @@
     }
 
     .img_div {
-        width: tovmin(670);
-        height: tovmin(318);
+        width: 89.33333vmin;
+        height: 26.66667vmin;
         overflow: hidden;
-        margin-bottom: tovmin(30);
-        border-radius: tovmin(10);
+        margin-bottom: 4vmin;
+        border-radius: 1.33333vmin;
         position: relative;
+        text-align: center;
+        line-height: 26.6667vmin;
+        font-size: tovmin(36);
+        color: white;
     }
 
     .image {
-        width: tovmin(690);
-        height: tovmin(518);
-        position: absolute;
-        top: -52%;
-        z-index: 1;
+        width: tovmin(670);
+        height: tovmin(162);
+        z-index: -1;
         margin: tovmin(30) 0;
+        position: absolute;
+        left: 0;
     }
 </style>

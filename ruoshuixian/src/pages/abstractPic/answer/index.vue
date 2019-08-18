@@ -26,22 +26,17 @@
             Keybord,
             alertBox
         },
+        beforeCreate() {
+            this.token = wx.getStorageSync("userInfo").token;
+        },
         create() {
             this.level = wx.getStorageSync("level");
-            this.token = wx.getStorageSync("userInfo").token;
+
+        },
+        onLoad() {
             this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
-        },
-        onLoad() {
-            this.numberList = this.rule.list ? this.rule.list.map((e, index) => {
-                return {
-                    image: e,
-                    text: "",
-                }
-            }) : [];
-            this.total = this.rule.number;
-            this.per = this.rule.number_per_group;
         },
         data() {
             let array = new Array(5);
@@ -62,7 +57,16 @@
             };
         },
         mounted() {
+
             let number = [];
+            this.numberList = this.rule.list.map((e, index) => {
+                return {
+                    image: e,
+                    text: "",
+                }
+            });
+            this.total = this.rule.number;
+            this.per = this.rule.number_per_group;
             this.numberList = this.numberList.sort(() => {
                 return Math.random() > 0.5 ? -1 : 1
             })
@@ -96,6 +100,7 @@
                         result.push(m.text);
                     });
                 });
+                console.log(this.token);
                 this.$http
                     .post({
                         url: "/api/wxapp.game/submitTheGame",

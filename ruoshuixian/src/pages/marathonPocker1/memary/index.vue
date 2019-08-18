@@ -7,11 +7,11 @@
                 <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg@'+ratio+'x.png'" />
             </template>
             <template v-else>
-                <em class="arrow arrow-left"></em>
+                <em class="arrow arrow-left" @click="prevGroup"></em>
                 <scroll-view :style="{width:'463px',height:'196px','white-space':'nowrap'}" scroll-x>
-                    <image class="pocker" ref="pocker" v-for="(item,index) in perPocker" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'@'+ratio+'x.png'" />
+                    <image class="pocker" ref="pocker" v-for="(item,index) in perPocker[currentGroupIndex]" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'@'+ratio+'x.png'" />
                 </scroll-view>
-                <em class="arrow arrow-right"></em>
+                <em class="arrow arrow-right" @click="nextGroup"></em>
             </template>
         </div>
         <div class="pageFoot">
@@ -50,16 +50,19 @@
                 perPocker: [],
                 currentPage: 0,
                 groupPage: [],
+                currentGroupIndex: 0
             }
         },
         mounted() {
             this.ratio = this.globalData.ratio;
+            // 生成pock的副数
             for (var i = 1; i <= this.pocker.length; i++) {
                 this.pages.push({
                     number: i,
                     active: false
                 });
             };
+            this.pages[0].active = true;
             let groupPage = [];
             for (var i = 0; i < this.pages.length; i += 10) {
                 groupPage.push(this.pages.slice(i, i + 10));
@@ -83,9 +86,13 @@
                     return e.active
                 })[0].number;
                 if (data !== "ALL") {
-                    this.perPocker = this.pocker[currentIndex].splice(0, data);
+                    let list = JSON.parse(JSON.stringify(this.pocker[currentIndex]));
+                    this.perPocker = [];
+                    for (var i = 0; i < list.length; i + data) {
+                        this.perPocker.push(list.splice(i, i + data));
+                    }
                 } else {
-                    this.perPocker = this.pocker[currentIndex]
+                    this.perPocker.push(this.pocker[currentIndex]);
                 };
                 this.groupData = data;
                 this.type = "记忆完成";
@@ -121,11 +128,20 @@
                     number: item.number,
                     active: true
                 });
-                if (this.pocker.length > 0) {
-                    this.perPocker = this.pocker[item.number].splice(0, this.groupData)
+                this.group(this.groupData);
+            },
+            prevGroup: function() {
+                if (this.currentGroupIndex > 0) {
+                    this.currentGroupIndex--;
+                }
+            },
+            nextGroup: function() {
+                if (this.currentGroupIndex < this.pocker.length - 1) {
+                    this.currentGroupIndex++;
                 }
             }
         }
+
     }
 </script>
 <style lang="scss" scoped>

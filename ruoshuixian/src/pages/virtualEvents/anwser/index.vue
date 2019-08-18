@@ -12,7 +12,7 @@
             </p>
             <p v-for="(item,index) in numberList" :key="index">
                 <span>{{index+1}}</span>
-                <span @click="focus(index)" class="input">{{item.date}}</span><span style="flex:5;">{{item.event}}</span>
+                <span @click="focus(index)" :class="{input:true,active:activeIndex==index}">{{item.date}}</span><span style="flex:5;">{{item.event}}</span>
             </p>
         </div>
         <Keybord :showKeybord="showKeybord" @selectNumber="selectNumber" @deleteNumber="deleteNumber"></Keybord>
@@ -51,13 +51,14 @@
                 showFog: false,
                 text: "确定结束作答吗？",
                 rule: {},
-                numberList: []
+                numberList: [],
+                activeIndex: null,
             }
         },
         methods: {
             focus: function(index) {
                 this.showKeybord = true;
-                this.index = index;
+                this.activeIndex = index;
             },
             finish: function(index) {
                 this.showFog = true;
@@ -67,16 +68,21 @@
             },
             confirm: function() {
                 this.endTime = new Date().getTime();
-                let result = [];
+                let date = [];
+                let event = [];
                 this.numberList.forEach(e => {
-                    result.push(e.date);
+                    date.push(e.date);
+                    event.push(e.event);
                 });
                 this.$http.post({
                     url: "/api/wxapp.game/submitTheGame",
                     data: {
                         game_records_id: this.game_records_id,
                         game_time: (this.endTime - this.startTime) / 1000,
-                        content: JSON.stringify(result)
+                        content: JSON.stringify({
+                            date: date,
+                            event: event
+                        })
                     },
                     header: {
                         token: this.token
@@ -96,13 +102,15 @@
                 })
             },
             selectNumber: function(data) {
-                let date = this.numberList[this.index].date;
-                this.$set(this.numberList[this.index], "date", date + data);
+                let date = this.numberList[this.activeIndex].date;
+                if (date.length < 5) {
+                    this.$set(this.numberList[this.activeIndex], "date", date + data);
+                }
             },
             deleteNumber: function() {
-                let date = this.numberList[this.index].date.split("");
+                let date = this.numberList[this.activeIndex].date.split("");
                 date.pop();
-                this.$set(this.numberList[this.index], "date", date.join(""));
+                this.$set(this.numberList[this.activeIndex], "date", date.join(""));
             }
         }
     };
@@ -146,5 +154,13 @@
         border-radius: tovmin(8);
         margin: 0 auto;
         display: inline-block;
+        line-height: tovmin(66);
+    }
+
+    .active {
+        border: 1px solid red;
+        margin-right: tovmin(-1);
+        position: relative;
+        z-index: 10;
     }
 </style>

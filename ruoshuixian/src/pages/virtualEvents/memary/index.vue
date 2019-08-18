@@ -24,7 +24,7 @@
                 return e.game_level == this.level
             })[0];
         },
-        onLoad(option) {
+        mounted() {
             this.numberList = this.rule.list ? this.rule.list.date.map((e, index) => {
                 return {
                     date: e,

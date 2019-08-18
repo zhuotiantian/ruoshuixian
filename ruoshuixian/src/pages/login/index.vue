@@ -13,7 +13,7 @@
             </template>
             <div class="input-div">
                 <template v-if="codeLogin">
-                    <input type="text" class="input" v-model="form.password" placeholder="密码" placeholder-style="color:#ccc" />
+                    <input type="password" class="input" v-model="form.password" placeholder="密码" placeholder-style="color:#ccc" />
                     <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:42rpx;width:34rpx"></image>
                 </template>
                 <template v-else>

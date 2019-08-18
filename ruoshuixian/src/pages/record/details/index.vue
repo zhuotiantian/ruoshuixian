@@ -1,49 +1,69 @@
 <template>
     <div class="container">
         <div class="content" v-if="ratio">
-            <div v-for="(item,index) in list" :key="index" @click="toDetails">
+            <div v-for="(item,index) in list" class="item" :key="index" @click="toGame(item)">
                 <div class="img_div">
-                    <image class="image" :src="'/static/images/redPocket/bg2@'+ratio+'x.png'"></image>
+                    <image class="image" :src="domain+item.img" />
                 </div>
-                <p class="p">{{item.remarks}}</p>
+                <p style="text-align:center;" class="btnGroup">
+                    <span v-if="item.status=='not_finished'" class="yellow_btn">待完成</span>
+                    <span v-else class="btn default_btn">已完成</span>
+                </p>
             </div>
         </div>
         <CardFooter :index="3"></CardFooter>
     </div>
 </template>
 <script>
-    import CardFooter from "@/components/footer"
+    import CardFooter from "@/components/footer";
     export default {
         components: {
             CardFooter
         },
+        created() {
+            this.token = wx.getStorageSync("userInfo").token;
+        },
         data() {
             return {
                 ratio: 1,
-                list: []
-            }
+                list: [],
+                domain: this.$http.domain
+            };
+        },
+        onLoad(option) {
+            this.getList(option.students_homework_details_id);
         },
         onShow() {
             wx.hideTabBar();
-            this.token = wx.getStorageSync("userInfo").token;
         },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.getList();
         },
         methods: {
-            getList: function() {
-                this.$http.get({
-                    url: "/api/wxapp.user/taskListForCarding",
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    this.list = result.data;
-                });
+            getList: function(id) {
+                this.$http
+                    .get({
+                        url: "/api/wxapp.student/myCardTask",
+                        data: {
+                            students_homework_details_id: id
+                        },
+                        header: {
+                            token: this.token
+                        }
+                    })
+                    .then(result => {
+                        this.list = result.data;
+                    });
+            },
+            toGame: function(item) {
+                if (item.status == "not_finished") {
+                    wx.navigateTo({
+                        url: item.wxapp_url
+                    });
+                }
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -64,7 +84,7 @@
     }
 
     .img_div {
-        width: tovmin(670);
+        width: tovmin(680);
         height: tovmin(318);
         overflow: hidden;
         margin-bottom: tovmin(30);
@@ -73,11 +93,31 @@
     }
 
     .image {
-        width: tovmin(690);
-        height: tovmin(518);
+        width: 92vmin;
+        height: 33.06667vmin;
         position: absolute;
-        top: -52%;
         z-index: 1;
-        margin: tovmin(30) 0;
+    }
+
+    .yellow_btn {
+        padding: tovmin(6) tovmin(10);
+    }
+
+    .item {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+        border-radius: tovmin(10);
+        margin-bottom: tovmin(30);
+    }
+
+    .btnGroup {
+        text-align: center;
+        position: relative;
+        margin-top: -7vmin;
+        top: -3vmin;
+
+    }
+
+    .default_btn {
+        background: #E0E0E0;
     }
 </style>

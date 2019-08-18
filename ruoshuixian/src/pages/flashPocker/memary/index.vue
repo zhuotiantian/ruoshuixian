@@ -7,11 +7,11 @@
                 <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg@'+ratio+'x.png'" />
             </template>
             <template v-else>
-                <em class="arrow arrow-left"></em>
+                <em class="arrow arrow-left" @click="prevGroup"></em>
                 <scroll-view :style="{width:'463px',height:'196px','white-space':'nowrap'}" scroll-x>
-                    <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'@'+ratio+'x.png'" />
+                    <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'@'+ratio+'x.png'" />
                 </scroll-view>
-                <em class="arrow arrow-right"></em>
+                <em class="arrow arrow-right" @click="nextGroup"></em>
             </template>
         </div>
     </div>
@@ -34,11 +34,16 @@
                 pocker: [],
                 ratio: 1,
                 type: null,
-                level: "primary"
+                level: "primary",
+                list: [],
+                currentGroupIndex: 0
             }
         },
         mounted() {
             this.ratio = this.globalData.ratio;
+            this.list = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            });
         },
         computed: {
             bgCounts: function() {
@@ -49,15 +54,19 @@
                     bgCounts.push(left)
                 };
                 return bgCounts;
-            }
+            },
+
         },
         methods: {
             group: function(data) {
-                this.pocker = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                    return e.game_level == this.level
-                })[0].list;
+                let list = JSON.parse(JSON.stringify(this.list[0].list));
+                this.pocker = [];
                 if (data !== "ALL") {
-                    this.pocker = this.pocker.splice(0, data);
+                    for (var i = 0; i < list.length; i + data) {
+                        this.pocker.push(list.splice(i, i + data));
+                    }
+                } else {
+                    this.pocker.push(list);
                 }
                 this.type = "记忆完成";
                 if (this.time_long) {
@@ -70,6 +79,16 @@
                 wx.navigateTo({
                     url: "../recall/main"
                 })
+            },
+            prevGroup: function() {
+                if (this.currentGroupIndex > 0) {
+                    this.currentGroupIndex--;
+                }
+            },
+            nextGroup: function() {
+                if (this.currentGroupIndex < this.pocker.length - 1) {
+                    this.currentGroupIndex++;
+                }
             }
         }
     }

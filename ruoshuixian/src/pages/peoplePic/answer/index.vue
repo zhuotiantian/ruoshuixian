@@ -74,10 +74,12 @@
             },
             confirm: function() {
                 this.endTime = new Date().getTime();
-                let result = [];
+                let name = [];
+                let avatar = [];
                 this.number.forEach(e => {
                     e.forEach(m => {
-                        result.push(m.name);
+                        name.push(m.name);
+                        avatar.push(m.avatar);
                     });
                 });
                 this.$http
@@ -86,7 +88,10 @@
                         data: {
                             game_records_id: this.game_records_id,
                             game_time: (this.endTime - this.startTime) / 1000,
-                            content: JSON.stringify(result)
+                            content: JSON.stringify({
+                                name,
+                                avatar
+                            })
                         },
                         header: {
                             token: this.token

@@ -34,7 +34,7 @@
         },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.result = getStorageSync("result");
+            this.result = wx.getStorageSync("result");
         },
         computed: {
             pocker: function() {
