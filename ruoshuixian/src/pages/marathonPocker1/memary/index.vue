@@ -30,7 +30,7 @@
         components: {
             CardTitle
         },
-        created() {
+        onLoad() {
             this.level = wx.getStorageSync("level");
             this.pocker = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
@@ -94,6 +94,7 @@
                 } else {
                     this.perPocker.push(this.pocker[currentIndex]);
                 };
+                console.log(this.perPocker);
                 this.groupData = data;
                 this.type = "记忆完成";
                 if (this.time_long) {

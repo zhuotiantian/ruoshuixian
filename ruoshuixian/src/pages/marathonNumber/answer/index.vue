@@ -22,11 +22,9 @@
             Keybord,
             alertBox
         },
-        created() {
+        onLoad() {
             this.level = wx.getStorageSync("level");
             this.token = wx.getStorageSync("userInfo").token;
-        },
-        onLoad() {
             this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
@@ -88,9 +86,14 @@
                     }
                 }).then(result => {
                     if (result.code == 1) {
-                        wx.setStorageSync("result", result.data);
-                        wx.navigateTo({
-                            url: "../result/main"
+                        wx.setStorage({
+                            key: "result",
+                            data: result.data,
+                            success: function() {
+                                wx.navigateTo({
+                                    url: "../result/main"
+                                })
+                            }
                         })
                     } else {
                         wx.showToast({

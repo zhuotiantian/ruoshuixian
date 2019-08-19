@@ -15,11 +15,9 @@
         components: {
             CardTitle
         },
-        created() {
+        onLoad(option) {
             this.level = wx.getStorageSync("level");
             this.rule = wx.getStorageSync("rule").rules_of_the_game;
-        },
-        onLoad(option) {
             this.numberList = this.rule ? this.rule.filter(e => {
                 return e.game_level == this.level
             })[0].list : [];

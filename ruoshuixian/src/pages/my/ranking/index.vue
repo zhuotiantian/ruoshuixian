@@ -72,7 +72,7 @@
                 token: ""
             }
         },
-        onShow() {
+        onLoad() {
             this.token = wx.getStorageSync("userInfo").token;
         },
         methods: {

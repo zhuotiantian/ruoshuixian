@@ -1,6 +1,6 @@
 <script>
     export default {
-        created() {
+        onLoad() {
             this.userInfo = wx.getStorageSync("userInfo");
         },
         mounted() {

@@ -20,32 +20,32 @@
         components: {
             CardFooter
         },
-        created() {
-            this.token = wx.getStorageSync("userInfo").token;
-        },
         data() {
             return {
                 ratio: 1,
                 list: [],
-                domain: this.$http.domain
+                domain: this.$http.domain,
+                students_homework_details_id: null,
             };
         },
         onLoad(option) {
-            this.getList(option.students_homework_details_id);
+            this.students_homework_details_id = option.students_homework_details_id
+            this.token = wx.getStorageSync("userInfo").token;
         },
         onShow() {
             wx.hideTabBar();
         },
         mounted() {
             this.ratio = this.globalData.ratio;
+            this.getList();
         },
         methods: {
-            getList: function(id) {
+            getList: function() {
                 this.$http
                     .get({
                         url: "/api/wxapp.student/myCardTask",
                         data: {
-                            students_homework_details_id: id
+                            students_homework_details_id: this.students_homework_details_id
                         },
                         header: {
                             token: this.token

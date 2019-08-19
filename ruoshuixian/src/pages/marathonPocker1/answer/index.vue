@@ -47,7 +47,7 @@
         beforeCreate() {
             this.level = wx.getStorageSync("level");
         },
-        created() {
+        onLoad() {
             this.list = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0].list;

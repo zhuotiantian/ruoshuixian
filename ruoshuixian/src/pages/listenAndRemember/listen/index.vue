@@ -15,7 +15,7 @@
         components: {
             CardTitle
         },
-        created() {
+        onLoad() {
             this.level = wx.getStorageSync("level");
             this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
@@ -27,6 +27,7 @@
             this.ratio = this.globalData.ratio;
             this.numberList = this.rule.list ? this.rule.list : [];
             let index = -1;
+            this.innerAudioContext.play();
             this.timer = setInterval(() => {
                 index++;
                 if (index == this.numberList.length - 1) {

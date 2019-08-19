@@ -15,11 +15,12 @@
         components: {
             CardTitle
         },
-        created() {
+        onLoad() {
             this.level = wx.getStorageSync("level");
             this.rule = wx.getStorageSync("rule").rules_of_the_game;
         },
         mounted() {
+
             this.total = this.rule[0].number;
             this.per = this.rule[0].number_per_group;
             this.numberList = this.rule ? this.rule.filter(e => {

@@ -13,7 +13,7 @@
         components: {
             CardTitle
         },
-        created() {
+        onLoad() {
             this.level = wx.getStorageSync("level");
         },
         mounted() {

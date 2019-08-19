@@ -39,7 +39,7 @@
                 scores: []
             }
         },
-        onShow() {
+        onLoad() {
             this.token = wx.getStorageSync("userInfo").token;
         },
         mounted() {

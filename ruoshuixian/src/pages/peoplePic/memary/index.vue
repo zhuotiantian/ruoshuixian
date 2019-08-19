@@ -18,10 +18,8 @@
         components: {
             CardTitle
         },
-        created() {
-            this.level = wx.getStorageSync("level");
-        },
         onLoad(option) {
+            this.level = wx.getStorageSync("level");
             let rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];

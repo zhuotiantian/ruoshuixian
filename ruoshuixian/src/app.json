@@ -1,11 +1,11 @@
 {
     "pages": [
+        "pages/indexPage/main",
         "pages/fastNumber/result/main",
         "pages/fastNumber/main",
         "pages/fastNumber/answer/main",
         "pages/fastNumber/memary/main",
 
-        "pages/indexPage/main",
 
         "pages/virtualEvents/main",
         "pages/virtualEvents/result/main",

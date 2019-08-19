@@ -28,14 +28,12 @@
             Keybord,
             alertBox
         },
-        created() {
+        onLoad(option) {
             this.level = wx.getStorageSync("level");
             this.token = wx.getStorageSync("userInfo").token;
             this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
-        },
-        onLoad(option) {
             this.numberList = this.rule.list ? this.rule.list.date.map((e, index) => {
                 return {
                     date: "",

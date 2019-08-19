@@ -104,6 +104,10 @@
                                         wx.switchTab({
                                             url: "../login/main"
                                         });
+                                    } else {
+                                        wx.showToast({
+                                            title: "注册失败"
+                                        });
                                     }
 
                                 })

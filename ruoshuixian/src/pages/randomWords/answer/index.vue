@@ -17,7 +17,7 @@
             CardTitle,
             alertBox
         },
-        created() {
+        onLoad() {
             this.level = wx.getStorageSync("level");
             this.token = wx.getStorageSync("userInfo").token;
         },

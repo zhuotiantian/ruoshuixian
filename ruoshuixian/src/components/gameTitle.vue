@@ -57,7 +57,7 @@
             "isInsert",
             "btnType"
         ],
-        created() {
+        onLoad() {
             this.level = wx.getStorageSync("level");
         },
         mounted() {

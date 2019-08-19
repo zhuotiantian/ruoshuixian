@@ -1,32 +1,15 @@
 <template>
-  <div class="container">
-    <CountIndex :nextPage="nextPage"></CountIndex>
-  </div>
+    <div class="container">
+        <CountIndex nextPage="./memary/main"></CountIndex>
+    </div>
 </template>
 <script>
-  import CountIndex from "@/components/countIndex"
-  export default {
-    components: {
-      CountIndex
-    },
-    data() {
-      return {
-        show: false,
-        type: "time",
-        nextPage: "./memary/main"
-      }
-    },
-    created() {
-
-    },
-    mounted() {
-
-    },
-    methods: {
-
+    import CountIndex from "@/components/countIndex"
+    export default {
+        components: {
+            CountIndex
+        }
     }
-  }
-
 </script>
 <style lang="scss" scoped>
 

@@ -1,63 +1,67 @@
 <template>
-  <div class="container">
-    <CardTitle :isResult="true"></CardTitle>
-    <div class="list">
-      <span v-for="(item,index) in words" :key="index+1">词语{{index+1}}</span>
+    <div class="container">
+        <CardTitle :isResult="true"></CardTitle>
+        <div class="list">
+            <span :class="{item:true, wrong:item.result==1}" v-for="(item,index) in list" :key="index+1">{{item.number}}</span>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
-  import CardTitle from "@/components/gameTitle"
-  export default {
-    components: {
-      CardTitle
-    },
-    mounted() {
+    import CardTitle from "@/components/gameTitle"
+    export default {
+        components: {
+            CardTitle
+        },
+        onLoad() {
+            this.list = wx.getStorageSync("result").right_and_wrong_results;
+        },
+        data() {
+            return {
+                list: [],
+            }
+        },
+        methods: {
 
-    },
-    data() {
-      let words = new Array(200);
-      return {
-        words: words,
-      }
-    },
-    methods: {
-
+        }
     }
-  }
-
 </script>
 <style lang="scss" scoped>
-  .container {
-    background: $deep-blue;
-    color: white;
-  }
+    .container {
+        background: $deep-blue;
+        color: white;
+    }
 
-  .title {
-    font-size: tovmin(30);
-    display: flex;
-    justify-content: space-between;
-    margin: tovmin(40) tovmin(30) 0 tovmin(30);
-  }
+    .title {
+        font-size: tovmin(30);
+        display: flex;
+        justify-content: space-between;
+        margin: tovmin(40) tovmin(30) 0 tovmin(30);
+    }
 
-  .list {
-    margin: tovmin(150) tovmin(30) tovmin(30) tovmin(30);
-  }
+    .list {
+        margin: tovmin(150) tovmin(30) tovmin(30) tovmin(30);
+    }
 
-  .list {
-    display: grid;
-    grid-template-columns: tovmin(200) tovmin(200) tovmin(200) tovmin(200) tovmin(200);
-    grid-gap: tovmin(20);
-    font-size: tovmin(26);
-    justify-content: center;
-    align-items: center;
-    color: $grey-text;
-  }
+    .list {
+        display: grid;
+        grid-template-columns: tovmin(200) tovmin(200) tovmin(200) tovmin(200) tovmin(200);
+        grid-gap: tovmin(20);
+        font-size: tovmin(26);
+        justify-content: center;
+        align-items: center;
+        color: $grey-text;
+    }
 
-  .list span {
-    border: tovmin(2) solid $blue-border;
-    text-align: center;
-  }
+    .list span {
+        border: tovmin(2) solid $blue-border;
+        text-align: center;
+        display: inline-block;
+        min-height: tovmin(36)
+    }
 
+    .wrong {
+        color: $grey-text;
+        background: $red;
+    }
 </style>

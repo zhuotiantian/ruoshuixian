@@ -22,11 +22,9 @@
             Keybord,
             alertBox
         },
-        created() {
+        onLoad() {
             this.level = wx.getStorageSync("level");
             this.token = wx.getStorageSync("userInfo").token;
-        },
-        onLoad() {
             this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];

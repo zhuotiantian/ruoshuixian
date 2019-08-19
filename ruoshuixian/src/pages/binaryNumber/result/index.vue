@@ -3,7 +3,7 @@
         <CardTitle :isResult="true"></CardTitle>
         <div class="list">
             <div class="row" v-for="(rows,_index) in number" :key="_index">
-                <span :class="{item:true, wrong:item.result==0}" v-for="(item,index) in rows" :key="index">{{item.number}}</span>
+                <span :class="{item:true, wrong:item.result==1}" v-for="(item,index) in rows" :key="index">{{item.number}}</span>
                 <span>row&nbsp;&nbsp;{{_index+1}}</span>
             </div>
         </div>
@@ -19,7 +19,7 @@
             Keybord,
             alertBox
         },
-        created() {
+        onLoad() {
             this.result = wx.getStorageSync("result").right_and_wrong_results;
             this.rule = wx.getStorageSync("rule").rules_of_the_game;
         },
