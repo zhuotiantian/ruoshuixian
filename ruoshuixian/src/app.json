@@ -1,6 +1,13 @@
 {
     "pages": [
         "pages/indexPage/main",
+
+        "pages/randomWords/main",
+        "pages/randomWords/memary/main",
+        "pages/randomWords/result/main",
+        "pages/randomWords/answer/main",
+
+        "pages/login/main",
         "pages/fastNumber/result/main",
         "pages/fastNumber/main",
         "pages/fastNumber/answer/main",
@@ -24,7 +31,6 @@
         "pages/marathonPocker1/ready/main",
         "pages/marathonPocker1/result/main",
 
-        "pages/login/main",
         "pages/record/main",
         "pages/record/details/main",
 
@@ -62,11 +68,6 @@
         "pages/fastPocker/result/main",
         "pages/fastPocker/answer/main",
         "pages/fastPocker/recall/main",
-
-        "pages/randomWords/main",
-        "pages/randomWords/memary/main",
-        "pages/randomWords/result/main",
-        "pages/randomWords/answer/main",
 
         "pages/marathonNumber/main",
         "pages/marathonNumber/memary/main",

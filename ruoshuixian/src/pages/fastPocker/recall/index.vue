@@ -32,9 +32,7 @@
         },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.times = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.type == "recollect_time"
-            })[0].number;
+            this.times = wx.getStorageSync("rule").rules_of_the_game[0].recollect_time;
         },
         methods: {
             startGame: function() {

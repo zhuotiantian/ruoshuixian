@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <CardTitle :seconds="seconds" :minutes="minutes" :btnType="btnType" :type="titleBtn" @toNextPage="toNextPage">
+        <CardTitle :btnType="btnType" :type="titleBtn" @toNextPage="toNextPage">
         </CardTitle>
         <div class="content" v-if="type=='time'">
             <span class="label">请选择闪视时间：</span>
@@ -26,12 +26,10 @@
         },
         data() {
             return {
-                seconds: 60,
                 activeIndex: 0,
-                minutes: 0,
                 btnType: this.btnType,
                 memaryTime: [],
-                memaryNumber: []
+                memaryNumber: ["all", "2", "4", "8"]
             }
         },
         mounted() {
@@ -44,22 +42,9 @@
             }, 1000);
             let rule = wx.getStorageSync("rule").rules_of_the_game;
             if (this.type == "time") {
-                this.memaryTime = rule.filter(e => {
-                    return e.type == "memory_time"
-                }).map(e => {
-                    return e.number
-                }).sort(function(a, b) {
-                    return a - b
-                });
+                this.memaryTime = rule[0].memory_time.split(",");
                 this.activeIndex = this.memaryTime[0];
             } else {
-                this.memaryNumber = rule.filter(e => {
-                    return e.type == "number"
-                }).map(e => {
-                    return e.number
-                }).sort(function(a, b) {
-                    return a - b
-                });
                 this.activeIndex = this.memaryNumber[0];
             }
         },

@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <PockerIndex type="counts" nextPage="./ready/main" btnType="none"></PockerIndex>
+        <PockerIndex type="counts" titleBtn="跳过" nextPage="./ready/main" btnType="none"></PockerIndex>
     </div>
 </template>
 <script>

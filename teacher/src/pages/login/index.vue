@@ -101,6 +101,11 @@
                                     })
                                 }
                             });
+                        } else {
+                            wx.showToast({
+                                title: result.msg,
+                                icon: "none"
+                            })
                         }
                     });
                 } else {

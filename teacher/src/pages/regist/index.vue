@@ -110,6 +110,11 @@
                                 .catch(err => {
                                     console.log(err);
                                 });
+                        } else {
+                            wx.showToast({
+                                title: "注册失败",
+                                icon: "none"
+                            });
                         }
                     })
                     .catch(err => {

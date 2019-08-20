@@ -46,8 +46,6 @@
 <script>
     export default {
         props: [
-            "seconds",
-            "minutes",
             "type",
             "isResult",
             "showType",
@@ -59,21 +57,23 @@
         ],
         onLoad() {
             this.level = wx.getStorageSync("level");
-        },
-        mounted() {
-            this.timer && clearInterval(this.timeout);
-            this.showType ? null : this.timer();
-            this.ratio = this.globalData.ratio;
             this.times = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
                 return e.game_level == (this.level || "primary")
             });
-            this.result = wx.getStorageSync("result");
+        },
+        mounted() {
             this.changeTime();
+            this.timeout && clearInterval(this.timeout);
+            this.showType ? null : this.timer();
+            this.ratio = this.globalData.ratio;
+
+            this.result = wx.getStorageSync("result");
+
         },
         data() {
             return {
-                t_seconds: this.seconds,
-                t_minutes: this.minutes,
+                t_seconds: null,
+                t_minutes: null,
                 showPannel: false,
                 selectType: "显示方式",
                 showTime: this.showTime,
@@ -114,9 +114,10 @@
         },
         methods: {
             changeTime: function() {
+                console.log(this.times);
                 switch (this.type) {
                     case "记忆完成":
-                        this.t_seconds = wx.getStorageSync("memoryTime") || this.times[0].memory_time || 60;
+                        this.t_seconds = wx.getStorageSync("memoryTime") || this.times[0] && this.times[0].memory_time || 60;
                         this.t_minutes = 0;
                         break;
                     case "开始":
@@ -125,7 +126,7 @@
                         break;
                     case "作答完成":
                         this.t_seconds = 60;
-                        this.t_minutes = 14;
+                        this.t_minutes = 15;
                         break;
                     case "跳过":
                         this.t_seconds = 60;
@@ -137,7 +138,9 @@
                 if (this.t_minutes) {
                     this.t_seconds = 60;
                     this.t_minutes = this.t_minutes - 1;
+
                     this.timeout = setInterval(() => {
+
                         if (this.t_seconds == 0) {
                             if (this.t_minutes > 0) {
                                 this.t_minutes--;
@@ -147,9 +150,11 @@
                             }
                         } else {
                             this.t_seconds--;
+
                         }
                     }, 1000);
                 } else {
+                    console.log(this.t_minutes);
                     this.timeout = setInterval(() => {
                         this.t_seconds--;
                         if (this.t_seconds == 0) {

@@ -114,6 +114,11 @@
                                 .catch(err => {
                                     console.log(err);
                                 });
+                        } else {
+                            wx.showToast({
+                                title: result.msg,
+                                icon: "none"
+                            });
                         }
                     })
                     .catch(err => {
@@ -172,7 +177,7 @@
                 clearInterval(this.timer);
                 this.clickGetCode = false;
                 this.seconds = 60;
-                let url = "../firstPage/main";
+                let url = "../login/main";
                 wx.navigateTo({
                     url
                 });

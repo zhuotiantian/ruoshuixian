@@ -4,8 +4,8 @@
         <div class="login-form">
             <div class="input_div">
                 <input type="text" class="input" placeholder="请输入手机号" v-model="form.mobile" placeholder-style="color:#ccc" />
-                <image :src="'/static/images/my/phone@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:42rpx;width:34rpx">
-                </image>
+                <image :src="'/static/images/my/phone@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:42rpx;width:34rpx"></image>
+
             </div>
             <template v-if="!codeLogin">
                 <span class="getCode" @click="getCode" v-if="!clickGetCode">获取验证码</span>
@@ -18,8 +18,8 @@
                 </template>
                 <template v-else>
                     <input type="text" class="input" placeholder="验证码" v-model="form.captcha" placeholder-style="color:#ccc" />
-                    <image :src="'/static/images/my/keys@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:54rpx;width:38rpx">
-                    </image>
+                    <image :src="'/static/images/my/keys@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:54rpx;width:38rpx"></image>
+
                 </template>
             </div>
             <p style="text-align:center">
@@ -27,7 +27,7 @@
             </p>
             <p class="info">
                 <span @click="switchLoginWay">
-                    <span v-if="!codeLogin">密码登陆</span><span v-else>验证码登陆</span>
+                    <span v-if="!codeLogin">密码登录</span><span v-else>验证码登录</span>
                 </span>
                 <span @click="toRepassword">忘记密码</span></p>
         </div>
@@ -93,7 +93,6 @@
                                     wx.showToast({
                                         title: "登陆成功"
                                     })
-
                                 } else {
                                     wx.showToast({
                                         title: result.msg,
@@ -101,6 +100,11 @@
                                     })
                                 }
                             });
+                        } else {
+                            wx.showToast({
+                                title: result.msg,
+                                icon: "none"
+                            })
                         }
                     });
                 } else {
