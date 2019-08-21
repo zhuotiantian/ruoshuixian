@@ -2,24 +2,26 @@
     <div class="container">
         <div class="fog" v-if="showDropdown"></div>
         <div class="header">
-            <span :class="{active:active=='我的学生'}" @click="active='我的学生'">我的学生</span>
-            <span :class="{active:active=='学生成绩'}" @click="active='学生成绩'">学生成绩</span>
+            <span :class="{active:active=='我的学生'}" @click="rankingType('我的学生')">我的学生</span>
+            <span :class="{active:active=='学生成绩'}" @click="rankingType('学生成绩',6)">学生成绩</span>
         </div>
         <div class="content" v-if="ratio">
             <div>
                 <p class="header-btn" v-if="active=='学生成绩'">
-                    <span :class="{active:activeBtn=='组别'}" @click="activeBtn='组别'">组别</span>
-                    <span :class="{active:activeBtn=='全校'}" @click="activeBtn='全校'">全校</span>
+                    <span :class="{active:activeBtn=='组别'}" @click="switchType('组别',6)">组别</span>
+                    <span :class="{active:activeBtn=='全校'}" @click="switchType('全校',7)">全校</span>
                 </p>
             </div>
             <ul class="list" v-if="active=='学生成绩'">
-                <li @click="toComment">
+                <li v-for="(item,index) in list" :key="index" @click="toComment">
                     <span style="flex:1">
-                        <image class="image" :src="domain+stu.avatar"></image>
+                        <image class="image" :src="domain+item.avatar"></image>
                     </span>
-                    <span style="flex:6">{{stu.nickname}}</span>
+                    <span style="flex:6">{{item.nickname}}</span>
                     <span style="flex:1">
-                        <image class="icon" :src="'/static/images/ranking/ranking1@'+ratio+'x.png'"></image>
+                        <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1@'+ratio+'x.png'"></image>
+                        <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2@'+ratio+'x.png'"></image>
+                        <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3@'+ratio+'x.png'"></image>
                     </span>
                 </li>
             </ul>
@@ -46,26 +48,52 @@
             return {
                 active: "我的学生",
                 activeBtn: "组别",
-                showDropdown: false,
                 ratio: 1,
                 stu_list: [],
-                domain: this.$http.domain
+                domain: this.$http.domain,
+                list: [],
             }
         },
         onShow() {
             this.token = wx.getStorageSync("userInfo").token;
         },
         methods: {
-            showDropdownFunc: function() {
-                this.activeBtn = "组别";
-                this.showDropdown = !this.showDropdown;
+            rankingType: function(type, index) {
+                this.active = type;
+                if (type == '学生成绩') {
+                    this.switchType("组别", 6);
+                } else {
+                    this.getStudents(index);
+                }
             },
             toComment: function() {
                 wx.navigateTo({
                     url: "./comment/main"
                 })
             },
-            getList: function() {
+            switchType: function(type, index) {
+                this.activeBtn = type;
+                this.getList(index);
+            },
+            getList: function(type) {
+                this.$http.get({
+                    url: "/api/wxapp.game/rankingList",
+                    data: {
+                        ranking_type: type
+                    },
+                    header: {
+                        token: this.token
+                    }
+                }).then(result => {
+                    this.list = result.data;
+                    this.list.forEach((e, index) => {
+                        if (e.nickname == this.currentUser) {
+                            this.index = index;
+                        }
+                    })
+                });
+            },
+            getStudents: function() {
                 this.$http.get({
                     url: "/api/wxapp.student/myStudents",
                     header: {
@@ -78,7 +106,7 @@
         },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.getList();
+            this.getStudents();
         }
     }
 </script>

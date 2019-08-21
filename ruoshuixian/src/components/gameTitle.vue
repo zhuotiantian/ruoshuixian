@@ -114,7 +114,6 @@
         },
         methods: {
             changeTime: function() {
-                console.log(this.times);
                 switch (this.type) {
                     case "记忆完成":
                         this.t_seconds = wx.getStorageSync("memoryTime") || this.times[0] && this.times[0].memory_time || 60;
@@ -154,7 +153,6 @@
                         }
                     }, 1000);
                 } else {
-                    console.log(this.t_minutes);
                     this.timeout = setInterval(() => {
                         this.t_seconds--;
                         if (this.t_seconds == 0) {

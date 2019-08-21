@@ -2,10 +2,10 @@
     <div class="container" v-if="ratio">
         <div class="header">
             <span style="flex:1">
-                <image class="image" :src="'/static/images/ranking/people@'+ratio+'x.png'"></image>
+                <image class="image" :src="domain+avatar"></image>
             </span>
             <span style="flex:6">我</span>
-            <span style="flex:1">04</span>
+            <span style="flex:1">{{index}}</span>
         </div>
         <div class="content">
             <ul>
@@ -13,9 +13,11 @@
                     <span style="flex:1">
                         <image class="image" :src="domain+item.avatar"></image>
                     </span>
-                    <span style="flex:6">小明</span>
+                    <span style="flex:6">{{item.nickname}}</span>
                     <span style="flex:1">
-                        <image class="icon" :src="'/static/images/ranking/ranking1@'+ratio+'x.png'"></image>
+                        <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1@'+ratio+'x.png'"></image>
+                        <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2@'+ratio+'x.png'"></image>
+                        <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3@'+ratio+'x.png'"></image>
                     </span>
                 </li>
             </ul>
@@ -29,11 +31,15 @@
                 ratio: 1,
                 token: "",
                 list: [],
-                domain: this.$http.domain
+                domain: this.$http.domain,
+                index: 0,
+                avator: ""
             }
         },
         onLoad() {
-            this.token = wx.getStorageSync("userInfo").token
+            this.token = wx.getStorageSync("userInfo").token;
+            this.currentUser = wx.getStorageSync("userInfo").nickname;
+            this.avator = wx.getStorageSync("userInfo").avatar
         },
         mounted() {
             this.ratio = this.globalData.ratio;
@@ -43,11 +49,19 @@
             getList: function() {
                 this.$http.get({
                     url: "/api/wxapp.game/rankingList",
+                    data: {
+                        ranking_type: 1
+                    },
                     header: {
                         token: this.token
                     }
                 }).then(result => {
-                    this.list = result.data
+                    this.list = result.data;
+                    this.list.forEach((e, index) => {
+                        if (e.nickname == this.currentUser) {
+                            this.index = index;
+                        }
+                    })
                 })
             }
         }

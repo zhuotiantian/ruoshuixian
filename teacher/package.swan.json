@@ -1,12 +1,12 @@
 {
-  "appid": "wxdaa66d9e61b87fd4",
-  "setting": {
-    "urlCheck": false
-  },
-  "condition": {
-    "swan": {
-      "current": -1,
-      "list": []
+    "appid": "wx3bbe629454e60bda",
+    "setting": {
+        "urlCheck": false
+    },
+    "condition": {
+        "swan": {
+            "current": -1,
+            "list": []
+        }
     }
-  }
 }

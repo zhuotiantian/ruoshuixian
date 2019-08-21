@@ -2,58 +2,42 @@
     <div class="container">
         <div class="fog" v-if="showDropdown"></div>
         <div class="header">
-            <span :class="{active:active=='打卡时间'}" @click="active='打卡时间'">打卡时间</span>
-            <span :class="{active:active=='成绩'}" @click="active='成绩'">成绩</span>
+            <span :class="{active:active=='打卡时间'}" @click="rankingType('打卡时间',1)">打卡时间</span>
+            <span :class="{active:active=='成绩'}" @click="rankingType('成绩',2)">成绩</span>
         </div>
         <div class="content" v-if="ratio">
             <div>
                 <p class="header-btn" v-if="active=='成绩'">
-                    <span :class="{active:activeBtn=='全校'}" @click="activeBtn='全校'">全校</span>
-                    <span :class="{active:activeBtn=='班级'}" @click="activeBtn='班级'">班级</span>
+                    <span :class="{active:activeBtn=='全校'}" @click="switchType('全校',2)">全校</span>
+                    <span :class="{active:activeBtn=='班级'}" @click="switchType('班级',3)">班级</span>
                     <span :class="{active:activeBtn=='单项排名',arrow:true}" @click="showDropdownFunc">单项排名</span>
                 </p>
                 <div :class="{'drop-down':true,'down':showDropdown,'up':!showDropdown}">
                     <ul>
-                        <li v-for="(item,index) in games" :key="index">
+                        <li v-for="(item,index) in games" :key="index" @click="selectGame(index,item.id)">
                             {{item.name}}
-                            <image class="icon_check" :src="'/static/images/my/select.png'" />
+                            <image v-if="activeGame==index" class="icon_check" :src="'/static/images/my/select.png'" />
                         </li>
                     </ul>
                 </div>
             </div>
             <p class="list-item">
                 <span style="flex:1">
-                    <image class="image" :src="'/static/images/ranking/people@'+ratio+'x.png'" />
+                    <image class="image" :src="domain+avatar"></image>
                 </span>
                 <span style="flex:6">我</span>
-                <span style="flex:1">04</span>
+                <span style="flex:1">{{index}}</span>
             </p>
             <ul class="list">
-                <li>
+                <li v-for="(item,index) in list" :key="index">
                     <span style="flex:1">
-                        <image class="image" :src="'/static/images/ranking/people@'+ratio+'x.png'" />
+                        <image class="image" :src="domain+item.avatar"></image>
                     </span>
-                    <span style="flex:6">小明</span>
+                    <span style="flex:6">{{item.nickname}}</span>
                     <span style="flex:1">
-                        <image class="icon" :src="'/static/images/ranking/ranking1@'+ratio+'x.png'" />
-                    </span>
-                </li>
-                <li>
-                    <span style="flex:1">
-                        <image class="image" :src="'/static/images/ranking/people@'+ratio+'x.png'" />
-                    </span>
-                    <span style="flex:6">小明</span>
-                    <span style="flex:1">
-                        <image class="icon" :src="'/static/images/ranking/ranking2@'+ratio+'x.png'" />
-                    </span>
-                </li>
-                <li>
-                    <span style="flex:1">
-                        <image class="image" :src="'/static/images/ranking/people@'+ratio+'x.png'" />
-                    </span>
-                    <span style="flex:6">小明</span>
-                    <span style="flex:1">
-                        <image class="icon" :src="'/static/images/ranking/ranking3@'+ratio+'x.png'" />
+                        <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1@'+ratio+'x.png'"></image>
+                        <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2@'+ratio+'x.png'"></image>
+                        <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3@'+ratio+'x.png'"></image>
                     </span>
                 </li>
             </ul>
@@ -69,44 +53,87 @@
                 showDropdown: false,
                 ratio: 1,
                 games: [],
-                token: ""
+                token: "",
+                domain: this.$http.domain,
+                avator: "",
+                currentUser: "",
+                index: 0,
+                activeGame: null
             }
         },
         onLoad() {
             this.token = wx.getStorageSync("userInfo").token;
+            this.currentUser = wx.getStorageSync("userInfo").nickname;
+            this.avator = wx.getStorageSync("userInfo").avatar
         },
         methods: {
+            rankingType: function(type, index) {
+                this.active = type;
+                if (type == '成绩') {
+                    this.switchType("全校", 2);
+                } else {
+                    this.getList(index);
+                }
+            },
+            switchType: function(type, index) {
+                this.activeBtn = type;
+                this.getList(index);
+            },
             showDropdownFunc: function() {
                 this.activeBtn = "单项排名";
                 this.showDropdown = !this.showDropdown;
             },
-            getList: function() {
+            getList: function(type) {
                 this.$http.get({
-                    url: "/api/wxapp.student/punchInRecord",
+                    url: "/api/wxapp.game/rankingList",
+                    data: {
+                        ranking_type: type
+                    },
                     header: {
                         token: this.token
                     }
                 }).then(result => {
-
+                    this.list = result.data;
+                    this.list.forEach((e, index) => {
+                        if (e.nickname == this.currentUser) {
+                            this.index = index;
+                        }
+                    })
                 });
             },
-            getScore: function() {
+            getIndexData: function() {
                 this.$http.get({
-                    url: "/api/wxapp.game/achievement",
+                    url: "/api/wxapp.index/index",
                     header: {
                         token: this.token
                     }
                 }).then(result => {
-
+                    this.games = result.data.game_list;
                 });
+            },
+            selectGame: function(index, id) {
+                this.activeGame = index;
+                this.showDropdown = false;
+                this.$http.get({
+                    url: "/api/wxapp.game/rankingList",
+                    data: {
+                        game_id: id,
+                        ranking_type: 4
+                    },
+                    header: {
+                        token: this.token
+                    }
+                }).then(result => {
+                    this.list = result.data;
+                })
             }
         },
         mounted() {
             this.ratio = this.globalData.ratio;
             this.games = this.globalData.games;
             this.token = this.globalData.token;
-            this.getList();
-            this.getScore();
+            this.getList(1);
+            this.getIndexData();
         }
     }
 </script>

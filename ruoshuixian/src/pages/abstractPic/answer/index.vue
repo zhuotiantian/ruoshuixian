@@ -100,7 +100,6 @@
                         result.push(m.text);
                     });
                 });
-                console.log(this.token);
                 this.$http
                     .post({
                         url: "/api/wxapp.game/submitTheGame",

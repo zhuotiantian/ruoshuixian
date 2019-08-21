@@ -35,9 +35,27 @@
 <script>
     export default {
         components: {},
+        onLoad() {
+            this.token = wx.getStorageSync("userInfo").token;
+        },
         mounted() {
             this.ratio = this.globalData.ratio;
             this.userInfo = wx.getStorageSync("userInfo");
+            this.$http.get({
+                url: "/api/wxapp.token/check",
+                header: {
+                    token: this.token
+                }
+            }).then(result => {
+                if (result.code !== 1) {
+                    wx.showToast({
+                        title: "登陆信息已过期，请重新登陆"
+                    });
+                    wx.navigateTo({
+                        url: "/pages/login/main"
+                    })
+                }
+            })
         },
         data() {
             return {
