@@ -11,7 +11,7 @@
             <ul>
                 <li v-for="(item,index) in list" :key="index">
                     <span style="flex:1">
-                        <image class="image" :src=""></image>
+                        <image class="image" :src="domain+item.avatar"></image>
                     </span>
                     <span style="flex:6">小明</span>
                     <span style="flex:1">

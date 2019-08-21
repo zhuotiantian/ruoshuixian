@@ -2,7 +2,7 @@
     <div class="container" v-if="ratio">
         <div class="header">
             <div class="userImage">
-                <image class="image" :src="userInfo.avatar"></image>
+                <image class="image" :src="icon==''?userInfo.avatar:icon" @click="uploadImg"></image>
             </div>
             <span style="flex:7">{{userInfo.nickname}}</span>
         </div>
@@ -49,7 +49,8 @@
             return {
                 ratio: 1,
                 userInfo: {},
-                domain: this.$http.domain
+                domain: this.$http.domain,
+                icon: ""
             }
         },
         onShareAppMessage: function(res) {
@@ -90,6 +91,24 @@
                 wx.navigateTo({
                     url
                 })
+            },
+            uploadImg: function() {
+                wx.chooseImage({
+                    count: 1,
+                    sizeType: ['original', 'compressed'],
+                    sourceType: ['album', 'camera'],
+                    success: (res) => {
+                        //转换临时文件为base64
+                        wx.getFileSystemManager().readFile({
+                            filePath: res.tempFilePaths[0], //选择图片返回的相对路径
+                            encoding: 'base64', //编码格式
+                            success: res => { //成功的回调
+                                this.icon = 'data:image/png;base64,' + res.data;
+                                // this.uploadimg(res.data);
+                            }
+                        })
+                    }
+                });
             }
         }
     }
