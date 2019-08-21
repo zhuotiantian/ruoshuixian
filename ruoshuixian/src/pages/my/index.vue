@@ -28,7 +28,7 @@
                 </li>
                 <li @click="toMessage">
                     <image class="item" style="height:44rpx;width:46rpx;" :src="'/static/images/my/my_icon5@'+ratio+'x.png'">
-                    </image>
+                        、</image>
                     <span class="last">我的消息</span>
                 </li>
             </ul>
