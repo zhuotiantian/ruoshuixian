@@ -23,19 +23,33 @@
             alertBox
         },
         onLoad(option) {
-            this.level = wx.getStorageSync("level");
-            this.token = wx.getStorageSync("userInfo").token;
-            this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+            this.level = this.$getParams("level");
+            this.userInfo = this.$getParams("userInfo");
+            this.rule = this.$getParams("rule");
+        },
+        mounted() {
+            this.token = this.userInfo.token;
+            let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level;
             })[0];
-            this.numberList = this.rule.list.name.map((e, index) => {
+            this.numberList = rule.list.name.map((e, index) => {
                 return {
                     name: "",
-                    avatar: this.rule.list.avatar[index]
+                    avatar: rule.list.avatar[index]
                 };
             });
-            this.total = this.rule.number;
-            this.per = this.rule.number_per_group;
+            this.total = rule.number;
+            this.per = rule.number_per_group;
+            let number = [];
+            for (var i = 0; i < this.total; i += this.per) {
+                number.push(this.numberList.slice(i, i + this.per));
+            }
+            this.number = number.filter(e => {
+                return e.length > 0;
+            });
+            this.startTime = new Date().getTime();
+            this.game_records_id = rule.game_records_id;
+            this.ratio = this.globalData.ratio;
         },
         data() {
             return {
@@ -52,16 +66,7 @@
             };
         },
         mounted() {
-            let number = [];
-            for (var i = 0; i < this.total; i += this.per) {
-                number.push(this.numberList.slice(i, i + this.per));
-            }
-            this.number = number.filter(e => {
-                return e.length > 0;
-            });
-            this.startTime = new Date().getTime();
-            this.game_records_id = this.rule.game_records_id;
-            this.ratio = this.globalData.ratio;
+
         },
         methods: {
             finish: function() {

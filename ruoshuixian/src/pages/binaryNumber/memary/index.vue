@@ -18,15 +18,16 @@
             CardTitle
         },
         onLoad() {
-            this.level = wx.getStorageSync("level");
-            this.rule = wx.getStorageSync("rule").rules_of_the_game;
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
         },
         mounted() {
-            this.numberList = this.rule ? this.rule.filter(e => {
+            let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
-            })[0].list : [];
-            this.total = this.rule[0].number;
-            this.per = this.rule[0].number_per_group;
+            })[0];
+            this.numberList = rule.list;
+            this.total = rule.number;
+            this.per = rule.number_per_group;
             let number = [];
             for (var i = 0; i < this.total; i += this.per) {
                 number.push(this.numberList.slice(i, i + this.per));
@@ -42,7 +43,7 @@
                 total: 0,
                 per: 0,
                 level: "primary",
-                rule: []
+                rule: {}
             }
         },
         methods: {

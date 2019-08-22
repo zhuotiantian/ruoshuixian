@@ -101,18 +101,6 @@
             "record/main"
         ]
     }, {
-        "root": "pages/my_teacher/",
-        "pages": [
-            "main",
-            "notice/main",
-            "message/main",
-            "message/other/main",
-            "message/toRecord/main",
-            "students/main",
-            "students/comment/main",
-            "work/main"
-        ]
-    }, {
         "root": "pages/ranking/",
         "pages": [
             "main"

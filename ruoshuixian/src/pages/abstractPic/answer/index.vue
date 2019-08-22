@@ -26,17 +26,10 @@
             Keybord,
             alertBox
         },
-        beforeCreate() {
-            this.token = wx.getStorageSync("userInfo").token;
-        },
-        create() {
-            this.level = wx.getStorageSync("level");
-
-        },
         onLoad() {
-            this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0];
+            this.level = this.$getParams("level");
+            this.userInfo = this.$getParams("userInfo");
+            this.rule = this.$getParams("rule");
         },
         data() {
             let array = new Array(5);
@@ -57,16 +50,19 @@
             };
         },
         mounted() {
-
+            this.token = this.userInfo.token;
             let number = [];
-            this.numberList = this.rule.list.map((e, index) => {
+            let rule = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == (this.level || "primary")
+            })[0];
+            this.numberList = rule.list.map((e, index) => {
                 return {
                     image: e,
                     text: "",
                 }
             });
-            this.total = this.rule.number;
-            this.per = this.rule.number_per_group;
+            this.total = rule.number;
+            this.per = rule.number_per_group;
             this.numberList = this.numberList.sort(() => {
                 return Math.random() > 0.5 ? -1 : 1
             })
@@ -77,7 +73,7 @@
                 return e.length > 0;
             });
             this.startTime = new Date().getTime();
-            this.game_records_id = this.rule.game_records_id;
+            this.game_records_id = rule.game_records_id;
             this.ratio = this.globalData.ratio;
         },
         methods: {

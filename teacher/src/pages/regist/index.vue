@@ -51,9 +51,12 @@
                 }
             };
         },
+        onLoad() {
+            this.userInfo = this.$getParams("userInfo");
+        },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.token = wx.getStorageSync("userInfo").token;
+            this.token = this.userInfo.token;
         },
         methods: {
             regist: function() {

@@ -21,6 +21,10 @@
                 result: [],
             };
         },
+        onLoad() {
+            this.result = this.$getParams("result");
+            this.ratio = this.globalData.ratio;
+        },
         onShareAppMessage: function(res) {
             return {
                 title: "闪现扑克牌，一起来玩吧！",
@@ -31,10 +35,6 @@
                     console.log("分享失败");
                 }
             }
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
-            this.result = wx.getStorageSync("result");
         },
         computed: {
             pocker: function() {

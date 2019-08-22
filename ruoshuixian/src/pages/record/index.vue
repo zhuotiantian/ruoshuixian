@@ -26,10 +26,14 @@
         },
         onShow() {
             wx.hideTabBar();
-            this.token = wx.getStorageSync("userInfo").token;
+
+        },
+        onLoad() {
+            this.userInfo = this.$getParams("userInfo");
         },
         mounted() {
             this.ratio = this.globalData.ratio;
+            this.token = this.userInfo.token;
             this.getList();
         },
         methods: {

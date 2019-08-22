@@ -30,13 +30,14 @@
         },
         onLoad(option) {
             this.students_homework_details_id = option.students_homework_details_id
-            this.token = wx.getStorageSync("userInfo").token;
+            this.userInfo = this.$getParams("userInfo");
         },
         onShow() {
             wx.hideTabBar();
         },
         mounted() {
             this.ratio = this.globalData.ratio;
+            this.token = this.userInfo.token;
             this.getList();
         },
         methods: {

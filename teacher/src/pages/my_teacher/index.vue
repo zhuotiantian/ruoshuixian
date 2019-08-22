@@ -36,11 +36,11 @@
     export default {
         components: {},
         onLoad() {
-            this.token = wx.getStorageSync("userInfo").token;
+            this.userInfo = this.$getParams("userInfo");
         },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.userInfo = wx.getStorageSync("userInfo");
+            this.token = this.userInfo.token;
             this.$http.get({
                 url: "/api/wxapp.token/check",
                 header: {

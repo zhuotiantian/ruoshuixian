@@ -37,11 +37,12 @@
             }
         },
         onLoad() {
-            this.token = wx.getStorageSync("userInfo").token;
-            this.currentUser = wx.getStorageSync("userInfo").nickname;
-            this.avator = wx.getStorageSync("userInfo").avatar
+            this.userInfo = this.$getParams("userInfo");
         },
         mounted() {
+            this.token = this.userInfo.token;
+            this.currentUser = this.userInfo.nickname;
+            this.avator = this.userInfo.avatar
             this.ratio = this.globalData.ratio;
             this.getList();
         },

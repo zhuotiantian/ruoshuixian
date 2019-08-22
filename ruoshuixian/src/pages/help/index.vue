@@ -13,12 +13,13 @@
                 content: ""
             }
         },
-        onShow() {
-            this.token = wx.getStorageSync("userInfo").token;
+        onLoad() {
+            this.userInfo = this.$getParams("userInfo");
+            this.game_id = this.$getParams("gameid");
         },
         mounted() {
+            this.token = this.userInfo.token;
             this.ratio = this.globalData.ratio;
-            this.game_id = wx.getStorageSync("gameid");
             this.getHelp();
         },
         methods: {

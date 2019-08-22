@@ -49,9 +49,12 @@
                 }
             }
         },
+        onLoad() {
+            this.userInfo = this.$getParams("userInfo");
+        },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.token = wx.getStorageSync("userInfo").token;
+            this.token = this.userInfo.token;
         },
         methods: {
             // 跳转到注册页面

@@ -29,19 +29,23 @@
             alertBox
         },
         onLoad(option) {
-            this.level = wx.getStorageSync("level");
-            this.token = wx.getStorageSync("userInfo").token;
-            this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+            this.level = this.$getParams("level");
+            this.userInfo = this.$getParams("userInfo");
+            this.rule = this.$getParams("rule");
+        },
+        mounted() {
+            this.token = this.userInfo.token;
+            let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
-            this.numberList = this.rule.list ? this.rule.list.date.map((e, index) => {
+            this.numberList = rule.list.date.map((e, index) => {
                 return {
                     date: "",
-                    event: this.rule.list.event[index]
+                    event: rule.list.event[index]
                 }
-            }) : [];
+            });
             this.startTime = new Date().getTime();
-            this.game_records_id = this.rule.game_records_id;
+            this.game_records_id = rule.game_records_id;
         },
         data() {
             return {

@@ -70,10 +70,11 @@
                 remarks: ""
             };
         },
-        onShow() {
-            this.token = wx.getStorageSync("userInfo").token;
+        onLoad() {
+            this.userInfo = this.$getParams("userInfo");
         },
         mounted() {
+            this.token = this.userInfo.token;
             this.ratio = this.globalData.ratio;
             this.getList();
             this.getIndexData();

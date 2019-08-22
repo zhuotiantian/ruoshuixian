@@ -31,8 +31,11 @@
             CardTitle
         },
         onLoad() {
-            this.level = wx.getStorageSync("level");
-            this.pocker = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
+        },
+        mounted() {
+            this.pocker = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0].list;
         },

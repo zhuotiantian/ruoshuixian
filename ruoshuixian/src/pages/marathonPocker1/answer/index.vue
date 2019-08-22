@@ -44,13 +44,10 @@
             Keybord,
             alertBox
         },
-        beforeCreate() {
-            this.level = wx.getStorageSync("level");
-        },
         onLoad() {
-            this.list = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0].list;
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
+            this.userInfo = this.$getParams("userInfo");
         },
         data() {
             let pocker = [];
@@ -80,7 +77,11 @@
             }
         },
         mounted() {
-            this.token = wx.getStorageSync("userInfo").token;
+            this.token = this.userInfo.token;
+            let rule = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0].
+            this.list = rule.list;
             this.ratio = this.globalData.ratio;
             // 生成pock的副数
             for (var i = 1; i <= this.list.length; i++) {
@@ -96,9 +97,7 @@
             };
             this.groupPage = groupPage;
             this.startTime = new Date().getTime();
-            this.game_records_id = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.game_level == "primary"
-            })[0].game_records_id;
+            this.game_records_id = rule.game_records_id;
         },
         methods: {
             startGame: function() {
@@ -142,6 +141,7 @@
                 }
             },
             confirm: function() {
+
                 this.endTime = new Date().getTime();
                 let result = [];
                 for (var i = 0; i < this.allResult.length; i++) {

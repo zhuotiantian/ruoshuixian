@@ -16,16 +16,17 @@
             CardTitle
         },
         onLoad() {
-            this.level = wx.getStorageSync("level");
-            this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0];
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
             // 创建音频播放对象
             this.innerAudioContext = wx.createInnerAudioContext();
         },
         mounted() {
+            let rule = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0];
             this.ratio = this.globalData.ratio;
-            this.numberList = this.rule.list ? this.rule.list : [];
+            this.numberList = rule.list;
             let index = -1;
             this.innerAudioContext.play();
             this.timer = setInterval(() => {

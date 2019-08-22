@@ -32,6 +32,9 @@
                 memaryNumber: ["all", "2", "4", "8"]
             }
         },
+        onLoad() {
+            this.rule = this.$getParams("rule");
+        },
         mounted() {
             this.timer && clearInterval(this.timer);
             this.timer = setInterval(() => {
@@ -40,7 +43,7 @@
                     clearInterval(this.timer);
                 }
             }, 1000);
-            let rule = wx.getStorageSync("rule").rules_of_the_game;
+            let rule = this.rule.rules_of_the_game;
             if (this.type == "time") {
                 this.memaryTime = rule[0].memory_time.split(",");
                 this.activeIndex = this.memaryTime[0];

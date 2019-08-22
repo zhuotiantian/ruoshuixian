@@ -42,9 +42,12 @@
         components: {
             CardFooter
         },
+        onLoad() {
+            this.userInfo = this.$getParams("userInfo");
+        },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.token = wx.getStorageSync("userInfo").token;
+            this.token = this.userInfo.token;
         },
         data() {
             return {
@@ -69,7 +72,6 @@
         },
         onShow() {
             wx.hideTabBar();
-            this.userInfo = wx.getStorageSync("userInfo");
         },
         methods: {
             toRanking: function() {

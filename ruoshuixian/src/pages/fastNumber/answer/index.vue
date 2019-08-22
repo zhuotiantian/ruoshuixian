@@ -23,28 +23,30 @@
             alertBox
         },
         onLoad() {
-            this.level = wx.getStorageSync("level");
-            this.token = wx.getStorageSync("userInfo").token;
+            this.level = this.$getParams("level");
+            this.userInfo = this.$getParams("userInfo");
+            this.rule = this.$getParams("rule");
         },
         mounted() {
-            this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.game_level == this.level
+            this.token = this.userInfo.token;
+            let rule = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == (this.level || "primary")
             })[0];
-            this.numberList = this.rule.list.map(e => {
+            this.numberList = rule.list.map(e => {
                 return {
                     number: "",
                     selected: false
                 }
             });
-            this.total = this.rule.number;
-            this.per = this.rule.number_per_group;
+            this.total = rule.number;
+            this.per = rule.number_per_group;
             let number = [];
             for (var i = 0; i < this.total; i += this.per) {
                 number.push(this.numberList.slice(i, i + this.per));
             };
             this.number = number;
             this.startTime = new Date().getTime();
-            this.game_records_id = this.rule.game_records_id;
+            this.game_records_id = rule.game_records_id;
         },
         data() {
             return {

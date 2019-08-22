@@ -17,7 +17,8 @@
             });
             if (this.userInfo.length == 0) {
                 wx.showToast({
-                    title: "请先登陆！"
+                    title: "请先登陆！",
+                    icon: "none"
                 });
                 wx.navigateTo({
                     url: "./pages/login/main"

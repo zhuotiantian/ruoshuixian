@@ -20,13 +20,17 @@
             alertBox
         },
         onLoad(option) {
-            this.level = wx.getStorageSync("level");
-            this.rule = wx.getStorageSync("rule").rules_of_the_game;
-            this.numberList = wx.getStorageSync("result").right_and_wrong_results;
-            this.total = this.rule[0].number;
-            this.per = this.rule[0].number_per_group;
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
+            this.result = this.$getParams("result");
         },
         mounted() {
+            let rule = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0];
+            this.numberList = this.result.right_and_wrong_results;
+            this.total = rule.number;
+            this.per = rule.number_per_group;
             let number = [];
             for (var i = 0; i < this.total; i += this.per) {
                 number.push(this.numberList.slice(i, i + this.per));

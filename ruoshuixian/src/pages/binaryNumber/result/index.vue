@@ -20,8 +20,9 @@
             alertBox
         },
         onLoad() {
-            this.result = wx.getStorageSync("result").right_and_wrong_results;
-            this.rule = wx.getStorageSync("rule").rules_of_the_game;
+            this.level = this.$getParams("level");
+            this._result = this.$getParams("result");
+            this.rule = this.$getParams("rule");
         },
         data() {
             let array = [];
@@ -41,8 +42,12 @@
             }
         },
         mounted() {
-            this.total = this.rule[0].number;
-            this.per = this.rule[0].number_per_group;
+            this.result = this._result.right_and_wrong_results;
+            let rule = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == (this.level || "primary")
+            })[0];
+            this.total = rule.number;
+            this.per = rule.number_per_group;
             let number = [];
             for (var i = 0; i < this.total; i += this.per) {
                 number.push(this.result.slice(i, i + this.per));

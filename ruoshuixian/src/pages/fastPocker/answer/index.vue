@@ -70,12 +70,16 @@
                 level: "primary"
             };
         },
+        onLoad() {
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
+            this.userInfo = this.$getParams("userInfo");
+        },
         mounted() {
-            this.token = wx.getStorageSync("userInfo").token;
+            this.token = this.userInfo.token;
             this.ratio = this.globalData.ratio;
             this.startTime = new Date().getTime();
-            this.level = wx.getStorageSync("level");
-            this.game_records_id = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+            this.game_records_id = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0].game_records_id;
         },

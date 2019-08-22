@@ -33,8 +33,12 @@
                 isMember: 3
             };
         },
+        onLoad() {
+            this.userInfo = this.$getParams("userInfo");
+        },
         mounted() {
-            this.isMember = wx.getStorageSync("userInfo").group_id !== 1
+            this.isMember = this.userInfo.group_id !== 1;
+            this.token = this.userInfo.token;
         },
         methods: {
             toFisrstPage: function(index) {

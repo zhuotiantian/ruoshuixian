@@ -49,9 +49,12 @@
                 }
             }
         },
+        onLoad() {
+            this.userInfo = this.$getParams("userInfo");
+        },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.token = wx.getStorageSync("userInfo").token;
+            this.token = this.userInfo.token;
         },
         methods: {
             // 跳转到注册页面
@@ -68,8 +71,19 @@
                     password
                 } = this.form;
                 if (!this.codeLogin) {
+                    // this.$http.post({
+                    //     url: "/api/wxapp.sms/check",
+                    //     data: {
+                    //         mobile,
+                    //         captcha
+                    //     },
+                    //     header: {
+                    //         token: this.token
+                    //     }
+                    // }).then(result => {
+                    //     if (result.code == 1) {
                     this.$http.post({
-                        url: "/api/wxapp.sms/check",
+                        url: "/api/wxapp.user/mobilelogin",
                         data: {
                             mobile,
                             captcha
@@ -79,27 +93,9 @@
                         }
                     }).then(result => {
                         if (result.code == 1) {
-                            this.$http.post({
-                                url: "/api/wxapp.user/mobilelogin",
-                                data: {
-                                    mobile,
-                                    captcha
-                                },
-                                header: {
-                                    token: this.token
-                                }
-                            }).then(result => {
-                                if (result.code == 1) {
-                                    wx.showToast({
-                                        title: "登陆成功"
-                                    })
-                                } else {
-                                    wx.showToast({
-                                        title: result.msg,
-                                        icon: "none"
-                                    })
-                                }
-                            });
+                            wx.showToast({
+                                title: "登陆成功"
+                            })
                         } else {
                             wx.showToast({
                                 title: result.msg,
@@ -107,6 +103,13 @@
                             })
                         }
                     });
+                    //     } else {
+                    //         wx.showToast({
+                    //             title: result.msg,
+                    //             icon: "none"
+                    //         })
+                    //     }
+                    // });
                 } else {
                     this.$http.post({
                         url: "/api/wxapp.user/login",

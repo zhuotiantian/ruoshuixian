@@ -18,12 +18,12 @@
                 list: [],
             }
         },
-        onShow() {
-            this.token = wx.getStorageSync("userInfo").token;
+        onLoad() {
+            this.userInfo = this.$getParams("userInfo");
         },
         mounted() {
+            this.token = this.userInfo.token;
             this.getList();
-
         },
         methods: {
             getList: function() {

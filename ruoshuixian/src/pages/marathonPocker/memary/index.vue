@@ -78,7 +78,6 @@
                 });
             },
             group: function(data) {
-                // this.pocker = wx.getStorageSync("rule").list[];
                 if (data !== "ALL") {
                     this.pocker = this.pocker.splice(0, data);
                 }

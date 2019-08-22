@@ -3,7 +3,7 @@
         <CardTitle ref="title" :seconds="seconds" :minutes="minutes" type="开始" @startGame="startGame"></CardTitle>
         <div class="tips">
             <p>回忆这些扑克牌</p>
-            <p>{{times}}秒后开始正式答题</p>
+            <p>{{recollect_time}}秒后开始正式答题</p>
         </div>
         <div class="list">
             <div class="row" v-for="(item,index) in rows" :key="index">
@@ -27,12 +27,18 @@
                 rows: rows,
                 columns: columns,
                 ratio: 1,
-                times: 0
+                recollect_time: 0
             }
+        },
+        onLoad() {
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
         },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.times = wx.getStorageSync("rule").rules_of_the_game[0].recollect_time;
+            this.recollect_time = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0].recollect_time;
         },
         methods: {
             startGame: function() {

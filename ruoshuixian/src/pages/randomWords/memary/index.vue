@@ -14,10 +14,11 @@
             CardTitle
         },
         onLoad() {
-            this.level = wx.getStorageSync("level");
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
         },
         mounted() {
-            this.list = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+            this.list = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0].list;
         },

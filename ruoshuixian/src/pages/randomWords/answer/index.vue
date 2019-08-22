@@ -18,11 +18,13 @@
             alertBox
         },
         onLoad() {
-            this.level = wx.getStorageSync("level");
-            this.token = wx.getStorageSync("userInfo").token;
+            this.level = this.$getParams("level");
+            this.userInfo = this.$getParams("userInfo");
+            this.rule = this.$getParams("rule");
         },
         mounted() {
-            let rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+            this.token = this.userInfo.token;
+            let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0]
             this.list = rule.list.map(e => {

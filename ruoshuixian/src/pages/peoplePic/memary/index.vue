@@ -19,8 +19,11 @@
             CardTitle
         },
         onLoad(option) {
-            this.level = wx.getStorageSync("level");
-            let rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
+        },
+        mounted() {
+            let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
             this.numberList = rule.list.name.map((e, index) => {
@@ -31,8 +34,6 @@
             });
             this.total = rule.number;
             this.per = rule.number_per_group;
-        },
-        mounted() {
             let number = [];
             for (var i = 0; i < this.total; i += this.per) {
                 number.push(this.numberList.slice(i, i + this.per));

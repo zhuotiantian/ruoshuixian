@@ -37,9 +37,9 @@
         components: {
             CardFooter
         },
-        onShow() {
+        onLoad() {
             wx.hideTabBar();
-            this.token = wx.getStorageSync("userInfo").token;
+            this.userInfo = this.$getParams("userInfo");
         },
         onShareAppMessage: function(res) {
             return {
@@ -52,9 +52,6 @@
                 }
             }
         },
-        beforeMount() {
-            this.ratio = this.globalData.ratio;
-        },
         data() {
             return {
                 ratio: 1,
@@ -65,8 +62,9 @@
             };
         },
         mounted() {
+            this.ratio = this.globalData.ratio;
+            this.token = this.userInfo.token;
             this.getIndexData();
-            this.userInfo = wx.getStorageSync("userInfo");
         },
         methods: {
             getIndexData: function() {

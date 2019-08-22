@@ -19,18 +19,19 @@
             CardTitle
         },
         onLoad() {
-            this.level = wx.getStorageSync("level");
-            this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0];
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
         },
         mounted() {
-            this.numberList = this.rule.list ? this.rule.list.date.map((e, index) => {
+            let rule = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0];
+            this.numberList = rule.list.date.map((e, index) => {
                 return {
                     date: e,
-                    event: this.rule.list.event[index]
+                    event: rule.list.event[index]
                 }
-            }) : [];
+            });
         },
         data() {
             return {

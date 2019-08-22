@@ -23,7 +23,8 @@
             CardTitle
         },
         onLoad() {
-            this.level = wx.getStorageSync("level");
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
         },
         data() {
             return {
@@ -33,6 +34,7 @@
                 left: 100,
                 pocker: [],
                 ratio: 1,
+                rule: {},
                 type: null,
                 level: "primary",
                 list: [],
@@ -41,7 +43,7 @@
         },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.list = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+            this.list = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             });
         },
@@ -55,7 +57,6 @@
                 };
                 return bgCounts;
             },
-
         },
         methods: {
             group: function(data) {

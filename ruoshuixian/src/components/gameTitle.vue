@@ -4,8 +4,8 @@
         <div class="title">
             <template v-if="isResult">
                 <p>
-                    <span v-if="isPocker&&showTime">用时：{{result.game_time}}S</span>
-                    <span v-else>得分：{{result.fraction}}</span>
+                    <span v-if="isPocker&&showTime">用时：{{result.game_time||0}}S</span>
+                    <span v-else>得分：{{result.fraction||0}}</span>
                 </p>
                 <p style="flex:1;text-align:right">
                     <span class="btn default-btn" style="margin-right:15rpx" v-if="isPocker" @click="showTimeHandle">
@@ -56,19 +56,19 @@
             "btnType"
         ],
         onLoad() {
-            this.level = wx.getStorageSync("level");
-            this.times = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.game_level == (this.level || "primary")
-            });
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
+            this.result = this.$getParams("result");
+            this.memoryTime = this.$getParams("memoryTime");
         },
         mounted() {
+            this.times = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == (this.level || "primary")
+            })[0];
             this.changeTime();
             this.timeout && clearInterval(this.timeout);
             this.showType ? null : this.timer();
             this.ratio = this.globalData.ratio;
-
-            this.result = wx.getStorageSync("result");
-
         },
         data() {
             return {
@@ -116,11 +116,11 @@
             changeTime: function() {
                 switch (this.type) {
                     case "记忆完成":
-                        this.t_seconds = wx.getStorageSync("memoryTime") || this.times[0] && this.times[0].memory_time || 60;
+                        this.t_seconds = this.memoryTime || this.times.memory_time || 60;
                         this.t_minutes = 0;
                         break;
                     case "开始":
-                        this.t_seconds = this.times[0].recollect_time || 60;
+                        this.t_seconds = this.times.recollect_time || 60;
                         this.t_minutes = 0;
                         break;
                     case "作答完成":

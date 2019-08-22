@@ -39,7 +39,9 @@
         },
         onShow() {
             wx.hideTabBar();
-            this.token = wx.getStorageSync("userInfo").token;
+        },
+        onLoad() {
+            this.userInfo = this.$getParams("userInfo");
         },
         onShareAppMessage: function(res) {
             return {
@@ -53,6 +55,7 @@
             }
         },
         beforeMount() {
+            this.token = this.userInfo.token;
             this.ratio = this.globalData.ratio;
             this.$http.get({
                 url: "/api/wxapp.token/check",
@@ -80,8 +83,8 @@
             };
         },
         mounted() {
+            this.token = this.userInfo.token;
             this.getIndexData();
-            this.userInfo = wx.getStorageSync("userInfo");
         },
         methods: {
             getIndexData: function() {
@@ -107,6 +110,8 @@
                     }
                 }).then(result => {
                     wx.setStorageSync("rule", result.data);
+                    wx.setStorageSync("level", "primary");
+                    wx.setStorageSync("result", []);
                     if (this.userInfo) {
                         wx.navigateTo({
                             url: item.wxapp_url

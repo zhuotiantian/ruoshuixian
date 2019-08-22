@@ -29,18 +29,19 @@
             }
         },
         onLoad() {
-            this.level = wx.getStorageSync("level");
-            this.result = wx.getStorageSync("result").right_and_wrong_results;
-            this.rule = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            });
+            this.level = this.$getParams("level");
+            this.result = this.$getParams("result");
+            this.rule = this.$getParams("rule");
         },
         mounted() {
-            this.total = this.rule[0].number;
-            this.per = this.rule[0].number_per_group;
+            let rule = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == (this.level || "primary")
+            })[0];
+            this.total = rule.number;
+            this.per = rule.number_per_group;
             let number = [];
             for (var i = 0; i < this.total; i += this.per) {
-                number.push(this.result.slice(i, i + this.per));
+                number.push(this.result.right_and_wrong_results.slice(i, i + this.per));
             };
             this.number = number;
         },

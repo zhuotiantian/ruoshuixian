@@ -32,14 +32,19 @@
                 type: null,
                 level: "primary",
                 list: [],
-                currentGroupIndex: 0
+                currentGroupIndex: 0,
+                rule: {}
             };
+        },
+        onLoad() {
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
         },
         mounted() {
             this.ratio = this.globalData.ratio;
-            this.list = wx.getStorageSync("rule").rules_of_the_game.filter(e => {
+            this.list = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
-            });
+            })[0].list;
         },
         computed: {
             bgCounts: function() {
@@ -54,7 +59,7 @@
         },
         methods: {
             group: function(data) {
-                let list = JSON.parse(JSON.stringify(this.list[0].list));
+                let list = JSON.parse(JSON.stringify(this.list));
                 this.pocker = [];
                 if (data !== "ALL") {
                     for (var i = 0; i < list.length; i + data) {

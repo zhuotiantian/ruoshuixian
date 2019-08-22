@@ -8,17 +8,20 @@ const app = new Vue(App);
 app.$mount();
 Vue.prototype.globalData = getApp().globalData;
 Vue.prototype.$http = http;
+Vue.prototype.$getParams = (param) => {
+    return wx.getStorageSync(param);
+}
 wx.login({
-    success: function(res) {
+    success: function (res) {
         Vue.prototype.wxcode = res.code;
     }
 });
 let pixelRatio = 0
 wx.getSystemInfo({
-    success: function(res) {
+    success: function (res) {
         pixelRatio = res.pixelRatio
     },
-    fail: function() {
+    fail: function () {
         pixelRatio = 0
     }
 });
