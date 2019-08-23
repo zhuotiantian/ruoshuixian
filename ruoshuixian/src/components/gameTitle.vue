@@ -208,8 +208,8 @@
             },
             playAgain: function() {
                 wx.navigateTo({
-                    url: "../main"
-                });
+                    url: "../answer/main"
+                })
             }
         }
     };

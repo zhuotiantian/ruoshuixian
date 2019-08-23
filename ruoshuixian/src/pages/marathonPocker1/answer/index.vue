@@ -134,13 +134,19 @@
                 this.showTip = false;
             },
             confirm: function() {
+
                 this.endTime = new Date().getTime();
-                let result = this.result.map(e => {
-                    return {
-                        index: e.columnIndex + 1,
-                        color: e.rowIndex + 1
-                    }
-                })
+                let result = [];
+                for (var i = 0; i < this.allResult.length; i++) {
+                    let item = [];
+                    for (var j = 0; j < this.allResult[i].length; j++) {
+                        item.push({
+                            color: this.allResult[i][j].rowIndex,
+                            index: this.allResult[i][j].columnIndex,
+                        })
+                    };
+                    result.push(item)
+                }
                 this.$http.post({
                     url: "/api/wxapp.game/submitTheGame",
                     data: {
@@ -155,7 +161,7 @@
                     if (result.code == 1) {
                         wx.navigateTo({
                             url: "../result/main"
-                        });
+                        })
                         wx.setStorageSync("result", result.data);
                     } else {
                         wx.showToast({

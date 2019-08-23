@@ -10,7 +10,7 @@
             </p>
             <p v-for="(item,index) in numberList" :key="index">
                 <span>{{index+1}}</span>
-                <span :class="{input:true, wrong:!item.isRight}">{{item.anwser}}</span>
+                <span :class="{input:true, wrong:!item.isRight}">{{item.answer}}</span>
                 <span class="year">{{item.date}}</span>
                 <span style="flex:3;">{{item.event}}</span>
             </p>
@@ -36,7 +36,7 @@
                 return {
                     date: e,
                     event: rule.list.event[index],
-                    anwser: this.result[index].number,
+                    answer: this.result[index].number,
                     isRight: this.result[index].result == 1,
                 }
             });

@@ -41,7 +41,7 @@
         methods: {
             finishMemary: function() {
                 wx.navigateTo({
-                    url: "../anwser/main"
+                    url: "../answer/main"
                 })
             }
         }

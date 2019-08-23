@@ -114,7 +114,7 @@ export default {
             "pages/virtualEvents/memary/main",
             "pages/virtualEvents/main",
             "pages/virtualEvents/result/main",
-            "pages/virtualEvents/anwser/main",
+            "pages/virtualEvents/answer/main",
 
             "pages/index/main",
 

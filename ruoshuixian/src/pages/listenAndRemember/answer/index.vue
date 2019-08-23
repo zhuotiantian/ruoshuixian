@@ -23,6 +23,7 @@
             alertBox
         },
         onLoad() {
+            console.log("111");
             Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
