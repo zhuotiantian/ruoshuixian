@@ -18,8 +18,6 @@
         onLoad(option) {
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
-        },
-        mounted() {
             let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];

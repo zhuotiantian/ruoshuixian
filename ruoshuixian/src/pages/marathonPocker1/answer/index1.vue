@@ -27,7 +27,7 @@
         <div class="pageFoot">
             <span class="pageBtn" @click="prevPage">上一页</span>
             <div class="btn-group">
-                <span class="item active" v-for="(item,index) in pages" :key="index">{{item}}幅</span>
+                <span :class="{item:true, active:item.active}" @click="select(index,item)" v-for="(item,index) in groupPage[currentPage]" :key="index">{{item.number}}幅</span>
             </div>
             <span class="pageBtn" @click="nextPage">下一页</span>
             <span class="btn tips-btn" style="float-right" @click="showTips">操作提示</span>
@@ -44,8 +44,33 @@
             Keybord,
             alertBox
         },
-        beforeCreate() {
+        onLoad() {
+            Object.assign(this.$data, this.$options.data())
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
+            this.userInfo = this.$getParams("userInfo");
 
+            this.token = this.userInfo.token;
+            let rule = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0];
+            this.list = rule.list;
+
+            // 生成pock的副数
+            for (var i = 1; i <= this.list.length; i++) {
+                this.pages.push({
+                    number: i,
+                    active: false
+                });
+            };
+            this.pages[0].active = true;
+            let groupPage = [];
+            for (var i = 0; i < this.pages.length; i += 10) {
+                groupPage.push(this.pages.slice(i, i + 10));
+            };
+            this.groupPage = groupPage;
+            this.startTime = new Date().getTime();
+            this.game_records_id = rule.game_records_id;
         },
         data() {
             let pocker = [];
@@ -67,13 +92,11 @@
                 showTip: false,
                 result: [],
                 lastClick: 0,
-                pages: (() => {
-                    let pages = [];
-                    for (let i = 1; i <= 10; i++) {
-                        pages.push(i);
-                    };
-                    return pages
-                })()
+                pages: [],
+                groupPage: [],
+                currentPage: 0,
+                currentIndex: 1,
+                allResult: [],
             }
         },
         methods: {
@@ -102,6 +125,7 @@
                     rowIndex: index,
                     columnIndex: _index
                 });
+                this.$set(this.allResult, this.currentIndex - 1, this.result);
                 let hidden = this.pocker[index];
                 hidden[_index].show = false;
                 this.$set(this.pocker, "index", hidden);
@@ -116,9 +140,43 @@
                 }
             },
             confirm: function() {
-                wx.navigateTo({
-                    url: "../result/main"
+
+                this.endTime = new Date().getTime();
+                let result = [];
+                for (var i = 0; i < this.allResult.length; i++) {
+                    let item = [];
+                    for (var j = 0; j < this.allResult[i].length; j++) {
+                        item.push({
+                            color: this.allResult[i][j].rowIndex,
+                            index: this.allResult[i][j].columnIndex,
+                        })
+                    };
+                    result.push(item)
+                }
+                this.$http.post({
+                    url: "/api/wxapp.game/submitTheGame",
+                    data: {
+                        game_records_id: this.game_records_id,
+                        game_time: (this.endTime - this.startTime) / 1000,
+                        content: JSON.stringify(result)
+                    },
+                    header: {
+                        token: this.token
+                    }
+                }).then(result => {
+                    if (result.code == 1) {
+                        wx.navigateTo({
+                            url: "../result/main"
+                        })
+                        wx.setStorageSync("result", result.data);
+                    } else {
+                        wx.showToast({
+                            title: result.msg,
+                            icon: "none"
+                        });
+                    }
                 })
+
             },
             nextPage: function() {
                 if (this.currentPage > 3) {
@@ -136,6 +194,31 @@
                     this.pages = this.pages.map((e) => {
                         return e - 10
                     });
+                }
+            },
+            select: function(index, item) {
+                this.$set(this.groupPage, this.currentPage, this.groupPage[this.currentPage].map(e => {
+                    return {
+                        number: e.number,
+                        active: false
+                    }
+                }));
+                this.$set(this.groupPage[this.currentPage], index, {
+                    number: item.number,
+                    active: true
+                });
+                this.currentIndex = this.groupPage[this.currentPage][index].number;
+                this.result = this.allResult[this.currentIndex - 1] || [];
+                this.pocker.forEach(e => {
+                    e.forEach(m => {
+                        m.show = true;
+                    })
+                });
+                if (this.result.length > 0) {
+                    this.result.forEach(e => {
+                        this.$set(this.pocker[e.rowIndex][e.columnIndex], "show", false);
+                    })
+
                 }
             }
         }

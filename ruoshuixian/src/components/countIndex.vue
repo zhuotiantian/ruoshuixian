@@ -20,15 +20,23 @@
         components: {
             CardTitle
         },
-        onLoad() {
-            this.show = true
-        },
         onUnload() {
             this.show = false
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
+            this.show = true
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
+            this.memaryTime = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0].memory_time;
+            this.timer = setInterval(() => {
+                this.seconds--;
+                if (this.seconds == 0) {
+                    clearInterval(this.timer);
+                }
+            }, 1000);
         },
         data() {
             return {
@@ -39,17 +47,6 @@
                 minutes: 0,
                 rule: {}
             }
-        },
-        mounted() {
-            this.memaryTime = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0].memory_time;
-            this.timer = setInterval(() => {
-                this.seconds--;
-                if (this.seconds == 0) {
-                    clearInterval(this.timer);
-                }
-            }, 1000);
         },
         methods: {
             toNextPage: function() {

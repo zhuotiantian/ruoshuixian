@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <CardTitle isResult="true" isPocker="true" showTime="false"></CardTitle>
-        <div class="list" v-if="ratio">
-            <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg@'+ratio+'x.png'" />
+        <div class="list">
+            <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
         </div>
     </div>
 </template>
@@ -15,15 +15,15 @@
         data() {
             return {
                 pockerCount: 23,
-                ratio: 1,
+
                 left: 100,
                 game: [],
                 result: [],
             };
         },
-        onLoad() {
+        onLoad(){Object.assign(this.$data, this.$options.data())
             this.result = this.$getParams("result");
-            this.ratio = this.globalData.ratio;
+
         },
         onShareAppMessage: function(res) {
             return {

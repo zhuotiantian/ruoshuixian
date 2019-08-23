@@ -20,28 +20,10 @@
             alertBox
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this._result = this.$getParams("result");
             this.rule = this.$getParams("rule");
-        },
-        data() {
-            let array = [];
-            let array1 = [0, 1];
-            for (let i = 0; i < 30; i++) {
-                let index = Math.floor((Math.random() * array1.length));
-                array.push(array1[index]);
-            };
-            let rows = new Array(3);
-            return {
-                showFog: false,
-                text: "确定结束作答吗？",
-                number: array,
-                rows: rows,
-                result: [],
-                rule: []
-            }
-        },
-        mounted() {
             this.result = this._result.right_and_wrong_results;
             let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == (this.level || "primary")
@@ -54,12 +36,10 @@
             };
             this.number = number;
         },
-        methods: {
-            finish: function() {
-                this.showFog = true;
-            },
-            hideFog: function() {
-                this.showFog = false;
+        data() {
+            return {
+                number: [],
+                result: [],
             }
         }
     }

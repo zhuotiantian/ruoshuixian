@@ -1,16 +1,6 @@
 <script>
     export default {
-        beforeCreate() {
 
-        },
-        mounted() {
-
-        },
-        data() {
-            return {
-
-            }
-        }
     }
 </script>
 

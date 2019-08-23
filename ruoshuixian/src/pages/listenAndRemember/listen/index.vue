@@ -1,9 +1,9 @@
 <template>
     <div class="contanier">
         <CardTitle type="记忆完成" @finishMemary="finishMemary"></CardTitle>
-        <div v-if="ratio" class="content">
-            <image class="play" :src="'/static/images/firstPage/play@'+ratio+'x.png'"></image>
-            <image class="slider" :src="'/static/images/firstPage/slider@'+ratio+'x.png'"></image>
+        <div class="content">
+            <image class="play" :src="'/static/images/firstPage/play.png'"></image>
+            <image class="slider" :src="'/static/images/firstPage/slider.png'"></image>
             <em></em>
         </div>
         <p class="text">正在播放录音&nbsp;&middot;&nbsp;&middot;&nbsp;&middot;</p>
@@ -16,16 +16,16 @@
             CardTitle
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
             // 创建音频播放对象
             this.innerAudioContext = wx.createInnerAudioContext();
-        },
-        mounted() {
+
             let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
-            this.ratio = this.globalData.ratio;
+
             this.numberList = rule.list;
             let index = -1;
             this.innerAudioContext.play();
@@ -47,7 +47,7 @@
         },
         data() {
             return {
-                ratio: 1,
+
                 isPaly: true
             }
         },

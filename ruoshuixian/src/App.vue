@@ -1,9 +1,8 @@
 <script>
     export default {
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = wx.getStorageSync("userInfo");
-        },
-        mounted() {
             const that = this;
             wx.getLocation({
                 type: 'wgs84',

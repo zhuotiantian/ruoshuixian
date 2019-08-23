@@ -32,8 +32,6 @@
             this.level = this.$getParams("level");
             this.userInfo = this.$getParams("userInfo");
             this.rule = this.$getParams("rule");
-        },
-        mounted() {
             this.token = this.userInfo.token;
             let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level

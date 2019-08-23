@@ -14,11 +14,10 @@
             CardTitle
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this._result = this.$getParams("result");
-
-        },
-        mounted() {
             this.list = this._result.right_and_wrong_results;
+
         },
         data() {
             return {

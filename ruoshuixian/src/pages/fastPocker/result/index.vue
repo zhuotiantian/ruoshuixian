@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <CardTitle isResult="true" isPocker="true" showTime="false" :count="count"></CardTitle>
-        <div class="list" v-if="ratio">
-            <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg@'+ratio+'x.png'" />
+        <div class="list">
+            <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
         </div>
     </div>
 </template>
@@ -16,14 +16,10 @@
             return {
                 pannelContent: ["ALL", "1", "2", "4", "8"],
                 pockerCount: 23,
-                ratio: 1,
+
                 left: 100,
                 count: 0
             };
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
-
         },
         computed: {
             pocker: function() {

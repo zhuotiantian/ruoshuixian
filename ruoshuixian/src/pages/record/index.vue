@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="content" v-if="ratio">
+        <div class="content">
             <div v-for="(item,index) in list" :key="index" @click="toDetails(item.students_homework_details_id)">
                 <div class="img_div">
                     {{item.name}}
@@ -20,7 +20,7 @@
         },
         data() {
             return {
-                ratio: 1,
+
                 list: []
             }
         },
@@ -29,10 +29,8 @@
 
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
             this.token = this.userInfo.token;
             this.getList();
         },

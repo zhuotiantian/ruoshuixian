@@ -7,7 +7,7 @@
         </div>
         <div class="list">
             <div class="row" v-for="(item,index) in rows" :key="index">
-                <image class="pocker" v-for="(item,_index) in columns" :key="_index" :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'@'+ratio+'x.png'"></image>
+                <image class="pocker" v-for="(item,_index) in columns" :key="_index" :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'.png'"></image>
             </div>
         </div>
     </div>
@@ -26,16 +26,14 @@
                 minutes: 5,
                 rows: rows,
                 columns: columns,
-                ratio: 1,
+
                 recollect_time: 0
             }
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
             this.recollect_time = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0].recollect_time;

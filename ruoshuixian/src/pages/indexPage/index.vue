@@ -1,19 +1,19 @@
 <template>
     <div class="container">
-        <div class="content" v-if="ratio">
-            <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'" />
+        <div class="content">
+            <image class="background" src="/static/images/firstPage/bg.png" />
             <div class="top">
                 <image class="top-image" :src="domain+topImg" />
             </div>
             <div class="middle">
                 <ul>
                     <li @click="toRanking">
-                        <image class="icon ranking" :src="'/static/images/firstPage/ranking_icon@'+ratio+'x.png'" />
+                        <image class="icon ranking" src="/static/images/firstPage/ranking_icon.png" />
                         <span class="flex-span">排行榜</span>
                     </li>
                     <li>
                         <button open-type="share">
-                            <image class="icon share" :src="'/static/images/firstPage/share@'+ratio+'x.png'" />
+                            <image class="icon share" src="/static/images/firstPage/share.png" />
                             <span class="flex-span" open-type="share">分享</span>
                         </button>
                     </li>
@@ -39,24 +39,9 @@
         },
         onShow() {
             wx.hideTabBar();
-        },
-        onLoad() {
-            this.userInfo = this.$getParams("userInfo");
-        },
-        onShareAppMessage: function(res) {
-            return {
-                title: "11种脑力游戏，一起来玩吧！",
-                success: function() {
-                    console.log("分享成功");
-                },
-                error: function() {
-                    console.log("分享失败");
-                }
-            }
-        },
-        beforeMount() {
+
             this.token = this.userInfo.token;
-            this.ratio = this.globalData.ratio;
+
             this.$http.get({
                 url: "/api/wxapp.token/check",
                 header: {
@@ -73,18 +58,32 @@
                 }
             })
         },
+        onLoad() {
+            Object.assign(this.$data, this.$options.data())
+            this.userInfo = this.$getParams("userInfo");
+
+            this.token = this.userInfo.token;
+            this.getIndexData();
+        },
+        onShareAppMessage: function(res) {
+            return {
+                title: "11种脑力游戏，一起来玩吧！",
+                success: function() {
+                    console.log("分享成功");
+                },
+                error: function() {
+                    console.log("分享失败");
+                }
+            }
+        },
         data() {
             return {
-                ratio: 1,
+
                 games: [],
                 domain: this.$http.domain,
                 topImg: "",
                 userInfo: null
             };
-        },
-        mounted() {
-            this.token = this.userInfo.token;
-            this.getIndexData();
         },
         methods: {
             getIndexData: function() {

@@ -20,14 +20,14 @@
             <em class="arrow arrow-left" v-if="result.length>0" style="flex:1;"></em>
             <scroll-view :style="{width:'99%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
                 <div class="result" :style="{width:102+(result.length-1)*20+'rpx'}">
-                    <image class="pocker" @click="backHandler(index,item.rowIndex,item.columnIndex)" :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url" />
+                    <image :class="{pocker:true,active:item.active}" @click="backHandler($event,index,item.rowIndex,item.columnIndex)" :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url" />
                 </div>
             </scroll-view>
             <em class="arrow arrow-right" v-if="result.length>0" style="flex:1;"></em>
         </div>
         <div class="list">
             <div class="row" v-for="(item,index) in pocker" :key="index">
-                <image @click="selectPocker($event,index,_index)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show}" v-for="(_item,_index) in item" :key="_index" :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'@'+ratio+'x.png'" />
+                <image @click="selectPocker($event,index,_index)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show}" v-for="(_item,_index) in item" :key="_index" :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'.png'" />
             </div>
         </div>
         <p class="operationTips">
@@ -60,7 +60,7 @@
                 seconds: 0,
                 minutes: 15,
                 pocker: pocker,
-                ratio: 1,
+
                 showFog: false,
                 showTip: false,
                 result: [],
@@ -71,13 +71,12 @@
             };
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
             this.token = this.userInfo.token;
-            this.ratio = this.globalData.ratio;
+
             this.startTime = new Date().getTime();
             this.game_records_id = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
@@ -114,9 +113,7 @@
                         (_index / 1 + 1) +
                         "-" +
                         (index / 1 + 1) +
-                        "@" +
-                        this.ratio +
-                        "x.png",
+                        ".png",
                     rowIndex: index,
                     columnIndex: _index
                 });
@@ -124,13 +121,21 @@
                 hidden[_index].show = false;
                 this.$set(this.pocker, "index", hidden);
             },
-            backHandler: function(index, row, column) {
+            backHandler: function(e, index, row, column) {
                 let currentTime = new Date().getTime();
                 if (currentTime - this.lastClick < 300) {
                     this.result.splice(index, 1);
                     this.$set(this.pocker[row][column], "show", true);
                 } else {
                     this.lastClick = new Date().getTime();
+                    this.$set(this.result[index], "active", !this.result[index].active);
+                    //index:result中的位置,row:下半区行标,column:下半区列标
+                    this.selectTopPocker = {
+                        e,
+                        index,
+                        row,
+                        column
+                    }
                 }
             },
             confirm: function() {
@@ -190,8 +195,7 @@
             selectPocker: function(e, index, _index) {
                 if (this.touchendTime - this.touchstartTime > 500) return false
                 this.result.push({
-                    url: '/static/images/pocker/' + (_index / 1 + 1) + '-' + (index / 1 + 1) + '@' + this.ratio +
-                        'x.png',
+                    url: '/static/images/pocker/' + (_index / 1 + 1) + '-' + (index / 1 + 1) + '.png',
                     rowIndex: index,
                     columnIndex: _index,
                     active: false
@@ -233,8 +237,7 @@
             replace: function() {
                 this.removeActive();
                 this.$set(this.result, this.selectTopPocker.index, {
-                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '@' + this.ratio +
-                        'x.png',
+                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
                     rowIndex: this.selectBottomPocker.index,
                     columnIndex: this.selectBottomPocker._index,
                     active: true
@@ -245,37 +248,32 @@
             insertBefore: function() {
                 this.removeActive();
                 this.result.splice(this.selectTopPocker.index + 1, 0, {
-                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '@' + this.ratio +
-                        'x.png',
+                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
                     rowIndex: this.selectBottomPocker.index,
                     columnIndex: this.selectBottomPocker._index,
                     active: true,
                     index: this.selectTopPocker.index + 1
                 });
-                this.$set(this.selectTopPocker, "index", this.result.filter(e => {
-                    return e.active
-                })[0].index);
+                this.$set(this.selectTopPocker, "index", this.selectTopPocker.index + 1);
+                this.$set(this.selectTopPocker, "row", this.selectBottomPocker.index);
+                this.$set(this.selectTopPocker, "column", this.selectBottomPocker._index);
                 this.hidden();
-                this.show();
             },
             insertAfter: function() {
                 this.result.forEach(e => {
                     e.active = false
                 });
-                this.result.splice(this.selectTopPocker.index - 1, 0, {
-                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '@' + this.ratio +
-                        'x.png',
+                this.result.splice(this.selectTopPocker.index, 0, {
+                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
                     rowIndex: this.selectBottomPocker.index,
                     columnIndex: this.selectBottomPocker._index,
                     active: true,
-                    index: this.selectTopPocker.index - 1
+                    index: this.selectTopPocker.index
                 });
-                this.$set(this.selectTopPocker, "index", this.result.filter(e => {
-                    return e.active
-                })[0].index);
-                let hidden = this.pocker[this.selectBottomPocker.index];
-                hidden[this.selectBottomPocker._index].show = false;
-                this.$set(this.pocker, this.selectBottomPocker.index, hidden);
+                this.$set(this.selectTopPocker, "index", this.selectTopPocker.index);
+                this.$set(this.selectTopPocker, "row", this.selectBottomPocker.index);
+                this.$set(this.selectTopPocker, "column", this.selectBottomPocker._index);
+                this.hidden();
             }
         }
     };

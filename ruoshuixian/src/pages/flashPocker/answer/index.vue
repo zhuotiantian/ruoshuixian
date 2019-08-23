@@ -27,7 +27,7 @@
         </div>
         <div class="list">
             <div class="row" v-for="(item,index) in pocker" :key="index">
-                <image @click="selectPocker($event,index,_index)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show,active:_item.active}" v-for="(_item,_index) in item" :key="_index" :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'@'+ratio+'x.png'" />
+                <image @click="selectPocker($event,index,_index)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show,active:_item.active}" v-for="(_item,_index) in item" :key="_index" :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'.png'" />
             </div>
         </div>
         <p class="operationTips">
@@ -59,24 +59,25 @@
             }
             return {
                 pocker: pocker,
-                ratio: 1,
+
                 showFog: false,
                 showTip: false,
                 result: [],
                 lastClick: 0,
                 showBtnGroup: false,
                 game_records_id: 1,
-                userInfo: {}
+                userInfo: {},
+                selectTopPocker: {},
             }
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
+
             this.token = this.userInfo.token;
-            this.ratio = this.globalData.ratio;
+
             this.startTime = new Date().getTime();
             this.game_records_id = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
@@ -165,8 +166,7 @@
             selectPocker: function(e, index, _index) {
                 if (this.touchendTime - this.touchstartTime > 500) return false
                 this.result.push({
-                    url: '/static/images/pocker/' + (_index / 1 + 1) + '-' + (index / 1 + 1) + '@' + this.ratio +
-                        'x.png',
+                    url: '/static/images/pocker/' + (_index / 1 + 1) + '-' + (index / 1 + 1) + '.png',
                     rowIndex: index,
                     columnIndex: _index,
                     active: false
@@ -208,8 +208,7 @@
             replace: function() {
                 this.removeActive();
                 this.$set(this.result, this.selectTopPocker.index, {
-                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '@' + this.ratio +
-                        'x.png',
+                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
                     rowIndex: this.selectBottomPocker.index,
                     columnIndex: this.selectBottomPocker._index,
                     active: true
@@ -220,37 +219,32 @@
             insertBefore: function() {
                 this.removeActive();
                 this.result.splice(this.selectTopPocker.index + 1, 0, {
-                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '@' + this.ratio +
-                        'x.png',
+                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
                     rowIndex: this.selectBottomPocker.index,
                     columnIndex: this.selectBottomPocker._index,
                     active: true,
                     index: this.selectTopPocker.index + 1
                 });
-                this.$set(this.selectTopPocker, "index", this.result.filter(e => {
-                    return e.active
-                })[0].index);
+                this.$set(this.selectTopPocker, "index", this.selectTopPocker.index + 1);
+                this.$set(this.selectTopPocker, "row", this.selectBottomPocker.index);
+                this.$set(this.selectTopPocker, "column", this.selectBottomPocker._index);
                 this.hidden();
-                this.show();
             },
             insertAfter: function() {
                 this.result.forEach(e => {
                     e.active = false
                 });
-                this.result.splice(this.selectTopPocker.index - 1, 0, {
-                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '@' + this.ratio +
-                        'x.png',
+                this.result.splice(this.selectTopPocker.index, 0, {
+                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
                     rowIndex: this.selectBottomPocker.index,
                     columnIndex: this.selectBottomPocker._index,
                     active: true,
-                    index: this.selectTopPocker.index - 1
+                    index: this.selectTopPocker.index
                 });
-                this.$set(this.selectTopPocker, "index", this.result.filter(e => {
-                    return e.active
-                })[0].index);
-                let hidden = this.pocker[this.selectBottomPocker.index];
-                hidden[this.selectBottomPocker._index].show = false;
-                this.$set(this.pocker, this.selectBottomPocker.index, hidden);
+                this.$set(this.selectTopPocker, "index", this.selectTopPocker.index);
+                this.$set(this.selectTopPocker, "row", this.selectBottomPocker.index);
+                this.$set(this.selectTopPocker, "column", this.selectBottomPocker._index);
+                this.hidden();
             }
         }
     }

@@ -24,11 +24,10 @@
             CardTitle
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this._result = this.$getParams("result");
             this.rule = this.$getParams("rule");
-        },
-        mounted() {
             let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];

@@ -1,5 +1,5 @@
 <template>
-    <div class="container" v-if="ratio">
+    <div class="container">
         <div class="header">
             <div class="userImage">
                 <image class="image" :src="userInfo.avatar"></image>
@@ -9,22 +9,22 @@
         <div class="content">
             <ul>
                 <li @click="toStudent">
-                    <image class="item item1" :src="'/static/images/my/my_icon7@'+ratio+'x.png'">
+                    <image class="item item1" :src="'/static/images/my/my_icon7.png'">
                     </image>
                     <span>我的学生</span>
                 </li>
                 <li @click="toWork">
-                    <image class="item" style="height:42rpx;width:42rpx;" :src="'/static/images/my/my_icon8@'+ratio+'x.png'">
+                    <image class="item" style="height:42rpx;width:42rpx;" :src="'/static/images/my/my_icon8.png'">
                     </image>
                     <span>布置作业</span>
                 </li>
                 <li @click="toNotice">
-                    <image class="item" style="height:44rpx;width:44rpx;" :src="'/static/images/my/my_icon9@'+ratio+'x.png'">
+                    <image class="item" style="height:44rpx;width:44rpx;" :src="'/static/images/my/my_icon9.png'">
                     </image>
                     <span>发布公告</span>
                 </li>
                 <li @click="toPushMessage">
-                    <image class="item" style="height:44rpx;width:46rpx;" :src="'/static/images/my/my_icon10@'+ratio+'x.png'">
+                    <image class="item" style="height:44rpx;width:46rpx;" :src="'/static/images/my/my_icon10.png'">
                     </image>
                     <span class="last">消息推送</span>
                 </li>
@@ -36,10 +36,8 @@
     export default {
         components: {},
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
             this.token = this.userInfo.token;
             this.$http.get({
                 url: "/api/wxapp.token/check",
@@ -59,7 +57,7 @@
         },
         data() {
             return {
-                ratio: 1,
+
                 domain: this.$http.domain,
                 userInfo: {}
             }
@@ -102,7 +100,10 @@
     .userImage .image {
         position: relative;
         top: 50%;
-        margin-top: tovmin(-40)
+        margin-top: tovmin(-60);
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
     }
 
     .container {

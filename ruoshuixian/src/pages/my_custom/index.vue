@@ -1,37 +1,37 @@
 <template>
-    <div class="container" v-if="ratio">
+    <div class="container">
         <div class="header">
             <div class="userImage">
-                <image class="image" :src="'/static/images/my/my_icon1@'+ratio+'x.png'"></image>
+                <image class="image" :src="'/static/images/my/my_icon1.png'"></image>
             </div>
             <span style="flex:7">注册/登录</span>
         </div>
         <div class="content">
             <ul>
                 <li @click="toRanking">
-                    <image class="item" style="height:44rpx;width:42rpx;" :src="'/static/images/my/my_icon2@'+ratio+'x.png'">
+                    <image class="item" style="height:44rpx;width:42rpx;" :src="'/static/images/my/my_icon2.png'">
                     </image>
                     <span>排行榜</span>
                 </li>
                 <button open-type="share">
                     <li>
-                        <image class="item" style="height:40rpx;width:46rpx;" :src="'/static/images/my/my_icon3@'+ratio+'x.png'">
+                        <image class="item" style="height:40rpx;width:46rpx;" :src="'/static/images/my/my_icon3.png'">
                         </image>
                         <span>分享邀请</span>
 
                     </li>
                 </button>
                 <li @click="toHongbao">
-                    <image class="item" :src="'/static/images/my/my_icon6@'+ratio+'x.png'"></image>
+                    <image class="item" :src="'/static/images/my/my_icon6.png'"></image>
                     <span>红包</span>
                 </li>
                 <li @click="toRecord">
-                    <image class="item" style="height:48rpx;width:38rpx;" :src="'/static/images/my/my_icon4@'+ratio+'x.png'">
+                    <image class="item" style="height:48rpx;width:38rpx;" :src="'/static/images/my/my_icon4.png'">
                     </image>
                     <span>我的记录</span>
                 </li>
                 <li @click="toMessage">
-                    <image class="item" style="height:44rpx;width:46rpx;" :src="'/static/images/my/my_icon5@'+ratio+'x.png'">
+                    <image class="item" style="height:44rpx;width:46rpx;" :src="'/static/images/my/my_icon5.png'">
                     </image>
                     <span class="last">我的消息</span>
                 </li>
@@ -45,14 +45,6 @@
     export default {
         components: {
             CardFooter
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
-        },
-        data() {
-            return {
-                ratio: 1
-            }
         },
         onShareAppMessage: function(res) {
             return {
@@ -104,7 +96,10 @@
     .userImage .image {
         position: relative;
         top: 50%;
-        margin-top: tovmin(-40)
+        margin-top: tovmin(-60);
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
     }
 
     .container {

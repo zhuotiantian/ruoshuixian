@@ -1,25 +1,25 @@
 <template>
     <div class="container">
         <p>{{content}}</p>
-        <!-- <image v-if="ratio" class="image" :src="'/static/images/help/qr@'+ratio+'x.png'"></image> -->
+        <!-- <image  class="image" :src="'/static/images/help/qr.png'"></image> -->
     </div>
 </template>
 <script>
     export default {
         data() {
             return {
-                ratio: 1,
+
                 game_id: 1,
                 content: ""
             }
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
             this.game_id = this.$getParams("gameid");
-        },
-        mounted() {
+
             this.token = this.userInfo.token;
-            this.ratio = this.globalData.ratio;
+
             this.getHelp();
         },
         methods: {

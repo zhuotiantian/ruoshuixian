@@ -5,7 +5,7 @@
             <span :class="{active:active=='我的学生'}" @click="rankingType('我的学生')">我的学生</span>
             <span :class="{active:active=='学生成绩'}" @click="rankingType('学生成绩',6)">学生成绩</span>
         </div>
-        <div class="content" v-if="ratio">
+        <div class="content">
             <div>
                 <p class="header-btn" v-if="active=='学生成绩'">
                     <span :class="{active:activeBtn=='组别'}" @click="switchType('组别',6)">组别</span>
@@ -19,9 +19,9 @@
                     </span>
                     <span style="flex:6">{{item.nickname}}</span>
                     <span style="flex:1">
-                        <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1@'+ratio+'x.png'"></image>
-                        <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2@'+ratio+'x.png'"></image>
-                        <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3@'+ratio+'x.png'"></image>
+                        <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1.png'"></image>
+                        <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2.png'"></image>
+                        <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3.png'"></image>
                     </span>
                 </li>
             </ul>
@@ -48,18 +48,17 @@
             return {
                 active: "我的学生",
                 activeBtn: "组别",
-                ratio: 1,
+
                 stu_list: [],
                 domain: this.$http.domain,
                 list: [],
             }
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
             this.token = this.userInfo.token;
+            this.getStudents();
         },
         methods: {
             rankingType: function(type, index) {
@@ -108,10 +107,6 @@
                 });
             }
         },
-        mounted() {
-            this.ratio = this.globalData.ratio;
-            this.getStudents();
-        }
     }
 </script>
 <style lang="scss" scoped>
@@ -123,7 +118,7 @@
     }
 
     .content {
-        height: calc(100% - 162rpx);
+        height: calc(100% - 170rpx);
     }
 
     .header {
@@ -204,12 +199,12 @@
 
     .students li {
         font-size: tovmin(34);
-        height: tovmin(80);
+        // height: tovmin(80);
         line-height: tovmin(80);
     }
 
     .student-list li {
-        height: tovmin(80);
+        // height: tovmin(80);
         line-height: tovmin(80);
         padding-left: tovmin(30);
     }

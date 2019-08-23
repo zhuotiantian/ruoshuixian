@@ -2,14 +2,14 @@
     <div class="container">
         <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
         </CardTitle>
-        <div class="list" v-if="ratio">
+        <div class="list">
             <template v-if="pocker.length==0">
-                <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg@'+ratio+'x.png'" />
+                <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
             </template>
             <template v-else>
                 <em class="arrow arrow-left"></em>
                 <scroll-view :style="{width:'510px',height:'196px','white-space':'nowrap'}" scroll-x>
-                    <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :src="'/static/images/pocker/'+(index+1)+'-1@'+ratio+'x.png'" />
+                    <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :src="'/static/images/pocker/'+(index+1)+'-1.png'" />
                 </scroll-view>
                 <em class="arrow arrow-right"></em>
             </template>
@@ -46,15 +46,12 @@
                 bg: 23,
                 left: 100,
                 pocker: [],
-                ratio: 1,
+
                 type: null,
                 currentPage: 1,
                 level: "",
                 pages: pages,
             }
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
         },
         computed: {
             bgCounts: function() {

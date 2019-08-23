@@ -1,14 +1,14 @@
 <template>
     <div class="container">
         <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary"></CardTitle>
-        <div class="list" v-if="ratio">
+        <div class="list">
             <template v-if="pocker.length==0">
-                <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg@'+ratio+'x.png'" />
+                <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
             </template>
             <template v-else>
                 <em class="arrow arrow-left" @click="prevGroup"></em>
                 <scroll-view :style="{width:'463px',height:'196px','white-space':'nowrap'}" scroll-x>
-                    <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'@'+ratio+'x.png'" />
+                    <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
                 </scroll-view>
                 <em class="arrow arrow-right" @click="nextGroup"></em>
             </template>
@@ -28,7 +28,7 @@
                 bg: 23,
                 left: 100,
                 pocker: [],
-                ratio: 1,
+
                 type: null,
                 level: "primary",
                 list: [],
@@ -37,11 +37,9 @@
             };
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
             this.list = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0].list;

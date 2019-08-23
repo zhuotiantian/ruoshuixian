@@ -5,7 +5,7 @@
             <span :class="{active:active=='打卡时间'}" @click="rankingType('打卡时间',1)">打卡时间</span>
             <span :class="{active:active=='成绩'}" @click="rankingType('成绩',2)">成绩</span>
         </div>
-        <div class="content" v-if="ratio">
+        <div class="content">
             <div>
                 <p class="header-btn" v-if="active=='成绩'">
                     <span :class="{active:activeBtn=='全校'}" @click="switchType('全校',2)">全校</span>
@@ -35,9 +35,9 @@
                     </span>
                     <span style="flex:6">{{item.nickname}}</span>
                     <span style="flex:1">
-                        <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1@'+ratio+'x.png'"></image>
-                        <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2@'+ratio+'x.png'"></image>
-                        <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3@'+ratio+'x.png'"></image>
+                        <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1.png'"></image>
+                        <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2.png'"></image>
+                        <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3.png'"></image>
                     </span>
                 </li>
             </ul>
@@ -51,7 +51,7 @@
                 active: "打卡时间",
                 activeBtn: "全校",
                 showDropdown: false,
-                ratio: 1,
+
                 games: [],
                 token: "",
                 domain: this.$http.domain,
@@ -62,12 +62,16 @@
             }
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
             this.token = this.userInfo.token;
             this.currentUser = this.userInfo.nickname;
-            this.avator = this.userInfo.avatar
+            this.avator = this.userInfo.avatar;
+
+            this.games = this.globalData.games;
+            this.token = this.globalData.token;
+            this.getList(1);
+            this.getIndexData();
         },
         methods: {
             rankingType: function(type, index) {
@@ -131,13 +135,6 @@
                 })
             }
         },
-        mounted() {
-            this.ratio = this.globalData.ratio;
-            this.games = this.globalData.games;
-            this.token = this.globalData.token;
-            this.getList(1);
-            this.getIndexData();
-        }
     }
 </script>
 <style lang="scss" scoped>

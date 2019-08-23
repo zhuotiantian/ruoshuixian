@@ -16,10 +16,6 @@
                 nextPage: "./memary/main"
             }
         },
-        mounted() {},
-        methods: {
-
-        }
     }
 </script>
 <style lang="scss" scoped>

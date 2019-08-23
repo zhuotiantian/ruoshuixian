@@ -19,9 +19,8 @@
             }
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
             this.token = this.userInfo.token;
             this.getList();
         },

@@ -26,8 +26,6 @@
             this.level = this.$getParams("level");
             this.userInfo = this.$getParams("userInfo");
             this.rule = this.$getParams("rule");
-        },
-        mounted() {
             this.token = this.userInfo.token;
             let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level;
@@ -49,13 +47,12 @@
             });
             this.startTime = new Date().getTime();
             this.game_records_id = rule.game_records_id;
-            this.ratio = this.globalData.ratio;
         },
         data() {
             return {
                 number: [],
                 counts: 0,
-                ratio: 1,
+
                 showFog: false,
                 total: 0,
                 per: 0,
@@ -64,9 +61,6 @@
                 level: "primary",
                 rule: {}
             };
-        },
-        mounted() {
-
         },
         methods: {
             finish: function() {

@@ -20,7 +20,7 @@
                     <span>
                         <span>{{item.fraction}}</span>
                         <span>
-                            <image class="image" v-if="ratio" :src="'/static/images/my/share@'+ratio+'x.png'"></image>
+                            <image class="image" :src="'/static/images/my/share.png'"></image>
                         </span>
                         <span>分享</span>
                     </span>
@@ -34,17 +34,17 @@
         data() {
             return {
                 active: "打卡记录",
-                ratio: 1,
+
                 list: [],
                 scores: []
             }
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
+
             this.token = this.userInfo.token;
-            this.ratio = this.globalData.ratio;
+
             this.getList();
             this.getScoreList();
         },

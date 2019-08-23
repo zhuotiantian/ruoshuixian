@@ -1,5 +1,5 @@
 <template>
-    <div class="container" v-if="ratio">
+    <div class="container">
         <div class="header">
             <span style="flex:1">
                 <image class="image" :src="domain+avatar"></image>
@@ -15,9 +15,9 @@
                     </span>
                     <span style="flex:6">{{item.nickname}}</span>
                     <span style="flex:1">
-                        <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1@'+ratio+'x.png'"></image>
-                        <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2@'+ratio+'x.png'"></image>
-                        <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3@'+ratio+'x.png'"></image>
+                        <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1.png'"></image>
+                        <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2.png'"></image>
+                        <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3.png'"></image>
                     </span>
                 </li>
             </ul>
@@ -28,7 +28,7 @@
     export default {
         data() {
             return {
-                ratio: 1,
+
                 token: "",
                 list: [],
                 domain: this.$http.domain,
@@ -37,13 +37,12 @@
             }
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
             this.token = this.userInfo.token;
             this.currentUser = this.userInfo.nickname;
             this.avator = this.userInfo.avatar
-            this.ratio = this.globalData.ratio;
+
             this.getList();
         },
         methods: {

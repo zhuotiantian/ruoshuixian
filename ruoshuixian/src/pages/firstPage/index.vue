@@ -1,19 +1,19 @@
 <template>
     <div class="container">
-        <div class="content" v-if="ratio">
-            <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'" />
+        <div class="content">
+            <image class="background" src="/static/images/firstPage/bg.png" />
             <div class="top">
                 <image class="top-image" :src="domain+topImg" />
             </div>
             <div class="middle">
                 <ul>
                     <li @click="toRanking">
-                        <image class="icon ranking" :src="'/static/images/firstPage/ranking_icon@'+ratio+'x.png'" />
+                        <image class="icon ranking" src="/static/images/firstPage/ranking_icon.png" />
                         <span class="flex-span">排行榜</span>
                     </li>
                     <li>
                         <button open-type="share">
-                            <image class="icon share" :src="'/static/images/firstPage/share@'+ratio+'x.png'" />
+                            <image class="icon share" src="/static/images/firstPage/share.png" />
                             <span class="flex-span" open-type="share">分享</span>
                         </button>
                     </li>
@@ -37,9 +37,32 @@
         components: {
             CardFooter
         },
-        onLoad() {
+        onShow() {
             wx.hideTabBar();
+        },
+        onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
+            this.token = this.userInfo.token;
+            this.getIndexData();
+
+            this.token = this.userInfo.token;
+
+            this.$http.get({
+                url: "/api/wxapp.token/check",
+                header: {
+                    token: this.token
+                }
+            }).then(result => {
+                if (result.code !== 1) {
+                    wx.showToast({
+                        title: "登陆信息已过期，请重新登陆"
+                    });
+                    wx.navigateTo({
+                        url: "/pages/login/main"
+                    })
+                }
+            })
         },
         onShareAppMessage: function(res) {
             return {
@@ -54,17 +77,12 @@
         },
         data() {
             return {
-                ratio: 1,
+
                 games: [],
                 domain: this.$http.domain,
                 topImg: "",
                 userInfo: null
             };
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
-            this.token = this.userInfo.token;
-            this.getIndexData();
         },
         methods: {
             getIndexData: function() {
@@ -90,6 +108,8 @@
                     }
                 }).then(result => {
                     wx.setStorageSync("rule", result.data);
+                    wx.setStorageSync("level", "primary");
+                    wx.setStorageSync("result", []);
                     if (this.userInfo) {
                         wx.navigateTo({
                             url: item.wxapp_url

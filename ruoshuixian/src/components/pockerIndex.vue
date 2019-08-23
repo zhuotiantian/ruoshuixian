@@ -33,9 +33,8 @@
             }
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.rule = this.$getParams("rule");
-        },
-        mounted() {
             this.timer && clearInterval(this.timer);
             this.timer = setInterval(() => {
                 this.seconds--;

@@ -1,42 +1,37 @@
 <template>
-    <ul class="footer" v-if="ratio">
+    <ul class="footer">
         <li @click="toFisrstPage">
-            <image class="icon footer1" :src="'/static/images/firstPage/footer1'+(index==1?'_active':'')+'@'+ratio+'x.png'">
+            <image class="icon footer1" :src="'/static/images/firstPage/footer1'+(index==1?'_active':'')+'.png'">
             </image>
             <span>首页</span>
         </li>
         <li @click="toMoney">
-            <image class="icon footer2" :src="'/static/images/firstPage/footer2'+(index==2?'_active':'')+'@'+ratio+'x.png'">
+            <image class="icon footer2" :src="'/static/images/firstPage/footer2'+(index==2?'_active':'')+'.png'">
             </image><span>红包</span>
         </li>
         <li @click="toRecord">
-            <image class="icon footer3" :src="'/static/images/firstPage/footer3'+(index==3?'_active':'')+'@'+ratio+'x.png'">
+            <image class="icon footer3" :src="'/static/images/firstPage/footer3'+(index==3?'_active':'')+'.png'">
             </image><span>打卡</span>
         </li>
         <li @click="toMy">
-            <image class="icon footer4" :src="'/static/images/firstPage/footer4'+(index==4?'_active':'')+'@'+ratio+'x.png'">
+            <image class="icon footer4" :src="'/static/images/firstPage/footer4'+(index==4?'_active':'')+'.png'">
             </image><span>我的</span>
         </li>
     </ul>
 </template>
 <script>
     export default {
-        beforeMount() {
-            this.ratio = this.globalData.ratio;
-
-        },
         props: ["index"],
         data() {
             return {
-                ratio: 1,
+
                 active: 1,
                 isMember: 3
             };
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
             this.isMember = this.userInfo.group_id !== 1;
             this.token = this.userInfo.token;
         },

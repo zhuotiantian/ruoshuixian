@@ -26,7 +26,7 @@
                 text: "确定结束作答吗？",
                 number: [],
                 counts: 0,
-                ratio: 1,
+
                 total: 0,
                 per: 0,
                 domain: this.$http.domain,
@@ -37,8 +37,6 @@
         onLoad(option) {
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
-        },
-        mounted() {
             let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
@@ -52,7 +50,6 @@
             this.number = number.filter(e => {
                 return e.length > 0
             });
-            this.ratio = this.globalData.ratio;
         },
         methods: {
             finishMemary: function() {

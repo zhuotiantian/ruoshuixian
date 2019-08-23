@@ -27,29 +27,11 @@
             alertBox
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this.userInfo = this.$getParams("userInfo");
             this.rule = this.$getParams("rule");
-        },
-        data() {
-            let array = new Array(5);
-            let rows = new Array(3);
-            return {
-                text: "确定结束作答吗？",
-                number: [],
-                counts: 0,
-                ratio: 1,
-                showFog: false,
-                showKeybord: false,
-                total: 0,
-                per: 0,
-                domain: this.$http.domain,
-                level: "primary",
-                numberList: [],
-                rule: {}
-            };
-        },
-        mounted() {
+
             this.token = this.userInfo.token;
             let number = [];
             let rule = this.rule.rules_of_the_game.filter(e => {
@@ -74,7 +56,24 @@
             });
             this.startTime = new Date().getTime();
             this.game_records_id = rule.game_records_id;
-            this.ratio = this.globalData.ratio;
+        },
+        data() {
+            let array = new Array(5);
+            let rows = new Array(3);
+            return {
+                text: "确定结束作答吗？",
+                number: [],
+                counts: 0,
+
+                showFog: false,
+                showKeybord: false,
+                total: 0,
+                per: 0,
+                domain: this.$http.domain,
+                level: "primary",
+                numberList: [],
+                rule: {}
+            };
         },
         methods: {
             finish: function() {

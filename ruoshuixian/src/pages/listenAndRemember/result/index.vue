@@ -2,8 +2,8 @@
     <div class="container">
         <CardTitle :isResult="true"></CardTitle>
         <div class="list">
-            <div class="row" v-for="(rows,_index) in rows" :key="_index">
-                <span class="item wrong" v-for="(item,index) in number" :key="index">{{index+1}}</span>
+            <div class="row" v-for="(rows,_index) in number" :key="_index">
+                <span :class="{item:true, wrong:item.result==1}" v-for="(item,index) in rows" :key="index">{{item.numer}}</span>
                 <span>row&nbsp;&nbsp;{{_index+1}}</span>
             </div>
         </div>
@@ -19,15 +19,29 @@
             Keybord,
             alertBox
         },
+        onLoad() {
+            Object.assign(this.$data, this.$options.data())
+            this.level = this.$getParams("level");
+            this._result = this.$getParams("result");
+            this.rule = this.$getParams("rule");
+            this.result = this._result.right_and_wrong_results;
+            let rule = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == (this.level || "primary")
+            })[0];
+            this.total = rule.number;
+            this.per = rule.number_per_group;
+            let number = [];
+            for (var i = 0; i < this.total; i += this.per) {
+                number.push(this.result.slice(i, i + this.per));
+            };
+            this.number = number;
+        },
         data() {
-            let array = new Array(30);
-            let rows = new Array(3);
             return {
                 seconds: 0,
                 minutes: 15,
                 showFog: false,
-                number: array,
-                rows: rows,
+                number: [],
             }
         },
         methods: {

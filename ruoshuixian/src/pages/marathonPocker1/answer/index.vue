@@ -6,22 +6,28 @@
             <p style="margin-bottom:30rpx">你可以通过以下两种方式对扑克牌的顺序进行修改</p>
             <p>方式一、双击屏幕上半区的任意一张扑克，将这张扑克牌退回原位。</p>
             <p>方式二、单击屏幕上半区的任意一张扑克，然后长按下半区的任意一张扑克，进行“替换位置/从前面插入/从后面插入”操作。</p>
-            <p><span class="btn default-btn" @click="shideTip">我知道了</span></p>
+            <p>
+                <span class="btn default-btn" @click="shideTip">我知道了</span>
+            </p>
         </div>
-        <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
+        <CardTitle minutes="15" seconds="0" type="作答完成" @finish="finish"></CardTitle>
+        <div v-if="result.length>0" class="btnGroup" style="position:relative:z-index:998;">
+            <div class="btn default-btn" @click.stop="replace">替换</div>
+            <div class="btn default-btn" @click="insertBefore">从前插入</div>
+            <div class="btn default-btn" @click="insertAfter">从后插入</div>
+        </div>
         <div class="result-div">
             <em class="arrow arrow-left" v-if="result.length>0" style="flex:1;"></em>
             <scroll-view :style="{width:'99%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
                 <div class="result" :style="{width:102+(result.length-1)*20+'rpx'}">
-                    <image class="pocker" @click="backHandler(index,item.rowIndex,item.columnIndex)" :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url">
-                    </image>
+                    <image :class="{pocker:true,active:item.active}" @click="backHandler($event,index,item.rowIndex,item.columnIndex)" :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url" ref="pocker" />
                 </div>
             </scroll-view>
             <em class="arrow arrow-right" v-if="result.length>0" style="flex:1;"></em>
         </div>
         <div class="list">
             <div class="row" v-for="(item,index) in pocker" :key="index">
-                <image @click="selectPocker($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show}" v-for="(_item,_index) in item" :key="_index" :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'@'+ratio+'x.png'"></image>
+                <image @click="selectPocker($event,index,_index)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show,active:_item.active}" v-for="(_item,_index) in item" :key="_index" :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'.png'" />
             </div>
         </div>
         <div class="pageFoot">
@@ -44,31 +50,29 @@
             Keybord,
             alertBox
         },
-        onLoad() {
-            this.level = this.$getParams("level");
-            this.rule = this.$getParams("rule");
-            this.userInfo = this.$getParams("userInfo");
-        },
         data() {
             let pocker = [];
             for (let j = 0; j < 4; j++) {
                 let columns = [];
                 for (let i = 0; i < 13; i++) {
                     columns.push({
-                        show: true
+                        show: true,
+                        active: false
                     });
                 };
                 pocker.push(columns);
             }
             return {
-                seconds: 0,
-                minutes: 15,
                 pocker: pocker,
-                ratio: 1,
+
                 showFog: false,
                 showTip: false,
                 result: [],
                 lastClick: 0,
+                showBtnGroup: false,
+                game_records_id: 1,
+                userInfo: {},
+                selectTopPocker: {},
                 pages: [],
                 groupPage: [],
                 currentPage: 0,
@@ -76,13 +80,18 @@
                 allResult: [],
             }
         },
-        mounted() {
+        onLoad() {
+            Object.assign(this.$data, this.$options.data())
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
+            this.userInfo = this.$getParams("userInfo");
+
             this.token = this.userInfo.token;
             let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
-            })[0].
+            })[0];
             this.list = rule.list;
-            this.ratio = this.globalData.ratio;
+
             // 生成pock的副数
             for (var i = 1; i <= this.list.length; i++) {
                 this.pages.push({
@@ -100,13 +109,18 @@
             this.game_records_id = rule.game_records_id;
         },
         methods: {
-            startGame: function() {
-                wx.navigateTo({
-                    url: "../answer/main"
-                })
-            },
-            finish: function() {
-                this.showFog = true;
+            finish: function(data) {
+                let result = this.result.map(e => {
+                    return {
+                        index: e.columnIndex + 1,
+                        color: e.rowIndex + 1,
+                    }
+                });
+                if (data == "timeout") {
+                    this.confirm();
+                } else {
+                    this.showFog = true;
+                }
             },
             hideFog: function() {
                 this.showFog = false;
@@ -119,41 +133,14 @@
                 this.showFog = false;
                 this.showTip = false;
             },
-            selectPocker: function(e, index, _index) {
-                this.result.push({
-                    url: '/static/images/pocker/' + (_index / 1 + 1) + '-' + (index / 1 + 1) + '@' + this.ratio +
-                        'x.png',
-                    rowIndex: index,
-                    columnIndex: _index
-                });
-                this.$set(this.allResult, this.currentIndex - 1, this.result);
-                let hidden = this.pocker[index];
-                hidden[_index].show = false;
-                this.$set(this.pocker, "index", hidden);
-            },
-            backHandler: function(index, row, column) {
-                let currentTime = new Date().getTime();
-                if (currentTime - this.lastClick < 300) {
-                    this.result.splice(index, 1);
-                    this.$set(this.pocker[row][column], "show", true);
-                } else {
-                    this.lastClick = new Date().getTime();
-                }
-            },
             confirm: function() {
-
                 this.endTime = new Date().getTime();
-                let result = [];
-                for (var i = 0; i < this.allResult.length; i++) {
-                    let item = [];
-                    for (var j = 0; j < this.allResult[i].length; j++) {
-                        item.push({
-                            color: this.allResult[i][j].rowIndex,
-                            index: this.allResult[i][j].columnIndex,
-                        })
-                    };
-                    result.push(item)
-                }
+                let result = this.result.map(e => {
+                    return {
+                        index: e.columnIndex + 1,
+                        color: e.rowIndex + 1
+                    }
+                })
                 this.$http.post({
                     url: "/api/wxapp.game/submitTheGame",
                     data: {
@@ -168,7 +155,7 @@
                     if (result.code == 1) {
                         wx.navigateTo({
                             url: "../result/main"
-                        })
+                        });
                         wx.setStorageSync("result", result.data);
                     } else {
                         wx.showToast({
@@ -178,6 +165,111 @@
                     }
                 })
 
+            },
+            touchstart: function() {
+                this.touchstartTime = new Date().getTime();
+            },
+            touchend: function(e, index, _index) {
+                this.touchendTime = new Date().getTime();
+                if (this.touchendTime - this.touchstartTime < 500) {
+
+                } else {
+                    this.longPress(e, index, _index);
+                }
+            },
+            longPress: function(e, index, _index) {
+                this.showBtnGroup = true;
+                //index:行标
+                //_index:列标
+                this.selectBottomPocker = {
+                    e,
+                    index,
+                    _index
+                };
+                this.$set(this.pocker[index][_index], "active", !this.pocker[index][_index].active);
+            },
+            selectPocker: function(e, index, _index) {
+                if (this.touchendTime - this.touchstartTime > 500) return false
+                this.result.push({
+                    url: '/static/images/pocker/' + (_index / 1 + 1) + '-' + (index / 1 + 1) + '.png',
+                    rowIndex: index,
+                    columnIndex: _index,
+                    active: false
+                });
+                let hidden = this.pocker[index];
+                hidden[_index].show = false;
+                this.$set(this.pocker, "index", hidden);
+            },
+            backHandler: function(e, index, row, column) {
+                let currentTime = new Date().getTime();
+                if (currentTime - this.lastClick < 300) {
+                    this.result.splice(index, 1);
+                    this.$set(this.pocker[row][column], "show", true);
+                } else {
+                    this.lastClick = new Date().getTime();
+                    this.$set(this.result[index], "active", !this.result[index].active);
+                    //index:result中的位置,row:下半区行标,column:下半区列标
+                    this.selectTopPocker = {
+                        e,
+                        index,
+                        row,
+                        column
+                    }
+                }
+            },
+            hidden: function() {
+                let hidden = this.pocker[this.selectBottomPocker.index];
+                hidden[this.selectBottomPocker._index].show = false;
+                this.$set(this.pocker, this.selectBottomPocker.index, hidden);
+            },
+            removeActive: function() {
+                this.result.forEach(e => {
+                    e.active = false
+                });
+            },
+            show: function() {
+                this.$set(this.pocker[this.selectTopPocker.row][this.selectTopPocker.column], "show", true);
+            },
+            replace: function() {
+                this.removeActive();
+                this.$set(this.result, this.selectTopPocker.index, {
+                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
+                    rowIndex: this.selectBottomPocker.index,
+                    columnIndex: this.selectBottomPocker._index,
+                    active: true
+                });
+                this.hidden();
+                this.show();
+            },
+            insertBefore: function() {
+                this.removeActive();
+                this.result.splice(this.selectTopPocker.index + 1, 0, {
+                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
+                    rowIndex: this.selectBottomPocker.index,
+                    columnIndex: this.selectBottomPocker._index,
+                    active: true,
+                    index: this.selectTopPocker.index + 1
+                });
+                this.$set(this.selectTopPocker, "index", this.selectTopPocker.index + 1);
+                this.$set(this.selectTopPocker, "row", this.selectBottomPocker.index);
+                this.$set(this.selectTopPocker, "column", this.selectBottomPocker._index);
+                this.hidden();
+            },
+            insertAfter: function() {
+                this.result.forEach(e => {
+                    e.active = false
+                });
+                this.result.splice(this.selectTopPocker.index, 0, {
+                    url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
+                    rowIndex: this.selectBottomPocker.index,
+                    columnIndex: this.selectBottomPocker._index,
+                    active: true,
+                    index: this.selectTopPocker.index
+                });
+                this.$set(this.selectTopPocker, "index", this.selectTopPocker.index);
+                this.$set(this.selectTopPocker, "row", this.selectBottomPocker.index);
+                this.$set(this.selectTopPocker, "column", this.selectBottomPocker._index);
+                this.hidden();
             },
             nextPage: function() {
                 if (this.currentPage > 3) {
@@ -251,11 +343,6 @@
         text-align: center;
     }
 
-    .list {
-        // margin-top: tovmin(160);
-        padding-bottom: tovmin(103);
-    }
-
     .pocker {
         width: tovmin(102);
         height: tovmin(150);
@@ -269,16 +356,11 @@
         padding-bottom: tovmin(30);
     }
 
-    .fog {
-        height: 200% !important;
-    }
-
     .result {
         position: absolute;
         min-width: 100%;
         height: 100%;
         bottom: tovmin(75);
-
     }
 
     .result image {
@@ -290,47 +372,5 @@
         display: flex;
         height: tovmin(238);
         align-items: center;
-    }
-
-    .pageFoot {
-        position: fixed;
-        width: 100%;
-        height: tovmin(120);
-        background: white;
-        z-index: 999;
-        bottom: 0;
-        display: flex;
-        justify-content: space-between;
-        padding: 0 tovmin(60);
-        box-sizing: border-box;
-        font-size: tovmin(28);
-        align-items: center;
-    }
-
-    .pageBtn {
-        color: $yellow;
-    }
-
-    .item {
-        height: tovmin(80);
-        width: tovmin(80);
-        display: inline-block;
-        border-radius: tovmin(8);
-        line-height: tovmin(80);
-        text-align: center;
-        margin-right: tovmin(24);
-        border: tovmin(2) solid #E5E5E5;
-        color: $black;
-    }
-
-    .item.active {
-        color: white;
-        background: $middle-blue;
-        border: none;
-    }
-
-    .tips-btn {
-        color: $middle-blue;
-        border: tovmin(2) solid $middle-blue;
     }
 </style>

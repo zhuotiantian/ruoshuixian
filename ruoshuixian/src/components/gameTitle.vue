@@ -13,8 +13,8 @@
                         <span v-else>显示用时</span>
                     </span>
                     <span class="btn primary-btn" @click="playAgain">再次训练</span>
-                    <button class="btn default-btn shareBtn" v-if="ratio" open-type="share">
-                        <image class="share" :src="'/static/images/redPocket/share@'+ratio+'x.png'" />
+                    <button class="btn default-btn shareBtn" open-type="share">
+                        <image class="share" :src="'/static/images/redPocket/share.png'" />
                         分享
                     </button>
                 </p>
@@ -56,19 +56,24 @@
             "btnType"
         ],
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
             this.result = this.$getParams("result");
             this.memoryTime = this.$getParams("memoryTime");
-        },
-        mounted() {
             this.times = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == (this.level || "primary")
             })[0];
-            this.changeTime();
-            this.timeout && clearInterval(this.timeout);
-            this.showType ? null : this.timer();
-            this.ratio = this.globalData.ratio;
+            this.resetInterval();
+        },
+        onShow() {
+            this.resetInterval();
+        },
+        onUnload: function() {
+            let pages = getCurrentPages().length - 1;
+            wx.navigateBack({
+                delta: pages
+            })
         },
         data() {
             return {
@@ -78,7 +83,7 @@
                 selectType: "显示方式",
                 showTime: this.showTime,
                 active: null,
-                ratio: 1,
+
                 event: {
                     "跳过": "toNextPage",
                     "记忆完成": "finishMemary",
@@ -113,6 +118,11 @@
             }
         },
         methods: {
+            resetInterval: function() {
+                this.changeTime();
+                this.timeout && clearInterval(this.timeout);
+                this.showType ? null : this.timer();
+            },
             changeTime: function() {
                 switch (this.type) {
                     case "记忆完成":

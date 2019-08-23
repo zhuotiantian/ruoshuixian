@@ -1,10 +1,10 @@
 <template>
     <div class="container">
-        <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'" v-if="ratio"></image>
+        <image class="background" :src="'/static/images/firstPage/bg.png'"></image>
         <div class="login-form">
             <div class="input_div">
                 <input type="text" class="input" placeholder="请输入手机号" v-model="form.mobile" placeholder-style="color:#ccc" />
-                <image :src="'/static/images/my/phone@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:42rpx;width:34rpx">
+                <image :src="'/static/images/my/phone.png'" class="icon" style="height:42rpx;width:34rpx">
                 </image>
             </div>
             <template v-if="!codeLogin">
@@ -14,11 +14,11 @@
             <div class="input-div">
                 <template v-if="codeLogin">
                     <input type="text" class="input" v-model="form.password" placeholder="密码" placeholder-style="color:#ccc" />
-                    <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:42rpx;width:34rpx"></image>
+                    <image :src="'/static/images/my/password.png'" class="icon" style="height:42rpx;width:34rpx"></image>
                 </template>
                 <template v-else>
                     <input type="text" class="input" placeholder="验证码" v-model="form.captcha" placeholder-style="color:#ccc" />
-                    <image :src="'/static/images/my/keys@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:54rpx;width:38rpx">
+                    <image :src="'/static/images/my/keys.png'" class="icon" style="height:54rpx;width:38rpx">
                     </image>
                 </template>
             </div>
@@ -41,7 +41,7 @@
                 clickGetCode: false,
                 seconds: 60,
                 codeLogin: false,
-                ratio: 1,
+
                 form: {
                     mobile: "",
                     captcha: "",
@@ -50,10 +50,8 @@
             }
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
             this.token = this.userInfo.token;
         },
         methods: {
@@ -71,8 +69,19 @@
                     password
                 } = this.form;
                 if (!this.codeLogin) {
+                    // this.$http.post({
+                    //     url: "/api/wxapp.sms/check",
+                    //     data: {
+                    //         mobile,
+                    //         captcha
+                    //     },
+                    //     header: {
+                    //         token: this.token
+                    //     }
+                    // }).then(result => {
+                    //     if (result.code == 1) {
                     this.$http.post({
-                        url: "/api/wxapp.sms/check",
+                        url: "/api/wxapp.user/mobilelogin",
                         data: {
                             mobile,
                             captcha
@@ -82,28 +91,12 @@
                         }
                     }).then(result => {
                         if (result.code == 1) {
-                            this.$http.post({
-                                url: "/api/wxapp.user/mobilelogin",
-                                data: {
-                                    mobile,
-                                    captcha
-                                },
-                                header: {
-                                    token: this.token
-                                }
-                            }).then(result => {
-                                if (result.code == 1) {
-                                    wx.showToast({
-                                        title: "登陆成功"
-                                    })
-
-                                } else {
-                                    wx.showToast({
-                                        title: result.msg,
-                                        icon: "none"
-                                    })
-                                }
-                            });
+                            wx.showToast({
+                                title: "登陆成功"
+                            })
+                            wx.navigateTo({
+                                url: "../my_teacher/main"
+                            })
                         } else {
                             wx.showToast({
                                 title: result.msg,
@@ -111,6 +104,13 @@
                             })
                         }
                     });
+                    // } else {
+                    //     wx.showToast({
+                    //         title: result.msg,
+                    //         icon: "none"
+                    //     })
+                    // }
+                    // });
                 } else {
                     this.$http.post({
                         url: "/api/wxapp.user/login",
@@ -127,7 +127,7 @@
                             wx.showToast({
                                 title: "登陆成功"
                             });
-                            wx.redirectTo({
+                            wx.navigateTo({
                                 url: "../my_teacher/main"
                             })
                         } else {

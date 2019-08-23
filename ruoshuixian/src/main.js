@@ -19,7 +19,7 @@ wx.login({
 let pixelRatio = 0
 wx.getSystemInfo({
     success: function (res) {
-        pixelRatio = res.pixelRatio
+        pixelRatio = Math.floor(res.pixelRatio)
     },
     fail: function () {
         pixelRatio = 0

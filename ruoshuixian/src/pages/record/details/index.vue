@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="content" v-if="ratio">
+        <div class="content">
             <div v-for="(item,index) in list" class="item" :key="index" @click="toGame(item)">
                 <div class="img_div">
                     <image class="image" :src="domain+item.img" />
@@ -22,7 +22,7 @@
         },
         data() {
             return {
-                ratio: 1,
+
                 list: [],
                 domain: this.$http.domain,
                 students_homework_details_id: null,
@@ -31,14 +31,11 @@
         onLoad(option) {
             this.students_homework_details_id = option.students_homework_details_id
             this.userInfo = this.$getParams("userInfo");
+            this.token = this.userInfo.token;
+            this.getList();
         },
         onShow() {
             wx.hideTabBar();
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
-            this.token = this.userInfo.token;
-            this.getList();
         },
         methods: {
             getList: function() {

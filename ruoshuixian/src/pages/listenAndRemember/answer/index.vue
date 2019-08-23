@@ -23,11 +23,11 @@
             alertBox
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
+
             this.token = this.userInfo.token;
             let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level

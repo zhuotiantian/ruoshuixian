@@ -1,10 +1,10 @@
 <template>
     <div class="container">
-        <image class="background" :src="'/static/images/firstPage/bg@'+ratio+'x.png'" v-if="ratio" />
+        <image class="background" :src="'/static/images/firstPage/bg.png'" />
         <div class="login-form">
             <div class="input-div">
                 <input type="text" class="input" v-model="form.mobile" placeholder="请输入手机号" @blur="checkPhone" placeholder-style="color:#ccc" />
-                <image :src="'/static/images/my/phone@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:42rpx;width:34rpx" />
+                <image :src="'/static/images/my/phone.png'" class="icon" style="height:42rpx;width:34rpx" />
 
                 <template v-if="true">
                     <span class="getCode" @click="getCode" v-if="!clickGetCode">获取验证码</span>
@@ -13,15 +13,15 @@
             </div>
             <div class="input-div">
                 <input type="text" class="input" v-model="form.captcha" placeholder="验证码" placeholder-style="color:#ccc" />
-                <image :src="'/static/images/my/keys@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:54rpx;width:38rpx" />
+                <image :src="'/static/images/my/keys.png'" class="icon" style="height:54rpx;width:38rpx" />
             </div>
             <div class="input-div">
                 <input type="password" class="input" v-model="form.password" placeholder="密码" placeholder-style="color:#ccc" />
-                <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:42rpx;width:34rpx" />
+                <image :src="'/static/images/my/password.png'" class="icon" style="height:42rpx;width:34rpx" />
             </div>
             <div class="input-div">
                 <input type="password" class="input" v-model="form.repassword" placeholder="确认密码" placeholder-style="color:#ccc" />
-                <image :src="'/static/images/my/password@'+ratio+'x.png'" v-if="ratio" class="icon" style="height:42rpx;width:34rpx" />
+                <image :src="'/static/images/my/password.png'" class="icon" style="height:42rpx;width:34rpx" />
             </div>
             <p class="info">
                 <span @click="switchLoginWay">
@@ -42,7 +42,7 @@
             return {
                 clickGetCode: false,
                 seconds: 60,
-                ratio: 1,
+
                 form: {
                     mobile: "",
                     password: "",
@@ -52,12 +52,11 @@
             };
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
-            this.ratio = this.globalData.ratio;
             this.token = this.userInfo.token;
         },
+
         methods: {
             regist: function() {
                 const {

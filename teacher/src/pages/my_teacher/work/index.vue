@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <div class="fog" v-if="showDrop||showSuccessBox" @click="showDrop=false"></div>
-        <div class="alertBox" v-if="showSuccessBox&&ratio">
-            <image class="image" :src="'/static/images/my/check@'+ratio+'x.png'" />
+        <div class="alertBox" v-if="showSuccessBox">
+            <image class="image" :src="'/static/images/my/check.png'" />
             <span>发布成功</span>
         </div>
         <div class="top">
@@ -55,7 +55,7 @@
             return {
                 showDrop: false,
                 game: [],
-                ratio: 1,
+
                 showSuccessBox: false,
                 token: "",
                 type: "",
@@ -71,11 +71,10 @@
             };
         },
         onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-        },
-        mounted() {
             this.token = this.userInfo.token;
-            this.ratio = this.globalData.ratio;
+
             this.getList();
             this.getIndexData();
         },
