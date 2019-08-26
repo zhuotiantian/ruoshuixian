@@ -37,7 +37,7 @@
         },
         methods: {
             toFisrstPage: function(index) {
-                let url = "/pages/firstPage/main";
+                let url = "/pages/indexPage/main";
                 this.to(url, index);
             },
             toMoney: function(index) {

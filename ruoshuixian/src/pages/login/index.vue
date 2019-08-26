@@ -95,7 +95,7 @@
                                 title: "登陆成功"
                             });
                             wx.navigateTo({
-                                url: "../firstPage/main"
+                                url: "../indexPage/main"
                             })
                         } else {
                             wx.showToast({

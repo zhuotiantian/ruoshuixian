@@ -99,23 +99,8 @@
             },
             toGame: function(item) {
                 wx.setStorageSync("gameid", item.id);
-                this.$http.get({
-                    url: "/api/wxapp.game/getGame",
-                    data: {
-                        game_id: item.id
-                    },
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    wx.setStorageSync("rule", result.data);
-                    wx.setStorageSync("level", "primary");
-                    wx.setStorageSync("result", []);
-                    if (this.userInfo) {
-                        wx.navigateTo({
-                            url: item.wxapp_url
-                        });
-                    }
+                wx.navigateTo({
+                    url: item.wxapp_url
                 });
             },
             toRanking: function() {

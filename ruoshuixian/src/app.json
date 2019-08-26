@@ -1,10 +1,12 @@
 {
     "pages": [
-        "pages/firstPage/main",
-
         "pages/login/main",
-
         "pages/indexPage/main",
+        "pages/firstPage/main",
+        "pages/hongbao/main",
+
+        "pages/my/hongbao/main",
+
 
         "pages/randomWords/main",
         "pages/randomWords/memary/main",
@@ -78,7 +80,6 @@
 
         "pages/my/main",
         "pages/my/message/main",
-        "pages/my/hongbao/main",
         "pages/my/record/main",
         "pages/my/ranking/main",
 
@@ -89,9 +90,8 @@
         "pages/peoplePic/result/main",
         "pages/peoplePic/answer/main",
 
-        "pages/index/main",
+        "pages/index/main"
 
-        "pages/hongbao/main"
     ],
     "subPackages": [{
         "root": "pages/my_custom/",

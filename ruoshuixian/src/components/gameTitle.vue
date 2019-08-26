@@ -71,8 +71,8 @@
         },
         onUnload: function() {
             let pages = getCurrentPages().length - 1;
-            wx.navigateBack({
-                delta: pages
+            wx.reLaunch({
+                url: "/pages/indexPage/main"
             })
         },
         data() {
@@ -207,8 +207,9 @@
                 this.$emit("finishMemary");
             },
             playAgain: function() {
-                wx.navigateTo({
-                    url: "../answer/main"
+                let pages = getCurrentPages();
+                wx.reLaunch({
+                    url: "/" + pages[1].route
                 })
             }
         }

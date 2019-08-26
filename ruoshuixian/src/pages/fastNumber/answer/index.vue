@@ -112,7 +112,6 @@
                     selected: true,
                     number: ""
                 });
-                this.hasSelect = true;
             },
             selectNumber: function(data) {
                 let number = this.number;

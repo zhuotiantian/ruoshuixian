@@ -52,12 +52,13 @@
                 showKeybord: true,
                 showFog: false,
                 number: [],
-                hasSelect: false,
                 total: 0,
                 per: 0,
                 game_records_id: 1,
                 rule: {},
-                level: "primary"
+                level: "primary",
+                rowIndex: 0,
+                columnIndex: 0
             }
         },
         methods: {
@@ -111,31 +112,55 @@
                 this.number = number;
                 this.$set(this.number[row], column, {
                     selected: true,
-                    number: ""
+                    number: this.number[row][column].number
                 });
-                this.hasSelect = true;
             },
             selectNumber: function(data) {
                 let number = this.number;
-                number.forEach(e => {
-                    e.forEach(m => {
+                number.forEach((e, rowIndex) => {
+                    e.forEach((m, columnIndex) => {
                         if (m.selected) {
+                            this.rowIndex = rowIndex;
+                            this.columnIndex = columnIndex;
                             m.number = data
                         }
                     })
                 });
                 this.number = number;
+                this.$set(this.number[this.rowIndex][this.columnIndex], "selected", false);
+                if (this.columnIndex < this.number[this.rowIndex].length - 1) {
+                    this.columnIndex++;
+                } else if (this.rowIndex < this.number.length - 1 && this.columnIndex == this.number[this.rowIndex].length - 1) {
+                    this.rowIndex++;
+                    this.columnIndex = 0;
+                }
+                this.$set(this.number[this.rowIndex][this.columnIndex], "selected", true);
             },
             deleteNumber: function() {
                 let number = this.number;
-                number.forEach(e => {
-                    e.forEach(m => {
+                number.forEach((e, rowIndex) => {
+                    e.forEach((m, columnIndex) => {
                         if (m.selected) {
+                            this.rowIndex = rowIndex;
+                            this.columnIndex = columnIndex;
                             m.number = ""
                         }
                     })
                 });
                 this.number = number;
+                this.$set(this.number[this.rowIndex][this.columnIndex], "selected", false);
+                this.number = number;
+                if (this.rowIndex == 0 && this.columnIndex == 0) {
+
+                } else {
+                    if (this.columnIndex == 0) {
+                        this.rowIndex--;
+                        this.columnIndex = this.number[this.rowIndex].length - 1;
+                    } else {
+                        this.columnIndex--;
+                    };
+                }
+                this.$set(this.number[this.rowIndex][this.columnIndex], "selected", true);
             }
         }
     }
