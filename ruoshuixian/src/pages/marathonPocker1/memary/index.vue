@@ -17,10 +17,9 @@
         <div class="pageFoot">
             <span class="pageBtn" @click="prevPage">上一页</span>
             <div class="btn-group">
-                <span :class="{item:true, active:item.active}" @click="select(index,item)" v-for="(item,index) in groupPage[currentPage]" :key="index">{{item.number}}幅</span>
+                <span :class="{item:true, active:item.active}" @click="selectHandler(index,item)" v-for="(item,index) in groupPage[currentPage]" :key="index">{{item.number}}幅</span>
             </div>
             <span class="pageBtn" @click="nextPage">下一页</span>
-            <span class="btn tips-btn" style="float-right" @click="showTips">操作提示</span>
         </div>
     </div>
 </template>
@@ -88,8 +87,10 @@
                 if (data !== "ALL") {
                     let list = JSON.parse(JSON.stringify(this.pocker[currentIndex]));
                     this.perPocker = [];
-                    for (var i = 0; i < list.length; i + data) {
-                        this.perPocker.push(list.splice(i, i + data));
+                    if (data) {
+                        for (var i = 0; i < list.length; i + data) {
+                            this.perPocker.push(list.splice(i, i + data));
+                        }
                     }
                 } else {
                     this.perPocker.push(this.pocker[currentIndex]);
@@ -117,7 +118,7 @@
                     this.currentPage--;
                 }
             },
-            select: function(index, item) {
+            selectHandler: function(index, item) {
                 this.$set(this.groupPage, this.currentPage, this.groupPage[this.currentPage].map(e => {
                     return {
                         number: e.number,
@@ -128,7 +129,8 @@
                     number: item.number,
                     active: true
                 });
-                this.group(this.groupData);
+
+                this.groupData && this.group(this.groupData);
             },
             prevGroup: function() {
                 if (this.currentGroupIndex > 0) {

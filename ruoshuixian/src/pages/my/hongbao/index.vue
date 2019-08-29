@@ -13,7 +13,7 @@
                     <span>红包记录1</span>
                     <span>2.00元</span>
                 </li>
-                <span class="btn submit-btn">去提现</span>
+                <span class="btn submit-btn" @click="tixian">去提现</span>
             </ul>
         </div>
     </div>
@@ -23,11 +23,11 @@
         data() {
             return {
                 list: [],
-                money: 0,
-            }
+                money: 0
+            };
         },
         onLoad() {
-            Object.assign(this.$data, this.$options.data())
+            Object.assign(this.$data, this.$options.data());
             this.userInfo = this.$getParams("userInfo");
 
             this.token = this.userInfo.token;
@@ -35,18 +35,25 @@
         },
         methods: {
             getList: function() {
-                this.$http.get({
-                    url: "/api/wxapp.user/redEnvelopeRecord",
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    this.list = result.data.list;
-                    this.money = result.data.money;
+                this.$http
+                    .get({
+                        url: "/api/wxapp.user/redEnvelopeRecord",
+                        header: {
+                            token: this.token
+                        }
+                    })
+                    .then(result => {
+                        this.list = result.data.list;
+                        this.money = result.data.money;
+                    });
+            },
+            tixian: function() {
+                wx.navigateTo({
+                    url: "./getCash/main"
                 });
             }
         }
-    }
+    };
 </script>
 <style lang="scss" scoped>
     .container {
@@ -63,7 +70,7 @@
         overflow: hidden;
         width: 100%;
         height: tovmin(296);
-        color: #FCE2B1;
+        color: #fce2b1;
         text-align: center;
         position: relative;
     }
@@ -81,7 +88,7 @@
     }
 
     .header::after {
-        content: '';
+        content: "";
         width: 140%;
         height: tovmin(296);
         position: absolute;
@@ -119,6 +126,6 @@
         position: absolute;
         bottom: tovmin(118);
         left: tovmin(180);
-        color: #FFC400;
+        //   color: #ffc400;
     }
 </style>

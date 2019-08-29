@@ -28,25 +28,7 @@
             },
             getUserInfo: function() {
                 const self = this;
-                wx.getUserInfo({
-                    withCredentials: true,
-                    success: function(res) {
-                        let {
-                            userInfo,
-                            nickName,
-                            avatarUrl,
-                            gender,
-                            province,
-                            city,
-                            country
-                        } = res;
-                    },
-                    fail(err) {
-                        console.log('自动wx.getUserInfo失败:', err);
-                        // 显示主动授权的button
-                        self.buttonVisible = true;
-                    }
-                })
+
             },
             toLogin: function() {
                 let url = "../login/main";

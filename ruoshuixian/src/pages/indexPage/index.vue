@@ -28,6 +28,11 @@
                 </ul>
             </div>
         </div>
+        <div class="fog" v-if="showFog"></div>
+        <image class="image1" :src="'/static/images/redPocket/redPocket.png'" v-if="showFog" />
+        <image class="image2" :src="'/static/images/redPocket/close.png'" v-if="showFog" @click="hideFog" />
+        <p class="success" v-if="showFog">新人注册红包</p>
+        <p class="redPocketBtn" v-if="showFog" @click="toGetRedPocket">点击领取</p>
         <CardFooter :index="1"></CardFooter>
     </div>
 </template>
@@ -64,6 +69,7 @@
 
             this.token = this.userInfo.token;
             this.getIndexData();
+            this.getList();
         },
         onShareAppMessage: function(res) {
             return {
@@ -82,10 +88,18 @@
                 games: [],
                 domain: this.$http.domain,
                 topImg: "",
-                userInfo: null
+                userInfo: null,
+                list: [],
+                showFog: false,
             };
         },
         methods: {
+            hideFog: function() {
+                this.showFog = false;
+            },
+            showRedPocket: function() {
+                this.showFog = true;
+            },
             getIndexData: function() {
                 this.$http.get({
                     url: "/api/wxapp.index/index",
@@ -109,7 +123,43 @@
                     url
                 });
             },
-
+            getList: function() {
+                this.$http
+                    .get({
+                        url: "/api/wxapp.red_envelopes/redPackList",
+                        header: {
+                            token: this.token
+                        }
+                    })
+                    .then(result => {
+                        this.list = result.data.list.filter(e => {
+                            return e.game_classification_id == 0 && e.status !== 'received'
+                        });
+                        this.showFog = this.list.length > 0;
+                    });
+            },
+            toGetRedPocket: function() {
+                this.$http.post({
+                    url: "/api/wxapp.red_envelopes/getARedEnvelope",
+                    data: {
+                        game_classification_id: this.list[0].game_classification_id
+                    },
+                    header: {
+                        token: this.token
+                    }
+                }).then(result => {
+                    if (result.code == 1) {
+                        wx.showToast({
+                            title: "领取成功",
+                            icon: "success"
+                        });
+                        wx.navigateTo({
+                            url: "/pages/hongbao/redPocketList/main"
+                        })
+                        this.showFog = false;
+                    }
+                })
+            }
         }
     };
 </script>
@@ -240,5 +290,84 @@
 
     button image {
         margin-bottom: 0;
+    }
+
+    .image {
+        width: tovmin(750);
+        height: tovmin(300);
+        position: absolute;
+        top: -49%;
+        z-index: 1;
+    }
+
+    .text {
+        color: #666666;
+        margin-bottom: tovmin(30);
+    }
+
+    .btn {
+        position: absolute;
+        z-index: 999;
+        top: tovmin(62);
+        left: tovmin(180);
+        width: tovmin(310);
+        text-align: center;
+        font-size: tovmin(24);
+        height: tovmin(60);
+        line-height: tovmin(60);
+        border-radius: tovmin(44);
+        font-weight: bold;
+    }
+
+    .default-btn {
+        color: $green;
+    }
+
+    .small-fog {
+        width: tovmin(750);
+        height: tovmin(608);
+        position: absolute;
+        z-index: 998;
+        top: 0;
+        background: $black;
+        opacity: $opacity;
+    }
+
+    .image1 {
+        width: tovmin(438);
+        height: tovmin(478);
+        position: absolute;
+        z-index: 1000;
+        top: 40%;
+        margin-top: tovmin(-239);
+        left: 50%;
+        margin-left: tovmin(-219);
+    }
+
+    .image2 {
+        width: tovmin(78);
+        height: tovmin(78);
+        position: absolute;
+        z-index: 1000;
+        top: 67%;
+        margin-top: tovmin(-39);
+        left: 50%;
+        margin-left: tovmin(-39);
+    }
+
+    .success {
+        position: absolute;
+        color: $red;
+        top: 30%;
+        left: 37%;
+        z-index: 1000;
+    }
+
+    .redPocketBtn {
+        position: absolute;
+        top: 51%;
+        left: 44.5%;
+        z-index: 1000;
+        font-size: 3.2vmin;
     }
 </style>

@@ -129,7 +129,15 @@
                             });
                             wx.navigateTo({
                                 url: "../my_teacher/main"
-                            })
+                            });
+                            wx.login({
+                                success: function(res) {
+                                    wx.setStorage({
+                                        key: "code",
+                                        data: res.code
+                                    });
+                                }
+                            });
                         } else {
                             wx.showToast({
                                 title: result.msg,

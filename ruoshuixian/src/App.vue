@@ -22,7 +22,7 @@
                 wx.navigateTo({
                     url: "./pages/login/main"
                 });
-            }
+            };
         },
         data() {
             return {

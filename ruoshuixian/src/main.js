@@ -13,7 +13,7 @@ Vue.prototype.$getParams = (param) => {
 }
 wx.login({
     success: function (res) {
-        Vue.prototype.wxcode = res.code;
+        wx.setStorageSync("code", res.code);
     }
 });
 let pixelRatio = 0
@@ -31,6 +31,7 @@ getApp().globalData.ratio = pixelRatio;
 export default {
     config: {
         "pages": [
+            "pages/my/hongbao/getCash/main",
             "pages/login/main",
             "pages/record/details/main",
             "pages/rePassword/main",

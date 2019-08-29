@@ -18,7 +18,8 @@
         components: {
             CardTitle
         },
-        onShow() {
+        onLoad() {
+            Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
 

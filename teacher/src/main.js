@@ -12,12 +12,7 @@ Vue.prototype.globalData = getApp().globalData;
 Vue.prototype.$http = http;
 Vue.prototype.$getParams = (param) => {
     return wx.getStorageSync(param);
-}
-wx.login({
-    success: function (res) {
-        Vue.prototype.wxcode = res.code;
-    }
-});
+};
 let pixelRatio = 0
 wx.getSystemInfo({
     success: function (res) {

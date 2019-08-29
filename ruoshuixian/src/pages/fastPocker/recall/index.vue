@@ -34,6 +34,7 @@
             Object.assign(this.$data, this.$options.data())
             this.level = this.$getParams("level");
             this.rule = this.$getParams("rule");
+
             this.recollect_time = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0].recollect_time;

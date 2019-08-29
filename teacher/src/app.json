@@ -1,15 +1,15 @@
 {
     "pages": [
+        "pages/login/main",
+        "pages/my_teacher/message/toRecord/main",
         "pages/my_teacher/main",
         "pages/my_teacher/work/main",
-        "pages/login/main",
         "pages/my_teacher/students/main",
         "pages/regist/main",
         "pages/rePassword/main",
         "pages/my_teacher/notice/main",
         "pages/my_teacher/message/main",
         "pages/my_teacher/message/other/main",
-        "pages/my_teacher/message/toRecord/main",
         "pages/my_teacher/students/comment/main"
     ],
     "window": {

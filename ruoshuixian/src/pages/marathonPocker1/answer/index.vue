@@ -332,7 +332,46 @@
         padding-top: tovmin(520);
         color: white;
         text-align: center;
+        padding-bottom: tovmin(100);
     }
+
+    .pageFoot {
+        position: fixed;
+        width: 100%;
+        height: tovmin(120);
+        background: white;
+        z-index: 999;
+        bottom: 0;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 tovmin(60);
+        box-sizing: border-box;
+        font-size: tovmin(28);
+        align-items: center;
+    }
+
+    .pageBtn {
+        color: $yellow;
+    }
+
+    .item {
+        height: tovmin(80);
+        width: tovmin(80);
+        display: inline-block;
+        border-radius: tovmin(8);
+        line-height: tovmin(80);
+        text-align: center;
+        margin-right: tovmin(24);
+        border: tovmin(2) solid #E5E5E5;
+        color: $black;
+    }
+
+    .item.active {
+        color: white;
+        background: $middle-blue;
+        border: none;
+    }
+
 
     .tips {
         position: fixed;

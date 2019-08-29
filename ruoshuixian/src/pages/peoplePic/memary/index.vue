@@ -24,9 +24,9 @@
             let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level
             })[0];
-            this.numberList = rule.list.name.map((e, index) => {
+            this.numberList = rule.list.xing_name.map((e, index) => {
                 return {
-                    name: e,
+                    name: e + rule.list.ming_name[index],
                     avatar: rule.list.avatar[index]
                 }
             });

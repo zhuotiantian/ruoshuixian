@@ -1,11 +1,25 @@
 {
     "pages": [
-        "pages/login/main",
         "pages/indexPage/main",
+        "pages/login/main",
+        "pages/marathonPocker1/memary/main",
+        "pages/marathonPocker1/answer/main",
+        "pages/marathonPocker1/main",
+        "pages/marathonPocker1/recall/main",
+        "pages/marathonPocker1/ready/main",
+        "pages/marathonPocker1/result/main",
+
+        "pages/my/hongbao/main",
+        "pages/my/hongbao/getCash/main",
+
+        "pages/my/main",
+        "pages/my/message/main",
+        "pages/my/record/main",
+        "pages/my/ranking/main",
+
         "pages/firstPage/main",
         "pages/hongbao/main",
 
-        "pages/my/hongbao/main",
 
 
         "pages/randomWords/main",
@@ -29,12 +43,7 @@
         "pages/binaryNumber/answer/main",
         "pages/binaryNumber/memary/main",
 
-        "pages/marathonPocker1/main",
-        "pages/marathonPocker1/answer/main",
-        "pages/marathonPocker1/memary/main",
-        "pages/marathonPocker1/recall/main",
-        "pages/marathonPocker1/ready/main",
-        "pages/marathonPocker1/result/main",
+
 
         "pages/record/main",
         "pages/record/details/main",
@@ -77,11 +86,6 @@
         "pages/marathonNumber/memary/main",
         "pages/marathonNumber/result/main",
         "pages/marathonNumber/answer/main",
-
-        "pages/my/main",
-        "pages/my/message/main",
-        "pages/my/record/main",
-        "pages/my/ranking/main",
 
         "pages/help/main",
 

@@ -34,7 +34,7 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.rule = this.$getParams("rule");
+            let rule = this.$getParams("rule");
             this.timer && clearInterval(this.timer);
             this.timer = setInterval(() => {
                 this.seconds--;
@@ -42,9 +42,8 @@
                     clearInterval(this.timer);
                 }
             }, 1000);
-            let rule = this.rule.rules_of_the_game;
             if (this.type == "time") {
-                this.memaryTime = rule[0].memory_time.split(",");
+                this.memaryTime = rule.rules_of_the_game[0].memory_time.split(",");
                 this.activeIndex = this.memaryTime[0];
             } else {
                 this.activeIndex = this.memaryNumber[0];
