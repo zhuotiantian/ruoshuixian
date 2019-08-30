@@ -3,7 +3,11 @@
         <div class="content">
             <image class="background" src="/static/images/firstPage/bg.png" />
             <div class="top">
-                <image class="top-image" :src="domain+topImg" />
+                <swiper autoplay="true" circular="true">
+                    <swiper-item v-for="(item ,index) in imgUrls" :key="index">
+                        <image class="top-image" :src="domain+topImg" />
+                    </swiper-item>
+                </swiper>
             </div>
             <div class="middle">
                 <ul>
@@ -95,6 +99,11 @@
                 userInfo: null,
                 list: [],
                 showFog: false,
+                imgUrls: [
+                    'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
+                    'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
+                    'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
+                ],
             };
         },
         methods: {

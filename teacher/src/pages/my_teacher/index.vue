@@ -49,7 +49,7 @@
                     wx.showToast({
                         title: "登陆信息已过期，请重新登陆"
                     });
-                    wx.navigateTo({
+                    wx.redirectTo({
                         url: "/pages/login/main"
                     })
                 }

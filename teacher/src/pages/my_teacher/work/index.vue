@@ -5,24 +5,26 @@
             <image class="image" :src="'/static/images/my/check.png'" />
             <span>发布成功</span>
         </div>
-        <div class="top">
-            <input placeholder-style="color: #AFAFAF;" type="text" v-model="workname" placeholder="请输入作业名称" />
-            <p class="item" @click="showGroup">{{selectGroupName}}</p>
-            <p class="item" @click="showStudents">{{selectStudentsName}}</p>
-        </div>
-        <div class="middle">
-            <p class="title">选择游戏：</p>
-            <ul class="gameList">
-                <li v-for="(item,index) in game" :key="index" @click="selectGameHan(item,index)">
-                    <em :class="{checkBox:true, active:item.selected}"></em>
-                    <span>{{item.name}}</span>
-                </li>
-            </ul>
-        </div>
-        <textarea cols="30" rows="10" v-model="remarks" placeholder="备注"></textarea>
-        <p style="text-align:center">
-            <button class="submit-btn btn" @click="sendMessage">点评</button>
-        </p>
+        <scroll-view :style="{'height': '90vh'}" scroll-y="true">
+            <div class="top">
+                <input placeholder-style="color: #AFAFAF;" type="text" v-model="workname" placeholder="请输入作业名称" />
+                <p class="item" @click="showGroup">{{selectGroupName}}</p>
+                <p class="item" @click="showStudents">{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}</p>
+            </div>
+            <div class="middle">
+                <p class="title">选择游戏：</p>
+                <ul class="gameList">
+                    <li v-for="(item,index) in game" :key="index" @click="selectGameHan(item,index)">
+                        <em :class="{checkBox:true, active:item.selected}"></em>
+                        <span>{{item.name}}</span>
+                    </li>
+                </ul>
+            </div>
+            <textarea cols="30" rows="10" v-if="!showDrop" v-model="remarks" placeholder="备注"></textarea>
+            <p style="text-align:center">
+                <button class="submit-btn btn" @click="sendMessage">点评</button>
+            </p>
+        </scroll-view>
         <div :class="{drop_up:true,up:showDrop,down:!showDrop}">
             <template v-if="type=='group'">
                 <p class="title">组别选择</p>
@@ -41,7 +43,7 @@
                     <ul class="list">
                         <li v-for="(item,index) in students" :key="index" @click="selectStudents(index,item.id)">
                             <span>{{item.nickname}}</span>
-                            <image class="icon" v-if="selectedUser.indexOf(item.id)>=0" :src="'/static/images/my/select.png'" />
+                            <image class="icon" v-if="item.selected" :src="'/static/images/my/select.png'" />
                         </li>
                     </ul>
                 </scroll-view>
@@ -101,7 +103,11 @@
                 this.showSuccessBox = true;
                 let params = {
                     name: this.workname,
-                    game_ids: this.selectGame.join(","),
+                    game_ids: this.game.filter(e => {
+                        return e.selected
+                    }).map(e => {
+                        return e.id
+                    }),
                     user_ids: this.selectedUser.join(","),
                     remarks: this.remarks
                 };
@@ -112,6 +118,16 @@
                         token: this.token
                     }
                 }).then(result => {
+                    this.game = this.game.map(e => {
+                        return {
+                            name: e.name,
+                            selected: false
+                        };
+                    });
+                    this.selectedUser = [];
+                    this.selectStudentsName = ["学生"];
+                    this.selectedGroup = "";
+                    this.remarks = ""
                     setTimeout(() => {
                         this.showSuccessBox = false;
                     }, 1500);
@@ -127,6 +143,9 @@
                     })
                     .then(result => {
                         this.stu_list = result.data;
+                        this.stu_list[0].user.forEach(e => {
+                            e.selected = false;
+                        });
                         this.students = this.stu_list[0].user || [];
                     });
             },
@@ -140,23 +159,31 @@
             },
             selectGroup: function(index) {
                 this.selectedGroup = index;
-                this.students = this.stu_list[index].user;
+                this.stu_list[index].user && this.stu_list[index].user.forEach(e => {
+                    e.selected = false;
+                })
+                this.students = this.stu_list[index].user || [];
                 this.selectGroupName = this.stu_list[index].name;
                 this.showDrop = false;
             },
             selectStudents: function(index, id) {
-                this.selectedUser.push(id);
-                this.selectStudentsName = [];
-                this.selectStudentsName.push(this.students[index].nickname);
-                this.showDrop = false;
+                if (this.students[index].selected) {
+                    this.$set(this.students[index], "selected", false);
+                } else {
+                    this.selectedUser.push(id);
+                    this.selectStudentsName = [];
+                    this.workname = "";
+                    this.selectStudentsName.push(this.students[index].nickname);
+                    this.$set(this.students[index], "selected", true);
+                    this.selectStudentsName = this.selectStudentsName.join(",");
+                }
             },
             selectGameHan: function(item, index) {
                 this.$set(this.game, index, {
                     name: item.name,
-                    selected: true,
+                    selected: !item.selected,
                     id: item.id
                 });
-                this.selectGame.push(item.id);
             },
         }
     };
@@ -165,12 +192,12 @@
     .top input,
     .top .item {
         border-bottom: 1px solid #f3f3f3;
-        height: tovmin(100);
         line-height: tovmin(100);
     }
 
     .top .item {
         color: #c6c6c6;
+        word-break: break-all;
     }
 
     .container {
@@ -276,7 +303,7 @@
         top: 35%;
         left: 50%;
         margin-left: tovmin(-136);
-        z-index: 1001;
+        z-index: 99999;
         justify-content: center;
         align-items: center;
     }
