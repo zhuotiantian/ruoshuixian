@@ -53,7 +53,7 @@
             toNextPage: function(data) {
                 clearInterval(this.timer);
                 if (this.type == "time") {
-                    wx.setStorageSync("memoryTime", this.activeIndex);
+                    this.$setStorage("memoryTime", this.activeIndex)
                 }
                 wx.navigateTo({
                     url: this.nextPage

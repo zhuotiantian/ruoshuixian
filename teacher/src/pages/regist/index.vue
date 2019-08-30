@@ -65,6 +65,27 @@
                     password,
                     repassword
                 } = this.form;
+                if (mobile == "") {
+                    wx.showToast({
+                        title: "手机号不能为空",
+                        icon: "none"
+                    });
+                    return false
+                };
+                if (captcha) {
+                    wx.showToast({
+                        title: "验证码不能为空",
+                        icon: "none"
+                    });
+                    return false
+                };
+                if (password) {
+                    wx.showToast({
+                        title: "密码不能为空",
+                        icon: "none"
+                    });
+                    return false
+                }
                 if (password !== repassword) {
                     wx.showToast({
                         title: "两次密码不一致",

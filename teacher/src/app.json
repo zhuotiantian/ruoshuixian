@@ -1,7 +1,7 @@
 {
     "pages": [
-        "pages/login/main",
         "pages/my_teacher/message/toRecord/main",
+        "pages/login/main",
         "pages/my_teacher/main",
         "pages/my_teacher/work/main",
         "pages/my_teacher/students/main",

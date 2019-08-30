@@ -54,11 +54,7 @@
                     });
             },
             toGame: function(item) {
-                if (item.status == "not_finished") {
-                    wx.navigateTo({
-                        url: item.wxapp_url
-                    });
-                }
+                this.$toGame(item.game_id, item.wxapp_url);
             }
         }
     };

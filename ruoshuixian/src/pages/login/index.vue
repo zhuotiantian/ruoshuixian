@@ -22,14 +22,15 @@
 
                 </template>
             </div>
-            <p style="text-align:center">
-                <span class="btn submit-btn" @click="login">登 录</span>
-            </p>
+            <form style="text-align:center" action="" report-submit='true' @submit="login">
+                <button class="btn submit-btn" form-type='submit'>登 录</button>
+            </form>
             <p class="info">
                 <span @click="switchLoginWay">
                     <span v-if="!codeLogin">密码登录</span><span v-else>验证码登录</span>
                 </span>
                 <span @click="toRepassword">忘记密码</span></p>
+
         </div>
         <p id="info">还没有若水轩账号？<span style="color:#f8b551" @click="toRegist">立即注册</span></p>
     </div>
@@ -46,12 +47,14 @@
                     mobile: "",
                     captcha: "",
                     password: ""
-                }
+                },
+                code: ""
             }
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
+            this.code = this.$getParams("code");
             this.token = this.userInfo.token;
         },
         methods: {
@@ -62,24 +65,34 @@
                     url
                 })
             },
-            login: function() {
+            login: function(e) {
                 const {
                     mobile,
                     captcha,
                     password
                 } = this.form;
+                if (mobile == "") {
+                    wx.showToast({
+                        title: "手机号不能为空",
+                        icon: "none"
+                    });
+                    return false
+                };
+                if (captcha && this.codeLogin) {
+                    wx.showToast({
+                        title: "验证码不能为空",
+                        icon: "none"
+                    });
+                    return false
+                };
+                if (password && !this.codeLogin) {
+                    wx.showToast({
+                        title: "密码不能为空",
+                        icon: "none"
+                    });
+                    return false
+                }
                 if (!this.codeLogin) {
-                    // this.$http.post({
-                    //     url: "/api/wxapp.sms/check",
-                    //     data: {
-                    //         mobile,
-                    //         captcha
-                    //     },
-                    //     header: {
-                    //         token: this.token
-                    //     }
-                    // }).then(result => {
-                    //     if (result.code == 1) {
                     this.$http.post({
                         url: "/api/wxapp.user/mobilelogin",
                         data: {
@@ -91,12 +104,15 @@
                         }
                     }).then(result => {
                         if (result.code == 1) {
-                            wx.showToast({
-                                title: "登陆成功"
+                            this.$setStorage("userInfo", result.data.userinfo, () => {
+                                this.storageData(result.data.userinfo.token, e.mp.detail.formId)
+                                wx.showToast({
+                                    title: "登陆成功"
+                                });
+                                wx.redirectTo({
+                                    url: "../firstPage/main"
+                                })
                             });
-                            wx.navigateTo({
-                                url: "../indexPage/main"
-                            })
                         } else {
                             wx.showToast({
                                 title: result.msg,
@@ -104,13 +120,6 @@
                             })
                         }
                     });
-                    //     } else {
-                    //         wx.showToast({
-                    //             title: result.msg,
-                    //             icon: "none"
-                    //         })
-                    //     }
-                    // });
                 } else {
                     this.$http.post({
                         url: "/api/wxapp.user/login",
@@ -123,23 +132,47 @@
                         }
                     }).then(result => {
                         if (result.code == 1) {
-                            wx.setStorageSync("userInfo", result.data.userinfo)
-                            wx.showToast({
-                                title: "登陆成功"
+                            this.$setStorage("userInfo", result.data.userinfo, () => {
+                                this.storageData(result.data.userinfo.token, e.mp.detail.formId)
+                                wx.showToast({
+                                    title: "登陆成功"
+                                });
+                                wx.redirectTo({
+                                    url: "../firstPage/main"
+                                })
                             });
-                            wx.navigateTo({
-                                url: "../firstPage/main"
-                            })
+
                         } else {
                             wx.showToast({
                                 title: result.msg,
                                 icon: "none"
                             })
                         }
-                    }).catch(err => {
-                        console.log(err);
                     });
                 };
+            },
+            storageData: function(token, formId) {
+                if (formId !== "the formId is a mock one") {
+                    this.$http.post({
+                        url: "/api/wxapp.user/storageFormId",
+                        data: {
+                            form_id: formId
+                        },
+                        header: {
+                            token
+                        }
+                    });
+                    this.$http.post({
+                        url: "/api/wxapp.user/bindingWechat",
+                        data: {
+                            code: this.code,
+                            type: "user"
+                        },
+                        header: {
+                            token
+                        }
+                    })
+                }
             },
             getCode: function() {
                 // 获取验证码
@@ -267,5 +300,11 @@
 
     .input-div {
         position: relative;
+    }
+
+    form {
+        display: flex;
+        justify-content: center;
+
     }
 </style>

@@ -7,7 +7,7 @@
                 <image class="image" :src=" domain+item.img" @click="getMoney"></image>
                 <div>
                     <div class="btn default-btn" @click="showRedPocket" v-if="item.status=='unclaimed'">已完成任务，点击领取</div>
-                    <div class="btn submit-btn" v-else-if="item.status=='pending_sales'" @click="toGame(item.wxapp_url)">去完成任务</div>
+                    <div class="btn submit-btn" v-else-if="item.status=='pending_sales'" @click="toGame(item.game_classification_id,item.wxapp_url)">去完成任务</div>
                     <div class="small-fog"></div>
                 </div>
             </div>
@@ -71,13 +71,11 @@
             },
             toGetRedPocket: function() {
                 wx.navigateTo({
-                    url: "./redPocketList/main"
+                    url: "/pages/my/hongbao/main"
                 });
             },
-            toGame: function(url) {
-                wx.navigateTo({
-                    url
-                })
+            toGame: function(id, url) {
+                this.$toGame(id, url);
             }
         }
     };

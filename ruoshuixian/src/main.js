@@ -6,14 +6,13 @@ Vue.config._mpTrace = true
 App.mpType = 'app'
 const app = new Vue(App);
 app.$mount();
-Vue.prototype.globalData = getApp().globalData;
-Vue.prototype.$http = http;
-Vue.prototype.$getParams = (param) => {
-    return wx.getStorageSync(param);
-}
+
 wx.login({
     success: function (res) {
-        wx.setStorageSync("code", res.code);
+        wx.setStorage({
+            key: "code",
+            data: res.code
+        });
     }
 });
 let pixelRatio = 0
@@ -27,11 +26,50 @@ wx.getSystemInfo({
 });
 getApp().globalData.token = wx.getStorageSync("userInfo").token;
 getApp().globalData.ratio = pixelRatio;
+Vue.prototype.globalData = getApp().globalData;
+Vue.prototype.$http = http;
+Vue.prototype.$getParams = (param) => {
+    return wx.getStorageSync(param);
+};
+Vue.prototype.$setStorage = (key, data, fn) => {
+    wx.setStorage({
+        key: key,
+        data: data,
+        success: () => {
+            fn && fn();
+        }
+    });
+}
+let setStorage = Vue.prototype.$setStorage;
+Vue.prototype.$toGame = (id, url, fn) => {
+    setStorage("gameid", id, () => {
+        http.get({
+            url: "/api/wxapp.game/getGame",
+            data: {
+                game_id: id
+            },
+            header: {
+                token: getApp().globalData.token
+            }
+        }).then(result => {
+            setStorage("rule", result.data, () => {
+                if (fn) {
+                    fn();
+                } else {
+                    wx.navigateTo({
+                        url
+                    })
+                }
+            });
+            setStorage("level", "primary");
+            setStorage("result", []);
 
+        });
+    });
+}
 export default {
     config: {
         "pages": [
-            "pages/my/hongbao/getCash/main",
             "pages/login/main",
             "pages/record/details/main",
             "pages/rePassword/main",

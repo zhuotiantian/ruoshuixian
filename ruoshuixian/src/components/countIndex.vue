@@ -53,7 +53,7 @@
                 wx.navigateTo({
                     url: this.nextPage
                 });
-                wx.setStorageSync("level", this.level);
+                this.$setStorage("level", this.level)
             },
             selLevel: function(level) {
                 this.level = level;

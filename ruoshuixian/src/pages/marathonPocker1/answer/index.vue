@@ -159,10 +159,11 @@
                     }
                 }).then(result => {
                     if (result.code == 1) {
-                        wx.navigateTo({
-                            url: "../result/main"
-                        })
-                        wx.setStorageSync("result", result.data);
+                        this.$setStorage("result", result.data, () => {
+                            wx.navigateTo({
+                                url: "../result/main"
+                            })
+                        });
                     } else {
                         wx.showToast({
                             title: result.msg,

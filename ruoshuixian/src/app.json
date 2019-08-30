@@ -1,100 +1,71 @@
 {
     "pages": [
         "pages/indexPage/main",
-        "pages/login/main",
-        "pages/marathonPocker1/memary/main",
-        "pages/marathonPocker1/answer/main",
-        "pages/marathonPocker1/main",
-        "pages/marathonPocker1/recall/main",
-        "pages/marathonPocker1/ready/main",
-        "pages/marathonPocker1/result/main",
-
-        "pages/my/hongbao/main",
-        "pages/my/hongbao/getCash/main",
-
+        "pages/record/main",
+        "pages/record/details/main",
+        "pages/firstPage/main",
+        "pages/ranking/main",
         "pages/my/main",
+        "pages/my/hongbao/main",
         "pages/my/message/main",
         "pages/my/record/main",
         "pages/my/ranking/main",
 
-        "pages/firstPage/main",
         "pages/hongbao/main",
-
-
-
+        "pages/regist/main",
+        "pages/login/main",
+        "pages/rePassword/main",
+        "pages/help/main",
+        "pages/index/main",
+        "pages/peoplePic/main",
+        "pages/peoplePic/memary/main",
+        "pages/peoplePic/result/main",
+        "pages/peoplePic/answer/main",
+        "pages/marathonPocker1/main",
+        "pages/marathonPocker1/memary/main",
+        "pages/marathonPocker1/answer/main",
+        "pages/marathonPocker1/recall/main",
+        "pages/marathonPocker1/ready/main",
+        "pages/marathonPocker1/result/main",
         "pages/randomWords/main",
         "pages/randomWords/memary/main",
         "pages/randomWords/result/main",
         "pages/randomWords/answer/main",
-
         "pages/fastNumber/result/main",
         "pages/fastNumber/main",
         "pages/fastNumber/answer/main",
         "pages/fastNumber/memary/main",
-
-
         "pages/virtualEvents/main",
         "pages/virtualEvents/result/main",
         "pages/virtualEvents/answer/main",
         "pages/virtualEvents/memary/main",
-
         "pages/binaryNumber/main",
         "pages/binaryNumber/result/main",
         "pages/binaryNumber/answer/main",
         "pages/binaryNumber/memary/main",
-
-
-
-        "pages/record/main",
-        "pages/record/details/main",
-
-        "pages/marathonPocker/main",
-        "pages/marathonPocker/memary/main",
-        "pages/marathonPocker/recall/main",
-        "pages/marathonPocker/ready/main",
-        "pages/marathonPocker/result/main",
-        "pages/marathonPocker/answer/main",
-
         "pages/listenAndRemember/main",
         "pages/listenAndRemember/answer/main",
         "pages/listenAndRemember/listen/main",
         "pages/listenAndRemember/result/main",
-
-
         "pages/flashPocker/main",
         "pages/flashPocker/answer/main",
         "pages/flashPocker/memary/main",
         "pages/flashPocker/recall/main",
         "pages/flashPocker/result/main",
-
-        "pages/regist/main",
-        "pages/rePassword/main",
-
         "pages/abstractPic/main",
         "pages/abstractPic/memary/main",
         "pages/abstractPic/answer/main",
         "pages/abstractPic/result/main",
-
         "pages/fastPocker/main",
         "pages/fastPocker/ready/main",
         "pages/fastPocker/memary/main",
         "pages/fastPocker/result/main",
         "pages/fastPocker/answer/main",
         "pages/fastPocker/recall/main",
-
         "pages/marathonNumber/main",
         "pages/marathonNumber/memary/main",
         "pages/marathonNumber/result/main",
-        "pages/marathonNumber/answer/main",
-
-        "pages/help/main",
-
-        "pages/peoplePic/main",
-        "pages/peoplePic/memary/main",
-        "pages/peoplePic/result/main",
-        "pages/peoplePic/answer/main",
-
-        "pages/index/main"
+        "pages/marathonNumber/answer/main"
 
     ],
     "subPackages": [{
@@ -105,11 +76,6 @@
             "message/main",
             "ranking/main",
             "record/main"
-        ]
-    }, {
-        "root": "pages/ranking/",
-        "pages": [
-            "main"
         ]
     }],
     "window": {

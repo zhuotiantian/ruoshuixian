@@ -7,7 +7,8 @@
             <div class="row" v-for="(rows,_index) in number" :key="_index">
                 <div class="image_div" v-for="(item,index) in rows" :key="index">
                     <image class="image" :src="domain+item.avatar" />
-                    <input type="text" class="input" placeholder="姓名" v-model="item.name" />
+                    <input type="text" class="input" placeholder="姓" v-model="item.xing_name" />
+                    <input type="text" class="input" placeholder="名" v-model="item.ming_name" />
                 </div>
                 <span class="rowName">row&nbsp;&nbsp;{{_index+1}}</span>
             </div>
@@ -30,9 +31,10 @@
             let rule = this.rule.rules_of_the_game.filter(e => {
                 return e.game_level == this.level;
             })[0];
-            this.numberList = rule.list.name.map((e, index) => {
+            this.numberList = rule.list.xing_name.map((e, index) => {
                 return {
-                    name: "",
+                    xing_name: "",
+                    ming_name: "",
                     avatar: rule.list.avatar[index]
                 };
             });
@@ -71,11 +73,13 @@
             },
             confirm: function() {
                 this.endTime = new Date().getTime();
-                let name = [];
+                let xing_name = [];
+                let ming_name = [];
                 let avatar = [];
                 this.number.forEach(e => {
                     e.forEach(m => {
-                        name.push(m.name);
+                        xing_name.push(m.xing_name);
+                        ming_name.push(m.ming_name);
                         avatar.push(m.avatar);
                     });
                 });
@@ -86,7 +90,8 @@
                             game_records_id: this.game_records_id,
                             game_time: (this.endTime - this.startTime) / 1000,
                             content: JSON.stringify({
-                                name,
+                                xing_name,
+                                ming_name,
                                 avatar
                             })
                         },
@@ -96,9 +101,10 @@
                     })
                     .then(result => {
                         if (result.code == 1) {
-                            wx.setStorageSync("result", result.data);
-                            wx.navigateTo({
-                                url: "../result/main"
+                            this.$setStorage("result", result.data, () => {
+                                wx.navigateTo({
+                                    url: "../result/main"
+                                })
                             });
                         } else {
                             wx.showToast({
@@ -159,5 +165,8 @@
         color: $grey-text;
         height: tovmin(40);
         line-height: tovmin(40) !important;
+        display: inline-block;
+        width: 40%;
+        margin-right: tovmin(20);
     }
 </style>

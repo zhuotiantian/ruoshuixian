@@ -57,7 +57,7 @@
                     wx.showToast({
                         title: "登陆信息已过期，请重新登陆"
                     });
-                    wx.navigateTo({
+                    wx.redirectTo({
                         url: "/pages/login/main"
                     })
                 }
@@ -66,8 +66,12 @@
         onLoad() {
             Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
-
             this.token = this.userInfo.token;
+            this.$setStorage("rule", {});
+            this.$setStorage("gameid", "");
+            this.$setStorage("level", "");
+            this.$setStorage("memaryTime", "");
+            this.$setStorage("result", {});
             this.getIndexData();
             this.getList();
         },
@@ -112,10 +116,7 @@
                 });
             },
             toGame: function(item) {
-                wx.setStorageSync("gameid", item.id);
-                wx.navigateTo({
-                    url: item.wxapp_url
-                });
+                this.$toGame(item.id, item.wxapp_url);
             },
             toRanking: function() {
                 let url = "../ranking/main";

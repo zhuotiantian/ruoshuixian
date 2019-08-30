@@ -44,262 +44,260 @@
     </div>
 </template>
 <script>
-export default {
-  props: [
-    "type",
-    "isResult",
-    "showType",
-    "pannelContent",
-    "isPocker",
-    "showTime",
-    "isInsert",
-    "btnType"
-  ],
-  onLoad() {
-    Object.assign(this.$data, this.$options.data());
-    this.level = this.$getParams("level");
-    this.rule = this.$getParams("rule");
-    this.result = this.$getParams("result");
-    this.memoryTime = this.$getParams("memoryTime");
-    this.times = this.rule.rules_of_the_game.filter(e => {
-      return e.game_level == (this.level || "primary");
-    })[0];
-    this.resetInterval();
-  },
-  onShow() {
-    this.resetInterval();
-  },
-  //   onUnload: function() {
-  //     wx.reLaunch({
-  //       url: "/" + pages[1].route
-  //     });
-  //   },
-  data() {
-    return {
-      t_seconds: null,
-      t_minutes: null,
-      showPannel: false,
-      selectType: "显示方式",
-      showTime: this.showTime,
-      active: null,
+    export default {
+        props: [
+            "type",
+            "isResult",
+            "showType",
+            "pannelContent",
+            "isPocker",
+            "showTime",
+            "isInsert",
+            "btnType"
+        ],
+        onLoad() {
+            Object.assign(this.$data, this.$options.data());
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
+            this.result = this.$getParams("result");
+            this.gameid = this.$getParams("gameid");
+            this.memoryTime = this.$getParams("memoryTime");
+            this.times = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == (this.level || "primary");
+            })[0];
+            this.resetInterval();
+        },
+        onShow() {
+            this.resetInterval();
+        },
+        data() {
+            return {
+                t_seconds: null,
+                t_minutes: null,
+                showPannel: false,
+                selectType: "显示方式",
+                showTime: this.showTime,
+                active: null,
 
-      event: {
-        跳过: "toNextPage",
-        记忆完成: "finishMemary",
-        作答完成: "finish",
-        开始: "startGame"
-      },
-      game: [],
-      result: [],
-      count: 0,
-      time: 0,
-      memoryTime: 0,
-      recallTime: 0,
-      times: [],
-      level: ""
-    };
-  },
-  watch: {
-    t_seconds: function() {
-      if (this.t_minutes == 0 && this.t_seconds == 0) {
-        if (this.btnType == "none") {
-          this.toNextPage();
-        }
-        this.type && this[this.event[this.type]]("timeout");
-      }
-    },
-    minutes: function(data) {
-      this.t_minutes = data - 1;
-      this.t_seconds = 60;
-    },
-    type: function() {
-      this.changeTime();
-    }
-  },
-  methods: {
-    resetInterval: function() {
-      this.changeTime();
-      this.timeout && clearInterval(this.timeout);
-      this.timer();
-    },
-    changeTime: function() {
-      switch (this.type) {
-        case "记忆完成":
-          this.t_seconds = this.memoryTime || this.times.memory_time || 60;
-          this.t_minutes = 0;
-          break;
-        case "开始":
-          this.t_seconds = this.times.recollect_time || 60;
-          this.t_minutes = 0;
-          break;
-        case "作答完成":
-          this.t_seconds = 60;
-          this.t_minutes = 15;
-          break;
-        case "跳过":
-          this.t_seconds = 60;
-          this.t_minutes = 0;
-          break;
-      }
-    },
-    timer: function() {
-      if (this.t_minutes) {
-        this.t_seconds = 60;
-        this.t_minutes = this.t_minutes - 1;
-        this.timeout = setInterval(() => {
-          if (this.t_seconds == 0) {
-            if (this.t_minutes > 0) {
-              this.t_minutes--;
-              this.t_seconds = 60;
-            } else {
-              clearInterval(this.timeout);
+                event: {
+                    跳过: "toNextPage",
+                    记忆完成: "finishMemary",
+                    作答完成: "finish",
+                    开始: "startGame"
+                },
+                game: [],
+                result: [],
+                count: 0,
+                time: 0,
+                memoryTime: 0,
+                recallTime: 0,
+                times: [],
+                level: ""
+            };
+        },
+        watch: {
+            t_seconds: function() {
+                if (this.t_minutes == 0 && this.t_seconds == 0) {
+                    if (this.btnType == "none") {
+                        this.toNextPage();
+                    }
+                    this.type && this[this.event[this.type]]("timeout");
+                }
+            },
+            minutes: function(data) {
+                this.t_minutes = data - 1;
+                this.t_seconds = 60;
+            },
+            type: function() {
+                this.changeTime();
             }
-          } else {
-            this.t_seconds--;
-          }
-        }, 1000);
-      } else {
-        this.timeout = setInterval(() => {
-          this.t_seconds--;
-          if (this.t_seconds == 0) {
-            clearInterval(this.timeout);
-          }
-        }, 1000);
-      }
-    },
-    finish: function(data) {
-      clearInterval(this.timeout);
-      this.$emit("finish", data);
-    },
-    nextPage: function() {
-      this.$emit("nextPage");
-    },
-    group: function(count, index) {
-      this.selectType = count;
-      this.active = index;
-      this.$emit("group", count);
-      this.showPannel = false;
-      clearInterval(this.timeout);
-      this.timer();
-    },
-    toNextPage: function() {
-      clearInterval(this.timeout);
-      this.$emit("toNextPage");
-    },
-    toHelpPage: function() {
-      wx.navigateTo({
-        url: "/pages/help/main"
-      });
-    },
-    startGame: function() {
-      clearInterval(this.timeout);
-      this.$emit("startGame");
-    },
-    showTimeHandle: function() {
-      this.showTime = !this.showTime;
-    },
-    finishMemary: function() {
-      clearInterval(this.timeout);
-      this.$emit("finishMemary");
-    },
-    playAgain: function() {
-      let pages = getCurrentPages();
-      wx.reLaunch({
-        url: "/" + pages[1].route
-      });
-    }
-  }
-};
+        },
+        methods: {
+            resetInterval: function() {
+                this.changeTime();
+                this.timeout && clearInterval(this.timeout);
+                this.timer();
+            },
+            changeTime: function() {
+                switch (this.type) {
+                    case "记忆完成":
+                        this.t_seconds = this.memoryTime || this.times.memory_time || 60;
+                        this.t_minutes = 0;
+                        break;
+                    case "开始":
+                        this.t_seconds = this.times.recollect_time || 60;
+                        this.t_minutes = 0;
+                        break;
+                    case "作答完成":
+                        this.t_seconds = 60;
+                        this.t_minutes = 15;
+                        break;
+                    case "跳过":
+                        this.t_seconds = 60;
+                        this.t_minutes = 0;
+                        break;
+                }
+            },
+            timer: function() {
+                if (this.t_minutes) {
+                    this.t_seconds = 60;
+                    this.t_minutes = this.t_minutes - 1;
+                    this.timeout = setInterval(() => {
+                        if (this.t_seconds == 0) {
+                            if (this.t_minutes > 0) {
+                                this.t_minutes--;
+                                this.t_seconds = 60;
+                            } else {
+                                clearInterval(this.timeout);
+                            }
+                        } else {
+                            this.t_seconds--;
+                        }
+                    }, 1000);
+                } else {
+                    this.timeout = setInterval(() => {
+                        this.t_seconds--;
+                        if (this.t_seconds == 0) {
+                            clearInterval(this.timeout);
+                        }
+                    }, 1000);
+                }
+            },
+            finish: function(data) {
+                clearInterval(this.timeout);
+                this.$emit("finish", data);
+            },
+            nextPage: function() {
+                this.$emit("nextPage");
+            },
+            group: function(count, index) {
+                this.selectType = count;
+                this.active = index;
+                this.$emit("group", count);
+                this.showPannel = false;
+                clearInterval(this.timeout);
+                this.timer();
+            },
+            toNextPage: function() {
+                clearInterval(this.timeout);
+                this.$emit("toNextPage");
+            },
+            toHelpPage: function() {
+                wx.navigateTo({
+                    url: "/pages/help/main"
+                });
+            },
+            startGame: function() {
+                clearInterval(this.timeout);
+                this.$emit("startGame");
+            },
+            showTimeHandle: function() {
+                this.showTime = !this.showTime;
+            },
+            finishMemary: function() {
+                clearInterval(this.timeout);
+                this.$emit("finishMemary");
+            },
+            playAgain: function() {
+                let pages = getCurrentPages();
+                this.$toGame(this.gameid, "", () => {
+                    wx.navigateTo({
+                        url: "/" + pages[1].route
+                    });
+                })
+            }
+        }
+    };
 </script>
 <style lang="scss" scoped>
-.title {
-  font-size: tovmin(30);
-  display: flex;
-  justify-content: space-between;
-  padding: tovmin(40) tovmin(30) tovmin(30) tovmin(30);
-  position: fixed;
-  top: 0;
-  width: calc(100% - 30rpx);
-  background: $deep-blue;
-  color: white;
-  z-index: 999;
-}
+    .title {
+        font-size: tovmin(30);
+        display: flex;
+        justify-content: space-between;
+        padding: tovmin(40) tovmin(30) tovmin(30) tovmin(30);
+        position: fixed;
+        top: 0;
+        width: calc(100% - 30rpx);
+        background: $deep-blue;
+        color: white;
+        z-index: 999;
+    }
 
-.shareBtn {
-  background: white;
-  color: $black;
-  text-align: right;
-  width: tovmin(130);
-  vertical-align: middle;
-  margin-left: tovmin(26);
-}
+    .shareBtn {
+        background: white;
+        color: $black;
+        text-align: right;
+        width: tovmin(130);
+        vertical-align: middle;
+        margin-left: tovmin(26);
+    }
 
-.share {
-  width: tovmin(32);
-  height: tovmin(26);
-  top: tovmin(6);
-}
+    .share {
+        width: tovmin(32);
+        height: tovmin(26);
+        top: tovmin(6);
+    }
 
-.pannel {
-  position: fixed;
-  width: 100%;
-  background: white;
-  color: $black;
-  z-index: 10001;
-  bottom: tovmin(-1000);
-  text-align: center;
-  // height: 100%;
-}
+    .pannel {
+        position: fixed;
+        width: 100%;
+        background: white;
+        color: $black;
+        z-index: 10001;
+        bottom: tovmin(-1000);
+        text-align: center;
+        // height: 100%;
+    }
 
-.pannel p:first-child {
-  height: tovmin(150);
-  line-height: tovmin(150);
-}
+    .pannel p:first-child {
+        height: tovmin(150);
+        line-height: tovmin(150);
+    }
 
-.pannel p {
-  height: tovmin(120);
-  line-height: tovmin(120);
-}
+    .pannel p {
+        height: tovmin(120);
+        line-height: tovmin(120);
+    }
 
-.pannel p.active {
-  background: $light-blue;
-}
+    .pannel p.active {
+        background: $light-blue;
+    }
 
-.type {
-  width: tovmin(170);
-  text-align: center;
-  position: absolute;
-}
+    .type {
+        width: tovmin(170);
+        text-align: center;
+        position: absolute;
+    }
 
-.down {
-  animation: slide-down 0.5s;
-  animation-fill-mode: forwards;
-}
+    .down {
+        animation: slide-down 0.5s;
+        animation-fill-mode: forwards;
+    }
 
-.up {
-  animation: slide-up 0.5s;
-  animation-fill-mode: forwards;
-}
+    .up {
+        animation: slide-up 0.5s;
+        animation-fill-mode: forwards;
+    }
 
-@keyframes slide-down {
-  from {
-    bottom: tovmin(-1000);
-  }
+    @keyframes slide-down {
+        from {
+            bottom: tovmin(-1000);
+        }
 
-  to {
-    bottom: 0;
-    display: block;
-  }
-}
+        to {
+            bottom: 0;
+            display: block;
+        }
+    }
 
-@keyframes slide-up {
-  from {
-    bottom: 0;
-  }
+    @keyframes slide-up {
+        from {
+            bottom: 0;
+        }
 
-  to {
-    bottom: tovmin(-1000);
-    display: none;
-  }
-}
+        to {
+            bottom: tovmin(-1000);
+            display: none;
+        }
+    }
 </style>

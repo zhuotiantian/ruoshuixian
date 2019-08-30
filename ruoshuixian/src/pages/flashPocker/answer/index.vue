@@ -128,10 +128,11 @@
                     }
                 }).then(result => {
                     if (result.code == 1) {
-                        wx.navigateTo({
-                            url: "../result/main"
+                        this.$setStorage("result", result.data, () => {
+                            wx.navigateTo({
+                                url: "../result/main"
+                            })
                         });
-                        wx.setStorageSync("result", result.data);
                     } else {
                         wx.showToast({
                             title: result.msg,

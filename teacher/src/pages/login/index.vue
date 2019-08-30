@@ -4,8 +4,8 @@
         <div class="login-form">
             <div class="input_div">
                 <input type="text" class="input" placeholder="请输入手机号" v-model="form.mobile" placeholder-style="color:#ccc" />
-                <image :src="'/static/images/my/phone.png'" class="icon" style="height:42rpx;width:34rpx">
-                </image>
+                <image :src="'/static/images/my/phone.png'" class="icon" style="height:42rpx;width:34rpx"></image>
+
             </div>
             <template v-if="!codeLogin">
                 <span class="getCode" @click="getCode" v-if="!clickGetCode">获取验证码</span>
@@ -13,23 +13,24 @@
             </template>
             <div class="input-div">
                 <template v-if="codeLogin">
-                    <input type="text" class="input" v-model="form.password" placeholder="密码" placeholder-style="color:#ccc" />
+                    <input type="password" class="input" v-model="form.password" placeholder="密码" placeholder-style="color:#ccc" />
                     <image :src="'/static/images/my/password.png'" class="icon" style="height:42rpx;width:34rpx"></image>
                 </template>
                 <template v-else>
                     <input type="text" class="input" placeholder="验证码" v-model="form.captcha" placeholder-style="color:#ccc" />
-                    <image :src="'/static/images/my/keys.png'" class="icon" style="height:54rpx;width:38rpx">
-                    </image>
+                    <image :src="'/static/images/my/keys.png'" class="icon" style="height:54rpx;width:38rpx"></image>
+
                 </template>
             </div>
-            <p style="text-align:center">
-                <span class="btn submit-btn" @click="login">登 录</span>
-            </p>
+            <form style="text-align:center" action="" report-submit='true' @submit="login">
+                <button class="btn submit-btn" form-type='submit'>登 录</button>
+            </form>
             <p class="info">
                 <span @click="switchLoginWay">
-                    <span v-if="!codeLogin">密码登陆</span><span v-else>验证码登陆</span>
+                    <span v-if="!codeLogin">密码登录</span><span v-else>验证码登录</span>
                 </span>
-                <span>忘记密码</span></p>
+                <span @click="toRepassword">忘记密码</span></p>
+
         </div>
         <p id="info">还没有若水轩账号？<span style="color:#f8b551" @click="toRegist">立即注册</span></p>
     </div>
@@ -46,12 +47,14 @@
                     mobile: "",
                     captcha: "",
                     password: ""
-                }
+                },
+                code: ""
             }
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
+            this.code = this.$getParams("code");
             this.token = this.userInfo.token;
         },
         methods: {
@@ -62,24 +65,34 @@
                     url
                 })
             },
-            login: function() {
+            login: function(e) {
                 const {
                     mobile,
                     captcha,
                     password
                 } = this.form;
+                if (mobile == "") {
+                    wx.showToast({
+                        title: "手机号不能为空",
+                        icon: "none"
+                    });
+                    return false
+                };
+                if (captcha && this.codeLogin) {
+                    wx.showToast({
+                        title: "验证码不能为空",
+                        icon: "none"
+                    });
+                    return false
+                };
+                if (password && !this.codeLogin) {
+                    wx.showToast({
+                        title: "密码不能为空",
+                        icon: "none"
+                    });
+                    return false
+                }
                 if (!this.codeLogin) {
-                    // this.$http.post({
-                    //     url: "/api/wxapp.sms/check",
-                    //     data: {
-                    //         mobile,
-                    //         captcha
-                    //     },
-                    //     header: {
-                    //         token: this.token
-                    //     }
-                    // }).then(result => {
-                    //     if (result.code == 1) {
                     this.$http.post({
                         url: "/api/wxapp.user/mobilelogin",
                         data: {
@@ -91,12 +104,15 @@
                         }
                     }).then(result => {
                         if (result.code == 1) {
-                            wx.showToast({
-                                title: "登陆成功"
-                            })
-                            wx.navigateTo({
-                                url: "../my_teacher/main"
-                            })
+                            this.$setStorage("userInfo", result.data.userinfo, () => {
+                                this.storageData(result.data.userinfo.token)
+                                wx.showToast({
+                                    title: "登陆成功"
+                                });
+                                wx.navigateTo({
+                                    url: "../my_teacher/main"
+                                })
+                            });
                         } else {
                             wx.showToast({
                                 title: result.msg,
@@ -104,13 +120,6 @@
                             })
                         }
                     });
-                    // } else {
-                    //     wx.showToast({
-                    //         title: result.msg,
-                    //         icon: "none"
-                    //     })
-                    // }
-                    // });
                 } else {
                     this.$http.post({
                         url: "/api/wxapp.user/login",
@@ -123,20 +132,14 @@
                         }
                     }).then(result => {
                         if (result.code == 1) {
-                            wx.setStorageSync("userInfo", result.data.userinfo)
-                            wx.showToast({
-                                title: "登陆成功"
-                            });
-                            wx.navigateTo({
-                                url: "../my_teacher/main"
-                            });
-                            wx.login({
-                                success: function(res) {
-                                    wx.setStorage({
-                                        key: "code",
-                                        data: res.code
-                                    });
-                                }
+                            this.$setStorage("userInfo", result.data.userinfo, () => {
+                                this.storageData(result.data.userinfo.token)
+                                wx.showToast({
+                                    title: "登陆成功"
+                                });
+                                wx.navigateTo({
+                                    url: "../my_teacher/main"
+                                })
                             });
                         } else {
                             wx.showToast({
@@ -144,10 +147,30 @@
                                 icon: "none"
                             })
                         }
-                    }).catch(err => {
-                        console.log(err);
                     });
                 };
+            },
+            storageData: function(token) {
+                this.$http.post({
+                    url: "/api/wxapp.user/storageFormId",
+                    data: {
+                        form_id: e.mp.detail.formId
+                    },
+                    header: {
+                        token
+                    }
+                }).then(result => {
+                    this.$http.post({
+                        url: "/api/wxapp.user/bindingWechat",
+                        data: {
+                            code: this.code,
+                            type: "user"
+                        },
+                        header: {
+                            token
+                        }
+                    })
+                })
             },
             getCode: function() {
                 // 获取验证码
@@ -187,6 +210,11 @@
                 clearInterval(this.timer);
                 this.clickGetCode = false;
                 this.seconds = 60;
+            },
+            toRepassword: function() {
+                wx.navigateTo({
+                    url: "../rePassword/main"
+                })
             }
         }
     };
@@ -270,5 +298,11 @@
 
     .input-div {
         position: relative;
+    }
+
+    form {
+        display: flex;
+        justify-content: center;
+
     }
 </style>

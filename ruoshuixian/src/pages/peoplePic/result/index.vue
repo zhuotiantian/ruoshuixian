@@ -2,11 +2,11 @@
     <div class="container">
         <CardTitle :isResult="true"></CardTitle>
         <div class="list">
-            <div class="row" v-for="(rows,_index) in rows" :key="_index">
-                <div class="image_div" v-for="(item,index) in number" :key="index">
-                    <image class="image" :src="'/static/images/firstPage/people.png'" />
-                    <span class="result name">罗晋</span>
-                    <span class="answer name">罗晋</span>
+            <div class="row" v-for="(rows,_index) in number" :key="_index">
+                <div class="image_div" v-for="(item,index) in rows" :key="index">
+                    <image class="image" :src="domain+item.avatar" />
+                    <span class="result name">{{item.name}}</span>
+                    <span :class="{answer:item.result==0, name:true}">{{item.result_name}}</span>
                 </div>
                 <span>row&nbsp;&nbsp;{{_index+1}}</span>
             </div>
@@ -19,13 +19,34 @@
         components: {
             CardTitle
         },
+        onLoad(option) {
+            this.level = this.$getParams("level");
+            this.rule = this.$getParams("rule");
+            let result = this.$getParams("result");
+            let rule = this.rule.rules_of_the_game.filter(e => {
+                return e.game_level == this.level
+            })[0];
+            this.numberList = rule.list.xing_name.map((e, index) => {
+                return {
+                    name: e + rule.list.ming_name[index],
+                    result_name: result.right_and_wrong_results[index].result_name,
+                    avatar: rule.list.avatar[index]
+                }
+            });
+            this.total = rule.number;
+            this.per = rule.number_per_group;
+            let number = [];
+            for (var i = 0; i < this.total; i += this.per) {
+                number.push(this.numberList.slice(i, i + this.per));
+            };
+            this.number = number.filter(e => {
+                return e.length > 0
+            });
+        },
         data() {
-            let array = new Array(5);
-            let rows = new Array(10);
             return {
-                number: array,
-                rows: rows,
-
+                number: [],
+                domain: this.$http.domain
             };
         },
     };
@@ -78,6 +99,7 @@
         height: tovmin(40);
         line-height: tovmin(40) !important;
         display: block;
+        color: $red;
     }
 
     .result {

@@ -3,11 +3,10 @@
         <div class="item" v-for="(item,index) in worklist" :key="index">
             <p class="title">
                 <span>{{item.name}}</span>
+
             </p>
-            <form report-submit="true" @submit="remind($event,item.students_homework_id)">
-                <button class="remind active" v-if="item.reminder_status=='normal'" form-type="submit" data-type="click">提醒打卡</button>
-                <button class="remind" v-else form-type="submit" data-type="click">已提醒</button>
-            </form>
+            <span class="remind active" v-if="item.reminder_status=='normal'" @click="remind($event,item.students_homework_id)">提醒打卡</span>
+            <span class="remind" v-else @click="remind($event,item.students_homework_id)">已提醒</span>
             <p style="margin-bottom:15px">
                 <span class="work-item" v-for="(item,_index) in works" :key="_index">{{item.game_name}}</span>
             </p>
@@ -19,16 +18,7 @@
     export default {
         onLoad() {
             this.userInfo = this.$getParams("userInfo");
-            // this.code = this.$getParams("code");
             this.token = this.userInfo.token;
-            wx.getStorage({
-                key: "code",
-                success: (res) => {
-                    this.code = res.data;
-                    this.getOpenid();
-
-                }
-            });
             this.getWorkList();
         },
         data() {
@@ -39,20 +29,6 @@
             }
         },
         methods: {
-            getOpenid: function() {
-                this.$http.get({
-                    url: "/api/wxapp.user/getOpenId",
-                    data: {
-                        code: this.code,
-                        type: "teacher"
-                    },
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    this.openid = result.data.openid;
-                });
-            },
             getWorkList: function() {
                 this.$http.get({
                     url: "/api/wxapp.student/cardTaskList",
@@ -90,15 +66,17 @@
                 this.$http.get({
                     url: "/api/wxapp.user/cardReminder",
                     data: {
-                        temp_open_id: openid,
-                        students_homework_id: id,
-                        form_id: this.formId
+                        students_homework_id: id
                     },
                     header: {
                         token: this.token
                     }
                 }).then(result => {
-                    console.log(result);
+                    if (result.code == 1) {
+                        wx.showToast({
+                            title: "提醒成功"
+                        })
+                    }
                 })
             }
         }
@@ -119,6 +97,7 @@
         border-radius: tovmin(6);
         margin: tovmin(30) tovmin(40);
         height: tovmin(396);
+        position: relative;
     }
 
     .title {
@@ -126,13 +105,6 @@
         justify-content: space-between;
         position: relative;
         margin-bottom: tovmin(20);
-    }
-
-    form {
-        position: absolute;
-        right: tovmin(30);
-        top: tovmin(60);
-        z-index: 999;
     }
 
     .remind {
@@ -145,6 +117,9 @@
         border-radius: tovmin(6);
         padding: 0;
         background: #ebebeb;
+        position: absolute;
+        right: tovmin(-10);
+        top: tovmin(30);
     }
 
     .remind.active {

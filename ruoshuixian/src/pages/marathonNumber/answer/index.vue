@@ -90,15 +90,11 @@
                     }
                 }).then(result => {
                     if (result.code == 1) {
-                        wx.setStorage({
-                            key: "result",
-                            data: result.data,
-                            success: function() {
-                                wx.navigateTo({
-                                    url: "../result/main"
-                                })
-                            }
-                        })
+                        this.$setStorage("result", result.data, () => {
+                            wx.navigateTo({
+                                url: "../result/main"
+                            })
+                        });
                     } else {
                         wx.showToast({
                             title: result.msg,

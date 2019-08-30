@@ -88,10 +88,11 @@
                     }
                 }).then(result => {
                     if (result.code == 1) {
-                        wx.setStorageSync("result", result.data);
-                        wx.navigateTo({
-                            url: "../result/main"
-                        })
+                        this.$setStorage("result", result.data, () => {
+                            wx.navigateTo({
+                                url: "../result/main"
+                            })
+                        });
                     } else {
                         wx.showToast({
                             title: result.msg,
