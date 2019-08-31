@@ -17,17 +17,27 @@ wx.getSystemInfo({
 });
 getApp().globalData.token = wx.getStorageSync("userInfo").token;
 getApp().globalData.ratio = pixelRatio;
-wx.login({
+Vue.prototype.globalData = getApp().globalData;
+Vue.prototype.$http = http;
+wx.getStorage({
+    key: "userInfo",
     success: function (res) {
-        Vue.prototype.$code = res.code;
-        wx.setStorage({
-            key: "code",
-            data: res.code
+        wx.login({
+            success: function (_res) {
+                http.get({
+                    url: "/api/wxapp.user/getOpenId",
+                    data: {
+                        code: _res.code,
+                        type: "user"
+                    },
+                    header: {
+                        token: res.token
+                    }
+                })
+            }
         });
     }
 });
-Vue.prototype.globalData = getApp().globalData;
-Vue.prototype.$http = http;
 Vue.prototype.$getParams = (param) => {
     return wx.getStorageSync(param);
 };

@@ -22,9 +22,10 @@
 
                 </template>
             </div>
-            <form style="text-align:center" action="" report-submit='true' @submit="login">
+            <button class="btn submit-btn" open-type="getUserInfo" @getuserinfo="getUserInfo">登 录</button>
+            <!-- <form style="text-align:center" action="" report-submit='true'>
                 <button class="btn submit-btn" form-type='submit' open-type="getUserInfo" @getuserinfo="getUserInfo">登 录</button>
-            </form>
+            </form> -->
             <p class="info">
                 <span @click="switchLoginWay">
                     <span v-if="!codeLogin">密码登录</span><span v-else>验证码登录</span>
@@ -63,20 +64,10 @@
                 let that = this;
                 wx.getUserInfo({
                     success: function(res) {
-                        that.$http.post({
-                            url: "/api/wxapp.user/bindingWechat",
-                            data: {
-                                code: that.code,
-                                user_info: res,
-                                type: "user"
-                            },
-                            header: {
-                                token: that.token
-                            }
-                        })
+                        console.log(res);
+                        that.login(res);
                     }
                 });
-
             },
             // 跳转到注册页面
             toRegist: function() {
@@ -85,7 +76,7 @@
                     url
                 })
             },
-            login: function(e) {
+            login: function(res) {
                 const {
                     mobile,
                     captcha,
@@ -125,13 +116,31 @@
                     }).then(result => {
                         if (result.code == 1) {
                             this.$setStorage("userInfo", result.data.userinfo, () => {
-                                this.storageData(result.data.userinfo.token, e.mp.detail.formId)
+                                // this.storageData(result.data.userinfo.token, e.mp.detail.formId)
                                 wx.showToast({
                                     title: "登陆成功"
                                 });
-                                wx.redirectTo({
-                                    url: "../firstPage/main"
+                                let that = this;
+                                wx.login({
+                                    success: function(_res) {
+                                        that.$http.post({
+                                            url: "/api/wxapp.user/bindingWechat",
+                                            data: {
+                                                code: _res.code,
+                                                user_info: res,
+                                                type: "user"
+                                            },
+                                            header: {
+                                                token: result.data.userinfo.token
+                                            }
+                                        }).then(result => {
+                                            wx.redirectTo({
+                                                url: "../firstPage/main"
+                                            })
+                                        })
+                                    }
                                 })
+
                             });
                         } else {
                             wx.showToast({
@@ -153,12 +162,30 @@
                     }).then(result => {
                         if (result.code == 1) {
                             this.$setStorage("userInfo", result.data.userinfo, () => {
-                                this.storageData(result.data.userinfo.token, e.mp.detail.formId)
+                                // this.storageData(result.data.userinfo.token, e.mp.detail.formId)
                                 wx.showToast({
                                     title: "登陆成功"
                                 });
-                                wx.redirectTo({
-                                    url: "../firstPage/main"
+                                let that = this;
+                                wx.login({
+                                    success: function(_res) {
+                                        console.log(_res.code);
+                                        that.$http.post({
+                                            url: "/api/wxapp.user/bindingWechat",
+                                            data: {
+                                                code: _res.code,
+                                                user_info: res,
+                                                type: "user"
+                                            },
+                                            header: {
+                                                token: result.data.userinfo.token
+                                            }
+                                        }).then(result => {
+                                            wx.redirectTo({
+                                                url: "../firstPage/main"
+                                            })
+                                        })
+                                    }
                                 })
                             });
 
@@ -170,6 +197,7 @@
                         }
                     });
                 };
+
             },
             storageData: function(token, formId) {
                 if (formId !== "the formId is a mock one") {

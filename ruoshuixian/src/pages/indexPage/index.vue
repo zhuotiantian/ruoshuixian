@@ -50,18 +50,6 @@
             wx.hideTabBar();
             this.token = this.userInfo.token;
             this.$http.get({
-                url: "/api/wxapp.user/getOpenId",
-                data: {
-                    code: this.$code,
-                    type: "user"
-                },
-                header: {
-                    token: this.token
-                }
-            }).then(result => {
-                this.openid = result.data.openid;
-            });
-            this.$http.get({
                 url: "/api/wxapp.token/check",
                 header: {
                     token: this.token
@@ -90,6 +78,7 @@
             this.$setStorage("result", {});
             this.getIndexData();
             this.getList();
+
         },
         onShareAppMessage: function(res) {
             return {
