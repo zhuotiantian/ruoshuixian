@@ -10,8 +10,8 @@
         <div class="content">
             <ul>
                 <li v-for="(item,index) in list" :key="index">
-                    <span>红包记录1</span>
-                    <span>2.00元</span>
+                    <span>{{item.name}}</span>
+                    <span>{{item.money}}元</span>
                 </li>
                 <span class="btn submit-btn" @click="tixian">去提现</span>
             </ul>

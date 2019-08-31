@@ -6,7 +6,7 @@
             <div class="img_div" v-for="(item,index) in list" :key="index">
                 <image class="image" :src=" domain+item.img" @click="getMoney"></image>
                 <div>
-                    <div class="btn default-btn" @click="showRedPocket" v-if="item.status=='unclaimed'">已完成任务，点击领取</div>
+                    <div class="btn default-btn" @click="showRedPocket(item.game_classification_id)" v-if="item.status=='unclaimed'">已完成任务，点击领取</div>
                     <div class="btn submit-btn" v-else-if="item.status=='pending_sales'" @click="toGame(item.game_classification_id,item.wxapp_url)">去完成任务</div>
                     <div class="small-fog"></div>
                 </div>
@@ -33,14 +33,17 @@
         },
         onShow() {
             wx.hideTabBar();
+            Object.assign(this.$data, this.$options.data());
+            this.getList();
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data());
             this.userInfo = this.$getParams("userInfo");
 
             this.token = this.userInfo.token;
-            this.getList();
+            // this.getList();
         },
+
         components: {
             CardFooter
         },
@@ -55,7 +58,7 @@
                     })
                     .then(result => {
                         this.list = result.data.list.filter(e => {
-                            return e.game_classification_id !== 0
+                            return e.game_classification_id !== 0 && e.status !== 'received'
                         });
                         this.rule = result.rule_description;
                     });
@@ -66,13 +69,31 @@
             hideFog: function() {
                 this.showFog = false;
             },
-            showRedPocket: function() {
+            showRedPocket: function(id) {
                 this.showFog = true;
+                this.game_classification_id = id;
             },
             toGetRedPocket: function() {
-                wx.navigateTo({
-                    url: "/pages/my/hongbao/main"
-                });
+                this.$http.post({
+                    url: "/api/wxapp.red_envelopes/getARedEnvelope",
+                    data: {
+                        game_classification_id: this.game_classification_id
+                    },
+                    header: {
+                        token: this.token
+                    }
+                }).then(result => {
+                    if (result.code == 1) {
+                        wx.showToast({
+                            title: "领取成功",
+                            icon: "success"
+                        });
+                        wx.navigateTo({
+                            url: "/pages/my/hongbao/main"
+                        });
+                        this.showFog = false;
+                    }
+                })
             },
             toGame: function(id, url) {
                 this.$toGame(id, url);

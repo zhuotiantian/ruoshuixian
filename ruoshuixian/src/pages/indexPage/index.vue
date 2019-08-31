@@ -48,9 +48,19 @@
         },
         onShow() {
             wx.hideTabBar();
-
             this.token = this.userInfo.token;
-
+            this.$http.get({
+                url: "/api/wxapp.user/getOpenId",
+                data: {
+                    code: this.$code,
+                    type: "user"
+                },
+                header: {
+                    token: this.token
+                }
+            }).then(result => {
+                this.openid = result.data.openid;
+            });
             this.$http.get({
                 url: "/api/wxapp.token/check",
                 header: {
@@ -65,11 +75,13 @@
                         url: "/pages/login/main"
                     })
                 }
-            })
+            });
+
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
             this.userInfo = this.$getParams("userInfo");
+            this.code = this.$getParams("code");
             this.token = this.userInfo.token;
             this.$setStorage("rule", {});
             this.$setStorage("gameid", "");

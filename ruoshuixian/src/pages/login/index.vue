@@ -23,7 +23,7 @@
                 </template>
             </div>
             <form style="text-align:center" action="" report-submit='true' @submit="login">
-                <button class="btn submit-btn" form-type='submit'>登 录</button>
+                <button class="btn submit-btn" form-type='submit' open-type="getUserInfo" @getuserinfo="getUserInfo">登 录</button>
             </form>
             <p class="info">
                 <span @click="switchLoginWay">
@@ -48,7 +48,8 @@
                     captcha: "",
                     password: ""
                 },
-                code: ""
+                code: "",
+                isIdGot: false
             }
         },
         onLoad() {
@@ -58,6 +59,25 @@
             this.token = this.userInfo.token;
         },
         methods: {
+            getUserInfo: function() {
+                let that = this;
+                wx.getUserInfo({
+                    success: function(res) {
+                        that.$http.post({
+                            url: "/api/wxapp.user/bindingWechat",
+                            data: {
+                                code: that.code,
+                                user_info: res,
+                                type: "user"
+                            },
+                            header: {
+                                token: that.token
+                            }
+                        })
+                    }
+                });
+
+            },
             // 跳转到注册页面
             toRegist: function() {
                 let url = "../regist/main";

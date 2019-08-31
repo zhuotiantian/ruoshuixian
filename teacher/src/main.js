@@ -13,6 +13,15 @@ Vue.prototype.$http = http;
 Vue.prototype.$getParams = (param) => {
     return wx.getStorageSync(param);
 };
+Vue.prototype.$setStorage = (key, data, fn) => {
+    wx.setStorage({
+        key: key,
+        data: data,
+        success: () => {
+            fn && fn();
+        }
+    });
+}
 let pixelRatio = 0
 wx.getSystemInfo({
     success: function (res) {

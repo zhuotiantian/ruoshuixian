@@ -6,15 +6,6 @@ Vue.config._mpTrace = true
 App.mpType = 'app'
 const app = new Vue(App);
 app.$mount();
-
-wx.login({
-    success: function (res) {
-        wx.setStorage({
-            key: "code",
-            data: res.code
-        });
-    }
-});
 let pixelRatio = 0
 wx.getSystemInfo({
     success: function (res) {
@@ -26,6 +17,15 @@ wx.getSystemInfo({
 });
 getApp().globalData.token = wx.getStorageSync("userInfo").token;
 getApp().globalData.ratio = pixelRatio;
+wx.login({
+    success: function (res) {
+        Vue.prototype.$code = res.code;
+        wx.setStorage({
+            key: "code",
+            data: res.code
+        });
+    }
+});
 Vue.prototype.globalData = getApp().globalData;
 Vue.prototype.$http = http;
 Vue.prototype.$getParams = (param) => {
@@ -67,6 +67,7 @@ Vue.prototype.$toGame = (id, url, fn) => {
         });
     });
 }
+
 export default {
     config: {
         "pages": [

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="btn-group">
-            <button class="btn primary" @click="weChetLogin">微信授权登陆</button>
+            <button class="btn primary" open-type="getUserInfo" @getuserinfo="weChetLogin">微信授权登陆</button>
             <button class="btn default" @click="toLogin">账号登陆</button>
         </div>
     </div>
@@ -11,20 +11,18 @@
     export default {
         methods: {
             weChetLogin: function() {
-                this.getLocation();
+                wx.getUserInfo({
+                    data: {
+                        withCredentials: false
+                    },
+                    success: (res) => {
+                        console.log(res);
+                    }
+                });
             },
             getLocation: function(fn) {
                 const self = this;
-                wx.getLocation({
-                    type: 'wgs84',
-                    success(res) {
-                        const latitude = res.latitude
-                        const longitude = res.longitude
-                        const speed = res.speed
-                        const accuracy = res.accuracy;
-                        self.getUserInfo();
-                    }
-                })
+
             },
             getUserInfo: function() {
                 const self = this;

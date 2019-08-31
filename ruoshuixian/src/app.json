@@ -1,6 +1,8 @@
 {
     "pages": [
         "pages/indexPage/main",
+        "pages/login/main",
+        "pages/index/main",
         "pages/record/main",
         "pages/record/details/main",
         "pages/firstPage/main",
@@ -13,10 +15,8 @@
 
         "pages/hongbao/main",
         "pages/regist/main",
-        "pages/login/main",
         "pages/rePassword/main",
         "pages/help/main",
-        "pages/index/main",
         "pages/peoplePic/main",
         "pages/peoplePic/memary/main",
         "pages/peoplePic/result/main",
