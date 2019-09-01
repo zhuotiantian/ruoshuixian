@@ -73,7 +73,7 @@
             };
         },
         onLoad() {
-            Object.assign(this.$data, this.$options.data())
+            Object.assign(this.$data, this.$options.data());
             this.$getStorage("userInfo").then(result => {
                 this.token = result.token;
                 this.getList();
@@ -103,35 +103,39 @@
                 this.showSuccessBox = true;
                 let params = {
                     name: this.workname,
-                    game_ids: this.game.filter(e => {
-                        return e.selected
-                    }).map(e => {
-                        return e.id
-                    }),
+                    game_ids: this.game
+                        .filter(e => {
+                            return e.selected;
+                        })
+                        .map(e => {
+                            return e.id;
+                        }),
                     user_ids: this.selectedUser.join(","),
                     remarks: this.remarks
                 };
-                this.$http.post({
-                    url: "/api/wxapp.student/publishStudentAssignments",
-                    data: params,
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    this.game = this.game.map(e => {
-                        return {
-                            name: e.name,
-                            selected: false
-                        };
+                this.$http
+                    .post({
+                        url: "/api/wxapp.student/publishStudentAssignments",
+                        data: params,
+                        header: {
+                            token: this.token
+                        }
+                    })
+                    .then(result => {
+                        this.game = this.game.map(e => {
+                            return {
+                                name: e.name,
+                                selected: false
+                            };
+                        });
+                        this.selectedUser = [];
+                        this.selectStudentsName = ["学生"];
+                        this.selectedGroup = "";
+                        this.remarks = "";
+                        setTimeout(() => {
+                            this.showSuccessBox = false;
+                        }, 1500);
                     });
-                    this.selectedUser = [];
-                    this.selectStudentsName = ["学生"];
-                    this.selectedGroup = "";
-                    this.remarks = ""
-                    setTimeout(() => {
-                        this.showSuccessBox = false;
-                    }, 1500);
-                })
             },
             getList: function() {
                 this.$http
@@ -159,9 +163,10 @@
             },
             selectGroup: function(index) {
                 this.selectedGroup = index;
-                this.stu_list[index].user && this.stu_list[index].user.forEach(e => {
-                    e.selected = false;
-                })
+                this.stu_list[index].user &&
+                    this.stu_list[index].user.forEach(e => {
+                        e.selected = false;
+                    });
                 this.students = this.stu_list[index].user || [];
                 this.selectGroupName = this.stu_list[index].name;
                 this.showDrop = false;
@@ -184,7 +189,7 @@
                     selected: !item.selected,
                     id: item.id
                 });
-            },
+            }
         }
     };
 </script>

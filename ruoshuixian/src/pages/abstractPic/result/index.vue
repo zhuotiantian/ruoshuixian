@@ -2,12 +2,12 @@
     <div class="container">
         <CardTitle :isResult="true" :sconds="seconds" :minutes="minutes"></CardTitle>
         <div class="list">
-            <div class="row" v-for="(rows,_index) in rows" :key="_index">
-                <div class="image_div" v-for="(item,index) in number" :key="index">
-                    <image class="image" :src="'/static/images/firstPage/abstract.png'" />
-                    <span class="index">{{_index}}</span>
-                    <span class="input">序号</span>
-                    <image class="icon" :src="'/static/images/my/select.png'" />
+            <div class="row" v-for="(rows,_index) in number" :key="_index">
+                <div class="image_div" v-for="(item,index) in rows" :key="index">
+                    <image class="image" :src="domain+item.image" />
+                    <span class="input">{{item.number}}</span>
+                    <image class="icon" v-if="item.result==0" :src="'/static/images/my/select.png'" />
+                    <image class="icon" v-else :src="'/static/images/my/wrong.png'" />
                 </div>
                 <span>row&nbsp;&nbsp;{{_index+1}}</span>
             </div>
@@ -20,12 +20,42 @@
         components: {
             CardTitle
         },
+        onLoad() {
+            Object.assign(this.$data, this.$options.data())
+            let level = this.$getStorage("level");
+            let userInfo = this.$getStorage("userInfo");
+            let rule = this.$getStorage("rule");
+            let result = this.$getStorage("result");
+            Promise.all([level, userInfo, rule, result]).then(values => {
+                this.level = values[0];
+                this.token = values[1].token;
+                this.rule = values[2].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary")
+                })[0];
+                this.result = values[3].right_and_wrong_results;
+                this.token = this.token;
+                let number = [];
+                this.numberList = this.rule.list.map((e, index) => {
+                    return {
+                        image: e,
+                        text: this.result[index].number,
+                        result: this.result[index].result
+                    }
+                });
+                this.total = this.rule.number;
+                this.per = this.rule.number_per_group;
+                for (var i = 0; i < this.total; i += this.per) {
+                    number.push(this.numberList.slice(i, i + this.per));
+                }
+                this.number = number.filter(e => {
+                    return e.length > 0;
+                });
+            })
+        },
         data() {
-            let array = new Array(5);
-            let rows = new Array(3);
             return {
-                number: array,
-                rows: rows,
+                number: [],
+                domain: this.$http.domain,
             };
         },
     };

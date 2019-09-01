@@ -111,14 +111,14 @@
                                         url: "/api/wxapp.user/bindingWechat",
                                         data: {
                                             code: this.code,
-                                            type: "user"
+                                            type: "teacher"
                                         },
                                         header: {
                                             token: result.data.userinfo.token
                                         }
                                     }).then(() => {
                                         wx.redirectTo({
-                                            url: "../firstPage/main"
+                                            url: "../my_teacher/main"
                                         })
                                     })
                                 });
@@ -152,14 +152,14 @@
                                         url: "/api/wxapp.user/bindingWechat",
                                         data: {
                                             code: this.code,
-                                            type: "user"
+                                            type: "teacher"
                                         },
                                         header: {
                                             token: result.data.userinfo.token
                                         }
                                     }).then(() => {
                                         wx.redirectTo({
-                                            url: "../firstPage/main"
+                                            url: "../my_teacher/main"
                                         })
                                     })
                                 });

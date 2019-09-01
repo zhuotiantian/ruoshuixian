@@ -9,10 +9,12 @@
         </div>
         <div class="content">
             <ul>
-                <li v-for="(item,index) in list" :key="index">
-                    <span>{{item.name}}</span>
-                    <span>{{item.money}}元</span>
-                </li>
+                <scroll-view :style="{height:'50vh'}" scroll-y="true">
+                    <li v-for="(item,index) in list" :key="index">
+                        <span>{{item.name}}</span>
+                        <span>{{item.money}}元</span>
+                    </li>
+                </scroll-view>
                 <span class="btn submit-btn" @click="tixian">去提现</span>
             </ul>
         </div>

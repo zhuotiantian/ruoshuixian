@@ -1,7 +1,7 @@
 {
     "pages": [
         "pages/indexPage/main",
-        "pages/my/hongbao/getCash/main",
+
         "pages/login/main",
         "pages/index/main",
         "pages/record/main",
@@ -9,7 +9,6 @@
         "pages/firstPage/main",
         "pages/ranking/main",
         "pages/my/main",
-        "pages/my/hongbao/main",
         "pages/my/message/main",
         "pages/my/record/main",
         "pages/my/ranking/main",
@@ -18,6 +17,12 @@
         "pages/regist/main",
         "pages/rePassword/main",
         "pages/help/main",
+        "pages/abstractPic/main",
+        "pages/abstractPic/memary/main",
+        "pages/abstractPic/result/main",
+        "pages/abstractPic/answer/main",
+        "pages/my/hongbao/main",
+        "pages/my/hongbao/getCash/main",
         "pages/peoplePic/main",
         "pages/peoplePic/memary/main",
         "pages/peoplePic/result/main",
@@ -53,10 +58,7 @@
         "pages/flashPocker/memary/main",
         "pages/flashPocker/recall/main",
         "pages/flashPocker/result/main",
-        "pages/abstractPic/main",
-        "pages/abstractPic/memary/main",
-        "pages/abstractPic/answer/main",
-        "pages/abstractPic/result/main",
+
         "pages/fastPocker/main",
         "pages/fastPocker/ready/main",
         "pages/fastPocker/memary/main",

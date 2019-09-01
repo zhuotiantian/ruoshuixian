@@ -35,10 +35,34 @@
 <script>
     export default {
         components: {},
+        onShoe() {
+            this.token && this.check();
+        },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.$getStorage("userInfo").then((result) => {
+            this.$getStorage("userInfo").then(result => {
                 this.token = result.token;
+                this.userInfo = result;
+                this.check();
+            }).catch(err => {
+                wx.showToast({
+                    title: "登陆信息已过期",
+                    icon: "none"
+                });
+                wx.redirectTo({
+                    url: "/pages/login/main"
+                });
+            });;
+        },
+        data() {
+            return {
+
+                domain: this.$http.domain,
+                userInfo: {}
+            }
+        },
+        methods: {
+            check: function() {
                 this.$http.get({
                     url: "/api/wxapp.token/check",
                     header: {
@@ -54,26 +78,7 @@
                         })
                     }
                 })
-            }).catch(err => {
-                console.log(err);
-                wx.showToast({
-                    title: "登陆信息已过期",
-                    icon: "none"
-                });
-                wx.redirectTo({
-                    url: "/pages/login/main"
-                });
-            });
-
-        },
-        data() {
-            return {
-
-                domain: this.$http.domain,
-                userInfo: {}
-            }
-        },
-        methods: {
+            },
             toStudent: function() {
                 let url = "./students/main";
                 this.to(url)

@@ -14,7 +14,6 @@
         data() {
             return {
                 showSuccessBox: false,
-
             }
         },
         methods: {

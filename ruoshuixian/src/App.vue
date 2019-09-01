@@ -1,7 +1,6 @@
 <script>
     export default {
         onLaunch() {
-            Object.assign(this.$data, this.$options.data());
             const that = this;
             wx.login({
                 success: function(res) {

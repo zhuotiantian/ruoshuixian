@@ -1,21 +1,13 @@
 import Vue from 'vue'
 import App from './App'
 import http from "./untils/request"
+
+
 Vue.config.productionTip = false
-Vue.config._mpTrace = true
 App.mpType = 'app'
-const app = new Vue(App);
-app.$mount();
-let pixelRatio = 0
-wx.getSystemInfo({
-    success: function (res) {
-        pixelRatio = Math.floor(res.pixelRatio)
-    },
-    fail: function () {
-        pixelRatio = 0
-    }
-});
-getApp().globalData.ratio = pixelRatio;
+
+const app = new Vue(App)
+app.$mount()
 Vue.prototype.globalData = getApp().globalData;
 Vue.prototype.$http = http;
 Vue.prototype.$getStorage = (param) => {

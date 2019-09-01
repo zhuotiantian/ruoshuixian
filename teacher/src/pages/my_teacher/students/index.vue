@@ -13,7 +13,7 @@
                 </p>
             </div>
             <ul class="list" v-if="active=='学生成绩'">
-                <li v-for="(item,index) in list" :key="index" @click="toComment">
+                <li v-for="(item,index) in list" :key="index" @click="toComment(item.id)">
                     <span style="flex:1">
                         <image class="image" :src="domain+item.avatar"></image>
                     </span>
@@ -55,7 +55,7 @@
             }
         },
         onLoad() {
-            Object.assign(this.$data, this.$options.data())
+            Object.assign(this.$data, this.$options.data());
             this.$getStorage("userInfo").then(result => {
                 this.token = result.token;
                 this.getStudents();
@@ -72,7 +72,7 @@
             },
             toComment: function() {
                 wx.navigateTo({
-                    url: "./comment/main"
+                    url: "./comment/main?aid="
                 })
             },
             switchType: function(type, index) {

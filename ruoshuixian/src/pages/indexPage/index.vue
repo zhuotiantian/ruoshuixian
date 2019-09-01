@@ -48,10 +48,10 @@
         },
         onShow() {
             wx.hideTabBar();
+            this.token && this.checkLoginStatus();
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data());
-
             this.$getStorage("code").then(result => {
                 this.code = result;
             });
