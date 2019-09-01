@@ -58,7 +58,8 @@
                 avator: "",
                 currentUser: "",
                 index: 0,
-                activeGame: null
+                activeGame: null,
+                list: []
             }
         },
         onLoad() {
@@ -106,7 +107,7 @@
                         if (e.nickname == this.currentUser) {
                             this.index = index;
                         }
-                    })
+                    });
                 });
             },
             getIndexData: function() {

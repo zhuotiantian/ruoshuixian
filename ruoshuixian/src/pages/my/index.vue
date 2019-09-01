@@ -100,14 +100,15 @@
                     sizeType: ['original', 'compressed'],
                     sourceType: ['album', 'camera'],
                     success: (res) => {
+
                         let res_ = res.tempFilePaths[0];
                         //转换临时文件为base64
                         wx.getFileSystemManager().readFile({
                             filePath: res.tempFilePaths[0], //选择图片返回的相对路径
                             encoding: 'base64', //编码格式
-                            success: res => { //成功的回调
-                                this.icon = 'data:image/png;base64,' + res.data;
-                                this.upload(res_);
+                            success: res_ => { //成功的回调
+                                this.icon = 'data:image/png;base64,' + res_.data;
+                                this.upload(this.icon);
                             }
                         })
                     }

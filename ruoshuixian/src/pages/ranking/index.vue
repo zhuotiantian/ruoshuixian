@@ -61,7 +61,8 @@
                         if (e.nickname == this.currentUser) {
                             this.index = index;
                         }
-                    })
+                    });
+                    console.log(this.list);
                 })
             }
         }
