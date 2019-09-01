@@ -24,14 +24,15 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-        },
-        onShow() {
-
-            this.level = this.$getParams("level");
-            this.rule = this.$getParams("rule");
-            this.list = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            });
+            let level = this.$getStorage("level");
+            let rule = this.$getStorage("rule");
+            Promise.all([level, rule]).then(values => {
+                this.level = values[0];
+                this.rule = values[1].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary")
+                })[0];
+                this.list = this.rule.list;
+            })
         },
         data() {
             return {
@@ -61,7 +62,7 @@
         },
         methods: {
             group: function(data) {
-                let list = JSON.parse(JSON.stringify(this.list[0].list));
+                let list = JSON.parse(JSON.stringify(this.list));
                 this.pocker = [];
                 if (data !== "ALL") {
                     for (var i = 0; i < list.length; i + data) {

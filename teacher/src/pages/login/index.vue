@@ -22,9 +22,10 @@
 
                 </template>
             </div>
-            <form style="text-align:center" action="" report-submit='true' @submit="login">
-                <button class="btn submit-btn" form-type='submit'>登 录</button>
-            </form>
+            <button class="btn submit-btn" @click="login">登 录</button>
+            <!-- <form style="text-align:center" action="" report-submit='true'>
+                <button class="btn submit-btn" form-type='submit' open-type="getUserInfo" @getuserinfo="getUserInfo">登 录</button>
+            </form> -->
             <p class="info">
                 <span @click="switchLoginWay">
                     <span v-if="!codeLogin">密码登录</span><span v-else>验证码登录</span>
@@ -42,7 +43,6 @@
                 clickGetCode: false,
                 seconds: 60,
                 codeLogin: false,
-
                 form: {
                     mobile: "",
                     captcha: "",
@@ -52,10 +52,7 @@
             }
         },
         onLoad() {
-            Object.assign(this.$data, this.$options.data())
-            this.userInfo = this.$getParams("userInfo");
-            this.code = this.$getParams("code");
-            this.token = this.userInfo.token;
+            Object.assign(this.$data, this.$options.data());
         },
         methods: {
             // 跳转到注册页面
@@ -65,7 +62,7 @@
                     url
                 })
             },
-            login: function(e) {
+            login: function() {
                 const {
                     mobile,
                     captcha,
@@ -104,14 +101,27 @@
                         }
                     }).then(result => {
                         if (result.code == 1) {
-                            this.$setStorage("userInfo", result.data.userinfo, () => {
-                                this.storageData(result.data.userinfo.token)
+                            this.$setStorage("userInfo", result.data.userinfo).then(() => {
                                 wx.showToast({
                                     title: "登陆成功"
                                 });
-                                wx.navigateTo({
-                                    url: "../my_teacher/main"
-                                })
+                                this.$getStorage("code").then(_result => {
+                                    this.code = _result;
+                                    this.$http.post({
+                                        url: "/api/wxapp.user/bindingWechat",
+                                        data: {
+                                            code: this.code,
+                                            type: "user"
+                                        },
+                                        header: {
+                                            token: result.data.userinfo.token
+                                        }
+                                    }).then(() => {
+                                        wx.redirectTo({
+                                            url: "../firstPage/main"
+                                        })
+                                    })
+                                });
                             });
                         } else {
                             wx.showToast({
@@ -132,14 +142,27 @@
                         }
                     }).then(result => {
                         if (result.code == 1) {
-                            this.$setStorage("userInfo", result.data.userinfo, () => {
-                                this.storageData(result.data.userinfo.token)
+                            this.$setStorage("userInfo", result.data.userinfo).then(() => {
                                 wx.showToast({
                                     title: "登陆成功"
                                 });
-                                wx.navigateTo({
-                                    url: "../my_teacher/main"
-                                })
+                                this.$getStorage("code").then(_result => {
+                                    this.code = _result;
+                                    this.$http.post({
+                                        url: "/api/wxapp.user/bindingWechat",
+                                        data: {
+                                            code: this.code,
+                                            type: "user"
+                                        },
+                                        header: {
+                                            token: result.data.userinfo.token
+                                        }
+                                    }).then(() => {
+                                        wx.redirectTo({
+                                            url: "../firstPage/main"
+                                        })
+                                    })
+                                });
                             });
                         } else {
                             wx.showToast({
@@ -149,17 +172,19 @@
                         }
                     });
                 };
+
             },
-            storageData: function(token) {
-                this.$http.post({
-                    url: "/api/wxapp.user/storageFormId",
-                    data: {
-                        form_id: e.mp.detail.formId
-                    },
-                    header: {
-                        token
-                    }
-                }).then(result => {
+            storageData: function(token, formId) {
+                if (formId !== "the formId is a mock one") {
+                    this.$http.post({
+                        url: "/api/wxapp.user/storageFormId",
+                        data: {
+                            form_id: formId
+                        },
+                        header: {
+                            token
+                        }
+                    });
                     this.$http.post({
                         url: "/api/wxapp.user/bindingWechat",
                         data: {
@@ -170,7 +195,7 @@
                             token
                         }
                     })
-                })
+                }
             },
             getCode: function() {
                 // 获取验证码

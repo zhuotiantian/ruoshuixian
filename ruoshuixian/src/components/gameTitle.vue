@@ -57,18 +57,27 @@
         ],
         onLoad() {
             Object.assign(this.$data, this.$options.data());
-            this.level = this.$getParams("level");
-            this.rule = this.$getParams("rule");
-            this.result = this.$getParams("result");
-            this.gameid = this.$getParams("gameid");
-            this.memoryTime = this.$getParams("memoryTime");
-            this.times = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == (this.level || "primary");
-            })[0];
-            this.resetInterval();
+            let getlevel = this.$getStorage("level");
+            let getrule = this.$getStorage("rule");
+            let getresult = this.$getStorage("result");
+            let getgameid = this.$getStorage("gameid");
+            let getmemoryTime = this.$getStorage("memoryTime");
+            Promise.all([getlevel, getrule, getresult, getgameid, getmemoryTime]).then(values => {
+                this.level = values[0];
+                this.rule = values[1].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary");
+                })[0];
+                this.result = values[2];
+                this.gameid = values[3];
+                this.memoryTime = values[4];
+                this.times = this.rule;
+                this.resetInterval();
+            }).catch(err => {
+                console.log(err);
+            });
         },
         onShow() {
-            this.resetInterval();
+            if (this.gameid) this.resetInterval();
         },
         data() {
             return {

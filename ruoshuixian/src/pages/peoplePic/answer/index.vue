@@ -24,31 +24,35 @@
             alertBox
         },
         onLoad(option) {
-            this.level = this.$getParams("level");
-            this.userInfo = this.$getParams("userInfo");
-            this.rule = this.$getParams("rule");
-            this.token = this.userInfo.token;
-            let rule = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == this.level;
-            })[0];
-            this.numberList = rule.list.xing_name.map((e, index) => {
-                return {
-                    xing_name: "",
-                    ming_name: "",
-                    avatar: rule.list.avatar[index]
-                };
-            });
-            this.total = rule.number;
-            this.per = rule.number_per_group;
-            let number = [];
-            for (var i = 0; i < this.total; i += this.per) {
-                number.push(this.numberList.slice(i, i + this.per));
-            }
-            this.number = number.filter(e => {
-                return e.length > 0;
-            });
-            this.startTime = new Date().getTime();
-            this.game_records_id = rule.game_records_id;
+            Object.assign(this.$data, this.$options.data())
+            let level = this.$getStorage("level");
+            let rule = this.$getStorage("rule");
+            let userInfo = this.$getStorage("userInfo");
+            Promise.all([level, rule, userInfo]).then(values => {
+                this.level = values[0];
+                this.rule = values[1].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary")
+                })[0];
+                this.token = values[2].token;
+                this.numberList = this.rule.list.xing_name.map((e, index) => {
+                    return {
+                        xing_name: "",
+                        ming_name: "",
+                        avatar: this.rule.list.avatar[index]
+                    };
+                });
+                this.total = this.rule.number;
+                this.per = this.rule.number_per_group;
+                let number = [];
+                for (var i = 0; i < this.total; i += this.per) {
+                    number.push(this.numberList.slice(i, i + this.per));
+                }
+                this.number = number.filter(e => {
+                    return e.length > 0;
+                });
+                this.startTime = new Date().getTime();
+                this.game_records_id = this.rule.game_records_id;
+            })
         },
         data() {
             return {
@@ -101,7 +105,7 @@
                     })
                     .then(result => {
                         if (result.code == 1) {
-                            this.$setStorage("result", result.data, () => {
+                            this.$setStorage("result", result.data).then(() => {
                                 wx.navigateTo({
                                     url: "../result/main"
                                 })

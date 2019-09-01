@@ -34,16 +34,15 @@
         onShow() {
             wx.hideTabBar();
             Object.assign(this.$data, this.$options.data());
-            this.getList();
+            this.token && this.getList();
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data());
-            this.userInfo = this.$getParams("userInfo");
-
-            this.token = this.userInfo.token;
-            // this.getList();
+            this.$getStorage("userInfo").then((result) => {
+                this.token = result.token;
+                this.getList();
+            });
         },
-
         components: {
             CardFooter
         },

@@ -20,28 +20,33 @@
             CardTitle
         },
         onLoad(option) {
-            this.level = this.$getParams("level");
-            this.rule = this.$getParams("rule");
-            let result = this.$getParams("result");
-            let rule = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0];
-            this.numberList = rule.list.xing_name.map((e, index) => {
-                return {
-                    name: e + rule.list.ming_name[index],
-                    result_name: result.right_and_wrong_results[index].result_name,
-                    avatar: rule.list.avatar[index]
-                }
-            });
-            this.total = rule.number;
-            this.per = rule.number_per_group;
-            let number = [];
-            for (var i = 0; i < this.total; i += this.per) {
-                number.push(this.numberList.slice(i, i + this.per));
-            };
-            this.number = number.filter(e => {
-                return e.length > 0
-            });
+            Object.assign(this.$data, this.$options.data())
+            let level = this.$getStorage("level");
+            let result = this.$getStorage("result");
+            let rule = this.$getStorage("rule");
+            Promise.all([level, result, rule]).then(values => {
+                this.level = values[0];
+                this.result = values[1].right_and_wrong_results;
+                this.rule = values[2].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary")
+                })[0];
+                this.numberList = this.rule.list.xing_name.map((e, index) => {
+                    return {
+                        name: e + this.rule.list.ming_name[index],
+                        result_name: this.result[index].result_name,
+                        avatar: this.rule.list.avatar[index]
+                    }
+                });
+                this.total = this.rule.number;
+                this.per = this.rule.number_per_group;
+                let number = [];
+                for (var i = 0; i < this.total; i += this.per) {
+                    number.push(this.numberList.slice(i, i + this.per));
+                };
+                this.number = number.filter(e => {
+                    return e.length > 0
+                });
+            })
         },
         data() {
             return {

@@ -1,9 +1,9 @@
 <template>
     <div class="container">
-        <CardTitle :seconds="seconds" :minutes="minutes" type="开始" @startGame="startGame"></CardTitle>
+        <CardTitle ref="title" type="开始" @startGame="startGame"></CardTitle>
         <div class="tips">
             <p>回忆这些扑克牌</p>
-            <p>{{minutes}}分钟后开始正式答题</p>
+            <p>{{recollect_time}}秒后开始正式答题</p>
         </div>
         <div class="list">
             <div class="row" v-for="(item,index) in rows" :key="index">
@@ -22,12 +22,22 @@
             let rows = new Array(4);
             let columns = new Array(13);
             return {
-                seconds: 0,
-                minutes: 120,
                 rows: rows,
                 columns: columns,
-
+                recollect_time: 0
             }
+        },
+        onLoad() {
+            Object.assign(this.$data, this.$options.data());
+            let level = this.$getStorage("level");
+            let rule = this.$getStorage("rule");
+            Promise.all([level, rule]).then(values => {
+                this.level = values[0];
+                this.rule = values[1].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary")
+                })[0];
+                this.recollect_time = this.rule.recollect_time;
+            })
         },
         methods: {
             startGame: function() {
@@ -52,5 +62,12 @@
 
     .list {
         margin-top: tovmin(400);
+    }
+
+    .pocker {
+        width: tovmin(82);
+        height: tovmin(130);
+        margin-right: tovmin(10);
+        margin-bottom: tovmin(10);
     }
 </style>

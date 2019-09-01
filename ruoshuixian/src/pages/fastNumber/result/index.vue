@@ -21,36 +21,29 @@
         },
         data() {
             return {
-                seconds: 0,
-                minutes: 15,
                 showFog: false,
-                text: "确定结束作答吗？",
                 number: [],
             }
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.level = this.$getParams("level");
-            this.result = this.$getParams("result");
-            this.rule = this.$getParams("rule");
-            let rule = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == (this.level || "primary")
-            })[0];
-            this.total = rule.number;
-            this.per = rule.number_per_group;
-            let number = [];
-            for (var i = 0; i < this.total; i += this.per) {
-                number.push(this.result.right_and_wrong_results.slice(i, i + this.per));
-            };
-            this.number = number;
-        },
-        methods: {
-            finish: function() {
-                this.showFog = true;
-            },
-            hideFog: function() {
-                this.showFog = false;
-            }
+            let level = this.$getStorage("level");
+            let result = this.$getStorage("result");
+            let rule = this.$getStorage("rule");
+            Promise.all([level, result, rule]).then(values => {
+                this.level = values[0];
+                this.result = values[1].right_and_wrong_results;
+                this.rule = values[2].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary")
+                })[0];
+                this.total = this.rule.number;
+                this.per = this.rule.number_per_group;
+                let number = [];
+                for (var i = 0; i < this.total; i += this.per) {
+                    number.push(this.result.slice(i, i + this.per));
+                };
+                this.number = number;
+            })
         }
     }
 </script>

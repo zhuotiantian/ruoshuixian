@@ -37,23 +37,34 @@
         components: {},
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.userInfo = this.$getParams("userInfo");
-            this.token = this.userInfo.token;
-            this.$http.get({
-                url: "/api/wxapp.token/check",
-                header: {
-                    token: this.token
-                }
-            }).then(result => {
-                if (result.code !== 1) {
-                    wx.showToast({
-                        title: "登陆信息已过期，请重新登陆"
-                    });
-                    wx.redirectTo({
-                        url: "/pages/login/main"
-                    })
-                }
-            })
+            this.$getStorage("userInfo").then((result) => {
+                this.token = result.token;
+                this.$http.get({
+                    url: "/api/wxapp.token/check",
+                    header: {
+                        token: this.token
+                    }
+                }).then(result => {
+                    if (result.code !== 1) {
+                        wx.showToast({
+                            title: "登陆信息已过期，请重新登陆"
+                        });
+                        wx.redirectTo({
+                            url: "/pages/login/main"
+                        })
+                    }
+                })
+            }).catch(err => {
+                console.log(err);
+                wx.showToast({
+                    title: "登陆信息已过期",
+                    icon: "none"
+                });
+                wx.redirectTo({
+                    url: "/pages/login/main"
+                });
+            });
+
         },
         data() {
             return {

@@ -22,7 +22,7 @@
 
                 </template>
             </div>
-            <button class="btn submit-btn" open-type="getUserInfo" @getuserinfo="getUserInfo">登 录</button>
+            <button class="btn submit-btn" @click="login">登 录</button>
             <!-- <form style="text-align:center" action="" report-submit='true'>
                 <button class="btn submit-btn" form-type='submit' open-type="getUserInfo" @getuserinfo="getUserInfo">登 录</button>
             </form> -->
@@ -43,32 +43,18 @@
                 clickGetCode: false,
                 seconds: 60,
                 codeLogin: false,
-
                 form: {
                     mobile: "",
                     captcha: "",
                     password: ""
                 },
-                code: "",
-                isIdGot: false
+                code: ""
             }
         },
         onLoad() {
-            Object.assign(this.$data, this.$options.data())
-            this.userInfo = this.$getParams("userInfo");
-            this.code = this.$getParams("code");
-            this.token = this.userInfo.token;
+            Object.assign(this.$data, this.$options.data());
         },
         methods: {
-            getUserInfo: function() {
-                let that = this;
-                wx.getUserInfo({
-                    success: function(res) {
-                        console.log(res);
-                        that.login(res);
-                    }
-                });
-            },
             // 跳转到注册页面
             toRegist: function() {
                 let url = "../regist/main";
@@ -76,7 +62,7 @@
                     url
                 })
             },
-            login: function(res) {
+            login: function() {
                 const {
                     mobile,
                     captcha,
@@ -115,32 +101,27 @@
                         }
                     }).then(result => {
                         if (result.code == 1) {
-                            this.$setStorage("userInfo", result.data.userinfo, () => {
-                                // this.storageData(result.data.userinfo.token, e.mp.detail.formId)
+                            this.$setStorage("userInfo", result.data.userinfo).then(() => {
                                 wx.showToast({
                                     title: "登陆成功"
                                 });
-                                let that = this;
-                                wx.login({
-                                    success: function(_res) {
-                                        that.$http.post({
-                                            url: "/api/wxapp.user/bindingWechat",
-                                            data: {
-                                                code: _res.code,
-                                                user_info: res,
-                                                type: "user"
-                                            },
-                                            header: {
-                                                token: result.data.userinfo.token
-                                            }
-                                        }).then(result => {
-                                            wx.redirectTo({
-                                                url: "../firstPage/main"
-                                            })
+                                this.$getStorage("code").then(_result => {
+                                    this.code = _result;
+                                    this.$http.post({
+                                        url: "/api/wxapp.user/bindingWechat",
+                                        data: {
+                                            code: this.code,
+                                            type: "user"
+                                        },
+                                        header: {
+                                            token: result.data.userinfo.token
+                                        }
+                                    }).then(() => {
+                                        wx.redirectTo({
+                                            url: "../firstPage/main"
                                         })
-                                    }
-                                })
-
+                                    })
+                                });
                             });
                         } else {
                             wx.showToast({
@@ -161,34 +142,28 @@
                         }
                     }).then(result => {
                         if (result.code == 1) {
-                            this.$setStorage("userInfo", result.data.userinfo, () => {
-                                // this.storageData(result.data.userinfo.token, e.mp.detail.formId)
+                            this.$setStorage("userInfo", result.data.userinfo).then(() => {
                                 wx.showToast({
                                     title: "登陆成功"
                                 });
-                                let that = this;
-                                wx.login({
-                                    success: function(_res) {
-                                        console.log(_res.code);
-                                        that.$http.post({
-                                            url: "/api/wxapp.user/bindingWechat",
-                                            data: {
-                                                code: _res.code,
-                                                user_info: res,
-                                                type: "user"
-                                            },
-                                            header: {
-                                                token: result.data.userinfo.token
-                                            }
-                                        }).then(result => {
-                                            wx.redirectTo({
-                                                url: "../firstPage/main"
-                                            })
+                                this.$getStorage("code").then(_result => {
+                                    this.code = _result;
+                                    this.$http.post({
+                                        url: "/api/wxapp.user/bindingWechat",
+                                        data: {
+                                            code: this.code,
+                                            type: "user"
+                                        },
+                                        header: {
+                                            token: result.data.userinfo.token
+                                        }
+                                    }).then(() => {
+                                        wx.redirectTo({
+                                            url: "../firstPage/main"
                                         })
-                                    }
-                                })
+                                    })
+                                });
                             });
-
                         } else {
                             wx.showToast({
                                 title: result.msg,

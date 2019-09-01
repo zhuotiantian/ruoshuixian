@@ -1,33 +1,18 @@
 <script>
     export default {
-        onLoad() {
-            Object.assign(this.$data, this.$options.data())
-            this.userInfo = wx.getStorageSync("userInfo");
+        onLaunch() {
+            Object.assign(this.$data, this.$options.data());
             const that = this;
-            wx.getLocation({
-                type: 'wgs84',
-                success: function(data) {
-                    const {
-                        latitude,
-                        longitude
-                    } = data;
-                    that.init(latitude, longitude);
+            wx.login({
+                success: function(res) {
+                    that.$setStorage("code", res.code)
                 }
             });
-            if (this.userInfo.length == 0) {
-                wx.showToast({
-                    title: "请先登陆！",
-                    icon: "none"
-                });
-                wx.navigateTo({
-                    url: "./pages/login/main"
-                });
-            };
         },
         data() {
             return {
                 userInfo: {}
-            }
+            };
         },
         methods: {
             init: function(lat, lng) {
@@ -37,18 +22,11 @@
                         version: "1",
                         lng: lat,
                         lat: lng
-                    },
-                    success: function(res) {
-                        wx.showToast({
-                            title: "success",
-                            icon: "success"
-                        });
                     }
                 });
             }
         }
-
-    }
+    };
 </script>
 
 <style lang="scss" scope>

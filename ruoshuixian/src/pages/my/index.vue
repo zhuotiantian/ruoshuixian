@@ -44,8 +44,10 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.userInfo = this.$getParams("userInfo");
-            this.token = this.userInfo.token;
+            this.$getStorage("userInfo").then(result => {
+                this.token = result.token;
+                this.userInfo = result;
+            });
         },
         data() {
             return {

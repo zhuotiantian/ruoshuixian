@@ -48,37 +48,33 @@
         },
         onShow() {
             wx.hideTabBar();
-            this.token = this.userInfo.token;
-            this.$http.get({
-                url: "/api/wxapp.token/check",
-                header: {
-                    token: this.token
-                }
-            }).then(result => {
-                if (result.code !== 1) {
-                    wx.showToast({
-                        title: "登陆信息已过期，请重新登陆"
-                    });
-                    wx.redirectTo({
-                        url: "/pages/login/main"
-                    })
-                }
-            });
-
         },
         onLoad() {
-            Object.assign(this.$data, this.$options.data())
-            this.userInfo = this.$getParams("userInfo");
-            this.code = this.$getParams("code");
-            this.token = this.userInfo.token;
-            this.$setStorage("rule", {});
-            this.$setStorage("gameid", "");
-            this.$setStorage("level", "");
-            this.$setStorage("memaryTime", "");
-            this.$setStorage("result", {});
-            this.getIndexData();
-            this.getList();
+            Object.assign(this.$data, this.$options.data());
 
+            this.$getStorage("code").then(result => {
+                this.code = result;
+            });
+            this.$getStorage("userInfo").then(result => {
+                this.userInfo = result;
+                this.token = result.token;
+                this.checkLoginStatus();
+                this.$setStorage("rule", {});
+                this.$setStorage("gameid", "");
+                this.$setStorage("level", "");
+                this.$setStorage("memoryTime", "");
+                this.$setStorage("result", {});
+                this.getIndexData();
+                this.getList();
+            }).catch(err => {
+                wx.showToast({
+                    title: "登陆信息已过期",
+                    icon: "none"
+                });
+                wx.redirectTo({
+                    url: "/pages/login/main"
+                });
+            });
         },
         onShareAppMessage: function(res) {
             return {
@@ -89,11 +85,10 @@
                 error: function() {
                     console.log("分享失败");
                 }
-            }
+            };
         },
         data() {
             return {
-
                 games: [],
                 domain: this.$http.domain,
                 topImg: "",
@@ -101,13 +96,33 @@
                 list: [],
                 showFog: false,
                 imgUrls: [
-                    'https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640',
-                    'https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640',
-                    'https://images.unsplash.com/photo-1551446591-142875a901a1?w=640'
-                ],
+                    "https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640",
+                    "https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640",
+                    "https://images.unsplash.com/photo-1551446591-142875a901a1?w=640"
+                ]
             };
         },
         methods: {
+            checkLoginStatus: function() {
+                this.$http
+                    .get({
+                        url: "/api/wxapp.token/check",
+                        header: {
+                            token: this.token
+                        }
+                    })
+                    .then(result => {
+                        if (result.code !== 1) {
+                            wx.showToast({
+                                title: "请重新登陆",
+                                icon: "none"
+                            });
+                            wx.redirectTo({
+                                url: "/pages/login/main"
+                            });
+                        }
+                    });
+            },
             hideFog: function() {
                 this.showFog = false;
             },
@@ -115,15 +130,17 @@
                 this.showFog = true;
             },
             getIndexData: function() {
-                this.$http.get({
-                    url: "/api/wxapp.index/index",
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    this.games = result.data.game_list;
-                    this.topImg = result.data.rotary_planting_map[0].image
-                });
+                this.$http
+                    .get({
+                        url: "/api/wxapp.index/index",
+                        header: {
+                            token: this.token
+                        }
+                    })
+                    .then(result => {
+                        this.games = result.data.game_list;
+                        this.topImg = result.data.rotary_planting_map[0].image;
+                    });
             },
             toGame: function(item) {
                 this.$toGame(item.id, item.wxapp_url);
@@ -144,32 +161,34 @@
                     })
                     .then(result => {
                         this.list = result.data.list.filter(e => {
-                            return e.game_classification_id == 0 && e.status !== 'received'
+                            return e.game_classification_id == 0 && e.status !== "received";
                         });
                         this.showFog = this.list.length > 0;
                     });
             },
             toGetRedPocket: function() {
-                this.$http.post({
-                    url: "/api/wxapp.red_envelopes/getARedEnvelope",
-                    data: {
-                        game_classification_id: this.list[0].game_classification_id
-                    },
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    if (result.code == 1) {
-                        wx.showToast({
-                            title: "领取成功",
-                            icon: "success"
-                        });
-                        wx.navigateTo({
-                            url: "/pages/hongbao/redPocketList/main"
-                        })
-                        this.showFog = false;
-                    }
-                })
+                this.$http
+                    .post({
+                        url: "/api/wxapp.red_envelopes/getARedEnvelope",
+                        data: {
+                            game_classification_id: this.list[0].game_classification_id
+                        },
+                        header: {
+                            token: this.token
+                        }
+                    })
+                    .then(result => {
+                        if (result.code == 1) {
+                            wx.showToast({
+                                title: "领取成功",
+                                icon: "success"
+                            });
+                            wx.navigateTo({
+                                url: "/pages/hongbao/redPocketList/main"
+                            });
+                            this.showFog = false;
+                        }
+                    });
             }
         }
     };
@@ -291,7 +310,6 @@
 
     button::after {
         border: none;
-
     }
 
     button {

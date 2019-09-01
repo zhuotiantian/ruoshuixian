@@ -28,34 +28,37 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.level = this.$getParams("level");
-            this.userInfo = this.$getParams("userInfo");
-            this.rule = this.$getParams("rule");
-
-            this.token = this.userInfo.token;
-            let number = [];
-            let rule = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == (this.level || "primary")
-            })[0];
-            this.numberList = rule.list.map((e, index) => {
-                return {
-                    image: e,
-                    text: "",
+            let level = this.$getStorage("level");
+            let userInfo = this.$getStorage("userInfo");
+            let rule = this.$getStorage("rule");
+            Promise.all([level, userInfo, rule]).then(values => {
+                this.level = values[0];
+                this.token = values[1].token;
+                this.rule = values[2].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary")
+                })[0];
+                this.token = this.token;
+                let number = [];
+                this.numberList = this.rule.list.map((e, index) => {
+                    return {
+                        image: e,
+                        text: "",
+                    }
+                });
+                this.total = this.rule.number;
+                this.per = this.rule.number_per_group;
+                this.numberList = this.numberList.sort(() => {
+                    return Math.random() > 0.5 ? -1 : 1
+                })
+                for (var i = 0; i < this.total; i += this.per) {
+                    number.push(this.numberList.slice(i, i + this.per));
                 }
-            });
-            this.total = rule.number;
-            this.per = rule.number_per_group;
-            this.numberList = this.numberList.sort(() => {
-                return Math.random() > 0.5 ? -1 : 1
+                this.number = number.filter(e => {
+                    return e.length > 0;
+                });
+                this.startTime = new Date().getTime();
+                this.game_records_id = this.rule.game_records_id;
             })
-            for (var i = 0; i < this.total; i += this.per) {
-                number.push(this.numberList.slice(i, i + this.per));
-            }
-            this.number = number.filter(e => {
-                return e.length > 0;
-            });
-            this.startTime = new Date().getTime();
-            this.game_records_id = rule.game_records_id;
         },
         data() {
             let array = new Array(5);
@@ -109,12 +112,11 @@
                     })
                     .then(result => {
                         if (result.code == 1) {
-                            this.$setStorage("result", result.data, () => {
+                            this.$setStorage("result", result.data).then(result => {
                                 wx.navigateTo({
                                     url: "../result/main"
                                 });
                             });
-
                         } else {
                             wx.showToast({
                                 title: result.msg,

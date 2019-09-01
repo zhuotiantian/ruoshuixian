@@ -6,15 +6,6 @@
     export default {
         components: {
             CountIndex
-        },
-        onLoad() {
-            this.gameid = this.$getParams("gameid");
-            this.userInfo = this.$getParams("userInfo");
-            this.token = this.userInfo.token;
         }
     }
 </script>
-<style lang="scss" scoped>
-
-
-</style>

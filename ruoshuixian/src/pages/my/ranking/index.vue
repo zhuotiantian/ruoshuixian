@@ -62,16 +62,17 @@
             }
         },
         onLoad() {
-            Object.assign(this.$data, this.$options.data())
-            this.userInfo = this.$getParams("userInfo");
-            this.token = this.userInfo.token;
-            this.currentUser = this.userInfo.nickname;
-            this.avator = this.userInfo.avatar;
+            Object.assign(this.$data, this.$options.data());
+            this.$getStorage("userInfo").then(result => {
+                this.token = result.token;
+                this.currentUser = result.nickname;
+                this.avator = result.avatar;
+                this.games = result.games;
+                this.token = result.token;
+                this.getList(1);
+                this.getIndexData();
+            });
 
-            this.games = this.globalData.games;
-            this.token = this.globalData.token;
-            this.getList(1);
-            this.getIndexData();
         },
         methods: {
             rankingType: function(type, index) {

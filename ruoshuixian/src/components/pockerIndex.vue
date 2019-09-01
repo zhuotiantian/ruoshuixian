@@ -5,7 +5,7 @@
         <div class="content" v-if="type=='time'">
             <span class="label">请选择闪视时间：</span>
             <div class="btn-group">
-                <span v-for="(item,index) in memaryTime" :class="{active:activeIndex==item}" @click="activeIndex=item" :key="index">{{item}}S</span>
+                <span v-for="(item,index) in memoryTime" :class="{active:activeIndex==item}" @click="activeIndex=item" :key="index">{{item}}S</span>
             </div>
         </div>
         <div class="content" v-else>
@@ -28,26 +28,27 @@
             return {
                 activeIndex: 0,
                 btnType: this.btnType,
-                memaryTime: [],
+                memoryTime: [],
                 memaryNumber: ["all", "2", "4", "8"]
             }
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            let rule = this.$getParams("rule");
-            this.timer && clearInterval(this.timer);
-            this.timer = setInterval(() => {
-                this.seconds--;
-                if (this.seconds == 0) {
-                    clearInterval(this.timer);
+            this.$getStorage("rule").then(result => {
+                this.timer && clearInterval(this.timer);
+                this.timer = setInterval(() => {
+                    this.seconds--;
+                    if (this.seconds == 0) {
+                        clearInterval(this.timer);
+                    }
+                }, 1000);
+                if (this.type == "time") {
+                    this.memoryTime = result.rules_of_the_game[0].memory_time.split(",");
+                    this.activeIndex = this.memoryTime[0];
+                } else {
+                    this.activeIndex = this.memaryNumber[0];
                 }
-            }, 1000);
-            if (this.type == "time") {
-                this.memaryTime = rule.rules_of_the_game[0].memory_time.split(",");
-                this.activeIndex = this.memaryTime[0];
-            } else {
-                this.activeIndex = this.memaryNumber[0];
-            }
+            });
         },
         methods: {
             toNextPage: function(data) {

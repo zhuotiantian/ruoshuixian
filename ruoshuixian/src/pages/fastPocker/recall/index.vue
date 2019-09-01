@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <CardTitle ref="title" :seconds="seconds" :minutes="minutes" type="开始" @startGame="startGame"></CardTitle>
+        <CardTitle ref="title" type="开始" @startGame="startGame"></CardTitle>
         <div class="tips">
             <p>回忆这些扑克牌</p>
             <p>{{recollect_time}}秒后开始正式答题</p>
@@ -22,22 +22,22 @@
             let rows = new Array(4);
             let columns = new Array(13);
             return {
-                seconds: 0,
-                minutes: 5,
                 rows: rows,
                 columns: columns,
-
                 recollect_time: 0
             }
         },
         onLoad() {
-            Object.assign(this.$data, this.$options.data())
-            this.level = this.$getParams("level");
-            this.rule = this.$getParams("rule");
-
-            this.recollect_time = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0].recollect_time;
+            Object.assign(this.$data, this.$options.data());
+            let level = this.$getStorage("level");
+            let rule = this.$getStorage("rule");
+            Promise.all([level, rule]).then(values => {
+                this.level = values[0];
+                this.rule = values[1].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary")
+                })[0];
+                this.recollect_time = this.rule.recollect_time;
+            })
         },
         methods: {
             startGame: function() {

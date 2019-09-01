@@ -46,31 +46,33 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.level = this.$getParams("level");
-            this.rule = this.$getParams("rule");
-            this.userInfo = this.$getParams("userInfo");
+            let level = this.$getStorage("level");
+            let rule = this.$getStorage("rule");
+            let userInfo = this.$getStorage("userInfo");
+            Promise.all([level, rule, userInfo]).then(values => {
+                this.level = values[0];
+                this.rule = values[1].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary")
+                })[0];
+                this.token = values[2].token;
+                this.list = this.rule.list;
 
-            this.token = this.userInfo.token;
-            let rule = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0];
-            this.list = rule.list;
-
-            // 生成pock的副数
-            for (var i = 1; i <= this.list.length; i++) {
-                this.pages.push({
-                    number: i,
-                    active: false
-                });
-            };
-            this.pages[0].active = true;
-            let groupPage = [];
-            for (var i = 0; i < this.pages.length; i += 10) {
-                groupPage.push(this.pages.slice(i, i + 10));
-            };
-            this.groupPage = groupPage;
-            this.startTime = new Date().getTime();
-            this.game_records_id = rule.game_records_id;
+                // 生成pock的副数
+                for (var i = 1; i <= this.list.length; i++) {
+                    this.pages.push({
+                        number: i,
+                        active: false
+                    });
+                };
+                this.pages[0].active = true;
+                let groupPage = [];
+                for (var i = 0; i < this.pages.length; i += 10) {
+                    groupPage.push(this.pages.slice(i, i + 10));
+                };
+                this.groupPage = groupPage;
+                this.startTime = new Date().getTime();
+                this.game_records_id = this.rule.game_records_id;
+            })
         },
         data() {
             let pocker = [];
@@ -165,7 +167,7 @@
                     }
                 }).then(result => {
                     if (result.code == 1) {
-                        this.$setStorage("result", result.data, () => {
+                        this.$setStorage("result", result.data).then(() => {
                             wx.navigateTo({
                                 url: "../result/main"
                             })

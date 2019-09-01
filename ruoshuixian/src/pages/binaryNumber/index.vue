@@ -10,9 +10,12 @@
             CountIndex
         },
         onLoad() {
-            this.gameid = this.$getParams("gameid");
-            this.userInfo = this.$getParams("userInfo");
-            this.token = this.userInfo.token;
+            let gameid = this.$getStorage("gameid");
+            let userInfo = this.$getStorage("userInfo");
+            Promise.all([gameid.userInfo]).then(values => {
+                this.gameid = values[0];
+                this.token = values[1].token;
+            })
         },
         data() {
             return {

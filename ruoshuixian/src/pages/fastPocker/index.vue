@@ -9,10 +9,5 @@
         components: {
             PockerIndex
         },
-        onLoad() {
-            this.gameid = this.$getParams("gameid");
-            this.userInfo = this.$getParams("userInfo");
-            this.token = this.userInfo.token;
-        }
     }
 </script>

@@ -31,9 +31,10 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.userInfo = this.$getParams("userInfo");
-            this.isMember = this.userInfo.group_id !== 1;
-            this.token = this.userInfo.token;
+            this.$getStorage("userInfo").then(result => {
+                this.isMember = result.group_id !== 1;
+                this.token = result.token;
+            });
         },
         methods: {
             toFisrstPage: function(index) {

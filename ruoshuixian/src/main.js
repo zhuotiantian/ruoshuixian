@@ -15,54 +15,54 @@ wx.getSystemInfo({
         pixelRatio = 0
     }
 });
-getApp().globalData.token = wx.getStorageSync("userInfo").token;
 getApp().globalData.ratio = pixelRatio;
 Vue.prototype.globalData = getApp().globalData;
 Vue.prototype.$http = http;
-wx.getStorage({
-    key: "userInfo",
-    success: function (res) {
-        wx.login({
-            success: function (_res) {
-                http.get({
-                    url: "/api/wxapp.user/getOpenId",
-                    data: {
-                        code: _res.code,
-                        type: "user"
-                    },
-                    header: {
-                        token: res.token
-                    }
-                })
+Vue.prototype.$getStorage = (param) => {
+    return new Promise((resolve, reject) => {
+        wx.getStorage({
+            key: param,
+            success: (res) => {
+                resolve(res.data);
+            },
+            fail: (res) => {
+
+                reject(res);
+            }
+        })
+    })
+};
+Vue.prototype.$setStorage = (key, data) => {
+    return new Promise((resolve, reject) => {
+        wx.setStorage({
+            key: key,
+            data: data,
+            success: (res) => {
+                resolve(res.data);
+            },
+            fail: (res) => {
+                reject(null);
             }
         });
-    }
-});
-Vue.prototype.$getParams = (param) => {
-    return wx.getStorageSync(param);
-};
-Vue.prototype.$setStorage = (key, data, fn) => {
-    wx.setStorage({
-        key: key,
-        data: data,
-        success: () => {
-            fn && fn();
-        }
-    });
+    })
 }
 let setStorage = Vue.prototype.$setStorage;
+let getStorage = Vue.prototype.$getStorage;
 Vue.prototype.$toGame = (id, url, fn) => {
-    setStorage("gameid", id, () => {
+    setStorage("gameid", id);
+    setStorage("level", "primary");
+    setStorage("result", []);
+    getStorage("userInfo").then(result => {
         http.get({
             url: "/api/wxapp.game/getGame",
             data: {
                 game_id: id
             },
             header: {
-                token: getApp().globalData.token
+                token: result.token
             }
         }).then(result => {
-            setStorage("rule", result.data, () => {
+            setStorage("rule", result.data).then(result => {
                 if (fn) {
                     fn();
                 } else {
@@ -71,11 +71,9 @@ Vue.prototype.$toGame = (id, url, fn) => {
                     })
                 }
             });
-            setStorage("level", "primary");
-            setStorage("result", []);
 
         });
-    });
+    })
 }
 
 export default {

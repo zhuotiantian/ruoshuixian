@@ -29,10 +29,11 @@
             };
         },
         onLoad(option) {
-            this.students_homework_details_id = option.students_homework_details_id
-            this.userInfo = this.$getParams("userInfo");
-            this.token = this.userInfo.token;
-            this.getList();
+            this.students_homework_details_id = option.students_homework_details_id;
+            this.$getStorage("userInfo").then(result => {
+                this.token = result.token;
+                this.getList();
+            });
         },
         onShow() {
             wx.hideTabBar();

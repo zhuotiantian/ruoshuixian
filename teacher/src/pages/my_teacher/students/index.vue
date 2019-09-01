@@ -56,9 +56,10 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.userInfo = this.$getParams("userInfo");
-            this.token = this.userInfo.token;
-            this.getStudents();
+            this.$getStorage("userInfo").then(result => {
+                this.token = result.token;
+                this.getStudents();
+            });
         },
         methods: {
             rankingType: function(type, index) {

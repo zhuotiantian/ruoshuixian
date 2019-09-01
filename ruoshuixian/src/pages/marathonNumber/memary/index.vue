@@ -16,19 +16,23 @@
             CardTitle
         },
         onLoad(option) {
-            this.level = this.$getParams("level");
-            this.rule = this.$getParams("rule");
-            let rule = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0];
-            this.numberList = rule.list;
-            this.total = rule.number;
-            this.per = rule.number_per_group;
-            let number = [];
-            for (var i = 0; i < this.total; i += this.per) {
-                number.push(this.numberList.slice(i, i + this.per));
-            };
-            this.number = number;
+            Object.assign(this.$data, this.$options.data())
+            let level = this.$getStorage("level");
+            let rule = this.$getStorage("rule");
+            Promise.all([level, rule]).then(values => {
+                this.level = values[0];
+                this.rule = values[1].rules_of_the_game.filter(e => {
+                    return e.game_level == this.level
+                })[0];
+                this.numberList = this.rule.list;
+                this.total = this.rule.number;
+                this.per = this.rule.number_per_group;
+                let number = [];
+                for (var i = 0; i < this.total; i += this.per) {
+                    number.push(this.numberList.slice(i, i + this.per));
+                };
+                this.number = number;
+            })
         },
         data() {
             return {

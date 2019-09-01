@@ -8,17 +8,6 @@
     export default {
         components: {
             CountIndex
-        },
-        data() {
-            return {
-                gameid: null,
-                token: null
-            }
-        },
-        onLoad() {
-            this.gameid = this.$getParams("gameid");
-            this.userInfo = this.$getParams("userInfo");
-            this.token = this.userInfo.token;
         }
     }
 </script>

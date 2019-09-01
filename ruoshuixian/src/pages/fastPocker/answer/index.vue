@@ -10,7 +10,7 @@
                 <span class="btn default-btn" @click="shideTip">我知道了</span>
             </p>
         </div>
-        <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
+        <CardTitle type="作答完成" @finish="finish"></CardTitle>
         <div v-if="result.length>0" class="btnGroup" style="position:relative:z-index:998;">
             <div class="btn default-btn" @click.stop="replace">替换</div>
             <div class="btn default-btn" @click="insertBefore">从前插入</div>
@@ -57,10 +57,7 @@
                 pocker.push(columns);
             }
             return {
-                seconds: 0,
-                minutes: 15,
                 pocker: pocker,
-
                 showFog: false,
                 showTip: false,
                 result: [],
@@ -72,15 +69,18 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.level = this.$getParams("level");
-            this.rule = this.$getParams("rule");
-            this.userInfo = this.$getParams("userInfo");
-            this.token = this.userInfo.token;
-
-            this.startTime = new Date().getTime();
-            this.game_records_id = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0].game_records_id;
+            let level = this.$getStorage("level");
+            let rule = this.$getStorage("rule");
+            let userInfo = this.$getStorage("userInfo");
+            Promise.all([level, rule, userInfo]).then(values => {
+                this.level = values[0];
+                this.rule = values[1].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary")
+                })[0];
+                this.token = values[2].token;
+                this.startTime = new Date().getTime();
+                this.game_records_id = this.rule.game_records_id;
+            })
         },
         methods: {
             finish: function(data) {
@@ -158,7 +158,7 @@
                     }
                 }).then(result => {
                     if (result.code == 1) {
-                        this.$setStorage("result", result.data, () => {
+                        this.$setStorage("result", result.data).then(() => {
                             wx.navigateTo({
                                 url: "../result/main"
                             })

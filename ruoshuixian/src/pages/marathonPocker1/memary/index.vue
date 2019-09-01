@@ -31,25 +31,28 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.level = this.$getParams("level");
-            this.rule = this.$getParams("rule");
-
-            this.pocker = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0].list;
-            // 生成pock的副数
-            for (var i = 1; i <= this.pocker.length; i++) {
-                this.pages.push({
-                    number: i,
-                    active: false
-                });
-            };
-            this.pages[0].active = true;
-            let groupPage = [];
-            for (var i = 0; i < this.pages.length; i += 10) {
-                groupPage.push(this.pages.slice(i, i + 10));
-            };
-            this.groupPage = groupPage;
+            let level = this.$getStorage("level");
+            let rule = this.$getStorage("rule");
+            Promise.all([level, rule]).then(values => {
+                this.level = values[0];
+                this.rule = values[1].rules_of_the_game.filter(e => {
+                    return e.game_level == this.level
+                })[0];
+                this.pocker = this.rule.list;
+                // 生成pock的副数
+                for (var i = 1; i <= this.pocker.length; i++) {
+                    this.pages.push({
+                        number: i,
+                        active: false
+                    });
+                };
+                this.pages[0].active = true;
+                let groupPage = [];
+                for (var i = 0; i < this.pages.length; i += 10) {
+                    groupPage.push(this.pages.slice(i, i + 10));
+                };
+                this.groupPage = groupPage;
+            })
         },
         data() {
             return {

@@ -1,6 +1,7 @@
 {
     "pages": [
         "pages/indexPage/main",
+        "pages/my/hongbao/getCash/main",
         "pages/login/main",
         "pages/index/main",
         "pages/record/main",

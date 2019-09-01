@@ -9,7 +9,7 @@
             <div class="top">
                 <input placeholder-style="color: #AFAFAF;" type="text" v-model="workname" placeholder="请输入作业名称" />
                 <p class="item" @click="showGroup">{{selectGroupName}}</p>
-                <p class="item" @click="showStudents">{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}{{selectStudentsName}}</p>
+                <p class="item" @click="showStudents">{{selectStudentsName}}</p>
             </div>
             <div class="middle">
                 <p class="title">选择游戏：</p>
@@ -74,11 +74,11 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.userInfo = this.$getParams("userInfo");
-            this.token = this.userInfo.token;
-
-            this.getList();
-            this.getIndexData();
+            this.$getStorage("userInfo").then(result => {
+                this.token = result.token;
+                this.getList();
+                this.getIndexData();
+            });
         },
         methods: {
             getIndexData: function() {

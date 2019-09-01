@@ -21,9 +21,11 @@
                 result: [],
             };
         },
-        onLoad(){Object.assign(this.$data, this.$options.data())
-            this.result = this.$getParams("result");
-
+        onLoad() {
+            Object.assign(this.$data, this.$options.data());
+            this.$getStorage("result").then(result => {
+                this.result = result;
+            })
         },
         onShareAppMessage: function(res) {
             return {

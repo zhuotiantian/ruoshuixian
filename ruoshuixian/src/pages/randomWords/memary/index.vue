@@ -15,11 +15,15 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.level = this.$getParams("level");
-            this.rule = this.$getParams("rule");
-            this.list = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0].list;
+            let level = this.$getStorage("level");
+            let rule = this.$getStorage("rule");
+            Promise.all([level, rule]).then(values => {
+                this.level = values[0];
+                this.rule = values[1].rules_of_the_game.filter(e => {
+                    return e.game_level == this.level
+                })[0];
+                this.list = this.rule.list;
+            })
         },
         data() {
             return {

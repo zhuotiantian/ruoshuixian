@@ -28,10 +28,10 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data());
-            this.userInfo = this.$getParams("userInfo");
-
-            this.token = this.userInfo.token;
-            this.getList();
+            this.$getStorage("userInfo").then(result => {
+                this.token = result.token;
+                this.getList();
+            });
         },
         methods: {
             getList: function() {
@@ -49,7 +49,7 @@
             },
             tixian: function() {
                 wx.navigateTo({
-                    url: "./getCash/main"
+                    url: "/pages/my/hongbao/getCash/main"
                 });
             }
         }

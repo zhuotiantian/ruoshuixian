@@ -25,21 +25,24 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.level = this.$getParams("level");
-            this._result = this.$getParams("result");
-            this.rule = this.$getParams("rule");
-            let rule = this.rule.rules_of_the_game.filter(e => {
-                return e.game_level == this.level
-            })[0];
-            this.result = this._result.right_and_wrong_results;
-            this.numberList = rule.list.date.map((e, index) => {
-                return {
-                    date: e,
-                    event: rule.list.event[index],
-                    answer: this.result[index].number,
-                    isRight: this.result[index].result == 1,
-                }
-            });
+            let level = this.$getStorage("level");
+            let result = this.$getStorage("result");
+            let rule = this.$getStorage("rule");
+            Promise.all([level, result, rule]).then(values => {
+                this.level = values[0];
+                this.result = values[1].right_and_wrong_results;
+                this.rule = values[2].rules_of_the_game.filter(e => {
+                    return e.game_level == (this.level || "primary")
+                })[0];
+                this.numberList = this.rule.list.date.map((e, index) => {
+                    return {
+                        date: e,
+                        event: this.rule.list.event[index],
+                        answer: this.result[index].number,
+                        isRight: this.result[index].result == 1,
+                    }
+                });
+            })
         },
         data() {
             return {

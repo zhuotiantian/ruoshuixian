@@ -21,13 +21,19 @@
                 openid: ""
             };
         },
+        onShow() {
+            if (this.code) this.getOpenid();
+        },
         onLoad() {
             Object.assign(this.$data, this.$options.data());
-            this.userInfo = this.$getParams("userInfo");
-            this.code = this.$getParams("code");
-            this.token = this.userInfo.token;
-            this.getList();
-            this.getOpenid();
+            let getCode = this.$getStorage("code");
+            let userInfo = this.$getStorage("userInfo");
+            Promise.all([getCode, userInfo]).then(values => {
+                this.code = values[0];
+                this.token = values[1].token;
+                this.getOpenid();
+                this.getList();
+            })
         },
         methods: {
             getOpenid: function() {
@@ -62,27 +68,27 @@
                 this.inputMoney = e.target.value.replace(reg, '');
             },
             tixian: function() {
-                // if (this.inputMoney > this.money) {
-                //     wx.showToast({
-                //         title: "可提现金额不足！",
-                //         icon: "none"
-                //     });
-                //     return false;
-                // } else {
-                let openid = this.openid;
-                this.$http.post({
-                    url: "/api/wxapp.user/withdrawal",
-                    data: {
-                        money: this.inputMoney,
-                        openid: openid
-                    },
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    console.log(result);
-                });
-                // }
+                if (this.inputMoney > this.money) {
+                    wx.showToast({
+                        title: "可提现金额不足！",
+                        icon: "none"
+                    });
+                    return false;
+                } else {
+                    let openid = this.openid;
+                    this.$http.post({
+                        url: "/api/wxapp.user/withdrawal",
+                        data: {
+                            money: this.inputMoney,
+                            openid: openid
+                        },
+                        header: {
+                            token: this.token
+                        }
+                    }).then(result => {
+                        console.log(result);
+                    });
+                }
             }
         }
     };

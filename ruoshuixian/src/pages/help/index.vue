@@ -15,12 +15,13 @@
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
-            this.userInfo = this.$getParams("userInfo");
-            this.game_id = this.$getParams("gameid");
-
-            this.token = this.userInfo.token;
-
-            this.getHelp();
+            let userInfo = this.$getStorage("userInfo");
+            let gameid = this.$getStorage("gameid");
+            Promise.all([level, rule]).then(values => {
+                this.token = values[0].token;
+                this.game_id = values[1];
+                this.getHelp();
+            });
         },
         methods: {
             getHelp: function() {

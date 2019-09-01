@@ -1,5 +1,4 @@
 const domain = "http://yxcy.wanzhong.ink";
-
 function request(url, method, data, header = {}) {
     wx.showLoading({
         title: '加载中' // 数据请求前loading
@@ -14,15 +13,15 @@ function request(url, method, data, header = {}) {
                 // 默认值
                 "token": header.token
             },
-            success: function(res) {
+            success: function (res) {
                 wx.hideLoading()
                 resolve(res.data)
             },
-            fail: function(res) {
+            fail: function (res) {
                 wx.hideLoading()
                 // reject(false)
             },
-            complete: function() {
+            complete: function () {
                 wx.hideLoading()
             }
         })
