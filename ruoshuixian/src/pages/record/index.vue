@@ -26,7 +26,7 @@
         },
         onShow() {
             wx.hideTabBar();
-
+            this.token && this.getList();
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())

@@ -33,301 +33,306 @@
                 <span @click="toRepassword">忘记密码</span></p>
 
         </div>
-        <p id="info">还没有若水轩账号？<span style="color:#f8b551" @click="toRegist">立即注册</span></p>
+        <!-- <span id="info">还没有若水轩账号？<span style="color:#f8b551" @click="toRegist">立即注册</span></p> -->
     </div>
 </template>
 <script>
-    export default {
-        data() {
-            return {
-                clickGetCode: false,
-                seconds: 60,
-                codeLogin: false,
-                form: {
-                    mobile: "",
-                    captcha: "",
-                    password: ""
-                },
-                code: ""
-            }
-        },
-        onLoad() {
-            Object.assign(this.$data, this.$options.data());
-        },
-        methods: {
-            // 跳转到注册页面
-            toRegist: function() {
-                let url = "../regist/main";
-                wx.navigateTo({
-                    url
-                })
-            },
-            login: function() {
-                const {
-                    mobile,
-                    captcha,
-                    password
-                } = this.form;
-                if (mobile == "") {
-                    wx.showToast({
-                        title: "手机号不能为空",
-                        icon: "none"
-                    });
-                    return false
-                };
-                if (captcha && this.codeLogin) {
-                    wx.showToast({
-                        title: "验证码不能为空",
-                        icon: "none"
-                    });
-                    return false
-                };
-                if (password && !this.codeLogin) {
-                    wx.showToast({
-                        title: "密码不能为空",
-                        icon: "none"
-                    });
-                    return false
-                }
-                if (!this.codeLogin) {
-                    this.$http.post({
-                        url: "/api/wxapp.user/mobilelogin",
-                        data: {
-                            mobile,
-                            captcha
-                        },
-                        header: {
-                            token: this.token
-                        }
-                    }).then(result => {
-                        if (result.code == 1) {
-                            this.$setStorage("userInfo", result.data.userinfo).then(() => {
-                                wx.showToast({
-                                    title: "登陆成功"
-                                });
-                                this.$getStorage("code").then(_result => {
-                                    this.code = _result;
-                                    this.$http.post({
-                                        url: "/api/wxapp.user/bindingWechat",
-                                        data: {
-                                            code: this.code,
-                                            type: "teacher"
-                                        },
-                                        header: {
-                                            token: result.data.userinfo.token
-                                        }
-                                    }).then(() => {
-                                        wx.redirectTo({
-                                            url: "../my_teacher/main"
-                                        })
-                                    })
-                                });
-                            });
-                        } else {
-                            wx.showToast({
-                                title: result.msg,
-                                icon: "none"
-                            })
-                        }
-                    });
-                } else {
-                    this.$http.post({
-                        url: "/api/wxapp.user/login",
-                        data: {
-                            mobile,
-                            password
-                        },
-                        header: {
-                            token: this.token
-                        }
-                    }).then(result => {
-                        if (result.code == 1) {
-                            this.$setStorage("userInfo", result.data.userinfo).then(() => {
-                                wx.showToast({
-                                    title: "登陆成功"
-                                });
-                                this.$getStorage("code").then(_result => {
-                                    this.code = _result;
-                                    this.$http.post({
-                                        url: "/api/wxapp.user/bindingWechat",
-                                        data: {
-                                            code: this.code,
-                                            type: "teacher"
-                                        },
-                                        header: {
-                                            token: result.data.userinfo.token
-                                        }
-                                    }).then(() => {
-                                        wx.redirectTo({
-                                            url: "../my_teacher/main"
-                                        })
-                                    })
-                                });
-                            });
-                        } else {
-                            wx.showToast({
-                                title: result.msg,
-                                icon: "none"
-                            })
-                        }
-                    });
-                };
-
-            },
-            storageData: function(token, formId) {
-                if (formId !== "the formId is a mock one") {
-                    this.$http.post({
-                        url: "/api/wxapp.user/storageFormId",
-                        data: {
-                            form_id: formId
-                        },
-                        header: {
-                            token
-                        }
-                    });
-                    this.$http.post({
-                        url: "/api/wxapp.user/bindingWechat",
-                        data: {
-                            code: this.code,
-                            type: "user"
-                        },
-                        header: {
-                            token
-                        }
-                    })
-                }
-            },
-            getCode: function() {
-                // 获取验证码
-                this.clickGetCode = true;
-                this.timer = setInterval(() => {
-                    this.seconds--;
-                    if (this.seconds == 0) {
-                        clearInterval(this.timer);
-                        this.clickGetCode = false;
-                        this.seconds = 60;
-                    }
-                }, 1000);
-                this.$http.post({
-                    url: "/api/wxapp.sms/send",
-                    data: {
-                        mobile: this.form.mobile,
-                        event: "登陆若水轩小程序"
-                    },
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    if (result.code == 1) {
-                        wx.showToast({
-                            title: "验证码发送成功"
-                        })
-                    } else {
-                        wx.showToast({
-                            title: result.msg,
-                            icon: "none"
-                        })
-                    }
-                });
-            },
-            switchLoginWay: function() {
-                this.codeLogin = !this.codeLogin;
-                clearInterval(this.timer);
-                this.clickGetCode = false;
-                this.seconds = 60;
-            },
-            toRepassword: function() {
-                wx.navigateTo({
-                    url: "../rePassword/main"
-                })
-            }
-        }
+export default {
+  data() {
+    return {
+      clickGetCode: false,
+      seconds: 60,
+      codeLogin: false,
+      form: {
+        mobile: "",
+        captcha: "",
+        password: ""
+      },
+      code: ""
     };
+  },
+  onLoad() {
+    Object.assign(this.$data, this.$options.data());
+  },
+  methods: {
+    // 跳转到注册页面
+    toRegist: function() {
+      let url = "../regist/main";
+      wx.navigateTo({
+        url
+      });
+    },
+    login: function() {
+      const { mobile, captcha, password } = this.form;
+      if (mobile == "") {
+        wx.showToast({
+          title: "手机号不能为空",
+          icon: "none"
+        });
+        return false;
+      }
+      if (captcha && this.codeLogin) {
+        wx.showToast({
+          title: "验证码不能为空",
+          icon: "none"
+        });
+        return false;
+      }
+      if (password && !this.codeLogin) {
+        wx.showToast({
+          title: "密码不能为空",
+          icon: "none"
+        });
+        return false;
+      }
+      if (!this.codeLogin) {
+        this.$http
+          .post({
+            url: "/api/wxapp.user/mobilelogin",
+            data: {
+              mobile,
+              captcha,
+              type: "teacher"
+            },
+            header: {
+              token: this.token
+            }
+          })
+          .then(result => {
+            if (result.code == 1) {
+              this.$setStorage("userInfo", result.data.userinfo).then(() => {
+                wx.showToast({
+                  title: "登陆成功"
+                });
+                this.$getStorage("code").then(_result => {
+                  this.code = _result;
+                  this.$http
+                    .post({
+                      url: "/api/wxapp.user/bindingWechat",
+                      data: {
+                        code: this.code,
+                        type: "teacher"
+                      },
+                      header: {
+                        token: result.data.userinfo.token
+                      }
+                    })
+                    .then(() => {
+                      wx.redirectTo({
+                        url: "../my_teacher/main"
+                      });
+                    });
+                });
+              });
+            } else {
+              wx.showToast({
+                title: result.msg,
+                icon: "none"
+              });
+            }
+          });
+      } else {
+        this.$http
+          .post({
+            url: "/api/wxapp.user/login",
+            data: {
+              mobile,
+              password,
+              type: "teacher"
+            },
+            header: {
+              token: this.token
+            }
+          })
+          .then(result => {
+            if (result.code == 1) {
+              this.$setStorage("userInfo", result.data.userinfo).then(() => {
+                wx.showToast({
+                  title: "登陆成功"
+                });
+                this.$getStorage("code").then(_result => {
+                  this.code = _result;
+                  this.$http
+                    .post({
+                      url: "/api/wxapp.user/bindingWechat",
+                      data: {
+                        code: this.code,
+                        type: "teacher"
+                      },
+                      header: {
+                        token: result.data.userinfo.token
+                      }
+                    })
+                    .then(() => {
+                      wx.redirectTo({
+                        url: "../my_teacher/main"
+                      });
+                    });
+                });
+              });
+            } else {
+              wx.showToast({
+                title: result.msg,
+                icon: "none"
+              });
+            }
+          });
+      }
+    },
+    storageData: function(token, formId) {
+      if (formId !== "the formId is a mock one") {
+        this.$http.post({
+          url: "/api/wxapp.user/storageFormId",
+          data: {
+            form_id: formId
+          },
+          header: {
+            token
+          }
+        });
+        this.$http.post({
+          url: "/api/wxapp.user/bindingWechat",
+          data: {
+            code: this.code,
+            type: "user"
+          },
+          header: {
+            token
+          }
+        });
+      }
+    },
+    getCode: function() {
+      // 获取验证码
+      this.clickGetCode = true;
+      this.timer = setInterval(() => {
+        this.seconds--;
+        if (this.seconds == 0) {
+          clearInterval(this.timer);
+          this.clickGetCode = false;
+          this.seconds = 60;
+        }
+      }, 1000);
+      this.$http
+        .post({
+          url: "/api/wxapp.sms/send",
+          data: {
+            mobile: this.form.mobile,
+            event: "登陆若水轩小程序"
+          },
+          header: {
+            token: this.token
+          }
+        })
+        .then(result => {
+          if (result.code == 1) {
+            wx.showToast({
+              title: "验证码发送成功"
+            });
+          } else {
+            wx.showToast({
+              title: result.msg,
+              icon: "none"
+            });
+          }
+        });
+    },
+    switchLoginWay: function() {
+      this.codeLogin = !this.codeLogin;
+      clearInterval(this.timer);
+      this.clickGetCode = false;
+      this.seconds = 60;
+    },
+    toRepassword: function() {
+      wx.navigateTo({
+        url: "../rePassword/main"
+      });
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
-    .container {
-        height: 100%;
-        width: 100%;
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-        font-size: tovmin(28);
-        position: absolute;
-    }
+.container {
+  height: 100%;
+  width: 100%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  font-size: tovmin(28);
+  position: absolute;
+}
 
-    .login-form {
-        width: 80%;
-        height: 50%;
-        position: relative;
-        transform: translate(13%, 50%);
-    }
+.login-form {
+  width: 80%;
+  height: 50%;
+  position: relative;
+  transform: translate(13%, 50%);
+}
 
-    .input {
-        background-color: white;
-        border-radius: tovmin(12);
-        height: tovmin(86);
-        width: tovmin(530);
-        margin-bottom: tovmin(28);
-        padding-left: tovmin(70);
-    }
+.input {
+  background-color: white;
+  border-radius: tovmin(12);
+  height: tovmin(86);
+  width: tovmin(530);
+  margin-bottom: tovmin(28);
+  padding-left: tovmin(70);
+}
 
-    .btn {
-        border-radius: tovmin(50);
-        margin-top: tovmin(104);
-        font-size: tovmin(40);
-        height: tovmin(98);
-        width: tovmin(530);
-        line-height: tovmin(98);
-    }
+.btn {
+  border-radius: tovmin(50);
+  margin-top: tovmin(104);
+  font-size: tovmin(40);
+  height: tovmin(98);
+  width: tovmin(530);
+  line-height: tovmin(98);
+}
 
-    .info {
-        color: #C0C4CC;
-        display: flex;
-        justify-content: space-between;
-        margin-top: tovmin(24);
-    }
+.info {
+  color: #c0c4cc;
+  display: flex;
+  justify-content: space-between;
+  margin-top: tovmin(24);
+}
 
-    #info {
-        color: $grey-background;
-        position: absolute;
-        bottom: tovmin(74);
-        text-align: center;
-        width: 100%;
+#info {
+  color: $grey-background;
+  position: absolute;
+  bottom: tovmin(74);
+  text-align: center;
+  width: 100%;
+}
 
-    }
+.getCode {
+  font-size: tovmin(26);
+  position: absolute;
+  right: tovmin(10);
+  top: tovmin(26);
+  color: #ccc;
+  z-index: 30;
+}
 
-    .getCode {
-        font-size: tovmin(26);
-        position: absolute;
-        right: tovmin(10);
-        top: tovmin(26);
-        color: #ccc;
-        z-index: 30;
-    }
+.background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -6;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
 
-    .background {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        z-index: -6;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-    }
+.icon {
+  position: absolute;
+  top: tovmin(20);
+  left: tovmin(20);
+}
 
-    .icon {
-        position: absolute;
-        top: tovmin(20);
-        left: tovmin(20);
-    }
+.input-div {
+  position: relative;
+}
 
-    .input-div {
-        position: relative;
-    }
-
-    form {
-        display: flex;
-        justify-content: center;
-
-    }
+form {
+  display: flex;
+  justify-content: center;
+}
 </style>

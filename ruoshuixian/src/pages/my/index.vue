@@ -116,16 +116,16 @@
             },
             upload: function(file) {
                 this.$http.post({
-                    url: "/api/wxapp.common/upload",
+                    url: "/api/wxapp.user/profile",
                     data: {
-                        file: file
+                        avatar: file
                     },
                     header: {
                         token: this.token
                     }
                 }).then(result => {
                     wx.showToast({
-                        title: "头像上传成功"
+                        title: "头像秀修改成功"
                     });
                 })
             }

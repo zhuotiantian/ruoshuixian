@@ -177,7 +177,6 @@
                 } else {
                     this.selectedUser.push(id);
                     this.selectStudentsName = [];
-                    this.workname = "";
                     this.selectStudentsName.push(this.students[index].nickname);
                     this.$set(this.students[index], "selected", true);
                     this.selectStudentsName = this.selectStudentsName.join(",");

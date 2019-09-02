@@ -76,6 +76,9 @@
                 console.log(err);
             });
         },
+        onUnload() {
+
+        },
         onShow() {
             if (this.gameid) this.resetInterval();
         },

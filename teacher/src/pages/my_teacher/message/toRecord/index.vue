@@ -3,12 +3,11 @@
         <div class="item" v-for="(item,index) in worklist" :key="index">
             <p class="title">
                 <span>{{item.name}}</span>
-
             </p>
             <span class="remind active" v-if="item.reminder_status=='normal'" @click="remind($event,item.students_homework_id)">提醒打卡</span>
             <span class="remind" v-else @click="remind($event,item.students_homework_id)">已提醒</span>
             <p style="margin-bottom:15px">
-                <span class="work-item" v-for="(item,_index) in works" :key="_index">{{item.game_name}}</span>
+                <span class="work-item" v-for="(item,_index) in item.game" :key="_index">{{item}}</span>
             </p>
             <div class="textarea">{{item.remarks}}</div>
         </div>
@@ -41,24 +40,6 @@
                     this.worksid = result.data.map(e => {
                         return e.students_homework_details_id
                     });
-                    this.getWorks();
-                })
-            },
-            getWorks: function() {
-                this.worksid.forEach(e => {
-                    this.$http
-                        .get({
-                            url: "/api/wxapp.student/myCardTask",
-                            data: {
-                                students_homework_details_id: e
-                            },
-                            header: {
-                                token: this.token
-                            }
-                        })
-                        .then(result => {
-                            this.works = result.data;
-                        });
                 })
             },
             remind: function(e, id) {

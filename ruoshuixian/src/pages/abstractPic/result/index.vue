@@ -5,7 +5,7 @@
             <div class="row" v-for="(rows,_index) in number" :key="_index">
                 <div class="image_div" v-for="(item,index) in rows" :key="index">
                     <image class="image" :src="domain+item.image" />
-                    <span class="input">{{item.number}}</span>
+                    <span class="input">{{item.text}}</span>
                     <image class="icon" v-if="item.result==0" :src="'/static/images/my/select.png'" />
                     <image class="icon" v-else :src="'/static/images/my/wrong.png'" />
                 </div>

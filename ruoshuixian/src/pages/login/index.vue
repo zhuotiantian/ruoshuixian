@@ -94,7 +94,8 @@
                         url: "/api/wxapp.user/mobilelogin",
                         data: {
                             mobile,
-                            captcha
+                            captcha,
+                            type: "user"
                         },
                         header: {
                             token: this.token
@@ -135,7 +136,8 @@
                         url: "/api/wxapp.user/login",
                         data: {
                             mobile,
-                            password
+                            password,
+                            type: "user"
                         },
                         header: {
                             token: this.token

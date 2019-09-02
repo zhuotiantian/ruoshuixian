@@ -33,6 +33,7 @@
             }
         },
         onLoad() {
+
             Object.assign(this.$data, this.$options.data())
             this.$getStorage("rule").then(result => {
                 this.timer && clearInterval(this.timer);
