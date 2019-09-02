@@ -86,7 +86,7 @@
                             token: this.token
                         }
                     }).then(result => {
-                        console.log(result);
+
                     });
                 }
             }

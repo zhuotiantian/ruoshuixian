@@ -29,7 +29,6 @@
             let level = this.$getStorage("level");
             let rule = this.$getStorage("rule");
             Promise.all([level, rule]).then(values => {
-                console.log(values[1]);
                 this.level = values[0];
                 this.rule = values[1].rules_of_the_game.filter(e => {
                     return e.game_level == (this.level || "primary")

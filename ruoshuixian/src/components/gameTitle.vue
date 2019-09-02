@@ -77,7 +77,9 @@
             });
         },
         onUnload() {
-
+            wx.reLaunch({
+                url: '/pages/firstPage/main?gameid=' + this.gameid,
+            });
         },
         onShow() {
             if (this.gameid) this.resetInterval();

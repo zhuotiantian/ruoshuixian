@@ -5,7 +5,7 @@
         <div class="list">
             <div class="row" v-for="(rows,_index) in number" :key="_index">
                 <div class="image" v-for="(item,index) in rows" :key="index">
-                    <image class="image" :src="domain+item" />
+                    <image class="image" :src="domain+item.img" />
                 </div>
                 <span style="margin-left:60rpx">row&nbsp;&nbsp;{{_index+1}}</span>
             </div>
@@ -43,7 +43,12 @@
                 this.rule = values[1].rules_of_the_game.filter(e => {
                     return e.game_level == this.level
                 })[0];
-                this.numberList = this.rule.list;
+                this.numberList = this.rule.list.map((e, index) => {
+                    return {
+                        img: e,
+                        index: index
+                    }
+                });
                 this.total = this.rule.number;
                 this.per = this.rule.number_per_group;
                 let number = [];
@@ -57,8 +62,9 @@
         },
         methods: {
             finishMemary: function() {
+
                 wx.navigateTo({
-                    url: "../answer/main"
+                    url: "../answer/main?list=" + JSON.stringify(this.numberList)
                 });
             }
         }

@@ -26,8 +26,10 @@
             Keybord,
             alertBox
         },
-        onLoad() {
-            Object.assign(this.$data, this.$options.data())
+        onLoad(option) {
+            Object.assign(this.$data, this.$options.data());
+            let list = JSON.parse(option.list);
+            console.log(list);
             let level = this.$getStorage("level");
             let userInfo = this.$getStorage("userInfo");
             let rule = this.$getStorage("rule");
@@ -39,17 +41,18 @@
                 })[0];
                 this.token = this.token;
                 let number = [];
-                this.numberList = this.rule.list.map((e, index) => {
+                this.numberList = list.map((e, index) => {
                     return {
-                        image: e,
+                        image: e.img,
                         text: "",
+                        index: e.index
                     }
                 });
                 this.total = this.rule.number;
                 this.per = this.rule.number_per_group;
                 this.numberList = this.numberList.sort(() => {
                     return Math.random() > 0.5 ? -1 : 1
-                })
+                });
                 for (var i = 0; i < this.total; i += this.per) {
                     number.push(this.numberList.slice(i, i + this.per));
                 }
@@ -92,10 +95,12 @@
             },
             confirm: function() {
                 this.endTime = new Date().getTime();
-                let result = [];
+                let new_game_list = [];
+                let game_list = [];
                 this.number.forEach(e => {
                     e.forEach(m => {
-                        result.push(m.text);
+                        new_game_list.push(m.text);
+                        game_list.push(m.index);
                     });
                 });
                 this.$http
@@ -104,7 +109,10 @@
                         data: {
                             game_records_id: this.game_records_id,
                             game_time: (this.endTime - this.startTime) / 1000,
-                            content: JSON.stringify(result)
+                            content: JSON.stringify({
+                                new_game_list,
+                                game_list
+                            })
                         },
                         header: {
                             token: this.token
