@@ -5,21 +5,19 @@
             <div class="input_div">
                 <input type="text" class="input" placeholder="请输入手机号" v-model="form.mobile" placeholder-style="color:#ccc" />
                 <image :src="'/static/images/my/phone.png'" class="icon" style="height:42rpx;width:34rpx"></image>
-
             </div>
-            <template v-if="!codeLogin">
-                <span class="getCode" @click="getCode" v-if="!clickGetCode">获取验证码</span>
-                <span class="getCode" style="color:#c0c4cc" v-else>{{seconds}}s后重新获取</span>
-            </template>
             <div class="input-div">
                 <template v-if="codeLogin">
                     <input type="password" class="input" v-model="form.password" placeholder="密码" placeholder-style="color:#ccc" />
                     <image :src="'/static/images/my/password.png'" class="icon" style="height:42rpx;width:34rpx"></image>
                 </template>
                 <template v-else>
-                    <input type="text" class="input" placeholder="验证码" v-model="form.captcha" placeholder-style="color:#ccc" />
+                    <input type="text" class="input" style="width:58%" placeholder="验证码" v-model="form.captcha" placeholder-style="color:#ccc" />
                     <image :src="'/static/images/my/keys.png'" class="icon" style="height:54rpx;width:38rpx"></image>
-
+                    <template v-if="!codeLogin">
+                        <button class="getCode" @click="getCode" v-if="!clickGetCode" style="background:#25BCFF;color:white">验证码</button>
+                        <button class="getCode" style="color:#c0c4cc;background:#25BCFF;color:white" v-else>{{seconds}}s</button>
+                    </template>
                 </template>
             </div>
             <button class="btn submit-btn" @click="login">登 录</button>
@@ -49,7 +47,7 @@
                     password: ""
                 },
                 code: ""
-            }
+            };
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data());
@@ -60,7 +58,7 @@
                 let url = "../regist/main";
                 wx.navigateTo({
                     url
-                })
+                });
             },
             login: function() {
                 const {
@@ -73,108 +71,115 @@
                         title: "手机号不能为空",
                         icon: "none"
                     });
-                    return false
-                };
-                if (captcha && this.codeLogin) {
+                    return false;
+                }
+                if (captcha == "" && !this.codeLogin) {
                     wx.showToast({
                         title: "验证码不能为空",
                         icon: "none"
                     });
-                    return false
-                };
-                if (password && !this.codeLogin) {
+                    return false;
+                }
+                if (password == "" && this.codeLogin) {
                     wx.showToast({
                         title: "密码不能为空",
                         icon: "none"
                     });
-                    return false
+                    return false;
                 }
                 if (!this.codeLogin) {
-                    this.$http.post({
-                        url: "/api/wxapp.user/mobilelogin",
-                        data: {
-                            mobile,
-                            captcha,
-                            type: "user"
-                        },
-                        header: {
-                            token: this.token
-                        }
-                    }).then(result => {
-                        if (result.code == 1) {
-                            this.$setStorage("userInfo", result.data.userinfo).then(() => {
+                    this.$http
+                        .post({
+                            url: "/api/wxapp.user/mobilelogin",
+                            data: {
+                                mobile,
+                                captcha,
+                                type: "user"
+                            },
+                            header: {
+                                token: this.token
+                            }
+                        })
+                        .then(result => {
+                            if (result.code == 1) {
+                                this.$setStorage("userInfo", result.data.userInfo).then(() => {
+                                    wx.showToast({
+                                        title: "登陆成功"
+                                    });
+                                    this.$getStorage("code").then(_result => {
+                                        this.code = _result;
+                                        this.$http
+                                            .post({
+                                                url: "/api/wxapp.user/bindingWechat",
+                                                data: {
+                                                    code: this.code,
+                                                    type: "user"
+                                                },
+                                                header: {
+                                                    token: result.data.userInfo.token
+                                                }
+                                            })
+                                            .then(() => {
+                                                wx.redirectTo({
+                                                    url: "../firstPage/main"
+                                                });
+                                            });
+                                    });
+                                });
+                            } else {
                                 wx.showToast({
-                                    title: "登陆成功"
+                                    title: result.msg,
+                                    icon: "none"
                                 });
-                                this.$getStorage("code").then(_result => {
-                                    this.code = _result;
-                                    this.$http.post({
-                                        url: "/api/wxapp.user/bindingWechat",
-                                        data: {
-                                            code: this.code,
-                                            type: "user"
-                                        },
-                                        header: {
-                                            token: result.data.userinfo.token
-                                        }
-                                    }).then(() => {
-                                        wx.redirectTo({
-                                            url: "../firstPage/main"
-                                        })
-                                    })
-                                });
-                            });
-                        } else {
-                            wx.showToast({
-                                title: result.msg,
-                                icon: "none"
-                            })
-                        }
-                    });
+                            }
+                        });
                 } else {
-                    this.$http.post({
-                        url: "/api/wxapp.user/login",
-                        data: {
-                            mobile,
-                            password,
-                            type: "user"
-                        },
-                        header: {
-                            token: this.token
-                        }
-                    }).then(result => {
-                        if (result.code == 1) {
-                            this.$setStorage("userInfo", result.data.userinfo).then(() => {
+                    this.$http
+                        .post({
+                            url: "/api/wxapp.user/login",
+                            data: {
+                                mobile,
+                                password,
+                                type: "user"
+                            },
+                            header: {
+                                token: this.token
+                            }
+                        })
+                        .then(result => {
+                            if (result.code == 1) {
+                                this.$setStorage("userInfo", result.data.userinfo).then(() => {
+                                    wx.showToast({
+                                        title: "登陆成功"
+                                    });
+                                    this.$getStorage("code").then(_result => {
+                                        this.code = _result;
+                                        this.$http
+                                            .post({
+                                                url: "/api/wxapp.user/bindingWechat",
+                                                data: {
+                                                    code: this.code,
+                                                    type: "user"
+                                                },
+                                                header: {
+                                                    token: result.data.userinfo.token
+                                                }
+                                            })
+                                            .then(() => {
+                                                wx.redirectTo({
+                                                    url: "../firstPage/main"
+                                                });
+                                            });
+                                    });
+                                });
+                            } else {
                                 wx.showToast({
-                                    title: "登陆成功"
+                                    title: result.msg,
+                                    icon: "none"
                                 });
-                                this.$getStorage("code").then(_result => {
-                                    this.code = _result;
-                                    this.$http.post({
-                                        url: "/api/wxapp.user/bindingWechat",
-                                        data: {
-                                            code: this.code,
-                                            type: "user"
-                                        },
-                                        header: {
-                                            token: result.data.userinfo.token
-                                        }
-                                    }).then(() => {
-                                        wx.redirectTo({
-                                            url: "../firstPage/main"
-                                        })
-                                    })
-                                });
-                            });
-                        } else {
-                            wx.showToast({
-                                title: result.msg,
-                                icon: "none"
-                            })
-                        }
-                    });
-                };
-
+                            }
+                        });
+                }
             },
             storageData: function(token, formId) {
                 if (formId !== "the formId is a mock one") {
@@ -196,7 +201,7 @@
                         header: {
                             token
                         }
-                    })
+                    });
                 }
             },
             getCode: function() {
@@ -210,27 +215,32 @@
                         this.seconds = 60;
                     }
                 }, 1000);
-                this.$http.post({
-                    url: "/api/wxapp.sms/send",
-                    data: {
-                        mobile: this.form.mobile,
-                        event: "登陆若水轩小程序"
-                    },
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    if (result.code == 1) {
-                        wx.showToast({
-                            title: "验证码发送成功"
-                        })
-                    } else {
-                        wx.showToast({
-                            title: result.msg,
-                            icon: "none"
-                        })
-                    }
-                });
+                this.$http
+                    .post({
+                        url: "/api/wxapp.sms/send",
+                        data: {
+                            mobile: this.form.mobile,
+                            event: "登陆若水轩小程序"
+                        },
+                        header: {
+                            token: this.token
+                        }
+                    })
+                    .then(result => {
+                        if (result.code == 1) {
+                            wx.showToast({
+                                title: "验证码发送成功"
+                            });
+                        } else {
+                            wx.showToast({
+                                title: result.msg,
+                                icon: "none"
+                            });
+                            this.seconds = 60;
+                            this.clickGetCode = false;
+                            clearInterval(this.timer);
+                        }
+                    });
             },
             switchLoginWay: function() {
                 this.codeLogin = !this.codeLogin;
@@ -241,7 +251,7 @@
             toRepassword: function() {
                 wx.navigateTo({
                     url: "../rePassword/main"
-                })
+                });
             }
         }
     };
@@ -282,7 +292,7 @@
     }
 
     .info {
-        color: #C0C4CC;
+        color: #c0c4cc;
         display: flex;
         justify-content: space-between;
         margin-top: tovmin(24);
@@ -294,16 +304,17 @@
         bottom: tovmin(74);
         text-align: center;
         width: 100%;
-
     }
 
     .getCode {
-        font-size: tovmin(26);
+        font-size: 3.46667vmin;
         position: absolute;
-        right: tovmin(10);
-        top: tovmin(26);
+        right: 1.33333vmin;
+        top: 0;
         color: #ccc;
         z-index: 30;
+        height: 47px;
+        line-height: 47px;
     }
 
     .background {
@@ -330,6 +341,5 @@
     form {
         display: flex;
         justify-content: center;
-
     }
 </style>

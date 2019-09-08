@@ -1,12 +1,12 @@
 <template>
     <div class="container">
         <div class="content">
-            <div v-for="(item,index) in list" class="item" :key="index" @click="toGame(item)">
+            <div v-for="(item,index) in list" class="item" :key="index">
                 <div class="img_div">
                     <image class="image" :src="domain+item.img" />
                 </div>
                 <p style="text-align:center;" class="btnGroup">
-                    <span v-if="item.status=='not_finished'" class="yellow_btn">待完成</span>
+                    <span v-if="item.status=='not_finished'" class="yellow_btn"  @click="toGame(item)">待完成</span>
                     <span v-else class="btn default_btn">已完成</span>
                 </p>
             </div>

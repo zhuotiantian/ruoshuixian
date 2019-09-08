@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary"></CardTitle>
+        <CardTitle :showType="true" ref="title" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary"></CardTitle>
         <div class="list">
             <template v-if="pocker.length==0">
                 <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
@@ -33,19 +33,22 @@
                 level: "primary",
                 list: [],
                 currentGroupIndex: 0,
-                rule: {}
+                rule: {},
+                pockerNum: 0,
             };
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
             let level = this.$getStorage("level");
             let rule = this.$getStorage("rule");
-            Promise.all([level, rule]).then(values => {
+            let pockerNum = this.$getStorage("pockerNumber");
+            Promise.all([level, rule, pockerNum]).then(values => {
                 this.level = values[0];
                 this.rule = values[1].rules_of_the_game.filter(e => {
                     return e.game_level == (this.level || "primary")
                 })[0];
                 this.list = this.rule.list;
+                this.pockerNum = values[2];
             }).catch(err => {
                 console.log(err);
             })
@@ -61,11 +64,15 @@
                 return bgCounts;
             }
         },
+        mounted: function() {
+            this.group(this.pockerNum);
+            this.$refs.title.selectType = this.pockerNum;
+        },
         methods: {
             group: function(data) {
                 let list = JSON.parse(JSON.stringify(this.list));
                 this.pocker = [];
-                if (data !== "ALL") {
+                if (data !== "all") {
                     for (var i = 0; i < list.length; i + data) {
                         this.pocker.push(list.splice(i, i + data));
                     }
@@ -73,11 +80,6 @@
                     this.pocker.push(list);
                 }
                 this.type = "记忆完成";
-                if (this.time_long) {
-                    setTimeout(() => {
-                        this.finishMemary();
-                    }, this.time_long);
-                }
             },
             finishMemary: function() {
                 wx.navigateTo({

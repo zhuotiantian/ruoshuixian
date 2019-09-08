@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <CardTitle :btnType="btnType" :type="titleBtn" @toNextPage="toNextPage">
+        <CardTitle ref="title" :btnType="btnType" :type="titleBtn" @toNextPage="toNextPage">
         </CardTitle>
         <div class="content" v-if="type=='time'">
             <span class="label">请选择闪视时间：</span>
@@ -14,7 +14,7 @@
                 <span v-for="(item,index) in memaryNumber" :key="index" :class="{active:activeIndex==item}" @click="activeIndex=item">{{item}}</span>
             </div>
         </div>
-        <div class="btn submit-btn" @click="toNextPage">{{type=='time'?activeIndex+"S":"确定"}}</div>
+        <div class="btn submit-btn" @click="toNextPage">{{type=='time'?"开始":"确定"}}</div>
     </div>
 </template>
 <script>
@@ -33,16 +33,8 @@
             }
         },
         onLoad() {
-
             Object.assign(this.$data, this.$options.data())
             this.$getStorage("rule").then(result => {
-                this.timer && clearInterval(this.timer);
-                this.timer = setInterval(() => {
-                    this.seconds--;
-                    if (this.seconds == 0) {
-                        clearInterval(this.timer);
-                    }
-                }, 1000);
                 if (this.type == "time") {
                     this.memoryTime = result.rules_of_the_game[0].memory_time.split(",");
                     this.activeIndex = this.memoryTime[0];
@@ -53,12 +45,11 @@
         },
         methods: {
             toNextPage: function(data) {
-                clearInterval(this.timer);
-                if (this.type == "time") {
-                    this.$setStorage("memoryTime", this.activeIndex)
-                }
-                wx.navigateTo({
-                    url: this.nextPage
+                this.$setStorage(this.type == "time" ? "memoryTime" : "pockerNumber", this.activeIndex).then(result => {
+                    this.$refs.title.clear();
+                    wx.navigateTo({
+                        url: this.nextPage
+                    })
                 })
             }
         }

@@ -24,8 +24,8 @@
                     <span class="btn default-btn" @click="toHelpPage">帮助</span>
                     <span class="btn default-btn type arrow" v-if="showType" style="margin-left:30rpx" @click="showPannel=true">{{selectType}}</span>
                 </p>
-                <p style="flex:1;text-align:center" v-if="!(t_minutes==null||t_seconds==null)">
-                    00：{{t_minutes<10?'0'+t_minutes:t_minutes}}：{{t_seconds<10?'0'+t_seconds:t_seconds}}</p>
+                <p style="flex:1;text-align:center" v-if="showIntervalTime">
+                    {{hours==0?'00':'0'+hours}}：{{t_minutes<10?'0'+t_minutes:t_minutes}}：{{t_seconds<10?'0'+t_seconds:t_seconds}}</p>
                 <div style="flex:1;text-align:right">
                     <p class="btn primary-btn" v-if="type=='跳过'" @click="toNextPage">跳过</p>
                     <p class="btn primary-btn" v-if="type=='下一页'" @click="nextPage">下一页</p>
@@ -53,7 +53,10 @@
             "isPocker",
             "showTime",
             "isInsert",
-            "btnType"
+            "btnType",
+            "pageType",
+            "isShowTime",
+            "seconds"
         ],
         onLoad() {
             Object.assign(this.$data, this.$options.data());
@@ -92,7 +95,7 @@
                 selectType: "显示方式",
                 showTime: this.showTime,
                 active: null,
-
+                showIntervalTime: true,
                 event: {
                     跳过: "toNextPage",
                     记忆完成: "finishMemary",
@@ -106,16 +109,18 @@
                 memoryTime: 0,
                 recallTime: 0,
                 times: [],
-                level: ""
+                level: "",
+                hours: 0,
             };
         },
         watch: {
             t_seconds: function() {
-                if (this.t_minutes == 0 && this.t_seconds == 0) {
+                if (this.t_minutes == 0 && this.t_seconds == 0 && (this.seconds || this.hours == 0)) {
                     if (this.btnType == "none") {
                         this.toNextPage();
+                    } else {
+                        this.type && this[this.event[this.type]]("timeout");
                     }
-                    this.type && this[this.event[this.type]]("timeout");
                 }
             },
             minutes: function(data) {
@@ -128,57 +133,91 @@
         },
         methods: {
             resetInterval: function() {
-                this.changeTime();
-                this.timeout && clearInterval(this.timeout);
-                this.timer();
+                this.showIntervalTime = this.isShowTime === undefined;
+                if (this.showIntervalTime) {
+                    this.changeTime();
+                    this.timeout && clearInterval(this.timeout);
+                    this.timer();
+                }
             },
             changeTime: function() {
                 switch (this.type) {
                     case "记忆完成":
-                        this.t_seconds = this.memoryTime || this.times.memory_time || 60;
-                        this.t_minutes = 0;
+                        this._time = this.memoryTime || this.times.memory_time || 60;
+                        this.t_seconds = this._time % 60;
+                        this.t_minutes = Math.floor(this._time / 60);
                         break;
                     case "开始":
-                        this.t_seconds = this.times.recollect_time || 60;
-                        this.t_minutes = 0;
+                        this._time = this.times.recollect_time || 60;
+                        this.t_seconds = this._time % 60;
+                        this.t_minutes = Math.floor(this._time / 60);
                         break;
                     case "作答完成":
-                        this.t_seconds = 60;
-                        this.t_minutes = 15;
+                        if (this.seconds != undefined) {
+                            this._time = this.seconds;
+                            if (this.seconds > 3600) {
+                                this.hours = Math.floor(this._time / 3600);
+                                this.t_minutes = (this._time % 3600) / 60;
+                                this.t_seconds = this.t_minutes % 60;
+                            } else if (this.seconds > 60) {
+                                this.hours = 0;
+                                this.t_minutes = Math.floor(this._time / 60);
+                                this.t_seconds = this.t_minutes % 60;
+                            } else {
+                                this.t_seconds = this.seconds;
+                                this.t_minutes = 0;
+                                this.hours = 0
+                            }
+                        } else {
+                            this.t_seconds = 60;
+                            this.t_minutes = 15;
+                        }
                         break;
                     case "跳过":
                         this.t_seconds = 60;
                         this.t_minutes = 0;
                         break;
-                }
+                };
             },
             timer: function() {
-                if (this.t_minutes) {
-                    this.t_seconds = 60;
-                    this.t_minutes = this.t_minutes - 1;
+                if (this.t_minutes > 0 || this.hours > 0) {
+                    if (this.hours > 0) {
+                        this.hours--;
+                        this.t_seconds = 60;
+                        this.t_minutes = 59;
+                    } else {
+                        this.t_seconds = 60;
+                        this.t_minutes = this.t_minutes - 1;
+                    }
                     this.timeout = setInterval(() => {
                         if (this.t_seconds == 0) {
                             if (this.t_minutes > 0) {
                                 this.t_minutes--;
                                 this.t_seconds = 60;
                             } else {
-                                clearInterval(this.timeout);
+                                if (this.hours > 0) {
+                                    this.hours--;
+                                    this.t_minutes = 59;
+                                    this.t_seconds = 60;
+                                } else {
+                                    this.clear();
+                                }
                             }
                         } else {
                             this.t_seconds--;
-                        }
+                        };
                     }, 1000);
                 } else {
                     this.timeout = setInterval(() => {
                         this.t_seconds--;
                         if (this.t_seconds == 0) {
-                            clearInterval(this.timeout);
+                            this.clear();
                         }
                     }, 1000);
                 }
             },
             finish: function(data) {
-                clearInterval(this.timeout);
+                this.clear();
                 this.$emit("finish", data);
             },
             nextPage: function() {
@@ -189,12 +228,16 @@
                 this.active = index;
                 this.$emit("group", count);
                 this.showPannel = false;
-                clearInterval(this.timeout);
+                this.clear();
                 this.timer();
             },
             toNextPage: function() {
-                clearInterval(this.timeout);
-                this.$emit("toNextPage");
+                if (this.pageType == 'countIndex' && this.t_seconds > 3) {
+                    this.t_seconds = 3;
+                } else {
+                    this.clear();
+                }
+                this.$emit("toNextPage", this.t_seconds);
             },
             toHelpPage: function() {
                 wx.navigateTo({
@@ -202,14 +245,14 @@
                 });
             },
             startGame: function() {
-                clearInterval(this.timeout);
+                this.clear();
                 this.$emit("startGame");
             },
             showTimeHandle: function() {
                 this.showTime = !this.showTime;
             },
             finishMemary: function() {
-                clearInterval(this.timeout);
+                this.clear();
                 this.$emit("finishMemary");
             },
             playAgain: function() {
@@ -219,6 +262,9 @@
                         url: "/" + pages[1].route
                     });
                 })
+            },
+            clear: function() {
+                clearInterval(this.timeout);
             }
         }
     };

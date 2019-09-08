@@ -10,7 +10,7 @@
                 <span class="btn default-btn" @click="shideTip">我知道了</span>
             </p>
         </div>
-        <CardTitle minutes="15" seconds="0" type="作答完成" @finish="finish"></CardTitle>
+        <CardTitle seconds="300" type="作答完成" @finish="finish"></CardTitle>
         <div v-if="result.length>0" class="btnGroup" style="position:relative:z-index:998;">
             <div class="btn default-btn" @click.stop="replace">替换</div>
             <div class="btn default-btn" @click="insertBefore">从前插入</div>

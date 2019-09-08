@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <div class="fog" v-if="showPannel" @click="showPannel=false"></div>
         <div class="header">
             <span :class="{active:active=='打卡记录'}" @click="active='打卡记录'">打卡记录</span>
             <span :class="{active:active=='成绩记录'}" @click="active='成绩记录'">成绩记录</span>
@@ -17,7 +18,7 @@
             <ul class="list" v-else>
                 <li v-for="(item,index) in scores" :key="index">
                     <span>{{item.game}}</span>
-                    <span>
+                    <span @click="showPannel=true">
                         <span>{{item.fraction}}</span>
                         <span>
                             <image class="image" :src="'/static/images/my/share.png'"></image>
@@ -26,6 +27,15 @@
                     </span>
                 </li>
             </ul>
+        </div>
+        <div :class="{drop_up:true,up:showPannel,down:!showPannel}">
+            <p>
+                <image src="/static/images/my/pengyouquan.png" style="margin-left:1vmin"></image>生成朋友圈分享图
+            </p>
+            <button open-type="share">
+                <image src="/static/images/my/timg.jpg" style="width:7vmin"></image>转发给好友或群聊
+            </button>
+            <p style="text-align:center;position:absolute;bottom:2vmin;width:100%" @click="showPannel=false">取消</p>
         </div>
     </div>
 </template>
@@ -36,8 +46,20 @@
                 active: "打卡记录",
 
                 list: [],
-                scores: []
-            }
+                scores: [],
+                showPannel: false
+            };
+        },
+        onShareAppMessage: function(res) {
+            return {
+                title: "来跟我一起玩吧~~",
+                success: function() {
+                    console.log("分享成功");
+                },
+                error: function() {
+                    console.log("分享失败");
+                }
+            };
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data());
@@ -49,41 +71,45 @@
         },
         methods: {
             getList: function() {
-                this.$http.get({
-                    url: "/api/wxapp.student/punchInRecord",
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    if (result.code == 1) {
-                        this.list = result.data;
-                    } else {
-                        wx.showToast({
-                            title: result.msg,
-                            icon: none
-                        });
-                    }
-                })
+                this.$http
+                    .get({
+                        url: "/api/wxapp.student/punchInRecord",
+                        header: {
+                            token: this.token
+                        }
+                    })
+                    .then(result => {
+                        if (result.code == 1) {
+                            this.list = result.data;
+                        } else {
+                            wx.showToast({
+                                title: result.msg,
+                                icon: none
+                            });
+                        }
+                    });
             },
             getScoreList: function() {
-                this.$http.get({
-                    url: "/api/wxapp.game/achievement",
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    if (result.code == 1) {
-                        this.scores = result.data;
-                    } else {
-                        wx.showToast({
-                            title: result.msg,
-                            icon: none
-                        });
-                    }
-                })
+                this.$http
+                    .get({
+                        url: "/api/wxapp.game/achievement",
+                        header: {
+                            token: this.token
+                        }
+                    })
+                    .then(result => {
+                        if (result.code == 1) {
+                            this.scores = result.data;
+                        } else {
+                            wx.showToast({
+                                title: result.msg,
+                                icon: none
+                            });
+                        }
+                    });
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -91,6 +117,7 @@
         height: 100%;
         position: absolute;
         width: 100%;
+        overflow: hidden;
     }
 
     .content {
@@ -168,5 +195,78 @@
         vertical-align: middle;
         margin-right: tovmin(10);
         margin-left: tovmin(20);
+    }
+
+    .drop_up {
+        height: tovmin(230);
+        background: white;
+        position: absolute;
+        z-index: 1001;
+        bottom: 0;
+        left: 0;
+        width: calc(100% - 7vmin);
+        font-size: tovmin(28);
+        padding: tovmin(30);
+    }
+
+    .drop_up .title {
+        color: #b4b4b4;
+        font-size: tovmin(24);
+        line-height: tovmin(74);
+        text-indent: tovmin(22);
+    }
+
+    .drop_up button {
+        border-color: #fff;
+        background: #fff;
+        text-align: left;
+        padding: 0;
+        font-size: inherit;
+        color: inherit;
+        position: static;
+
+    }
+
+    .drop_up p {
+        margin-bottom: tovmin(30);
+    }
+
+    .drop_up image {
+        height: tovmin(40);
+        width: tovmin(40);
+        vertical-align: middle;
+        margin-right: tovmin(30);
+    }
+
+    .down {
+        animation: slide-down 0.5s;
+        animation-fill-mode: forwards;
+    }
+
+    .up {
+        animation: slide-up 0.5s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes slide-down {
+        from {
+            transform: translateY(0);
+        }
+
+        to {
+            transform: translateY(tovmin(1000));
+            display: block;
+        }
+    }
+
+    @keyframes slide-up {
+        from {
+            transform: translateY(tovmin(1000));
+        }
+
+        to {
+            transform: translateY(0);
+            display: none;
+        }
     }
 </style>

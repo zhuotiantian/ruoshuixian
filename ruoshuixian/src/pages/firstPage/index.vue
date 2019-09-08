@@ -48,10 +48,10 @@
         },
         onShow() {
             wx.hideTabBar();
+            this.token && this.checkLoginStatus();
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data());
-
             this.$getStorage("code").then(result => {
                 this.code = result;
             });
@@ -64,10 +64,10 @@
                 this.$setStorage("level", "");
                 this.$setStorage("memoryTime", "");
                 this.$setStorage("result", {});
+                this.$setStorage("pockerNumber", "");
                 this.getIndexData();
                 this.getList();
             }).catch(err => {
-                console.log(err);
                 wx.showToast({
                     title: "登陆信息已过期",
                     icon: "none"
@@ -185,7 +185,7 @@
                                 icon: "success"
                             });
                             wx.navigateTo({
-                                url: "/pages/hongbao/redPocketList/main"
+                                url: "/pages/my/hongbao/main"
                             });
                             this.showFog = false;
                         }

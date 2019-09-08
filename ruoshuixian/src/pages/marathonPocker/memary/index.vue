@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
+        <CardTitle :showType="true" ref="title" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
         </CardTitle>
         <div class="list">
             <template v-if="perPocker.length==0">
@@ -33,7 +33,8 @@
             Object.assign(this.$data, this.$options.data())
             let level = this.$getStorage("level");
             let rule = this.$getStorage("rule");
-            Promise.all([level, rule]).then(values => {
+            let pockerNum = this.$getStorage("pockerNumber");
+            Promise.all([level, rule, pockerNum]).then(values => {
                 this.level = values[0];
                 this.rule = values[1].rules_of_the_game.filter(e => {
                     return e.game_level == this.level
@@ -52,6 +53,8 @@
                     groupPage.push(this.pages.slice(i, i + 10));
                 };
                 this.groupPage = groupPage;
+                this.pockerNum = values[2];
+
             })
         },
         data() {
@@ -68,8 +71,13 @@
                 perPocker: [],
                 currentPage: 0,
                 groupPage: [],
-                currentGroupIndex: 0
+                currentGroupIndex: 0,
+                pockerNum: 0,
             }
+        },
+        mounted: function() {
+            this.group(this.pockerNum);
+            this.$refs.title.selectType = this.pockerNum;
         },
         computed: {
             bgCounts: function() {
@@ -87,7 +95,7 @@
                 let currentIndex = this.groupPage[this.currentPage].filter(e => {
                     return e.active
                 })[0].number;
-                if (data !== "ALL") {
+                if (data !== "all") {
                     let list = JSON.parse(JSON.stringify(this.pocker[currentIndex]));
                     this.perPocker = [];
                     if (data) {

@@ -2,7 +2,7 @@
     <div class="container">
         <div class="fog" v-if="showFog"></div>
         <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
-        <CardTitle type="作答完成" @finish="finish" @nextPage="nextPage"></CardTitle>
+        <CardTitle type="作答完成" seconds="1800" @finish="finish" @nextPage="nextPage"></CardTitle>
         <div class="list">
             <span v-for="(item,index) in list" :key="index+1"><span>{{index+1}}</span><input type="text" class="input" v-model="item.text"></span>
         </div>

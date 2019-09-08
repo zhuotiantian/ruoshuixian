@@ -1,8 +1,8 @@
 <template>
     <div class="container">
-        <CardTitle :seconds="seconds" :minutes="minutes" type="跳过" @toNextPage="toNextPage"></CardTitle>
+        <CardTitle :seconds="seconds" type="跳过" pageType="countIndex" @toNextPage="toNextPage"></CardTitle>
         <div class="content">
-            <p>本轮记忆时间：{{memoryTime}}秒钟</p>
+            <p>本轮记忆时间：{{memoryTime}}分钟</p>
             <p :class="{proccess,acticve,active:seconds>3&&seconds<=60}">一分钟准备</p>
             <p :class="{proccess,active:seconds>1&&seconds<=3}">脑细胞准备</p>
             <p :class="{proccess,active:seconds>0&&seconds<=1}">开始</p>
@@ -33,17 +33,22 @@
                 this.rule = values[1].rules_of_the_game.filter(e => {
                     return e.game_level == (this.level || "primary")
                 })[0];
-                this.memoryTime = this.rule.memory_time;
+                // this.memoryTime = Math.floor(this.rule.memory_time / 60);
+                this.memoryTime = this.rule.memory_time / 60;
                 this.timer = setInterval(() => {
                     this.seconds--;
                     if (this.seconds == 0) {
                         clearInterval(this.timer);
+                        this.$setStorage("level", this.level).then(results => {
+                            wx.navigateTo({
+                                url: this.nextPage
+                            });
+                        })
                     }
                 }, 1000);
             }).catch(err => {
                 console.log(err);
             })
-
         },
         data() {
             return {
@@ -51,23 +56,18 @@
                 seconds: 60,
                 memoryTime: null,
                 show: false,
-                minutes: 0,
                 rule: {}
             }
         },
         methods: {
-            toNextPage: function() {
-                wx.navigateTo({
-                    url: this.nextPage
-                });
-                this.$setStorage("level", this.level)
+            toNextPage: function(time) {
+                this.seconds = time;
             },
             selLevel: function(level) {
                 this.level = level;
                 this.seconds = 60;
             }
         },
-
     }
 </script>
 <style lang="scss" scoped>

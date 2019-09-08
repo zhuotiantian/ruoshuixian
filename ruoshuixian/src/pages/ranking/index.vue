@@ -5,7 +5,7 @@
                 <image class="image" :src="domain+avatar"></image>
             </span>
             <span style="flex:6">我</span>
-            <span style="flex:1">{{index}}</span>
+            <span style="flex:1">{{index+1}}</span>
         </div>
         <div class="content">
             <ul>
@@ -62,7 +62,6 @@
                             this.index = index;
                         }
                     });
-                    console.log(this.list);
                 })
             }
         }

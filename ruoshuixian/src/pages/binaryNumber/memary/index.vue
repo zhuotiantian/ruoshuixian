@@ -1,9 +1,9 @@
 <template>
     <div class="container">
-        <CardTitle :showType="false" type="记忆完成" @finishMemary="finishMemary" @group="group" :pannelContent="pannelContent"></CardTitle>
+        <CardTitle :showType="true" type="记忆完成" @finishMemary="finishMemary" @group="group" :pannelContent="pannelContent"></CardTitle>
         <div class="list">
             <div class="row" v-for="(rows,_index) in number" :key="_index">
-                <div v-for="(item,index) in rows" :key="index" :class="{item:true,border:counts&&((index+1)%counts==0)&&(index+1)!=number.length}">
+                <div v-for="(item,index) in rows" :key="index" :class="{item:true,border:counts&&((index+1)%counts==0)&&(index+1)!=rows.length}">
                     <span>{{item}}</span>
                 </div>
                 <span style="width:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>

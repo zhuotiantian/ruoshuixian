@@ -10,96 +10,123 @@
     </div>
 </template>
 <script>
-    import CardTitle from "@/components/gameTitle"
-    export default {
-        components: {
-            CardTitle
+import CardTitle from "@/components/gameTitle";
+export default {
+  components: {
+    CardTitle
+  },
+  onUnload() {
+    this.innerAudioContext.stop();
+  },
+  data() {
+    return {
+      innerAudioContext: null
+    };
+  },
+  onLoad() {
+    Object.assign(this.$data, this.$options.data());
+    let level = this.$getStorage("level");
+    let rule = this.$getStorage("rule");
+    let code = this.$getStorage("code");
+    Promise.all([level, rule, code]).then(values => {
+      this.level = values[0];
+      this.rule = values[1].rules_of_the_game.filter(e => {
+        return e.game_level == this.level;
+      })[0];
+      let numberList = this.rule.list;
+      let that = this;
+      wx.request({
+        url: "https://openapi.baidu.com/oauth/2.0/token",
+        method: "GET",
+        data: {
+          grant_type: "client_credentials",
+          client_id: "Ty51KGGMStzsF2MaXDmaMG0j",
+          client_secret: "g4LN0RcXzUGKsyzK8jBscXHcYRiGSQEv"
         },
-        onLoad() {
-            Object.assign(this.$data, this.$options.data())
-            let level = this.$getStorage("level");
-            let rule = this.$getStorage("rule");
-            Promise.all([level, rule]).then(values => {
-                this.level = values[0];
-                this.rule = values[1].rules_of_the_game.filter(e => {
-                    return e.game_level == this.level
-                })[0];
-                // 创建音频播放对象
-                this.innerAudioContext = wx.createInnerAudioContext();
-                this.numberList = this.rule.list;
-                let index = -1;
-                this.innerAudioContext.play();
-                this.timer = setInterval(() => {
-                    index++;
-                    if (index == this.numberList.length - 1) {
-                        this.innerAudioContext.src = 'http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&text=' + encodeURI("播放完毕")
-                        clearInterval(this.timer);
-                    } else {
-                        // 设置音频播放来源
-                        this.innerAudioContext.src = 'http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&text=' + encodeURI(this.numberList[index])
-                    }
-                    // 音频进入可以播放状态
-                    this.innerAudioContext.onCanplay((res) => {
-                        this.isPaly = true
-                    });
-                    this.innerAudioContext.play();
-                }, 2000);
-            })
+        success: function(res) {
+          wx.hideLoading();
+          let token = res.data.access_token;
+          let tex = encodeURI(numberList);
+          let cuid = values[2];
+          var url = `http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=${cuid}&tok=${token}&tex=${tex}&vol=9&per=0&spd=3&pit=5&aue=3`;
 
-
-        },
-        data() {
-            return {
-                isPaly: true
+          wx.downloadFile({
+            url: url,
+            success: function(result) {
+              wx.playVoice({
+                filePath: result.tempFilePath,
+                complete: function(res) {}
+              });
+              let innerAudioContext = wx.createInnerAudioContext();
+              innerAudioContext.src = result.tempFilePath;
+              innerAudioContext.onCanplay(res => {
+                // this.isPaly = true;
+              });
+              innerAudioContext.play();
+              that.innerAudioContext = innerAudioContext;
             }
+          });
         },
-        methods: {
-            finishMemary: function() {
-                clearInterval(this.timer);
-                this.innerAudioContext.pause();
-                wx.navigateTo({
-                    url: "../answer/main"
-                });
-            }
+        fail: function(res) {
+          wx.hideLoading();
+        },
+        complete: function() {
+          wx.hideLoading();
         }
+      });
+    });
+  },
+  data() {
+    return {
+      isPaly: true
+    };
+  },
+  methods: {
+    finishMemary: function() {
+      this.innerAudioContext.stop();
+      wx.navigateTo({
+        url: "../answer/main"
+      });
     }
+  }
+};
 </script>
 <style lang="scss" scoped>
-    .contanier {
-        color: white;
-        text-align: center;
-    }
+.contanier {
+  color: white;
+  text-align: center;
+}
 
-    .content {
-        width: tovmin(692);
-        height: tovmin(138);
-        text-align: center;
-        margin: 0 auto;
-        margin-top: tovmin(250);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+.content {
+  width: tovmin(692);
+  height: tovmin(138);
+  text-align: center;
+  margin: 0 auto;
+  margin-top: tovmin(250);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .play {
-        height: tovmin(64);
-        width: tovmin(64);
-    }
+.play {
+  height: tovmin(64);
+  width: tovmin(64);
+}
 
-    .slider {
-        height: tovmin(24);
-        width: tovmin(24);
-        position: absolute;
-    }
+.slider {
+  height: tovmin(24);
+  width: tovmin(24);
+  position: absolute;
+}
 
-    em {
-        height: tovmin(4);
-        width: tovmin(538);
-        background: $middle-blue;
-        margin-left: tovmin(10)
-    }
+em {
+  height: tovmin(4);
+  width: tovmin(538);
+  background: $middle-blue;
+  margin-left: tovmin(10);
+}
 
-    .text {
-        margin-top: tovmin(100)
-    }
+.text {
+  margin-top: tovmin(100);
+}
 </style>

@@ -10,20 +10,20 @@
                 <span class="btn default-btn" @click="shideTip">我知道了</span>
             </p>
         </div>
-        <CardTitle minutes="15" seconds="0" type="作答完成" @finish="finish"></CardTitle>
+        <CardTitle seconds="7200" type="作答完成" @finish="finish"></CardTitle>
         <div v-if="result.length>0" class="btnGroup" style="position:relative:z-index:998;">
             <div class="btn default-btn" @click.stop="replace">替换</div>
             <div class="btn default-btn" @click="insertBefore">从前插入</div>
             <div class="btn default-btn" @click="insertAfter">从后插入</div>
         </div>
         <div class="result-div">
-            <em class="arrow arrow-left" v-if="result.length>0" style="flex:1;"></em>
+            <em class="arrow arrow-left" v-if="allResult[currentIndex-1].length>0" style="flex:1;"></em>
             <scroll-view :style="{width:'99%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
-                <div class="result" :style="{width:102+(result.length-1)*20+'rpx'}">
-                    <image :class="{pocker:true,active:item.active}" @click="backHandler($event,index,item.rowIndex,item.columnIndex)" :style="{right:(result.length-index)*20+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url" ref="pocker" />
+                <div class="result" :style="{width:102+(allResult[currentIndex-1].length-1)*20+'rpx'}">
+                    <image :class="{pocker:true,active:item.active}" @click="backHandler($event,index,item.rowIndex,item.columnIndex)" :style="{right:(allResult[currentIndex-1].length-index)*20+'rpx'}" v-for="(item,index) in allResult[currentIndex-1]" :key="index" :src="item.url" ref="pocker" />
                 </div>
             </scroll-view>
-            <em class="arrow arrow-right" v-if="result.length>0" style="flex:1;"></em>
+            <em class="arrow arrow-right" v-if="allResult[currentIndex-1].length>0" style="flex:1;"></em>
         </div>
         <div class="list">
             <div class="row" v-for="(item,index) in pocker" :key="index">
@@ -98,6 +98,7 @@
                         number: i,
                         active: false
                     });
+                    this.allResult.push([]);
                 };
                 this.pages[0].active = true;
                 let groupPage = [];
@@ -111,12 +112,6 @@
         },
         methods: {
             finish: function(data) {
-                let result = this.result.map(e => {
-                    return {
-                        index: e.columnIndex + 1,
-                        color: e.rowIndex + 1,
-                    }
-                });
                 if (data == "timeout") {
                     this.confirm();
                 } else {
@@ -135,7 +130,6 @@
                 this.showTip = false;
             },
             confirm: function() {
-
                 this.endTime = new Date().getTime();
                 let result = [];
                 for (var i = 0; i < this.allResult.length; i++) {
@@ -198,7 +192,7 @@
             },
             selectPocker: function(e, index, _index) {
                 if (this.touchendTime - this.touchstartTime > 500) return false
-                this.result.push({
+                this.allResult[this.currentIndex - 1].push({
                     url: '/static/images/pocker/' + (_index / 1 + 1) + '-' + (index / 1 + 1) + '.png',
                     rowIndex: index,
                     columnIndex: _index,
@@ -211,11 +205,11 @@
             backHandler: function(e, index, row, column) {
                 let currentTime = new Date().getTime();
                 if (currentTime - this.lastClick < 300) {
-                    this.result.splice(index, 1);
+                    this.allResult[this.currentIndex - 1].splice(index, 1);
                     this.$set(this.pocker[row][column], "show", true);
                 } else {
                     this.lastClick = new Date().getTime();
-                    this.$set(this.result[index], "active", !this.result[index].active);
+                    this.$set(this.allResult[this.currentIndex - 1][index], "active", !this.allResult[this.currentIndex - 1][index].active);
                     //index:result中的位置,row:下半区行标,column:下半区列标
                     this.selectTopPocker = {
                         e,
@@ -231,7 +225,7 @@
                 this.$set(this.pocker, this.selectBottomPocker.index, hidden);
             },
             removeActive: function() {
-                this.result.forEach(e => {
+                this.allResult[this.currentIndex - 1].forEach(e => {
                     e.active = false
                 });
             },
@@ -240,7 +234,7 @@
             },
             replace: function() {
                 this.removeActive();
-                this.$set(this.result, this.selectTopPocker.index, {
+                this.$set(this.allResult[this.currentIndex - 1], this.selectTopPocker.index, {
                     url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
                     rowIndex: this.selectBottomPocker.index,
                     columnIndex: this.selectBottomPocker._index,
@@ -251,7 +245,7 @@
             },
             insertBefore: function() {
                 this.removeActive();
-                this.result.splice(this.selectTopPocker.index + 1, 0, {
+                this.allResult[this.currentIndex - 1].splice(this.selectTopPocker.index + 1, 0, {
                     url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
                     rowIndex: this.selectBottomPocker.index,
                     columnIndex: this.selectBottomPocker._index,
@@ -264,10 +258,10 @@
                 this.hidden();
             },
             insertAfter: function() {
-                this.result.forEach(e => {
+                this.allResult[this.currentIndex - 1].forEach(e => {
                     e.active = false
                 });
-                this.result.splice(this.selectTopPocker.index, 0, {
+                this.allResult[this.currentIndex - 1].splice(this.selectTopPocker.index, 0, {
                     url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
                     rowIndex: this.selectBottomPocker.index,
                     columnIndex: this.selectBottomPocker._index,
@@ -309,17 +303,15 @@
                     active: true
                 });
                 this.currentIndex = this.groupPage[this.currentPage][index].number;
-                this.result = this.allResult[this.currentIndex - 1] || [];
                 this.pocker.forEach(e => {
                     e.forEach(m => {
                         m.show = true;
                     })
                 });
-                if (this.result.length > 0) {
-                    this.result.forEach(e => {
+                if (this.allResult[this.currentIndex - 1].length > 0) {
+                    this.allResult[this.currentIndex - 1].forEach(e => {
                         this.$set(this.pocker[e.rowIndex][e.columnIndex], "show", false);
                     })
-
                 }
             }
         }

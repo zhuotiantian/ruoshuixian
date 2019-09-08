@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
+        <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :isShowTime="false" :type="type" @finishMemary="finishMemary">
         </CardTitle>
         <div class="list">
             <template v-if="pocker.length==0">
@@ -26,12 +26,14 @@
             Object.assign(this.$data, this.$options.data())
             let level = this.$getStorage("level");
             let rule = this.$getStorage("rule");
-            Promise.all([level, rule]).then(values => {
+            let memoryTime = this.$getStorage("memoryTime");
+            Promise.all([level, rule, memoryTime]).then(values => {
                 this.level = values[0];
                 this.rule = values[1].rules_of_the_game.filter(e => {
                     return e.game_level == (this.level || "primary")
                 })[0];
                 this.list = this.rule.list;
+                this.time_long = values[2];
             })
         },
         data() {
@@ -46,7 +48,8 @@
                 type: null,
                 level: "primary",
                 list: [],
-                currentGroupIndex: 0
+                currentGroupIndex: 0,
+                time_long: 0
             }
         },
         computed: {

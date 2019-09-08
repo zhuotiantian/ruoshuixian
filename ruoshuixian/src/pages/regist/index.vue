@@ -72,14 +72,14 @@
                     });
                     return false
                 };
-                if (captcha) {
+                if (captcha == "") {
                     wx.showToast({
                         title: "验证码不能为空",
                         icon: "none"
                     });
                     return false
                 };
-                if (password) {
+                if (password == "") {
                     wx.showToast({
                         title: "密码不能为空",
                         icon: "none"
@@ -129,7 +129,8 @@
                                         });
                                     } else {
                                         wx.showToast({
-                                            title: "注册失败"
+                                            title: result.msg,
+                                            icon: "none"
                                         });
                                     }
 
@@ -186,6 +187,8 @@
                                 title: "验证码发送成功"
                             });
                         } else {
+                            this.clickGetCode = false;
+                            this.seconds = 60;
                             wx.showToast({
                                 title: result.msg,
                                 icon: "none"
@@ -261,7 +264,8 @@
         right: tovmin(10);
         top: tovmin(26);
         color: #ccc;
-        z-index: 30;
+        z-index: 999;
+
     }
 
     .background {

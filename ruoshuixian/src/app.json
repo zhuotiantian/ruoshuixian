@@ -1,8 +1,10 @@
 {
     "pages": [
         "pages/indexPage/main",
-
         "pages/login/main",
+        "pages/my/record/main",
+        "pages/regist/main",
+
         "pages/index/main",
         "pages/record/main",
         "pages/record/details/main",
@@ -10,11 +12,9 @@
         "pages/ranking/main",
         "pages/my/main",
         "pages/my/message/main",
-        "pages/my/record/main",
         "pages/my/ranking/main",
 
         "pages/hongbao/main",
-        "pages/regist/main",
         "pages/rePassword/main",
         "pages/help/main",
         "pages/abstractPic/main",

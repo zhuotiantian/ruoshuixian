@@ -2,7 +2,7 @@
     <div class="container">
         <div class="fog" v-if="showFog"></div>
         <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
-        <CardTitle :seconds="seconds" :minutes="minutes" type="作答完成" @finish="finish"></CardTitle>
+        <CardTitle seconds="1800" type="作答完成" @finish="finish"></CardTitle>
         <div class="list">
             <div class="row" v-for="(rows,_index) in number" :key="_index">
                 <span :class="{item:true,selected:item.selected}" v-for="(item,index) in rows" :key="index" @click="selected(_index,index)">{{item.number}}</span>

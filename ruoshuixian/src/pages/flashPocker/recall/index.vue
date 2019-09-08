@@ -3,7 +3,9 @@
         <CardTitle ref="title" type="开始" @startGame="startGame"></CardTitle>
         <div class="tips">
             <p>回忆这些扑克牌</p>
-            <p>{{recollect_time}}秒后开始正式答题</p>
+            <p v-if="recollect_minutes>0&&recollect_seconds==0">{{recollect_minutes}}分钟后开始正式答题</p>
+            <p v-if="recollect_minutes==0&&recollect_seconds>0">{{recollect_seconds}}秒后开始正式答题</p>
+            <p v-if="recollect_minutes>0&&recollect_seconds>0">{{recollect_minutes}}分{{recollect_seconds}}秒后开始正式答题</p>
         </div>
         <div class="list">
             <div class="row" v-for="(item,index) in rows" :key="index">
@@ -24,7 +26,9 @@
             return {
                 rows: rows,
                 columns: columns,
-                recollect_time: 0
+                recollect_time: 0,
+                recollect_minutes: 0,
+                recollect_seconds: 0
             }
         },
         onLoad() {
@@ -37,6 +41,8 @@
                     return e.game_level == (this.level || "primary")
                 })[0];
                 this.recollect_time = this.rule.recollect_time;
+                this.recollect_minutes = Math.floor(this.recollect_time / 60);
+                this.recollect_seconds = this.recollect_time % 60;
             })
         },
         methods: {

@@ -103,9 +103,10 @@
                     }
                 }).then(result => {
                     this.list = result.data;
+                    this.index = ""
                     this.list.forEach((e, index) => {
                         if (e.nickname == this.currentUser) {
-                            this.index = index;
+                            this.index = index + 1;
                         }
                     });
                 });

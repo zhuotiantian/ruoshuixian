@@ -64,6 +64,7 @@
                 this.$setStorage("level", "");
                 this.$setStorage("memoryTime", "");
                 this.$setStorage("result", {});
+                this.$setStorage("pockerNumber", "");
                 this.getIndexData();
                 this.getList();
             }).catch(err => {
@@ -184,7 +185,7 @@
                                 icon: "success"
                             });
                             wx.navigateTo({
-                                url: "/pages/hongbao/redPocketList/main"
+                                url: "/pages/my/hongbao/main"
                             });
                             this.showFog = false;
                         }

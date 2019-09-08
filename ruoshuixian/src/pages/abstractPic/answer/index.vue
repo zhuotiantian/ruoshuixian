@@ -2,7 +2,7 @@
     <div class="container">
         <div class="fog" v-if="showFog"></div>
         <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
-        <CardTitle type="作答完成" @finish="finish"></CardTitle>
+        <CardTitle type="作答完成" seconds="1800" @finish="finish"></CardTitle>
         <div class="list">
             <div class="row" v-for="(rows,_index) in number" :key="_index">
                 <div class="image_div" v-for="(item,index) in rows" :key="index">
