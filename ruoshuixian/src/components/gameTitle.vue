@@ -65,27 +65,31 @@
             let getresult = this.$getStorage("result");
             let getgameid = this.$getStorage("gameid");
             let getmemoryTime = this.$getStorage("memoryTime");
-            Promise.all([getlevel, getrule, getresult, getgameid, getmemoryTime]).then(values => {
-                this.level = values[0];
-                this.rule = values[1].rules_of_the_game.filter(e => {
-                    return e.game_level == (this.level || "primary");
-                })[0];
-                this.result = values[2];
-                this.gameid = values[3];
-                this.memoryTime = values[4];
-                this.times = this.rule;
-                this.resetInterval();
-            }).catch(err => {
-                console.log(err);
-            });
+            Promise.all([getlevel, getrule, getresult, getgameid, getmemoryTime])
+                .then(values => {
+                    this.level = values[0];
+                    this.rule = values[1].rules_of_the_game.filter(e => {
+                        return e.game_level == (this.level || "primary");
+                    })[0];
+                    this.result = values[2];
+                    this.gameid = values[3];
+                    this.memoryTime = values[4];
+                    this.times = this.rule;
+                    this.resetInterval();
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         onUnload() {
             wx.reLaunch({
-                url: '/pages/firstPage/main?gameid=' + this.gameid,
+                url: "/pages/firstPage/main?gameid=" + this.gameid
             });
         },
         onShow() {
-            if (this.gameid) this.resetInterval();
+            if (this.t_minutes || this.t_seconds) {
+                this.resetInterval();
+            }
         },
         data() {
             return {
@@ -110,22 +114,22 @@
                 recallTime: 0,
                 times: [],
                 level: "",
-                hours: 0,
+                hours: 0
             };
         },
         watch: {
             t_seconds: function() {
-                if (this.t_minutes == 0 && this.t_seconds == 0 && (this.seconds || this.hours == 0)) {
+                if (
+                    this.t_minutes == 0 &&
+                    this.t_seconds == 0 &&
+                    (this.seconds || this.hours == 0)
+                ) {
                     if (this.btnType == "none") {
                         this.toNextPage();
                     } else {
                         this.type && this[this.event[this.type]]("timeout");
                     }
                 }
-            },
-            minutes: function(data) {
-                this.t_minutes = data - 1;
-                this.t_seconds = 60;
             },
             type: function() {
                 this.changeTime();
@@ -136,14 +140,16 @@
                 this.showIntervalTime = this.isShowTime === undefined;
                 if (this.showIntervalTime) {
                     this.changeTime();
-                    this.timeout && clearInterval(this.timeout);
-                    this.timer();
                 }
             },
             changeTime: function() {
                 switch (this.type) {
                     case "记忆完成":
-                        this._time = this.memoryTime || this.times.memory_time || 60;
+                        if (this.memoryTime == "") {
+                            this._time = this.times.memory_time;
+                        } else {
+                            this._time = this.memoryTime;
+                        }
                         this.t_seconds = this._time % 60;
                         this.t_minutes = Math.floor(this._time / 60);
                         break;
@@ -166,7 +172,7 @@
                             } else {
                                 this.t_seconds = this.seconds;
                                 this.t_minutes = 0;
-                                this.hours = 0
+                                this.hours = 0;
                             }
                         } else {
                             this.t_seconds = 60;
@@ -177,7 +183,9 @@
                         this.t_seconds = 60;
                         this.t_minutes = 0;
                         break;
-                };
+                }
+                this.timeout && clearInterval(this.timeout);
+                this.timer();
             },
             timer: function() {
                 if (this.t_minutes > 0 || this.hours > 0) {
@@ -205,7 +213,7 @@
                             }
                         } else {
                             this.t_seconds--;
-                        };
+                        }
                     }, 1000);
                 } else {
                     this.timeout = setInterval(() => {
@@ -232,7 +240,7 @@
                 this.timer();
             },
             toNextPage: function() {
-                if (this.pageType == 'countIndex' && this.t_seconds > 3) {
+                if (this.pageType == "countIndex" && this.t_seconds > 3) {
                     this.t_seconds = 3;
                 } else {
                     this.clear();
@@ -261,7 +269,7 @@
                     wx.navigateTo({
                         url: "/" + pages[1].route
                     });
-                })
+                });
             },
             clear: function() {
                 clearInterval(this.timeout);

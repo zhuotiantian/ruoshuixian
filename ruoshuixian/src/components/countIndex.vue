@@ -2,7 +2,9 @@
     <div class="container">
         <CardTitle :seconds="seconds" type="跳过" pageType="countIndex" @toNextPage="toNextPage"></CardTitle>
         <div class="content">
-            <p>本轮记忆时间：{{memoryTime}}分钟</p>
+            <p v-if="memoryTime_minutes>0&&memoryTime_seconds==0">本轮记忆时间：{{memoryTime_minutes}}分钟</p>
+            <p v-if="memoryTime_minutes==0&&memoryTime_seconds>0">本轮记忆时间：{{memoryTime_seconds}}秒</p>
+            <p v-if="memoryTime_minutes>0&&memoryTime_seconds>0">本轮记忆时间：{{memoryTime_minutes}}分{{memoryTime_seconds}}秒</p>
             <p :class="{proccess,acticve,active:seconds>3&&seconds<=60}">一分钟准备</p>
             <p :class="{proccess,active:seconds>1&&seconds<=3}">脑细胞准备</p>
             <p :class="{proccess,active:seconds>0&&seconds<=1}">开始</p>
@@ -33,8 +35,9 @@
                 this.rule = values[1].rules_of_the_game.filter(e => {
                     return e.game_level == (this.level || "primary")
                 })[0];
-                // this.memoryTime = Math.floor(this.rule.memory_time / 60);
-                this.memoryTime = this.rule.memory_time / 60;
+                this.memoryTime = this.rule.memory_time;
+                this.memoryTime_minutes = Math.floor(this.memoryTime / 60);
+                this.memoryTime_seconds = this.memoryTime % 60;
                 this.timer = setInterval(() => {
                     this.seconds--;
                     if (this.seconds == 0) {
@@ -55,6 +58,8 @@
                 level: 'primary',
                 seconds: 60,
                 memoryTime: null,
+                memoryTime_minutes: 0,
+                memoryTime_seconds: 0,
                 show: false,
                 rule: {}
             }
