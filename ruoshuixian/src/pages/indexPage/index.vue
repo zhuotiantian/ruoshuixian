@@ -48,33 +48,23 @@
         },
         onShow() {
             wx.hideTabBar();
-            this.token && this.checkLoginStatus();
+            this.getIndexData();
+            this.$getStorage("userInfo").then(result => {
+                this.userInfo = result;
+                this.token = result.token;
+                this.getList();
+            })
         },
         onLoad() {
             Object.assign(this.$data, this.$options.data());
             this.$getStorage("code").then(result => {
                 this.code = result;
-            });
-            this.$getStorage("userInfo").then(result => {
-                this.userInfo = result;
-                this.token = result.token;
-                this.checkLoginStatus();
                 this.$setStorage("rule", {});
                 this.$setStorage("gameid", "");
                 this.$setStorage("level", "");
                 this.$setStorage("memoryTime", "");
                 this.$setStorage("result", {});
                 this.$setStorage("pockerNumber", "");
-                this.getIndexData();
-                this.getList();
-            }).catch(err => {
-                wx.showToast({
-                    title: "登陆信息已过期",
-                    icon: "none"
-                });
-                wx.redirectTo({
-                    url: "/pages/login/main"
-                });
             });
         },
         onShareAppMessage: function(res) {
@@ -104,26 +94,6 @@
             };
         },
         methods: {
-            checkLoginStatus: function() {
-                this.$http
-                    .get({
-                        url: "/api/wxapp.token/check",
-                        header: {
-                            token: this.token
-                        }
-                    })
-                    .then(result => {
-                        if (result.code !== 1) {
-                            wx.showToast({
-                                title: "请重新登陆",
-                                icon: "none"
-                            });
-                            wx.redirectTo({
-                                url: "/pages/login/main"
-                            });
-                        }
-                    });
-            },
             hideFog: function() {
                 this.showFog = false;
             },
@@ -144,7 +114,27 @@
                     });
             },
             toGame: function(item) {
-                this.$toGame(item.id, item.wxapp_url);
+                this.$http.post({
+                    url: "/api/wxapp.user/login",
+                    data: {
+                        code: this.code,
+                        type: "user"
+                    }
+                }).then(result => {
+                    if (result.msg !== "登陆成功") {
+                        wx.showToast({
+                            title: result.msg,
+                            icon: "none"
+                        });
+                        wx.navigateTo({
+                            url: "/pages/auth/main"
+                        })
+                    } else {
+                        this.$setStorage("userInfo", result.data.userInfo).then(result => {
+                            this.$toGame(item.id, item.wxapp_url);
+                        });
+                    }
+                })
             },
             toRanking: function() {
                 let url = "../ranking/main";

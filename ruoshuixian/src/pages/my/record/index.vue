@@ -29,12 +29,8 @@
             </ul>
         </div>
         <div :class="{drop_up:true,up:showPannel,down:!showPannel}">
-            <p>
-                <image src="/static/images/my/pengyouquan.png" style="margin-left:1vmin"></image>生成朋友圈分享图
-            </p>
-            <button open-type="share">
-                <image src="/static/images/my/timg.jpg" style="width:7vmin"></image>转发给好友或群聊
-            </button>
+            <button open-type="share">发送给好友</button>
+            <p>生成海报</p>
             <p style="text-align:center;position:absolute;bottom:2vmin;width:100%" @click="showPannel=false">取消</p>
         </div>
     </div>
