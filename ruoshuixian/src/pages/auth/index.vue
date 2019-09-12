@@ -15,18 +15,22 @@
         methods: {
             getPhoneNumber: function(e) {
                 if (e.mp.detail.iv) {
-                    this.$getStorage("code").then(result => {
-                        this.$http.post({
-                            url: "/api/wxapp.user/login",
-                            data: {
-                                rawData: JSON.stringify(e.mp.detail),
-                                code: result,
-                                type: "user"
-                            }
-                        });
-                    }).then(result => {
-                        console.log(result);
-                    })
+                    let that = this;
+                    wx.login({
+                        success: function(res) {
+                            that.$setStorage("code", res.code).then(result => {
+                                console.log(res.code);
+                                that.$http.post({
+                                    url: "/api/wxapp.user/login",
+                                    data: {
+                                        rawData: JSON.stringify(e.mp.detail),
+                                        code: res.code,
+                                        type: "user"
+                                    }
+                                });
+                            })
+                        }
+                    });
                 }
             }
         }

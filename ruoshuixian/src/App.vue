@@ -4,6 +4,7 @@
             const that = this;
             wx.login({
                 success: function(res) {
+                    console.log(res.code);
                     that.$setStorage("code", res.code)
                 }
             });
