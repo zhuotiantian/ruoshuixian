@@ -1,5 +1,6 @@
 {
     "pages": [
+        "pages/firstPage/main",
         "pages/indexPage/main",
         "pages/auth/main",
         "pages/my/hongbao/getCash/main",
@@ -10,7 +11,6 @@
         "pages/index/main",
         "pages/record/main",
         "pages/record/details/main",
-        "pages/firstPage/main",
         "pages/ranking/main",
         "pages/my/main",
         "pages/my/message/main",
@@ -102,7 +102,7 @@
     "tabBar": {
         "list": [{
                 "text": "首页",
-                "pagePath": "pages/indexPage/main"
+                "pagePath": "pages/firstPage/main"
             },
             {
                 "text": "红包",

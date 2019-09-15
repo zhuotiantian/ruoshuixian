@@ -29,7 +29,6 @@
         onLoad(option) {
             Object.assign(this.$data, this.$options.data());
             let list = JSON.parse(option.list);
-            console.log(list);
             let level = this.$getStorage("level");
             let userInfo = this.$getStorage("userInfo");
             let rule = this.$getStorage("rule");

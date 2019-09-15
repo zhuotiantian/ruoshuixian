@@ -57,7 +57,7 @@
             }
         },
         onShareAppMessage: function(res) {
-            let path = "pages/indexPage/main";
+            let path = "pages/firstPage/main";
             return {
                 title: "11种脑力游戏，一起来玩吧！",
                 path: path,

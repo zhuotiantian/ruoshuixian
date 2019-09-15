@@ -78,6 +78,7 @@
                     this.resetInterval();
                 })
                 .catch(err => {
+                    console.log("111");
                     console.log(err);
                 });
         },
@@ -180,6 +181,7 @@
                         }
                         break;
                     case "跳过":
+                        console.log("111");
                         this.t_seconds = 60;
                         this.t_minutes = 0;
                         break;

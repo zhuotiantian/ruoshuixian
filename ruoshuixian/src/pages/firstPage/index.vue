@@ -48,34 +48,28 @@
         },
         onShow() {
             wx.hideTabBar();
-            this.token && this.checkLoginStatus();
-        },
-        onLoad() {
-            Object.assign(this.$data, this.$options.data());
-            this.$getStorage("code").then(result => {
-                this.code = result;
-            });
+            this.getIndexData();
+            this.$setStorage("rule", {});
+            this.$setStorage("gameid", "");
+            this.$setStorage("level", "");
+            this.$setStorage("memoryTime", "");
+            this.$setStorage("result", {});
+            this.$setStorage("pockerNumber", "");
+            let code = this.$getStorage("code");
+            let userInfo = this.$getStorage("userInfo");
             this.$getStorage("userInfo").then(result => {
                 this.userInfo = result;
                 this.token = result.token;
-                this.checkLoginStatus();
-                this.$setStorage("rule", {});
-                this.$setStorage("gameid", "");
-                this.$setStorage("level", "");
-                this.$setStorage("memoryTime", "");
-                this.$setStorage("result", {});
-                this.$setStorage("pockerNumber", "");
-                this.getIndexData();
-                this.getList();
-            }).catch(err => {
-                wx.showToast({
-                    title: "登陆信息已过期",
-                    icon: "none"
-                });
-                wx.redirectTo({
-                    url: "/pages/login/main"
-                });
             });
+            this.$getStorage("red_envelopes").then(result => {
+                this.showFog = result.filter(e => {
+                    return e.name == '注册'
+                });
+                this.red_envelopes = result;
+            });
+        },
+        onLoad() {
+            Object.assign(this.$data, this.$options.data());
         },
         onShareAppMessage: function(res) {
             return {
@@ -100,30 +94,12 @@
                     "https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640",
                     "https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640",
                     "https://images.unsplash.com/photo-1551446591-142875a901a1?w=640"
-                ]
+                ],
+                code: null,
+                red_envelopes: [],
             };
         },
         methods: {
-            checkLoginStatus: function() {
-                this.$http
-                    .get({
-                        url: "/api/wxapp.token/check",
-                        header: {
-                            token: this.token
-                        }
-                    })
-                    .then(result => {
-                        if (result.code !== 1) {
-                            wx.showToast({
-                                title: "请重新登陆",
-                                icon: "none"
-                            });
-                            wx.redirectTo({
-                                url: "/pages/login/main"
-                            });
-                        }
-                    });
-            },
             hideFog: function() {
                 this.showFog = false;
             },
@@ -144,7 +120,34 @@
                     });
             },
             toGame: function(item) {
-                this.$toGame(item.id, item.wxapp_url);
+                this.$getStorage("userInfo").then(result => {
+                    this.$toGame(item.id, item.wxapp_url);
+                }).catch(err => {
+                    this.$getStorage("code").then(result => {
+                        this.code = result;
+                        this.$http.post({
+                            url: "/api/wxapp.user/login",
+                            data: {
+                                code: this.code,
+                                type: "user"
+                            }
+                        }).then(result => {
+                            if (!result.data.userInfo || typeof result.data.userInfo !== "object") {
+                                wx.showToast({
+                                    title: result.msg,
+                                    icon: "none"
+                                });
+                                wx.navigateTo({
+                                    url: "/pages/auth/main"
+                                })
+                            } else {
+                                this.$setStorage("userInfo", result.data.userInfo).then(result => {
+                                    this.$toGame(item.id, item.wxapp_url);
+                                });
+                            }
+                        })
+                    });
+                });
             },
             toRanking: function() {
                 let url = "../ranking/main";
@@ -152,27 +155,13 @@
                     url
                 });
             },
-            getList: function() {
-                this.$http
-                    .get({
-                        url: "/api/wxapp.red_envelopes/redPackList",
-                        header: {
-                            token: this.token
-                        }
-                    })
-                    .then(result => {
-                        this.list = result.data.list.filter(e => {
-                            return e.game_classification_id == 0 && e.status !== "received";
-                        });
-                        this.showFog = this.list.length > 0;
-                    });
-            },
             toGetRedPocket: function() {
                 this.$http
                     .post({
                         url: "/api/wxapp.red_envelopes/getARedEnvelope",
                         data: {
-                            game_classification_id: this.list[0].game_classification_id
+                            red_envelopes_id: this.red_envelopes[0].id,
+                            game_classification_id: 0
                         },
                         header: {
                             token: this.token

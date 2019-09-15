@@ -49,8 +49,6 @@
                         })
                     }
                 }, 1000);
-            }).catch(err => {
-                console.log(err);
             })
         },
         data() {

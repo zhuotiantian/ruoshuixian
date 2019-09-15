@@ -49,7 +49,7 @@
         onShareAppMessage: function(res) {
             return {
                 title: "11种脑力游戏，一起来玩吧！",
-                path: "/pages/indexPage/main",
+                path: "/pages/firstPage/main",
                 success: function() {
                     console.log("分享成功");
                 },

@@ -33,7 +33,7 @@
                     return e.game_level == (this.level || "primary")
                 })[0];
                 this.list = this.rule.list;
-                this.time_long = values[2];
+                this.time_long = values[2] * 1000;
             })
         },
         data() {

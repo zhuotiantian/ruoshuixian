@@ -89,7 +89,6 @@ export default {
             "pages/marathonPocker1/result/main",
             "pages/marathonPocker1/answer/main",
             "pages/firstPage/main",
-            "pages/indexPage/main",
             "pages/regist/main",
             "pages/flashPocker/main",
             "pages/flashPocker/answer/main",

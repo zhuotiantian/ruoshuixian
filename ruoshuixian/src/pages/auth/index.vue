@@ -9,9 +9,6 @@
 </template>
 <script>
     export default {
-        onLoad() {
-            console.log("111");
-        },
         methods: {
             getPhoneNumber: function(e) {
                 if (e.mp.detail.iv) {
@@ -19,13 +16,22 @@
                     wx.login({
                         success: function(res) {
                             that.$setStorage("code", res.code).then(result => {
-                                console.log(res.code);
                                 that.$http.post({
                                     url: "/api/wxapp.user/login",
                                     data: {
                                         rawData: JSON.stringify(e.mp.detail),
                                         code: res.code,
                                         type: "user"
+                                    }
+                                }).then(result => {
+                                    if (result.code == 1) {
+                                        let userInfo = that.$setStorage("userInfo", result.data.userInfo);
+                                        let redPocket = that.$setStorage("red_envelopes", result.data.red_envelopes);
+                                        Promise.all([userInfo, redPocket]).then(result => {
+                                            wx.switchTab({
+                                                url: "/pages/firstPage/main"
+                                            })
+                                        })
                                     }
                                 });
                             })

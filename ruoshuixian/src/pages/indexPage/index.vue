@@ -52,7 +52,13 @@
             this.$getStorage("userInfo").then(result => {
                 this.userInfo = result;
                 this.token = result.token;
-                this.getList();
+                this.$setStorage("rule", {});
+                this.$setStorage("gameid", "");
+                this.$setStorage("level", "");
+                this.$setStorage("memoryTime", "");
+                this.$setStorage("result", {});
+                this.$setStorage("pockerNumber", "");
+                // this.getList();
             })
         },
         onLoad() {
@@ -121,7 +127,7 @@
                         type: "user"
                     }
                 }).then(result => {
-                    if (result.msg !== "登陆成功") {
+                    if (!result.data.userInfo) {
                         wx.showToast({
                             title: result.msg,
                             icon: "none"
@@ -130,9 +136,11 @@
                             url: "/pages/auth/main"
                         })
                     } else {
-                        this.$setStorage("userInfo", result.data.userInfo).then(result => {
+                        let userInfo = that.$setStorage("userInfo", result.data.userInfo);
+                        let redPocket = that.$setStorage("red_envelopes", result.data.red_envelopes);
+                        Promise.all([userInfo, redPocket]).then(result => {
                             this.$toGame(item.id, item.wxapp_url);
-                        });
+                        })
                     }
                 })
             },
