@@ -32,11 +32,22 @@
                 </ul>
             </div>
         </div>
-        <div class="fog" v-if="showFog"></div>
-        <image class="image1" :src="'/static/images/redPocket/redPocket.png'" v-if="showFog" />
-        <image class="image2" :src="'/static/images/redPocket/close.png'" v-if="showFog" @click="hideFog" />
-        <p class="success" v-if="showFog">新人注册红包</p>
-        <p class="redPocketBtn" v-if="showFog" @click="toGetRedPocket">点击领取</p>
+        <template v-if="showFog">
+            <div class="fog"></div>
+            <image class="image1" :src="'/static/images/redPocket/redPocket.png'" />
+            <image class="image2" :src="'/static/images/redPocket/close.png'" @click="hideFog" />
+            <p class="success">新人注册红包</p>
+            <p class="success" style="top:35%;left:42%">{{registPocket[0]["money"]}}元</p>
+            <p class="redPocketBtn" @click="toGetRedPocket('regist')">点击领取</p>
+        </template>
+        <template v-if="showFog1">
+            <div class="fog"></div>
+            <image class="image1" :src="'/static/images/redPocket/redPocket.png'" />
+            <image class="image2" :src="'/static/images/redPocket/close.png'" @click="hideFog1" />
+            <p class="success" style="text-align:center;width: 26%;">邀请红包</p>
+            <p class="success" style="top:35%;left:44%">{{sharePocket[0]["money"]}}元</p>
+            <p class="redPocketBtn" @click="toGetRedPocket('share')">点击领取</p>
+        </template>
         <CardFooter :index="1"></CardFooter>
     </div>
 </template>
@@ -60,19 +71,17 @@
             this.$getStorage("userInfo").then(result => {
                 this.userInfo = result;
                 this.token = result.token;
-            });
-            this.$getStorage("red_envelopes").then(result => {
-                this.showFog = result.filter(e => {
-                    return e.name == '注册'
-                });
-                this.red_envelopes = result;
+                this.userid = result.id;
+                this.getRedPocket();
             });
         },
-        onLoad() {
+        onLoad(options) {
             Object.assign(this.$data, this.$options.data());
+            if (options.id) this.inviter_id = options.id;
         },
         onShareAppMessage: function(res) {
             return {
+                path: "/pages/firstPage/main?id=" + this.userid,
                 title: "11种脑力游戏，一起来玩吧！",
                 success: function() {
                     console.log("分享成功");
@@ -90,6 +99,7 @@
                 userInfo: null,
                 list: [],
                 showFog: false,
+                showFog1: false,
                 imgUrls: [
                     "https://images.unsplash.com/photo-1551334787-21e6bd3ab135?w=640",
                     "https://images.unsplash.com/photo-1551214012-84f95e060dee?w=640",
@@ -97,11 +107,18 @@
                 ],
                 code: null,
                 red_envelopes: [],
+                userid: null,
+                inviter_id: null,
+                registPocket: [],
+                sharePocket: []
             };
         },
         methods: {
             hideFog: function() {
                 this.showFog = false;
+            },
+            hideFog1: function() {
+                this.showFog1 = false;
             },
             showRedPocket: function() {
                 this.showFog = true;
@@ -132,13 +149,13 @@
                                 type: "user"
                             }
                         }).then(result => {
-                            if (!result.data.userInfo || typeof result.data.userInfo !== "object") {
+                            if (!result.data) {
                                 wx.showToast({
                                     title: result.msg,
                                     icon: "none"
                                 });
                                 wx.navigateTo({
-                                    url: "/pages/auth/main"
+                                    url: "/pages/auth/main?inviterid=" + this.inviter_id
                                 })
                             } else {
                                 this.$setStorage("userInfo", result.data.userInfo).then(result => {
@@ -155,12 +172,34 @@
                     url
                 });
             },
-            toGetRedPocket: function() {
+            getRedPocket: function() {
+                this.$http.get({
+                    url: "/api/wxapp.red_envelopes/getRegisterToShareRedEnvelopes",
+                    header: {
+                        token: this.token
+                    }
+                }).then(result => {
+                    this.red_envelopes = result.data.red_envelopes;
+                    this.registPocket = result.data.red_envelopes.filter(e => {
+                        return e.name == '注册'
+                    });
+                    this.sharePocket = result.data.red_envelopes.filter(e => {
+                        return e.name !== '注册'
+                    });
+                    if (this.registPocket.length > 0) {
+                        this.showFog = true;
+                    };
+                    if (this.sharePocket.length > 0) {
+                        this.showFog = true;
+                    };
+                })
+            },
+            toGetRedPocket: function(type) {
                 this.$http
                     .post({
                         url: "/api/wxapp.red_envelopes/getARedEnvelope",
                         data: {
-                            red_envelopes_id: this.red_envelopes[0].id,
+                            red_envelopes_id: type == 'regist' ? this.registPocket[0].id : this.sharePocket[0].id,
                             game_classification_id: 0
                         },
                         header: {

@@ -21,6 +21,18 @@
                 count: 0
             };
         },
+        onShareAppMessage: function(res) {
+            return {
+                // path: "/pages/firstPage/main?id=" + this.userid,
+                title: "快速扑克牌，一起来玩吧！",
+                success: function() {
+                    console.log("分享成功");
+                },
+                error: function() {
+                    console.log("分享失败");
+                }
+            }
+        },
         computed: {
             pocker: function() {
                 let pocker = [];

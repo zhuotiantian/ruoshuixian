@@ -15,20 +15,27 @@
         data() {
             return {
                 pockerCount: 23,
-
                 left: 100,
                 game: [],
                 result: [],
+                userid: null,
             };
         },
-        onLoad() {
-            Object.assign(this.$data, this.$options.data());
+        onShow() {
             this.$getStorage("result").then(result => {
                 this.result = result;
-            })
+            });
+            this.$getStorage("userInfo").then(result => {
+                this.userid = result.id;
+            });
+        },
+        onLoad(options) {
+            Object.assign(this.$data, this.$options.data());
+            if (options.id) this.inviter_id = options.id;
         },
         onShareAppMessage: function(res) {
             return {
+                // path: "/pages/firstPage/main?id=" + this.userid,
                 title: "闪现扑克牌，一起来玩吧！",
                 success: function() {
                     console.log("分享成功");

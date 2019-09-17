@@ -35,24 +35,37 @@
 <script>
     export default {
         components: {},
-        onShoe() {
-            this.token && this.check();
-        },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
+        },
+        onShow() {
             this.$getStorage("userInfo").then(result => {
                 this.token = result.token;
                 this.userInfo = result;
-                this.check();
             }).catch(err => {
-                wx.showToast({
-                    title: "登陆信息已过期",
-                    icon: "none"
+                this.$getStorage("code").then(result => {
+                    this.code = result;
+                    this.$http.post({
+                        url: "/api/wxapp.user/login",
+                        data: {
+                            code: this.code,
+                            type: "user"
+                        }
+                    }).then(result => {
+                        if (!result.data) {
+                            wx.showToast({
+                                title: result.msg,
+                                icon: "none"
+                            });
+                            wx.navigateTo({
+                                url: "/pages/auth/main"
+                            })
+                        } else {
+                            this.$setStorage("userInfo", result.data.userInfo)
+                        }
+                    })
                 });
-                wx.redirectTo({
-                    url: "/pages/login/main"
-                });
-            });;
+            });
         },
         data() {
             return {
@@ -62,23 +75,6 @@
             }
         },
         methods: {
-            check: function() {
-                this.$http.get({
-                    url: "/api/wxapp.token/check",
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    if (result.code !== 1) {
-                        wx.showToast({
-                            title: "登陆信息已过期，请重新登陆"
-                        });
-                        wx.redirectTo({
-                            url: "/pages/login/main"
-                        })
-                    }
-                })
-            },
             toStudent: function() {
                 let url = "./students/main";
                 this.to(url)

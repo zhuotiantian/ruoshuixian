@@ -1,6 +1,7 @@
 {
     "pages": [
         "pages/my_teacher/main",
+        "pages/auth/main",
         "pages/my_teacher/message/toRecord/main",
         "pages/login/main",
         "pages/my_teacher/work/main",

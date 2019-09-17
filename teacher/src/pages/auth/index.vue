@@ -9,14 +9,6 @@
 </template>
 <script>
     export default {
-        onLoad(options) {
-            this.inviter_id = options.inviterid
-        },
-        data() {
-            return {
-                inviter_id: null
-            }
-        },
         methods: {
             getPhoneNumber: function(e) {
                 if (e.mp.detail.iv) {
@@ -27,11 +19,8 @@
                                 let params = {
                                     rawData: JSON.stringify(e.mp.detail),
                                     code: res.code,
-                                    type: "user",
+                                    type: "teacher",
                                 };
-                                if (that.inviter_id && that.inviter_id !== "null") {
-                                    params.inviter_id = that.inviter_id;
-                                }
                                 that.$http.post({
                                     url: "/api/wxapp.user/login",
                                     data: params
@@ -39,7 +28,7 @@
                                     if (result.code == 1) {
                                         that.$setStorage("userInfo", result.data.userInfo).then(() => {
                                             wx.switchTab({
-                                                url: "/pages/firstPage/main"
+                                                url: "/pages/my_teacher/main"
                                             })
                                         });
                                     }
