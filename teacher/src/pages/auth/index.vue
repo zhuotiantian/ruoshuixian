@@ -41,7 +41,7 @@
                                 let params = {
                                     rawData: JSON.stringify(e.mp.detail),
                                     code: res.code,
-                                    type: "user",
+                                    type: "teacher",
                                 };
                                 if (that.inviter_id && that.inviter_id !== "null") {
                                     params.inviter_id = that.inviter_id;
@@ -52,7 +52,7 @@
                                 }).then(result => {
                                     if (result.code == 1) {
                                         that.showFog = true;
-                                        that.$setStorage("userInfo", result.data.userInfo);
+
                                         that.token = result.data.userInfo.token;
                                     }
                                 });
@@ -70,7 +70,7 @@
                                 url: "/api/wxapp.user/bindingMobilePhoneNumber",
                                 data: {
                                     code: res.code,
-                                    type: "user",
+                                    type: "teacher",
                                     rawData: JSON.stringify(e.mp.detail)
                                 },
                                 header: {
@@ -78,15 +78,16 @@
                                 }
                             }).then(result => {
                                 if (result.code == 1) {
-                                    wx.showToast({
-                                        title: "绑定成功！",
-                                        icon: "none"
+                                    that.$setStorage("userInfo", result.data.userInfo).then(result => {
+                                        wx.showToast({
+                                            title: "绑定成功！",
+                                            icon: "none"
+                                        });
+                                        wx.reLaunch({
+                                            url: "/pages/my_teacher/main"
+                                        })
                                     });
-                                    wx.switchTab({
-                                        url: "/pages/firstPage/main"
-                                    })
                                 }
-
                             })
                         })
                     }

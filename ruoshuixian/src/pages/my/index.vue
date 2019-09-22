@@ -2,7 +2,7 @@
     <div class="container">
         <div class="header">
             <div class="userImage">
-                <image class="image" :src="icon==''?userInfo.avatar:icon" @click="uploadImg"></image>
+                <image class="image" :src="userInfo.avatar"></image>
             </div>
             <div>
                 <p v-if="!userInfo.nickname">未登录</p>
@@ -117,43 +117,6 @@
                 wx.navigateTo({
                     url
                 });
-            },
-            uploadImg: function() {
-                wx.chooseImage({
-                    count: 1,
-                    sizeType: ["original", "compressed"],
-                    sourceType: ["album", "camera"],
-                    success: res => {
-                        let res_ = res.tempFilePaths[0];
-                        //转换临时文件为base64
-                        wx.getFileSystemManager().readFile({
-                            filePath: res.tempFilePaths[0], //选择图片返回的相对路径
-                            encoding: "base64", //编码格式
-                            success: res_ => {
-                                //成功的回调
-                                this.icon = "data:image/png;base64," + res_.data;
-                                this.upload(this.icon);
-                            }
-                        });
-                    }
-                });
-            },
-            upload: function(file) {
-                this.$http
-                    .post({
-                        url: "/api/wxapp.user/profile",
-                        data: {
-                            avatar: file
-                        },
-                        header: {
-                            token: this.token
-                        }
-                    })
-                    .then(result => {
-                        wx.showToast({
-                            title: "头像秀修改成功"
-                        });
-                    });
             }
         }
     };

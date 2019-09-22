@@ -8,7 +8,7 @@
                 <p v-if="!userInfo.nickname">未登录</p>
                 <template v-else>
                     <p>{{userInfo.nickname}}</p>
-                    <p>{{mobile}}</p>
+                    <p>{{userInfo.mobile}}</p>
                 </template>
             </div>
         </div>
@@ -42,7 +42,7 @@
     export default {
         components: {},
         onLoad() {
-            Object.assign(this.$data, this.$options.data())
+            Object.assign(this.$data, this.$options.data());
         },
         onShow() {
             this.$getStorage("userInfo").then(result => {
@@ -50,27 +50,31 @@
                 this.userInfo = result;
                 this.getData();
             }).catch(err => {
-                this.$getStorage("code").then(result => {
-                    this.code = result;
-                    this.$http.post({
-                        url: "/api/wxapp.user/login",
-                        data: {
-                            code: this.code,
-                            type: "user"
-                        }
-                    }).then(result => {
-                        if (!result.data) {
-                            wx.showToast({
-                                title: result.msg,
-                                icon: "none"
-                            });
-                            wx.navigateTo({
-                                url: "/pages/auth/main"
-                            })
-                        } else {
-                            this.$setStorage("userInfo", result.data.userInfo)
-                        }
-                    })
+                let that = this;
+                wx.login({
+                    success: function(res) {
+                        that.code = res.code;
+                        that.$http.post({
+                            url: "/api/wxapp.user/login",
+                            data: {
+                                code: that.code,
+                                type: "teacher"
+                            }
+                        }).then(result => {
+                            if (typeof result.data.userInfo !== 'object') {
+                                wx.showToast({
+                                    title: result.msg,
+                                    icon: "none"
+                                });
+                                wx.reLaunch({
+                                    url: "/pages/auth/main"
+                                })
+                            } else {
+                                that.$setStorage("userInfo", result.data.userInfo);
+                                that.userInfo = result.data.userInfo;
+                            }
+                        })
+                    }
                 });
             });
         },
@@ -151,7 +155,6 @@
         background: $deep-blue;
         color: white;
         display: flex;
-        justify-content: center;
         align-items: center;
         font-size: tovmin(34);
         padding: 0 tovmin(32);
