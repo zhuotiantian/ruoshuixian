@@ -1,18 +1,18 @@
 {
     "pages": [
         "pages/firstPage/main",
-        "pages/indexPage/main",
+        "pages/my/record/main",
         "pages/auth/main",
+        "pages/my/main",
+        "pages/indexPage/main",
         "pages/my/hongbao/getCash/main",
         "pages/login/main",
-        "pages/my/record/main",
         "pages/regist/main",
 
         "pages/index/main",
         "pages/record/main",
         "pages/record/details/main",
         "pages/ranking/main",
-        "pages/my/main",
         "pages/my/message/main",
         "pages/my/ranking/main",
 

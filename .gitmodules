@@ -1,0 +1,3 @@
+[submodule "ruoshuixian/static/painter"]
+	path = ruoshuixian/static/painter
+	url = https://github.com/Kujiale-Mobile/PainterCore.git

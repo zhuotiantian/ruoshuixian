@@ -4,7 +4,13 @@
             <div class="userImage">
                 <image class="image" :src="userInfo.avatar"></image>
             </div>
-            <span style="flex:7">{{userInfo.nickname}}</span>
+            <div>
+                <p v-if="!userInfo.nickname">未登录</p>
+                <template v-else>
+                    <p>{{userInfo.nickname}}</p>
+                    <p>{{mobile}}</p>
+                </template>
+            </div>
         </div>
         <div class="content">
             <ul>
@@ -42,6 +48,7 @@
             this.$getStorage("userInfo").then(result => {
                 this.token = result.token;
                 this.userInfo = result;
+                this.getData();
             }).catch(err => {
                 this.$getStorage("code").then(result => {
                     this.code = result;
@@ -71,10 +78,24 @@
             return {
 
                 domain: this.$http.domain,
-                userInfo: {}
+                userInfo: {},
+                mobile: ""
             }
         },
         methods: {
+            getData: function() {
+                this.$http.get({
+                    url: "/api/wxapp.user/index",
+                    header: {
+                        token: this.token
+                    }
+                }).then(result => {
+                    if (result.code == 1) {
+                        this.mobile = result.data.mobile;
+
+                    }
+                })
+            },
             toStudent: function() {
                 let url = "./students/main";
                 this.to(url)

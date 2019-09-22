@@ -19,17 +19,31 @@
             Keybord,
             alertBox
         },
+        onShareAppMessage: function(res) {
+            return {
+                path: "pages/firstPage/main?id=" + this.userid,
+                title: "二进制数字，一起来玩吧！",
+                success: function() {
+                    console.log("分享成功");
+                },
+                error: function() {
+                    console.log("分享失败");
+                }
+            }
+        },
         onLoad() {
             Object.assign(this.$data, this.$options.data())
             let level = this.$getStorage("level");
             let result = this.$getStorage("result");
             let rule = this.$getStorage("rule");
-            Promise.all([level, result, rule]).then(values => {
+            let userInfo = this.$getStorage("userInfo");
+            Promise.all([level, result, rule, userInfo]).then(values => {
                 this.level = values[0];
                 this.result = values[1].right_and_wrong_results;
                 this.rule = values[2].rules_of_the_game.filter(e => {
                     return e.game_level == (this.level || "primary")
                 })[0];
+                this.userid = values[3].id;
                 this.total = this.rule.number;
                 this.per = this.rule.number_per_group;
                 let number = [];
@@ -43,6 +57,7 @@
             return {
                 number: [],
                 result: [],
+                userid: null
             }
         }
     }

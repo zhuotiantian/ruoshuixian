@@ -17,11 +17,27 @@
             Object.assign(this.$data, this.$options.data());
             this.$getStorage("result").then(result => {
                 this.list = result.right_and_wrong_results;
+            });
+            this.$getStorage("userInfo").then(result => {
+                this.userid = resule.id;
             })
         },
         data() {
             return {
                 list: [],
+                userid: null
+            }
+        },
+        onShareAppMessage: function(res) {
+            return {
+                path: "pages/firstPage/main?id=" + this.userid,
+                title: "随机词语，一起来玩吧！",
+                success: function() {
+                    console.log("分享成功");
+                },
+                error: function() {
+                    console.log("分享失败");
+                }
             }
         },
         methods: {

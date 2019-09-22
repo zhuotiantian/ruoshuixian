@@ -4,7 +4,14 @@
             <div class="userImage">
                 <image class="image" :src="icon==''?userInfo.avatar:icon" @click="uploadImg"></image>
             </div>
-            <span style="flex:7">{{userInfo.nickname}}</span>
+            <div>
+                <p v-if="!userInfo.nickname">未登录</p>
+                <template v-else>
+                    <p>{{userInfo.nickname}}</p>
+                    <p>{{mobile}}</p>
+                </template>
+            </div>
+
         </div>
         <div class="content">
             <ul>
@@ -37,27 +44,31 @@
     </div>
 </template>
 <script>
-    import CardFooter from "@/components/footer"
+    import CardFooter from "@/components/footer";
     export default {
         components: {
             CardFooter
         },
         onLoad() {
-            Object.assign(this.$data, this.$options.data())
+            Object.assign(this.$data, this.$options.data());
             this.$getStorage("userInfo").then(result => {
                 this.token = result.token;
                 this.userInfo = result;
+                this.userid = result.id;
+                this.getData();
             });
         },
         data() {
             return {
                 userInfo: {},
                 domain: this.$http.domain,
-                icon: ""
-            }
+                icon: "",
+                mobile: "",
+                userid: null
+            };
         },
         onShareAppMessage: function(res) {
-            let path = "pages/firstPage/main";
+            let path = "pages/firstPage/main?id=" + this.userid;
             return {
                 title: "11种脑力游戏，一起来玩吧！",
                 path: path,
@@ -67,70 +78,85 @@
                 error: function() {
                     console.log("分享失败");
                 }
-            }
+            };
         },
         onShow() {
             wx.hideTabBar();
         },
         methods: {
-            toRanking: function() {
-                let url = "./ranking/main";
-                this.to(url)
-            },
-            toHongbao: function() {
-                let url = "./hongbao/main";
-                this.to(url)
-            },
-            toRecord: function() {
-                let url = "./record/main";
-                this.to(url)
-            },
-            toMessage: function() {
-                let url = "./message/main";
-                this.to(url)
-            },
-            to: function(url) {
-                wx.navigateTo({
-                    url
-                })
-            },
-            uploadImg: function() {
-                wx.chooseImage({
-                    count: 1,
-                    sizeType: ['original', 'compressed'],
-                    sourceType: ['album', 'camera'],
-                    success: (res) => {
-
-                        let res_ = res.tempFilePaths[0];
-                        //转换临时文件为base64
-                        wx.getFileSystemManager().readFile({
-                            filePath: res.tempFilePaths[0], //选择图片返回的相对路径
-                            encoding: 'base64', //编码格式
-                            success: res_ => { //成功的回调
-                                this.icon = 'data:image/png;base64,' + res_.data;
-                                this.upload(this.icon);
-                            }
-                        })
-                    }
-                });
-            },
-            upload: function(file) {
-                this.$http.post({
-                    url: "/api/wxapp.user/profile",
-                    data: {
-                        avatar: file
-                    },
+            getData: function() {
+                this.$http.get({
+                    url: "/api/wxapp.user/index",
                     header: {
                         token: this.token
                     }
                 }).then(result => {
-                    wx.showToast({
-                        title: "头像秀修改成功"
-                    });
+                    if (result.code == 1) {
+                        this.mobile = result.data.mobile;
+
+                    }
                 })
+            },
+            toRanking: function() {
+                let url = "./ranking/main";
+                this.to(url);
+            },
+            toHongbao: function() {
+                let url = "./hongbao/main";
+                this.to(url);
+            },
+            toRecord: function() {
+                let url = "./record/main";
+                this.to(url);
+            },
+            toMessage: function() {
+                let url = "./message/main";
+                this.to(url);
+            },
+            to: function(url) {
+                wx.navigateTo({
+                    url
+                });
+            },
+            uploadImg: function() {
+                wx.chooseImage({
+                    count: 1,
+                    sizeType: ["original", "compressed"],
+                    sourceType: ["album", "camera"],
+                    success: res => {
+                        let res_ = res.tempFilePaths[0];
+                        //转换临时文件为base64
+                        wx.getFileSystemManager().readFile({
+                            filePath: res.tempFilePaths[0], //选择图片返回的相对路径
+                            encoding: "base64", //编码格式
+                            success: res_ => {
+                                //成功的回调
+                                this.icon = "data:image/png;base64," + res_.data;
+                                this.upload(this.icon);
+                            }
+                        });
+                    }
+                });
+            },
+            upload: function(file) {
+                this.$http
+                    .post({
+                        url: "/api/wxapp.user/profile",
+                        data: {
+                            avatar: file
+                        },
+                        header: {
+                            token: this.token
+                        }
+                    })
+                    .then(result => {
+                        wx.showToast({
+                            title: "头像秀修改成功"
+                        });
+                    });
             }
         }
-    }
+    };
 </script>
 <style lang="scss" scoped>
     .userImage {
@@ -163,7 +189,6 @@
         background: $deep-blue;
         color: white;
         display: flex;
-        justify-content: center;
         align-items: center;
         font-size: tovmin(34);
         padding: 0 tovmin(32);
@@ -185,7 +210,6 @@
         font-size: tovmin(32);
         align-items: center;
         line-height: tovmin(120);
-
     }
 
     .item {
@@ -196,7 +220,7 @@
 
     .content ul li span {
         flex: 7;
-        border-bottom: tovmin(2) solid #E4E7ED;
+        border-bottom: tovmin(2) solid #e4e7ed;
     }
 
     .last {
@@ -205,7 +229,6 @@
 
     button::after {
         border: none;
-
     }
 
     button {
@@ -214,7 +237,6 @@
         padding: 0;
         text-align: left;
         color: black;
-
     }
 
     button image {

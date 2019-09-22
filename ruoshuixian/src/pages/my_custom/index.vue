@@ -46,6 +46,16 @@
         components: {
             CardFooter
         },
+        data() {
+            return {
+                userid: null
+            }
+        },
+        onLoad: function() {
+            this.$getStorage("userInfo").then(result => {
+                this.userid = result.id;
+            });
+        },
         onShareAppMessage: function(res) {
             return {
                 title: "11种脑力游戏，一起来玩吧！",
