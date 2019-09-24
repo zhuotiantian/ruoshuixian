@@ -29,17 +29,19 @@
                 <span style="flex:1">{{index}}</span>
             </p>
             <ul class="list">
-                <li v-for="(item,index) in list" :key="index">
-                    <span style="flex:1">
-                        <image class="image" :src="domain+item.avatar"></image>
-                    </span>
-                    <span style="flex:6">{{item.nickname}}</span>
-                    <span style="flex:1">
-                        <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1.png'"></image>
-                        <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2.png'"></image>
-                        <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3.png'"></image>
-                    </span>
-                </li>
+                <scroll-view :style="{height:active=='打卡时间'?'75vh':'67vh'}" scroll-y="true">
+                    <li v-for="(item,index) in list" :key="index">
+                        <span style="flex:1">
+                            <image class="image" :src="domain+item.avatar"></image>
+                        </span>
+                        <span style="flex:6">{{item.nickname?item.nickname:""}}</span>
+                        <span style="flex:1">
+                            <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1.png'"></image>
+                            <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2.png'"></image>
+                            <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3.png'"></image>
+                        </span>
+                    </li>
+                </scroll-view>
             </ul>
         </div>
     </div>
@@ -57,7 +59,7 @@
                 domain: this.$http.domain,
                 avator: "",
                 currentUser: "",
-                index: 0,
+                index: null,
                 activeGame: null,
                 list: []
             }
@@ -103,9 +105,9 @@
                     }
                 }).then(result => {
                     this.list = result.data;
-                    this.index = ""
+                    this.index = "";
                     this.list.forEach((e, index) => {
-                        if (e.nickname == this.currentUser) {
+                        if (e.nickname === this.currentUser) {
                             this.index = index + 1;
                         }
                     });
@@ -124,18 +126,7 @@
             selectGame: function(index, id) {
                 this.activeGame = index;
                 this.showDropdown = false;
-                this.$http.get({
-                    url: "/api/wxapp.game/rankingList",
-                    data: {
-                        game_id: id,
-                        ranking_type: 4
-                    },
-                    header: {
-                        token: this.token
-                    }
-                }).then(result => {
-                    this.list = result.data;
-                })
+                this.getList(index);
             }
         },
     }

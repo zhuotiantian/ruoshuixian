@@ -51,30 +51,8 @@
                 this.getData();
             }).catch(err => {
                 let that = this;
-                wx.login({
-                    success: function(res) {
-                        that.code = res.code;
-                        that.$http.post({
-                            url: "/api/wxapp.user/login",
-                            data: {
-                                code: that.code,
-                                type: "teacher"
-                            }
-                        }).then(result => {
-                            if (typeof result.data.userInfo !== 'object') {
-                                wx.showToast({
-                                    title: result.msg,
-                                    icon: "none"
-                                });
-                                wx.reLaunch({
-                                    url: "/pages/auth/main"
-                                })
-                            } else {
-                                that.$setStorage("userInfo", result.data.userInfo);
-                                that.userInfo = result.data.userInfo;
-                            }
-                        })
-                    }
+                wx.reLaunch({
+                    url: "/pages/login/main"
                 });
             });
         },
