@@ -126,7 +126,24 @@
             selectGame: function(index, id) {
                 this.activeGame = index;
                 this.showDropdown = false;
-                this.getList(index);
+                this.$http.get({
+                    url: "/api/wxapp.game/rankingList",
+                    data: {
+                        game_id: id,
+                        ranking_type: 4
+                    },
+                    header: {
+                        token: this.token
+                    }
+                }).then(result => {
+                    this.list = result.data;
+                    this.index = "";
+                    this.list.forEach((e, index) => {
+                        if (e.nickname === this.currentUser) {
+                            this.index = index + 1;
+                        }
+                    });
+                })
             }
         },
     }

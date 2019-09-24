@@ -57,7 +57,7 @@
                         </div>
                         <div class="draw">
                             <p class="draw" data-type="text" data-text="排名">排名</p>
-                            <p class="data draw" data-type="text" :data-text="currentGameInfo.fraction">{{currentGameInfo.fraction}}</p>
+                            <p class="data draw" data-type="text" :data-text="currentGameInfo.ranking">{{currentGameInfo.ranking}}</p>
                         </div>
                     </div>
                     <image class="draw" data-type="image" :data-url="domain+currentGameInfo.img" :src="domain+currentGameInfo.img"></image>
@@ -264,7 +264,7 @@
                         },
                         {
                             type: 'text',
-                            text: String(this.currentGameInfo.fraction),
+                            text: String(this.currentGameInfo.ranking),
                             css: {
                                 top: '300px',
                                 right: '175px',
