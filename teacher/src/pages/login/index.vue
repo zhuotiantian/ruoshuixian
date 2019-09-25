@@ -59,11 +59,10 @@
                 }
                 this.$http
                     .post({
-                        url: "/api/wxapp.user/login",
+                        url: "/api/wxapp.user/teacherLogin",
                         data: {
                             mobile,
                             password,
-                            type: "user"
                         },
                         header: {
                             token: this.token
@@ -75,24 +74,8 @@
                                 wx.showToast({
                                     title: "登陆成功"
                                 });
-                                this.$getStorage("code").then(_result => {
-                                    this.code = _result;
-                                    this.$http
-                                        .post({
-                                            url: "/api/wxapp.user/bindingWechat",
-                                            data: {
-                                                code: this.code,
-                                                type: "user"
-                                            },
-                                            header: {
-                                                token: result.data.userinfo.token
-                                            }
-                                        })
-                                        .then(() => {
-                                            wx.redirectTo({
-                                                url: "../firstPage/main"
-                                            });
-                                        });
+                                wx.redirectTo({
+                                    url: "../firstPage/main"
                                 });
                             });
                         } else {

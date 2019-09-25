@@ -12,10 +12,9 @@
             </p>
             <p v-for="(item,index) in numberList" :key="index">
                 <span>{{index+1}}</span>
-                <span @click="focus(index)" :class="{input:true,active:activeIndex==index}">{{item.date}}</span><span style="flex:5;">{{item.event}}</span>
+                <input @focus="focus(index)" type="text" :class="{input:true,active:activeIndex==index}">{{item.date}}<span style="flex:5;">{{item.event}}</span>
             </p>
         </div>
-        <Keybord :showKeybord="showKeybord" @selectNumber="selectNumber" @deleteNumber="deleteNumber"></Keybord>
     </div>
 </template>
 <script>
@@ -51,7 +50,6 @@
         },
         data() {
             return {
-                showKeybord: false,
                 showFog: false,
                 text: "确定结束作答吗？",
                 rule: {},
@@ -61,7 +59,6 @@
         },
         methods: {
             focus: function(index) {
-                this.showKeybord = true;
                 this.activeIndex = index;
             },
             finish: function(index) {
@@ -106,17 +103,6 @@
                     }
                 })
             },
-            selectNumber: function(data) {
-                let date = this.numberList[this.activeIndex].date;
-                if (date.length < 5) {
-                    this.$set(this.numberList[this.activeIndex], "date", date + data);
-                }
-            },
-            deleteNumber: function() {
-                let date = this.numberList[this.activeIndex].date.split("");
-                date.pop();
-                this.$set(this.numberList[this.activeIndex], "date", date.join(""));
-            }
         }
     };
 </script>

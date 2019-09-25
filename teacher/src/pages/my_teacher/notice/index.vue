@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <textarea placeholder-style="color: #c6c6c6;" name="" id="" cols="30" rows="10" placeholder="输入公告"></textarea>
+        <textarea placeholder-style="color: #c6c6c6;" v-model="content" name="" id="" cols="30" rows="10" placeholder="输入公告"></textarea>
         <p style="text-align:center"><button class="btn submit-btn" @click="sendMessage">发布</button></p>
         <div class="fog" v-if="showSuccessBox"></div>
         <div class="alertBox" v-if="showSuccessBox">
@@ -14,15 +14,33 @@
         data() {
             return {
                 showSuccessBox: false,
-
+                content: "",
+                token: null
             }
+        },
+        onLoad() {
+            this.$getStorage("userInfo").then(result => {
+                this.token = result.token;
+            });
         },
         methods: {
             sendMessage: function() {
                 this.showSuccessBox = true;
-                setTimeout(() => {
-                    this.showSuccessBox = false;
-                }, 1500);
+                this.$http.post({
+                    url: "/api/wxapp.user/announcement",
+                    data: {
+                        content: this.content
+                    },
+                    header: {
+                        token: this.token
+                    }
+                }).then(result => {
+                    if (result.code == 1) {
+                        setTimeout(() => {
+                            this.showSuccessBox = false;
+                        }, 1500)
+                    }
+                })
             }
         },
     }
