@@ -12,11 +12,7 @@
             </div>
             <button class="btn submit-btn" @click="login">登 录</button>
             <p class="info">
-                <span @click="switchLoginWay">
-                    <span>密码登录</span>
-                </span>
                 <span @click="toRepassword">忘记密码</span></p>
-
         </div>
         <p id="info">还没有若水轩账号？<span style="color:#f8b551" @click="toRegist">立即注册</span></p>
     </div>
@@ -75,7 +71,7 @@
                                     title: "登陆成功"
                                 });
                                 wx.redirectTo({
-                                    url: "../firstPage/main"
+                                    url: "/pages/my_teacher/main"
                                 });
                             });
                         } else {
@@ -85,11 +81,6 @@
                             });
                         }
                     });
-            },
-            switchLoginWay: function() {
-                this.codeLogin = !this.codeLogin;
-                clearInterval(this.timer);
-                this.seconds = 60;
             },
             toRepassword: function() {
                 wx.navigateTo({
