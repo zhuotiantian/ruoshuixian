@@ -100,6 +100,16 @@
                     });
             },
             sendMessage: function() {
+                if (this.game
+                    .filter(e => {
+                        return e.selected;
+                    }).length == 0) {
+                    wx.showToast({
+                        title: "请选择游戏",
+                        icon: "none"
+                    });
+                    return false
+                };
                 this.showSuccessBox = true;
                 let params = {
                     name: this.workname,

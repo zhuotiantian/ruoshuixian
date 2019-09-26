@@ -169,7 +169,11 @@
                     })
                     .then(result => {
                         if (result.code == 1) {
-                            this.list = result.data;
+                            this.list = result.data.forEach(e => {
+                                let init_time = new Date(e.createtime * 1000);
+                                let formateTime = init_time.getFullYear() + "-" + (Number(init_time.getMonth() + 1) < 10 ? "0" : "") + Number(init_time.getMonth() + 1) + "-" + (init_time.getDate() + 1 < 10 ? "0" : "") + init_time.getDate()
+                                e.createtime = formateTime
+                            });
                         } else {
                             wx.showToast({
                                 title: result.msg,

@@ -41,7 +41,7 @@
                         date: e,
                         event: this.rule.list.event[index],
                         answer: this.result[index].number,
-                        isRight: this.result[index].result == 1,
+                        isRight: this.result[index].result == 0,
                     }
                 });
             })

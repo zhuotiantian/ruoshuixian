@@ -12,7 +12,7 @@
             </p>
             <p v-for="(item,index) in numberList" :key="index">
                 <span>{{index+1}}</span>
-                <input @focus="focus(index)" type="text" :class="{input:true,active:activeIndex==index}">{{item.date}}<span style="flex:5;">{{item.event}}</span>
+                <input @focus="focus(index)" type="text" :class="{input:true,active:activeIndex==index}" v-model="item.date"><span style="flex:5;">{{item.event}}</span>
             </p>
         </div>
     </div>

@@ -194,8 +194,8 @@
                         this.t_seconds = 60;
                         this.t_minutes = 59;
                     } else {
-                        this.t_seconds = 60;
-                        this.t_minutes = this.t_minutes - 1;
+                        this.t_seconds = this.t_seconds == 0 ? 60 : this.t_seconds;
+                        this.t_minutes = this.t_seconds == 0 ? this.t_minutes - 1 : this.t_minutes;
                     }
                     this.timeout = setInterval(() => {
                         if (this.t_seconds == 0) {

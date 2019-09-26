@@ -37,8 +37,8 @@
                     }
                 }).then(result => {
                     result.data.forEach(e => {
-                        let init_time = new Date(e.createtime);
-                        let formateTime = init_time.getFullYear() + "-" + init_time.getMonth() + 1 + "-" + (init_time.getDate() + 1 < 10 ? "0" : "") + init_time.getDate()
+                        let init_time = new Date(e.createtime * 1000);
+                        let formateTime = init_time.getFullYear() + "-" + (Number(init_time.getMonth() + 1) < 10 ? "0" : "") + Number(init_time.getMonth() + 1) + "-" + (init_time.getDate() + 1 < 10 ? "0" : "") + init_time.getDate()
                         e.createtime = formateTime
                     });
                     this.list = result.data;
