@@ -93,6 +93,7 @@
                         this.game = result.data;
                         this.game.map(e => {
                             return {
+                                id: e.id,
                                 name: e.name,
                                 selected: false
                             };
@@ -134,13 +135,16 @@
                     .then(result => {
                         this.game = this.game.map(e => {
                             return {
+                                id: e.id,
                                 name: e.name,
                                 selected: false
                             };
                         });
                         this.selectedUser = [];
                         this.selectStudentsName = ["学生"];
+                        this.selectGroupName = "组别"
                         this.selectedGroup = "";
+                        this.workname = "";
                         this.remarks = "";
                         setTimeout(() => {
                             this.showSuccessBox = false;

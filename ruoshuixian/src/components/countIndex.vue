@@ -32,7 +32,8 @@
             let rule = this.$getStorage("rule");
             Promise.all([level, rule]).then(values => {
                 this.level = values[0];
-                this.rule = values[1].rules_of_the_game.filter(e => {
+                this.gameRule = values[1].rules_of_the_game;
+                this.rule = this.gameRule.filter(e => {
                     return e.game_level == (this.level || "primary")
                 })[0];
                 this.memoryTime = this.rule.memory_time;
@@ -68,7 +69,12 @@
             },
             selLevel: function(level) {
                 this.level = level;
-                this.seconds = 60;
+                let rule = this.gameRule.filter(e => {
+                    return e.game_level == this.level
+                })[0];
+                this.memoryTime = rule.memory_time;
+                this.memoryTime_minutes = Math.floor(this.memoryTime / 60);
+                this.memoryTime_seconds = this.memoryTime % 60;
             }
         },
     }

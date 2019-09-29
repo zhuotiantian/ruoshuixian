@@ -4,6 +4,7 @@
             <h4>提现金额</h4>
             <span class="money">¥</span>
             <input type="number" v-model="inputMoney" @input="change">
+            <span class="allCash" @click="getAllCash">全部提现</span>
             <p>可提现金额：{{money}}</p>
             <div style="text-align:center;margin-top:30rpx">
                 <p class="btn submit-btn" @click="tixian">提现</p>
@@ -37,18 +38,24 @@
         },
         methods: {
             getOpenid: function() {
-                this.$http.get({
-                    url: "/api/wxapp.user/getOpenId",
-                    data: {
-                        code: this.code,
-                        type: "user"
-                    },
-                    header: {
-                        token: this.token
+                let that = this;
+                wx.login({
+                    success: function(res) {
+                        that.$http.get({
+                            url: "/api/wxapp.user/getOpenId",
+                            data: {
+                                code: res.code,
+                                type: "user"
+                            },
+                            header: {
+                                token: that.token
+                            }
+                        }).then(result => {
+                            that.openid = result.data.openid;
+                        });
                     }
-                }).then(result => {
-                    this.openid = result.data.openid;
-                });
+                })
+
             },
             getList: function() {
                 this.$http
@@ -89,6 +96,9 @@
 
                     });
                 }
+            },
+            getAllCash: function() {
+                this.inputMoney = this.money;
             }
         }
     };
@@ -130,6 +140,7 @@
         margin-top: tovmin(100);
         padding-left: tovmin(80);
         padding-bottom: tovmin(30);
+        margin-right: tovmin(300);
     }
 
     .submit-btn {
@@ -145,5 +156,12 @@
         position: absolute;
         left: 22%;
         bottom: tovmin(40);
+    }
+
+    .allCash {
+        color: $green;
+        position: absolute;
+        right: tovmin(30);
+        top: 40vmin;
     }
 </style>

@@ -26,10 +26,11 @@
                 </li>
             </ul>
             <ul class="students" v-else>
-                <li v-for="(item,index) in stu_list" :key="index">
-                    <span class="arrow">&nbsp;&nbsp;&nbsp;</span>
+                <li v-for="(item,index) in stu_list" :key="index" @click="hide(index)">
+                    <span class="arrow" v-if="item.show">&nbsp;&nbsp;&nbsp;</span>
+                    <span class="arrow arrow-right" v-else>&nbsp;&nbsp;&nbsp;</span>
                     <span>{{item.name}}</span>
-                    <ul class="student-list">
+                    <ul class="student-list" v-show="item.show">
                         <li v-for="(stu,_index) in item.user" :key="_index">
                             <span style="flex:1">
                                 <image class="image" :src="domain+stu.avatar"></image>
@@ -104,8 +105,14 @@
                         token: this.token
                     }
                 }).then(result => {
+                    result.data.forEach(e => {
+                        e.show = true;
+                    });
                     this.stu_list = result.data;
                 });
+            },
+            hide: function(index) {
+                this.$set(this.stu_list[index], "show", !this.stu_list[index]["show"]);
             }
         },
     }

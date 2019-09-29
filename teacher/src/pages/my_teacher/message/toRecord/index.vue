@@ -70,6 +70,7 @@
         height: 100%;
         width: 100%;
         background: $grey-background;
+        overflow-y: auto;
     }
 
     .item {

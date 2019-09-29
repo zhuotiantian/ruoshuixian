@@ -144,7 +144,7 @@
                                 type: "user"
                             }
                         }).then(result => {
-                            if (typeof result.data.userInfo !== 'object') {
+                            if (typeof result.data.userInfo !== 'object' || !result.data) {
                                 wx.showToast({
                                     title: result.msg,
                                     icon: "none"
@@ -153,7 +153,7 @@
                                     url: "/pages/auth/main?inviterid=" + this.inviter_id
                                 })
                             } else {
-                                this.$setStorage("userInfo", result.data.userInfo).then(result => {
+                                this.$setStorage("userInfo", result.data.userInfo).then(() => {
                                     this.$toGame(item.id, item.wxapp_url);
                                 });
                             }

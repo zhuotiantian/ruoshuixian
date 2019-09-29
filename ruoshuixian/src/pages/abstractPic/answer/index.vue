@@ -99,7 +99,7 @@
                 this.number.forEach(e => {
                     e.forEach(m => {
                         new_game_list.push(m.text);
-                        game_list.push(m.index);
+                        game_list.push(m.index + 1);
                     });
                 });
                 this.$http

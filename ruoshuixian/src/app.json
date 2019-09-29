@@ -1,11 +1,11 @@
 {
     "pages": [
         "pages/firstPage/main",
+        "pages/my/hongbao/getCash/main",
         "pages/my/record/main",
         "pages/auth/main",
         "pages/my/main",
         "pages/indexPage/main",
-        "pages/my/hongbao/getCash/main",
         "pages/login/main",
         "pages/regist/main",
 

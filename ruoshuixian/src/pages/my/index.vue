@@ -5,10 +5,10 @@
                 <image class="image" :src="userInfo.avatar"></image>
             </div>
             <div>
-                <p v-if="!userInfo.nickname">未登录</p>
+                <p v-if="userInfo.nickname==null">未登录</p>
                 <template v-else>
                     <p>{{userInfo.nickname}}</p>
-                    <p>{{mobile}}</p>
+                    <p>{{userInfo.mobile}}</p>
                 </template>
             </div>
 
@@ -50,12 +50,39 @@
             CardFooter
         },
         onLoad() {
+
             Object.assign(this.$data, this.$options.data());
             this.$getStorage("userInfo").then(result => {
                 this.token = result.token;
                 this.userInfo = result;
                 this.userid = result.id;
                 this.getData();
+            }).catch(err => {
+                this.$getStorage("code").then(result => {
+                    this.code = result;
+                    this.$http.post({
+                        url: "/api/wxapp.user/login",
+                        data: {
+                            code: this.code,
+                            type: "user"
+                        }
+                    }).then(result => {
+                        if (typeof result.data.userInfo !== 'object') {
+                            wx.showToast({
+                                title: result.msg,
+                                icon: "none"
+                            });
+                            wx.navigateTo({
+                                url: "/pages/auth/main"
+                            })
+                        } else {
+                            this.$setStorage("userInfo", result.data.userInfo).then(() => {
+                                this.userInfo = result.data.userInfo;
+
+                            })
+                        }
+                    })
+                });
             });
         },
         data() {

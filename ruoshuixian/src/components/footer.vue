@@ -50,13 +50,8 @@
                 this.to(url, index);
             },
             toMy: function(index) {
-                if (this.isMember) {
-                    let url = "/pages/my/main";
-                    this.to(url, index);
-                } else {
-                    let url = "/pages/my_custom/main";
-                    this.to(url, index);
-                }
+                let url = "/pages/my/main";
+                this.to(url, index);
             },
             to: function(url) {
                 wx.switchTab({
