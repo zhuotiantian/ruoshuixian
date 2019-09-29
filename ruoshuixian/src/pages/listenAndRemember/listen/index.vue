@@ -1,13 +1,13 @@
 <template>
-    <div class="contanier">
-        <CardTitle type="记忆完成" @finishMemary="finishMemary"></CardTitle>
-        <div class="content">
-            <image class="play" :src="'/static/images/firstPage/play.png'"></image>
-            <image class="slider" :src="'/static/images/firstPage/slider.png'"></image>
-            <em></em>
-        </div>
-        <p class="text">正在播放录音&nbsp;&middot;&nbsp;&middot;&nbsp;&middot;</p>
+  <div class="contanier">
+    <CardTitle type="记忆完成" @finishMemary="finishMemary"></CardTitle>
+    <div class="content">
+      <image class="play" :src="'/static/images/firstPage/play.png'"></image>
+      <image class="slider" :src="'/static/images/firstPage/slider.png'"></image>
+      <em></em>
     </div>
+    <p class="text">正在播放录音&nbsp;&middot;&nbsp;&middot;&nbsp;&middot;</p>
+  </div>
 </template>
 <script>
 import CardTitle from "@/components/gameTitle";
@@ -15,15 +15,15 @@ export default {
   components: {
     CardTitle
   },
-  onUnload() {
+  onUnload () {
     this.innerAudioContext.stop();
   },
-  data() {
+  data () {
     return {
       innerAudioContext: null
     };
   },
-  onLoad() {
+  onLoad () {
     Object.assign(this.$data, this.$options.data());
     let level = this.$getStorage("level");
     let rule = this.$getStorage("rule");
@@ -43,7 +43,7 @@ export default {
           client_id: "Ty51KGGMStzsF2MaXDmaMG0j",
           client_secret: "g4LN0RcXzUGKsyzK8jBscXHcYRiGSQEv"
         },
-        success: function(res) {
+        success: function (res) {
           wx.hideLoading();
           let token = res.data.access_token;
           let tex = encodeURI(numberList);
@@ -52,37 +52,30 @@ export default {
 
           wx.downloadFile({
             url: url,
-            success: function(result) {
-              wx.playVoice({
-                filePath: result.tempFilePath,
-                complete: function(res) {}
-              });
+            success: function (result) {
               let innerAudioContext = wx.createInnerAudioContext();
               innerAudioContext.src = result.tempFilePath;
-              innerAudioContext.onCanplay(res => {
-                // this.isPaly = true;
-              });
               innerAudioContext.play();
               that.innerAudioContext = innerAudioContext;
             }
           });
         },
-        fail: function(res) {
+        fail: function (res) {
           wx.hideLoading();
         },
-        complete: function() {
+        complete: function () {
           wx.hideLoading();
         }
       });
     });
   },
-  data() {
+  data () {
     return {
       isPaly: true
     };
   },
   methods: {
-    finishMemary: function() {
+    finishMemary: function () {
       this.innerAudioContext.stop();
       wx.navigateTo({
         url: "../answer/main"

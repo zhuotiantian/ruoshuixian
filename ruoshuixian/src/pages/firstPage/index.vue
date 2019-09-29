@@ -185,7 +185,7 @@
                         this.showFog = true;
                     };
                     if (this.sharePocket.length > 0) {
-                        this.showFog = true;
+                        this.showFog1 = true;
                     };
                 })
             },
