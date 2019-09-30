@@ -120,7 +120,7 @@
                     .then(result => {
                         if (result.code == 1) {
                             this.$setStorage("result", result.data).then(result => {
-                                wx.navigateTo({
+                                wx.redirectTo({
                                     url: "../result/main"
                                 });
                             });

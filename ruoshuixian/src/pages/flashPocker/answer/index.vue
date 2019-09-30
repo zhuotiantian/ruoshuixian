@@ -131,7 +131,7 @@
                 }).then(result => {
                     if (result.code == 1) {
                         this.$setStorage("result", result.data).then(() => {
-                            wx.navigateTo({
+                            wx.reLaunch({
                                 url: "../result/main"
                             })
                         });

@@ -44,7 +44,7 @@
                     if (this.seconds == 0) {
                         clearInterval(this.timer);
                         this.$setStorage("level", this.level).then(results => {
-                            wx.navigateTo({
+                            wx.reLaunch({
                                 url: this.nextPage
                             });
                         })

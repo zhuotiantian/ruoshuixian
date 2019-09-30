@@ -59,7 +59,7 @@
                 }
             },
             finishMemary: function() {
-                wx.navigateTo({
+                wx.reLaunch({
                     url: "../answer/main"
                 });
             }

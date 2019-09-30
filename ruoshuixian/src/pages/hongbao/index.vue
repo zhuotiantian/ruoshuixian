@@ -87,7 +87,7 @@
                             title: "领取成功",
                             icon: "success"
                         });
-                        wx.navigateTo({
+                        wx.reLaunch({
                             url: "/pages/my/hongbao/main"
                         });
                         this.showFog = false;

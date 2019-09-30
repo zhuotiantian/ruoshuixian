@@ -82,7 +82,7 @@
                 this.type = "记忆完成";
             },
             finishMemary: function() {
-                wx.navigateTo({
+                wx.reLaunch({
                     url: "../recall/main"
                 });
             },

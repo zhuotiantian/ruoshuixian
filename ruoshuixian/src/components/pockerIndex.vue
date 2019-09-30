@@ -47,7 +47,7 @@
             toNextPage: function(data) {
                 this.$setStorage(this.type == "time" ? "memoryTime" : "pockerNumber", this.activeIndex).then(result => {
                     this.$refs.title.clear();
-                    wx.navigateTo({
+                    wx.reLaunch({
                         url: this.nextPage
                     })
                 })

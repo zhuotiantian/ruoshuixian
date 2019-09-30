@@ -77,9 +77,7 @@
         },
         onLoad(options) {
             Object.assign(this.$data, this.$options.data());
-            console.log(options);
             if (options.id) this.inviter_id = options.id;
-
         },
         onShareAppMessage: function(res) {
             return {
@@ -249,7 +247,7 @@
                     this.showFog = true;
                 };
                 if (this.sharePocket.length > 0) {
-                    this.showFog = true;
+                    this.showFog1 = true;
                 };
             })
         },

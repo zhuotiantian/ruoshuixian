@@ -66,7 +66,7 @@ Vue.prototype.$toGame = (id, url, fn) => {
                 if (fn) {
                     fn();
                 } else {
-                    wx.navigateTo({
+                    wx.redirectTo({
                         url
                     })
                 }

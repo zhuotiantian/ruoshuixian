@@ -33,7 +33,7 @@
                         }
                     }).then(result => {
                         if (!result.data) {
-                            wx.navigateTo({
+                            wx.reLaunch({
                                 url: "/pages/auth/main?inviterid=" + this.inviter_id
                             })
                         }

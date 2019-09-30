@@ -82,7 +82,7 @@
                 }
             },
             finishMemary: function() {
-                wx.navigateTo({
+                wx.reLaunch({
                     url: "../recall/main"
                 })
             },

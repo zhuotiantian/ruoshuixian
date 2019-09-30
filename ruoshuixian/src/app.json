@@ -1,39 +1,31 @@
 {
     "pages": [
         "pages/firstPage/main",
-        "pages/my/hongbao/getCash/main",
-        "pages/my/record/main",
+
         "pages/auth/main",
         "pages/my/main",
-        "pages/indexPage/main",
-        "pages/login/main",
-        "pages/regist/main",
+        "pages/my/hongbao/getCash/main",
+        "pages/my/record/main",
+        "pages/my/message/main",
+        "pages/my/ranking/main",
+        "pages/my/hongbao/main",
 
-        "pages/index/main",
+
         "pages/record/main",
         "pages/record/details/main",
         "pages/ranking/main",
-        "pages/my/message/main",
-        "pages/my/ranking/main",
-
         "pages/hongbao/main",
-        "pages/rePassword/main",
+
+
         "pages/help/main",
         "pages/abstractPic/main",
         "pages/abstractPic/memary/main",
         "pages/abstractPic/result/main",
         "pages/abstractPic/answer/main",
-        "pages/my/hongbao/main",
         "pages/peoplePic/main",
         "pages/peoplePic/memary/main",
         "pages/peoplePic/result/main",
         "pages/peoplePic/answer/main",
-        "pages/marathonPocker1/main",
-        "pages/marathonPocker1/memary/main",
-        "pages/marathonPocker1/answer/main",
-        "pages/marathonPocker1/recall/main",
-        "pages/marathonPocker1/ready/main",
-        "pages/marathonPocker1/result/main",
         "pages/marathonPocker/main",
         "pages/marathonPocker/memary/main",
         "pages/marathonPocker/answer/main",
@@ -78,16 +70,6 @@
         "pages/marathonNumber/answer/main"
 
     ],
-    "subPackages": [{
-        "root": "pages/my_custom/",
-        "pages": [
-            "main",
-            "hongbao/main",
-            "message/main",
-            "ranking/main",
-            "record/main"
-        ]
-    }],
     "window": {
         "backgroundTextStyle": "light",
         "navigationBarBackgroundColor": "#173771",

@@ -2,6 +2,7 @@
     <div>
         <div class="fog" v-if="showPannel" @click="showPannel=false"></div>
         <div class="title">
+            <!-- <em class="arrow arrow-left" @click="toFirstPage"></em> -->
             <template v-if="isResult">
                 <p>
                     <span v-if="isPocker&&showTime">用时：{{result.game_time||0}}S</span>
@@ -80,11 +81,6 @@
                 .catch(err => {
                     console.log(err);
                 });
-        },
-        onUnload() {
-            wx.reLaunch({
-                url: "/pages/firstPage/main"
-            });
         },
         onShow() {
             if (this.t_minutes || this.t_seconds) {
@@ -267,20 +263,22 @@
             },
             playAgain: function() {
                 let pages = getCurrentPages();
-                this.isPlayAgain = 1;
                 this.$toGame(this.gameid, "", () => {
-
-                    let that = this;
                     wx.reLaunch({
-                        url: "/pages/firstPage/main?isPlayAgain=" + that.isPlayAgain
+                        url: "../main"
                     });
                 });
             },
             clear: function() {
                 clearInterval(this.timeout);
+            },
+            toFirstPage: function() {
+                wx.reLaunch({
+                    url: "/pages/firstPage/main"
+                });
             }
         }
-    };
+    }
 </script>
 <style lang="scss" scoped>
     .title {
@@ -334,6 +332,11 @@
 
     .pannel p.active {
         background: $light-blue;
+    }
+
+    .arrow-left::after {
+        top: 0.2vmin;
+        left: -0.2vmin;
     }
 
     .type {
