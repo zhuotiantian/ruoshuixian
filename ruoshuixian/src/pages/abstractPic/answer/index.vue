@@ -139,8 +139,10 @@
             },
             deleteNumber: function() {
                 let number = this.number;
-                number.forEach(m => {
-                    m.text = ""
+                number.forEach((e, rowIndex) => {
+                    e.forEach((m, columnIndex) => {
+                        m.text = ""
+                    })
                 });
                 this.number = number;
             }

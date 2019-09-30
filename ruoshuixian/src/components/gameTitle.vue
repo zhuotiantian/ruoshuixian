@@ -114,7 +114,8 @@
                 recallTime: 0,
                 times: [],
                 level: "",
-                hours: 0
+                hours: 0,
+                isPlayAgain: 0
             };
         },
         watch: {
@@ -164,11 +165,11 @@
                             if (this.seconds > 3600) {
                                 this.hours = Math.floor(this._time / 3600);
                                 this.t_minutes = (this._time % 3600) / 60;
-                                this.t_seconds = this.t_minutes % 60;
+                                this.t_seconds = this._time % 60;
                             } else if (this.seconds > 60) {
                                 this.hours = 0;
                                 this.t_minutes = Math.floor(this._time / 60);
-                                this.t_seconds = this.t_minutes % 60;
+                                this.t_seconds = this._time % 60;
                             } else {
                                 this.t_seconds = this.seconds;
                                 this.t_minutes = 0;
@@ -266,9 +267,12 @@
             },
             playAgain: function() {
                 let pages = getCurrentPages();
+                this.isPlayAgain = 1;
                 this.$toGame(this.gameid, "", () => {
-                    wx.navigateTo({
-                        url: "/" + pages[1].route
+
+                    let that = this;
+                    wx.reLaunch({
+                        url: "/pages/firstPage/main?isPlayAgain=" + that.isPlayAgain
                     });
                 });
             },

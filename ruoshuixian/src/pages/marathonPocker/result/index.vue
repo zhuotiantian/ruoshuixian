@@ -4,13 +4,13 @@
         <div class="list">
             <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
         </div>
-        <div class="pageFoot">
+        <!-- <div class="pageFoot">
             <span class="pageBtn" @click="prevPage">上一页</span>
             <div class="btn-group">
                 <span class="item active" v-for="(item,index) in pages" :key="index">{{item}}幅</span>
             </div>
             <span class="pageBtn" @click="nextPage">下一页</span>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>

@@ -136,8 +136,8 @@
                     let item = [];
                     for (var j = 0; j < this.allResult[i].length; j++) {
                         item.push({
-                            color: this.allResult[i][j].rowIndex,
-                            index: this.allResult[i][j].columnIndex,
+                            index: this.allResult[i][j].columnIndex + 1,
+                            color: this.allResult[i][j].rowIndex + 1,
                         })
                     };
                     result.push(item)

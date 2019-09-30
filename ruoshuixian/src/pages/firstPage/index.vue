@@ -77,7 +77,9 @@
         },
         onLoad(options) {
             Object.assign(this.$data, this.$options.data());
+            console.log(options);
             if (options.id) this.inviter_id = options.id;
+
         },
         onShareAppMessage: function(res) {
             return {
@@ -129,6 +131,14 @@
                     .then(result => {
                         this.games = result.data.game_list;
                         this.imgUrls = result.data.rotary_planting_map;
+                        this.$getStorage("gameid").then(gameid => {
+                            if (gameid !== "") {
+                                let currentGame = result.data.game_list.filter(e => {
+                                    return e.id == gameid;
+                                })[0]
+                                this.$toGame(currentGame.id, currentGame.wxapp_url);
+                            }
+                        })
                     });
             },
             toGame: function(item) {
