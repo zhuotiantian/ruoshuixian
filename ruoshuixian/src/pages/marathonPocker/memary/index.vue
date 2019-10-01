@@ -94,7 +94,7 @@
             group: function(data) {
                 let currentIndex = this.groupPage[this.currentPage].filter(e => {
                     return e.active
-                })[0].number;
+                })[0].number - 1;
                 if (data !== "all") {
                     let list = JSON.parse(JSON.stringify(this.pocker[currentIndex]));
                     this.perPocker = [];
