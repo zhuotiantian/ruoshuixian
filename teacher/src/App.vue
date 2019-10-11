@@ -1,13 +1,6 @@
 <script>
 export default {
-  onLaunch () {
-    const that = this;
-    wx.login({
-      success: function (res) {
-        that.$setStorage("code", res.code)
-      }
-    });
-  },
+
 }
 </script>
 

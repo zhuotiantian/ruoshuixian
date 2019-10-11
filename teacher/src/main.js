@@ -1,42 +1,15 @@
 import Vue from 'vue'
 import App from './App'
 import http from "./untils/request"
-
+import Store from "./store/index"
 
 Vue.config.productionTip = false
 App.mpType = 'app'
 
 const app = new Vue(App)
 app.$mount()
+Vue.prototype.$store = Store;
 Vue.prototype.$http = http;
-Vue.prototype.$getStorage = (param) => {
-    return new Promise((resolve, reject) => {
-        wx.getStorage({
-            key: param,
-            success: (res) => {
-                resolve(res.data);
-            },
-            fail: (res) => {
-
-                reject(res);
-            }
-        })
-    })
-};
-Vue.prototype.$setStorage = (key, data) => {
-    return new Promise((resolve, reject) => {
-        wx.setStorage({
-            key: key,
-            data: data,
-            success: (res) => {
-                resolve(res.data);
-            },
-            fail: (res) => {
-                reject(null);
-            }
-        });
-    })
-}
 let pixelRatio = 0
 wx.getSystemInfo({
     success: function(res) {

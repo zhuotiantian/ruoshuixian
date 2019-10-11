@@ -11,8 +11,8 @@
         <image :src="'/static/images/my/password.png'" class="icon" style="height:42rpx;width:34rpx"></image>
       </div>
       <button class="btn submit-btn" @click="login">登 录</button>
-      <span class="info">
-        <!-- <span @click="toRepassword">忘记密码</span></span> -->
+      <!-- <span class="info"> -->
+      <!-- <span @click="toRepassword">忘记密码</span></span> -->
     </div>
   </div>
 </template>
@@ -65,13 +65,12 @@ export default {
         })
         .then(result => {
           if (result.code == 1) {
-            this.$setStorage("userInfo", result.data.userinfo).then(() => {
-              wx.showToast({
-                title: "登陆成功"
-              });
-              wx.redirectTo({
-                url: "/pages/my_teacher/main"
-              });
+            this.$store.commit("setUserInfo", result.data.userinfo);
+            wx.showToast({
+              title: "登陆成功"
+            });
+            wx.redirectTo({
+              url: "/pages/my_teacher/main"
             });
           } else {
             wx.showToast({
