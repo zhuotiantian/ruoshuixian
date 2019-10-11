@@ -8,7 +8,6 @@ App.mpType = 'app'
 
 const app = new Vue(App)
 app.$mount()
-Vue.prototype.globalData = getApp().globalData;
 Vue.prototype.$http = http;
 Vue.prototype.$getStorage = (param) => {
     return new Promise((resolve, reject) => {
@@ -40,11 +39,10 @@ Vue.prototype.$setStorage = (key, data) => {
 }
 let pixelRatio = 0
 wx.getSystemInfo({
-    success: function (res) {
+    success: function(res) {
         pixelRatio = res.pixelRatio
     },
-    fail: function () {
+    fail: function() {
         pixelRatio = 0
     }
 });
-getApp().globalData.ratio = pixelRatio;

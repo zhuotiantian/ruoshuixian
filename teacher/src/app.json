@@ -5,7 +5,6 @@
         "pages/login/main",
         "pages/my_teacher/work/main",
         "pages/my_teacher/students/main",
-        "pages/regist/main",
         "pages/rePassword/main",
         "pages/my_teacher/notice/main",
         "pages/my_teacher/message/main",
