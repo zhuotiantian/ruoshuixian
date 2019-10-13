@@ -75,10 +75,12 @@ export default {
   },
   methods: {
     finishMemary: function () {
-      this.innerAudioContext.stop();
-      wx.reLaunch({
-        url: "../answer/main"
-      });
+      this.innerAudioContext&&this.innerAudioContext.stop();
+      setTimeout(()=>{
+        wx.reLaunch({
+          url: "../answer/main"
+        });
+      },200)
     }
   }
 };

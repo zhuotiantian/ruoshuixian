@@ -32,7 +32,8 @@ export default {
     this.numberList = this.rule.list.map(e => {
       return {
         number: "",
-        selected: false
+        selected: false,
+        length:String(e).length
       }
     });
     this.total = this.rule.number;
@@ -44,6 +45,7 @@ export default {
     this.number = number;
     this.startTime = new Date().getTime();
     this.game_records_id = this.rule.game_records_id;
+    this.selected(this.rowIndex,this.columnIndex);
   },
   data () {
     return {
@@ -51,6 +53,8 @@ export default {
       showFog: false,
       text: "确定结束作答吗？",
       number: [],
+      rowIndex:0,
+      columnIndex:0
     }
   },
   methods: {
@@ -104,31 +108,64 @@ export default {
       this.number = number;
       this.$set(this.number[row], column, {
         selected: true,
-        number: ""
+        number: "",
+        length:this.number[row][column].length
       });
       this.hasSelect = true;
     },
     selectNumber: function (data) {
-      let number = this.number;
-      number.forEach(e => {
-        e.forEach(m => {
-          if (m.selected) {
-            m.number += data
-          }
-        })
-      });
-      this.number = number;
+      let current=this.number[this.rowIndex][this.columnIndex];
+      if(current.selected&&current.number.length <current.length){
+        current.number+=data;
+      };
+      this.$set(this.number[this.rowIndex], this.columnIndex, current);
+      if ( current.number.length > current.length||current.number.length === current.length) {
+        this.$set(this.number[this.rowIndex][this.columnIndex], "selected", false);
+        if (this.columnIndex < this.number[this.rowIndex].length - 1) {
+          this.columnIndex++;
+        } else if (this.rowIndex < this.number.length - 1 && this.columnIndex == this.number[this.rowIndex].length - 1) {
+          this.rowIndex++;
+          this.columnIndex = 0;
+        }
+        this.$set(this.number[this.rowIndex][this.columnIndex], "selected", true);
+      }
     },
     deleteNumber: function () {
-      let number = this.number;
-      number.forEach(e => {
-        e.forEach(m => {
-          if (m.selected) {
-            m.number = ""
+      let current=this.number[this.rowIndex][this.columnIndex];
+      if(current.selected){
+        if(current.number.length>0){
+          let item=current.number.split("");
+          item.pop();
+          current.number=item.join("");
+          this.$set(this.number[this.rowIndex], this.columnIndex, current);
+        }else{
+          this.$set(this.number[this.rowIndex][this.columnIndex], "selected", false);
+          if (this.rowIndex == 0 && this.columnIndex == 0) {
+
+          } else {
+            if (this.columnIndex == 0) {
+              this.rowIndex--;
+              this.columnIndex = this.number[this.rowIndex].length - 1;
+            } else {
+              this.columnIndex--;
+            };
           }
-        })
-      });
-      this.number = number;
+          this.$set(this.number[this.rowIndex][this.columnIndex], "selected", true);
+        }
+      }else{
+        this.$set(this.number[this.rowIndex][this.columnIndex], "selected", false);
+        if (this.rowIndex == 0 && this.columnIndex == 0) {
+
+        } else {
+          if (this.columnIndex == 0) {
+            this.rowIndex--;
+            this.columnIndex = this.number[this.rowIndex].length - 1;
+          } else {
+            this.columnIndex--;
+          };
+        }
+        this.$set(this.number[this.rowIndex][this.columnIndex], "selected", true);
+      }
     }
   }
 }

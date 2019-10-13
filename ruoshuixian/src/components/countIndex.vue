@@ -59,7 +59,6 @@ export default {
   },
   methods: {
     toNextPage: function (time) {
-      clearInterval(this.timer);
       this.seconds = time;
     },
     selLevel: function (level) {

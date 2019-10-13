@@ -64,7 +64,8 @@ export default {
       lastClick: 0,
       showBtnGroup: false,
       game_records_id: 1,
-      level: "primary"
+      level: "primary",
+      canAdd:false
     };
   },
   onLoad () {
@@ -175,6 +176,7 @@ export default {
 
       } else {
         this.longPress(e, index, _index);
+        this.canAdd=true;
       }
     },
     longPress: function (e, index, _index) {
@@ -242,6 +244,7 @@ export default {
       this.show();
     },
     insertBefore: function () {
+      if(!this.canAdd) return false;this.canAdd=false;this.canAdd=false;
       this.removeActive();
       this.result.splice(this.selectTopPocker.index + 1, 0, {
         url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
@@ -256,6 +259,7 @@ export default {
       this.hidden();
     },
     insertAfter: function () {
+      if(!this.canAdd) return false;this.canAdd=false;this.canAdd=false;
       this.result.forEach(e => {
         e.active = false
       });

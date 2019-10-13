@@ -44,6 +44,7 @@ export default {
     this.number = number;
     this.startTime = new Date().getTime();
     this.game_records_id = this.rule.game_records_id;
+    this.selected(this.rowIndex,this.columnIndex);
   },
   data () {
     return {
@@ -114,17 +115,11 @@ export default {
       });
     },
     selectNumber: function (data) {
-      let number = this.number;
-      number.forEach((e, rowIndex) => {
-        e.forEach((m, columnIndex) => {
-          if (m.selected) {
-            this.rowIndex = rowIndex;
-            this.columnIndex = columnIndex;
-            m.number = data
-          }
-        })
-      });
-      this.number = number;
+      let current=this.number[this.rowIndex][this.columnIndex];
+      if(current.selected){
+        current.number=data;
+      }
+      this.$set(this.number[this.rowIndex], this.columnIndex, current);
       this.$set(this.number[this.rowIndex][this.columnIndex], "selected", false);
       if (this.columnIndex < this.number[this.rowIndex].length - 1) {
         this.columnIndex++;
@@ -135,19 +130,10 @@ export default {
       this.$set(this.number[this.rowIndex][this.columnIndex], "selected", true);
     },
     deleteNumber: function () {
-      let number = this.number;
-      number.forEach((e, rowIndex) => {
-        e.forEach((m, columnIndex) => {
-          if (m.selected) {
-            this.rowIndex = rowIndex;
-            this.columnIndex = columnIndex;
-            m.number = ""
-          }
-        })
-      });
-      this.number = number;
+      let current=this.number[this.rowIndex][this.columnIndex];
+      current.number="";
+      this.$set(this.number[this.rowIndex], this.columnIndex, current);
       this.$set(this.number[this.rowIndex][this.columnIndex], "selected", false);
-      this.number = number;
       if (this.rowIndex == 0 && this.columnIndex == 0) {
 
       } else {

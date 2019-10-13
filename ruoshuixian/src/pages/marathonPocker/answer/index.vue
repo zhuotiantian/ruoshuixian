@@ -78,6 +78,7 @@ export default {
       currentPage: 0,
       currentIndex: 1,
       allResult: [],
+      canAdd:false
     }
   },
   onLoad () {
@@ -238,6 +239,7 @@ export default {
       this.show();
     },
     insertBefore: function () {
+      if(!this.canAdd) return false;this.canAdd=false;this.canAdd=false;
       this.removeActive();
       this.allResult[this.currentIndex - 1].splice(this.selectTopPocker.index + 1, 0, {
         url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
@@ -252,6 +254,7 @@ export default {
       this.hidden();
     },
     insertAfter: function () {
+      if(!this.canAdd) return false;this.canAdd=false;this.canAdd=false;
       this.allResult[this.currentIndex - 1].forEach(e => {
         e.active = false
       });

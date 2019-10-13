@@ -30,6 +30,9 @@ export default {
         event: this.rule.list.event[index]
       }
     });
+    this.numberList.sort(()=>{
+      return Math.random()>0.5?-1:1
+    })
   },
   data () {
     return {
