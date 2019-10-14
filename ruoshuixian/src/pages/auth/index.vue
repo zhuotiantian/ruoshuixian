@@ -23,7 +23,8 @@ export default {
     alertBox
   },
   onLoad (options) {
-    this.inviter_id = options.inviterid
+    this.inviter_id = options.inviterid;
+
   },
   data () {
     return {
@@ -51,7 +52,7 @@ export default {
             }).then(result => {
               if (result.code == 1) {
                 that.showFog = true;
-                this.$store.commit("userInfo", result.data.userInfo);
+                that.$store.commit("setUserInfo", result.data.userInfo);
                 that.token = result.data.userInfo.token;
               }
             });

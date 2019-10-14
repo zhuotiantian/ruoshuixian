@@ -40,8 +40,9 @@ export default {
       this.seconds--;
       if (this.seconds == 0) {
         clearInterval(this.timer);
+        let that = this;
         wx.reLaunch({
-          url: this.nextPage
+          url: that.nextPage
         });
       }
     }, 1000);
@@ -59,8 +60,8 @@ export default {
   },
   methods: {
     toNextPage: function (time) {
-      clearInterval(this.timer);
       this.seconds = time;
+
     },
     selLevel: function (level) {
       this.level = level;
