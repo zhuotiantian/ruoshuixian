@@ -2,15 +2,7 @@
   <div class="container">
     <div class="fog" v-if="showFog"></div>
     <alertBox :text="text" v-if="showFog&&!showTip" @hideFog="hideFog" @confirm="confirm"></alertBox>
-    <div class="tips" v-if="showFog&&showTip">
-      <p style="margin-bottom:30rpx">你可以通过以下两种方式对扑克牌的顺序进行修改</p>
-      <p>方式一、双击屏幕上半区的任意一张扑克，将这张扑克牌退回原位。</p>
-      <p>方式二、单击屏幕上半区的任意一张扑克，然后长按下半区的任意一张扑克，进行“替换位置/从前面插入/从后面插入”操作。</p>
-      <p>
-        <span class="btn default-btn" @click="shideTip">我知道了</span>
-      </p>
-    </div>
-    <CardTitle seconds="300" type="作答完成" @finish="finish"></CardTitle>
+    <CardTitle seconds="300" type="作答完成" @finish="finish" :showTips="true"></CardTitle>
     <div v-if="result.length>0" class="btnGroup" style="position:relative:z-index:998;">
       <div class="btn default-btn" @click.stop="replace">替换</div>
       <div class="btn default-btn" @click="insertBefore">从前插入</div>
@@ -30,9 +22,6 @@
         <image @click="selectPocker($event,index,_index)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show,active:_item.active}" v-for="(_item,_index) in item" :key="_index" :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'.png'" />
       </div>
     </div>
-    <p class="operationTips">
-      <span class="btn default-btn" style="float-right" @click="showTips">操作提示</span>
-    </p>
   </div>
 </template>
 <script>
@@ -68,7 +57,7 @@ export default {
       game_records_id: 1,
       userInfo: {},
       selectTopPocker: {},
-      canAdd:false
+      canAdd: false
     }
   },
   onLoad () {
@@ -97,14 +86,6 @@ export default {
     },
     hideFog: function () {
       this.showFog = false;
-    },
-    showTips: function () {
-      this.showFog = true;
-      this.showTip = true;
-    },
-    shideTip: function () {
-      this.showFog = false;
-      this.showTip = false;
     },
     confirm: function () {
       this.endTime = new Date().getTime();
@@ -148,7 +129,7 @@ export default {
 
       } else {
         this.longPress(e, index, _index);
-        this.canAdd=true;
+        this.canAdd = true;
       }
     },
     longPress: function (e, index, _index) {
@@ -216,7 +197,7 @@ export default {
       this.show();
     },
     insertBefore: function () {
-      if(!this.canAdd) return false;this.canAdd=false;this.canAdd=false;
+      if (!this.canAdd) return false; this.canAdd = false; this.canAdd = false;
       this.removeActive();
       this.result.splice(this.selectTopPocker.index + 1, 0, {
         url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
@@ -231,7 +212,7 @@ export default {
       this.hidden();
     },
     insertAfter: function () {
-      if(!this.canAdd) return false;this.canAdd=false;this.canAdd=false;
+      if (!this.canAdd) return false; this.canAdd = false; this.canAdd = false;
       this.result.forEach(e => {
         e.active = false
       });
@@ -256,7 +237,7 @@ export default {
 }
 
 .container {
-  padding-top: tovmin(520);
+  padding-top: tovmin(300);
   color: white;
   text-align: center;
 }

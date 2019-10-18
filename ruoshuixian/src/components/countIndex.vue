@@ -1,13 +1,19 @@
 <template>
   <div class="container">
-    <CardTitle :seconds="seconds" type="跳过" pageType="countIndex" @toNextPage="toNextPage"></CardTitle>
+    <CardTitle :seconds="seconds" type="跳过" pageType="countIndex" :noWait="hideProccess" @toNextPage="toNextPage"></CardTitle>
     <div class="content">
       <p v-if="memoryTime_minutes>0&&memoryTime_seconds==0">本轮记忆时间：{{memoryTime_minutes}}分钟</p>
       <p v-if="memoryTime_minutes==0&&memoryTime_seconds>0">本轮记忆时间：{{memoryTime_seconds}}秒</p>
       <p v-if="memoryTime_minutes>0&&memoryTime_seconds>0">本轮记忆时间：{{memoryTime_minutes}}分{{memoryTime_seconds}}秒</p>
-      <p :class="{proccess,acticve,active:seconds>3&&seconds<=60}">一分钟准备</p>
-      <p :class="{proccess,active:seconds>1&&seconds<=3}">脑细胞准备</p>
-      <p :class="{proccess,active:seconds>0&&seconds<=1}">开始</p>
+      <template v-if="!hideProccess">
+        <p :class="{proccess,acticve,active:seconds>3&&seconds<=60}">一分钟准备</p>
+        <p :class="{proccess,active:seconds>1&&seconds<=3}">脑细胞准备</p>
+        <p :class="{proccess,active:seconds>0&&seconds<=1}">开始</p>
+      </template>
+      <template v-else>
+        <p class="active">脑细胞准备一分钟后游戏自动开始</p>
+        <p class="active">或点击“跳过”直接进入游戏</p>
+      </template>
       <p>
         <span :class="{radio:true,active:level=='primary'}" @click="selLevel('primary')">初级</span>
         <span :class="{radio:true,active:level=='senior'}" @click="selLevel('senior')">高级</span>
@@ -18,7 +24,7 @@
 <script>
 import CardTitle from "@/components/gameTitle"
 export default {
-  props: ["nextPage"],
+  props: ["nextPage", "hideProccess"],
   components: {
     CardTitle
   },
@@ -38,7 +44,7 @@ export default {
     this.memoryTime_seconds = this.memoryTime % 60;
     this.timer = setInterval(() => {
       this.seconds--;
-      if (this.seconds == 0) {
+      if (this.seconds == 0 || this.seconds < 0) {
         clearInterval(this.timer);
         let that = this;
         wx.reLaunch({
@@ -61,7 +67,6 @@ export default {
   methods: {
     toNextPage: function (time) {
       this.seconds = time;
-
     },
     selLevel: function (level) {
       this.level = level;

@@ -8,9 +8,9 @@
       </template>
       <template v-else>
         <em class="arrow arrow-left" @click="prevGroup"></em>
-        <scroll-view :style="{width:'463px',height:'196px','white-space':'nowrap'}" scroll-x>
-          <image class="pocker" ref="pocker" v-for="(item,index) in perPocker[currentGroupIndex]" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
-        </scroll-view>
+        <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
+          <image class="pocker" ref="pocker" v-for="(item,index) in perPocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        </div>
         <em class="arrow arrow-right" @click="nextGroup"></em>
       </template>
     </div>
@@ -53,7 +53,7 @@ export default {
   },
   data () {
     return {
-      pannelContent: ["ALL", "1", "2", "4", "8"],
+      pannelContent: ["1", "2", "4", "8"],
       pockerCount: 0,
       bg: 23,
       left: 100,
@@ -89,18 +89,15 @@ export default {
       let currentIndex = this.groupPage[this.currentPage].filter(e => {
         return e.active
       })[0].number - 1;
-      if (data !== "all") {
-        let list = JSON.parse(JSON.stringify(this.pocker[currentIndex]));
-        this.perPocker = [];
-        if (data) {
-          for (var i = 0; i < list.length; i + data) {
-            this.perPocker.push(list.splice(i, i + data));
-          }
+      let list = JSON.parse(JSON.stringify(this.pocker[currentIndex]));
+      this.perPocker = [];
+      if (data) {
+        for (var i = 0; i < list.length; i + data) {
+          this.perPocker.push(list.splice(i, i + data));
         }
-      } else {
-        this.perPocker.push(this.pocker[currentIndex]);
       };
-      this.groupData = data;
+      this.currentGroupIndex = 0;
+      this.pockerNumber = data;
       this.type = "记忆完成";
       if (this.time_long) {
         setTimeout(() => {
@@ -134,8 +131,9 @@ export default {
         number: item.number,
         active: true
       });
+      this.currentGroupIndex = 0;
 
-      this.groupData && this.group(this.groupData);
+      this.pockerNumber && this.group(this.pockerNumber);
     },
     prevGroup: function () {
       if (this.currentGroupIndex > 0) {
@@ -143,7 +141,7 @@ export default {
       }
     },
     nextGroup: function () {
-      if (this.currentGroupIndex < this.pocker.length - 1) {
+      if (this.currentGroupIndex < this.perPocker.length - 1) {
         this.currentGroupIndex++;
       }
     }
@@ -159,6 +157,7 @@ export default {
   height: tovmin(382);
   display: flex;
   justify-content: space-between;
+  margin: 0 15vmin;
 }
 
 .container {
@@ -169,6 +168,7 @@ export default {
   height: tovmin(382);
   width: tovmin(248);
   margin-right: tovmin(30);
+  position: absolute;
 }
 
 .pocker-bg {

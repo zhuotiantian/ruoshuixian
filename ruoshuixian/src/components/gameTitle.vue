@@ -5,14 +5,10 @@
       <!-- <em class="arrow arrow-left" @click="toFirstPage"></em> -->
       <template v-if="isResult">
         <p>
-          <span v-if="isPocker&&showTime">用时：{{result.game_time||0}}S</span>
-          <span v-else>得分：{{result.fraction||0}}</span>
+          <span v-if="isPocker">用时：{{getPayedTime}}</span>
+          <span style="margin-left:30rpx">得分：{{result.fraction||0}}分</span>
         </p>
         <p style="flex:1;text-align:right">
-          <span class="btn default-btn" style="margin-right:15rpx" v-if="isPocker" @click="showTimeHandle">
-            <span v-if="showTime">显示得分</span>
-            <span v-else>显示用时</span>
-          </span>
           <span class="btn primary-btn" @click="playAgain">再次训练</span>
           <button class="btn default-btn shareBtn" open-type="share">
             <image class="share" :src="'/static/images/redPocket/share.png'" />
@@ -23,11 +19,13 @@
       <template v-else>
         <p style="flex:1;text-align:left">
           <span class="btn default-btn" @click="toHelpPage">帮助</span>
+          <span class="btn default-btn" v-if="showTips" @click="showTipsHandler" style="margin-left:30rpx">操作提示</span>
           <span class="btn default-btn type arrow" v-if="showType" style="margin-left:30rpx" @click="showPannel=true">{{selectType}}</span>
         </p>
         <p style="flex:1;text-align:center" v-if="showIntervalTime">
           {{hours==0?'00':'0'+hours}}：{{t_minutes<10?'0'+t_minutes:t_minutes}}：{{t_seconds<10?'0'+t_seconds:t_seconds}}</p>
         <div style="flex:1;text-align:right">
+          <span v-if="showGameLevel" style="margin-right:15rpx">{{level=='primary'?'初级':'高级'}}快速扑克牌</span>
           <p class="btn primary-btn" v-if="type=='跳过'" @click="toNextPage">跳过</p>
           <p class="btn primary-btn" v-if="type=='下一页'" @click="nextPage">下一页</p>
           <p class="btn primary-btn" v-if="isInsert" style="margin-right:15rpx" @click="insertPocker">插入空牌</p>
@@ -41,6 +39,15 @@
     <div :class="{pannel:true,down:showPannel,up:!showPannel}">
       <p>显示方式</p>
       <p v-for="(item,index) in pannelContent" :key="index" @click.stop="group(item,index)" :class="{active:active==index}">{{item}}</p>
+    </div>
+    <div class="fog" v-if="showTip" @click="showTip=false"></div>
+    <div class="tips" v-if="showTip">
+      <p style="margin-bottom:30rpx">你可以通过以下两种方式对扑克牌的顺序进行修改</p>
+      <p>方式一、双击屏幕上半区的任意一张扑克，将这张扑克牌退回原位。</p>
+      <p>方式二、单击屏幕上半区的任意一张扑克，然后长按下半区的任意一张扑克，进行“替换位置/从前面插入/从后面插入”操作。</p>
+      <p>
+        <span class="btn default-btn" @click="hideTips">我知道了</span>
+      </p>
     </div>
   </div>
 </template>
@@ -57,7 +64,10 @@ export default {
     "btnType",
     "pageType",
     "isShowTime",
-    "seconds"
+    "seconds",
+    "showTips",
+    "showGameLevel",
+    "noWait"
   ],
   onLoad () {
     Object.assign(this.$data, this.$options.data());
@@ -69,7 +79,11 @@ export default {
     this.gameid = this.$store.state.gameid;
     this.memoryTime = this.$store.state.memoryTime;
     this.resetInterval();
-
+  },
+  computed: {
+    getPayedTime: function () {
+      return this.result && Math.round(this.result.game_time / 60) + '分' + (this.result.game_time % 60).toFixed("2") + "秒"
+    }
   },
   data () {
     return {
@@ -94,7 +108,8 @@ export default {
       recallTime: 0,
       level: "",
       hours: 0,
-      isPlayAgain: 0
+      isPlayAgain: 0,
+      showTip: false
     };
   },
   watch: {
@@ -222,9 +237,10 @@ export default {
       this.timer();
     },
     toNextPage: function () {
-      if (this.pageType == "countIndex" && this.t_seconds > 3) {
+      if (this.pageType == "countIndex" && this.t_seconds > 3 && !this.noWait) {
         this.t_seconds = 3;
       } else {
+        this.t_seconds = 0;
         this.clear();
       }
       this.$emit("toNextPage", this.t_seconds);
@@ -237,9 +253,6 @@ export default {
     startGame: function () {
       this.clear();
       this.$emit("startGame");
-    },
-    showTimeHandle: function () {
-      this.showTime = !this.showTime;
     },
     finishMemary: function () {
       this.clear();
@@ -260,6 +273,12 @@ export default {
       wx.reLaunch({
         url: "/pages/firstPage/main"
       });
+    },
+    showTipsHandler: function () {
+      this.showTip = true;
+    },
+    hideTips: function () {
+      this.showTip = false;
     }
   }
 }
@@ -359,5 +378,19 @@ export default {
     bottom: tovmin(-1000);
     display: none;
   }
+}
+.tips {
+  position: fixed;
+  top: tovmin(150);
+  padding: 0 tovmin(100);
+  z-index: 1002;
+}
+
+.tips p {
+  text-align: left;
+}
+
+.tips p:last-child {
+  text-align: center;
 }
 </style>

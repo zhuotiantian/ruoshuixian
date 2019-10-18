@@ -1,15 +1,15 @@
 <template>
   <div class="container">
-    <CardTitle :showType="true" ref="title" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary"></CardTitle>
+    <CardTitle :showType="true" :showGameLevel="true" ref="title" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary"></CardTitle>
     <div class="list">
       <template v-if="pocker.length==0">
         <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
       </template>
       <template v-else>
         <em class="arrow arrow-left" @click="prevGroup"></em>
-        <scroll-view :style="{width:'463px',height:'196px','white-space':'nowrap'}" scroll-x>
-          <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
-        </scroll-view>
+        <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
+          <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        </div>
         <em class="arrow arrow-right" @click="nextGroup"></em>
       </template>
     </div>
@@ -23,7 +23,7 @@ export default {
   },
   data () {
     return {
-      pannelContent: ["ALL", "1", "2", "4", "8"],
+      pannelContent: ["1", "2", "4", "8"],
       pockerCount: 0,
       bg: 23,
       left: 100,
@@ -64,16 +64,14 @@ export default {
   methods: {
     group: function (data) {
       let list = JSON.parse(JSON.stringify(this.list));
+      this.pockerNumber = data;
       this.pocker = [];
-      if (data !== "all") {
-        for (var i = 0; i < list.length; i + data) {
-          this.pocker.push(list.splice(i, i + data));
-        }
-      } else {
-        this.pocker.push(list);
+      for (var i = 0; i < list.length; i + data) {
+        this.pocker.push(list.splice(i, i + data));
       }
       this.type = "记忆完成";
     },
+    this.currentGroupIndex=0;
     finishMemary: function () {
       wx.reLaunch({
         url: "../recall/main"
@@ -100,6 +98,7 @@ export default {
   height: tovmin(382);
   display: flex;
   justify-content: space-between;
+  margin: 0 15vmin;
 }
 
 .container {
@@ -110,6 +109,7 @@ export default {
   height: tovmin(382);
   width: tovmin(248);
   margin-right: tovmin(30);
+  position: absolute;
 }
 
 .pocker-bg {

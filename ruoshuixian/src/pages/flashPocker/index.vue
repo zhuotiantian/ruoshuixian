@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <PockerIndex type="time" titleBtn="跳过" nextPage="./memary/main"></PockerIndex>
+    <PockerIndex type="time" :isShowTime="false" titleBtn="跳过" nextPage="./memary/main"></PockerIndex>
   </div>
 </template>
 <script>

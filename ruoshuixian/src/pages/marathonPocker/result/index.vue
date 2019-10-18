@@ -37,7 +37,7 @@ export default {
   },
   data () {
     return {
-      pannelContent: ["ALL", "1", "2", "4", "8"],
+      pannelContent: ["1", "2", "4", "8"],
       pockerCount: 23,
 
       left: 100,

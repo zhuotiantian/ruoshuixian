@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <PockerIndex type="counts" titleBtn="跳过" nextPage="/pages/fastPocker/ready/main" btnType="none"></PockerIndex>
+        <PockerIndex type="counts" :isShowTime="false" titleBtn="跳过" nextPage="/pages/fastPocker/ready/main" btnType="none"></PockerIndex>
     </div>
 </template>
 <script>

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <p>{{content}}</p>
+    <div v-html="content"></div>
     <!-- <image  class="image" :src="'/static/images/help/qr.png'"></image> -->
   </div>
 </template>

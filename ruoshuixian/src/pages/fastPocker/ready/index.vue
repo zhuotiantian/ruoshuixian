@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <CountIndex nextPage="/pages/fastPocker/memary/main"></CountIndex>
+        <CountIndex nextPage="/pages/fastPocker/memary/main" :hideProccess="true"></CountIndex>
     </div>
 </template>
 <script>

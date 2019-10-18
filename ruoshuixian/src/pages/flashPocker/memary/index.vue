@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle :showType="true" :pannelContent="pannelContent" @group="group" :isShowTime="false" :type="type" @finishMemary="finishMemary">
+    <CardTitle :showType="false" :pannelContent="pannelContent" @group="group" :isShowTime="false" :type="type" @finishMemary="finishMemary">
     </CardTitle>
     <div class="list">
       <template v-if="pocker.length==0">
@@ -8,12 +8,13 @@
       </template>
       <template v-else>
         <em class="arrow arrow-left" @click="prevGroup"></em>
-        <scroll-view :style="{width:'463px',height:'196px','white-space':'nowrap'}" scroll-x>
-          <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
-        </scroll-view>
+        <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
+          <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        </div>
         <em class="arrow arrow-right" @click="nextGroup"></em>
       </template>
     </div>
+    <div class="interval" v-if="showInterval">{{number}}秒</div>
   </div>
 </template>
 <script>
@@ -31,10 +32,18 @@ export default {
     let memoryTime = this.$store.state.memoryTime;
     this.list = this.rule.list;
     this.time_long = memoryTime * 1000;
+    this.pockerNumber = this.$store.state.pockerNumber;
+    let interval = setInterval(() => {
+      this.number--;
+      if (!this.number > 0) {
+        this.group();
+        this.showInterval = false;
+      }
+    }, 1000);
   },
   data () {
     return {
-      pannelContent: ["ALL", "1", "2", "4", "8"],
+      pannelContent: ["1", "2", "4", "8"],
       pockerCount: 0,
       bg: 23,
       left: 100,
@@ -45,13 +54,16 @@ export default {
       level: "primary",
       list: [],
       currentGroupIndex: 0,
-      time_long: 0
+      time_long: 0,
+      pockerNumber: 0,
+      showInterval: true,
+      number: 3,
     }
   },
   computed: {
     bgCounts: function () {
       let bgCounts = [];
-      let left0 = this.pockerCount == 23 ? 100 : (350 - 10 * this.bg);
+      let left0 = this.pockerCount == 23 ? 100 : (290 - 10 * this.bg);
       for (let i = 0; i < this.bg; i++) {
         let left = left0 + 20 * i;
         bgCounts.push(left)
@@ -60,17 +72,14 @@ export default {
     },
   },
   methods: {
-    group: function (data) {
+    group: function () {
       let list = JSON.parse(JSON.stringify(this.list));
       this.pocker = [];
-      if (data !== "ALL") {
-        for (var i = 0; i < list.length; i + data) {
-          this.pocker.push(list.splice(i, i + data));
-        }
-      } else {
-        this.pocker.push(list);
+      for (var i = 0; i < list.length; i + this.pockerNumber) {
+        this.pocker.push(list.splice(i, i + this.pockerNumber));
       }
       this.type = "记忆完成";
+      this.currentGroupIndex=0;
       if (this.time_long) {
         setTimeout(() => {
           this.finishMemary();
@@ -103,6 +112,7 @@ export default {
   height: tovmin(382);
   display: flex;
   justify-content: space-between;
+  margin: 0 15vmin;
 }
 
 .container {
@@ -113,6 +123,7 @@ export default {
   height: tovmin(382);
   width: tovmin(248);
   margin-right: tovmin(30);
+  position: absolute;
 }
 
 .pocker-bg {
@@ -131,5 +142,18 @@ export default {
   height: tovmin(30);
   width: tovmin(30);
   margin: 0 tovmin(60);
+}
+.interval {
+  position: fixed;
+  width: tovmin(200);
+  height: tovmin(200);
+  line-height: tovmin(200);
+  background: rgba(0, 0, 0, 0.3);
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border-radius: tovmin(200);
+  text-align: center;
+  font-size: tovmin(40);
 }
 </style>

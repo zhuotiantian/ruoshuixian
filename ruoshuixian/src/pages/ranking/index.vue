@@ -4,7 +4,7 @@
       <span style="flex:1">
         <image class="image" :src="domain+avatar"></image>
       </span>
-      <span style="flex:6">我</span>
+      <span style="flex:6">我的排名</span>
       <span style="flex:1">{{index+1}}</span>
     </div>
     <div class="content">
@@ -14,10 +14,11 @@
             <image class="image" :src="domain+item.avatar"></image>
           </span>
           <span style="flex:6">{{item.nickname}}</span>
-          <span style="flex:1">
+          <span style="flex:1;display:flex;justify-content:center">
             <image class="icon" v-if="index==0" :src="'/static/images/ranking/ranking1.png'"></image>
             <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2.png'"></image>
             <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3.png'"></image>
+            <span v-if="index>2">{{index+1}}</span>
           </span>
         </li>
       </ul>
@@ -96,6 +97,7 @@ export default {
   color: $black;
   box-sizing: content-box;
   height: 100%;
+  overflow-y: auto;
 }
 
 .content ul li {
