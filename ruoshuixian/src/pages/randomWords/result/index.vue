@@ -1,8 +1,10 @@
 <template>
   <div class="container">
-    <CardTitle :isResult="true"></CardTitle>
+    <CardTitle :isResult="true" :type="type" @nextPage="nextPage" @prevPage="prevPage" :showPrevPageBtn="showPrevPageBtn"></CardTitle>
     <div class="list">
-      <span :class="{item:true, wrong:item.result==1}" v-for="(item,index) in list" :key="index+1">{{item.number}}</span>
+      <div class="item-list" v-for="(columns,index) in list" :key="index+1">
+        <span :class="{item:true, wrong:item.result==1}" v-for="(item,_index) in columns" :key="_index+1"><span>{{item.index+1}}</span>&nbsp;&nbsp;&nbsp;<span>{{item.words}}</span></span>
+      </div>
     </div>
   </div>
 </template>
@@ -16,14 +18,17 @@ export default {
   onLoad () {
     Object.assign(this.$data, this.$options.data());
     this.result = this.$store.state.result;
-    this.list = this.result.right_and_wrong_results;
+    
     let userInfo = this.$store.state.userInfo;
     this.userid = userInfo.id;
+    this.sliceList(0,100);
   },
   data () {
     return {
       list: [],
-      userid: null
+      userid: null,
+      type:"下一页",
+      showPrevPageBtn:false
     }
   },
   onShareAppMessage: function (res) {
@@ -39,7 +44,38 @@ export default {
     }
   },
   methods: {
+    sliceList:function(start,end){
+      let level = this.$store.state.level;
+      this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      let per = this.rule.number_per_group;
+      let total = this.rule.number;
+      this.list = this.result.right_and_wrong_results;
+      let list = [];
+      let wordsList = this.list.map((e, index) => {
+        return {
+          words: e.number,
+          result:e.result,
+          index: index
+        }
+      }).slice(start, end);
+      for (var i = 0; i < total; i += per) {
+        list.push(wordsList.slice(i, i + per));
+      }
+      this.list = list;
+      console.log(list);
 
+      this.per = per;
+    },
+    nextPage: function () {
+      this.sliceList(100, 200);
+      this.showPrevPageBtn=true;
+    },
+    prevPage: function () {
+      this.sliceList(0, 100);
+      this.showPrevPageBtn=false;
+    },
   }
 }
 </script>
@@ -62,8 +98,8 @@ export default {
 
 .list {
   display: grid;
-  grid-template-columns: tovmin(200) tovmin(200) tovmin(200) tovmin(200) tovmin(
-      200
+  grid-template-columns: tovmin(250) tovmin(250) tovmin(250) tovmin(250) tovmin(
+      250
     );
   grid-gap: tovmin(20);
   font-size: tovmin(26);
@@ -71,12 +107,25 @@ export default {
   align-items: center;
   color: $grey-text;
 }
-.list span {
+.item-list {
+  display: grid;
+  grid-template-columns: tovmin(250);
+  grid-gap: tovmin(20);
+  font-size: tovmin(26);
+  justify-content: center;
+  align-items: center;
+}
+.list > span {
+  display: flex;
   border: tovmin(2) solid $blue-border;
   text-align: center;
-  display: inline-block;
   min-height: tovmin(36);
 }
+.list > span > span {
+  border: tovmin(2) solid $blue-border;
+  text-align: center;
+}
+
 .wrong {
   color: $grey-text;
   background: $red;

@@ -20,7 +20,8 @@ export default {
   },
   data () {
     return {
-      innerAudioContext: null
+      innerAudioContext: null,
+      level:"primary"
     };
   },
   onLoad () {
@@ -29,7 +30,8 @@ export default {
     this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
       return e.game_level == level
     })[0];
-    let numberList = this.rule.list;
+    let numberList = ['A','B','C'].concat(this.rule.list);
+    // let numberList = ['A','B','C'].concat(eng);
     let that = this;
     wx.request({
       url: "https://openapi.baidu.com/oauth/2.0/token",
@@ -46,7 +48,7 @@ export default {
         wx.login({
           success: function (res) {
             let cuid = res.code;
-            var url = `http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=${cuid}&tok=${token}&tex=${tex}&vol=9&per=0&spd=3&pit=5&aue=3`;
+            var url = `http://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=${cuid}&tok=${token}&tex=${tex}&vol=9&per=0&spd=1&pit=5&aue=3`;
             wx.downloadFile({
               url: url,
               success: function (result) {

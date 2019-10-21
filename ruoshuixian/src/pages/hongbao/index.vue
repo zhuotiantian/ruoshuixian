@@ -39,7 +39,7 @@ export default {
   onLoad () {
     Object.assign(this.$data, this.$options.data());
     this.token = this.$store.state.userInfo.token;
-    this.getList();
+    // this.getList();
   },
   components: {
     CardFooter
@@ -57,7 +57,7 @@ export default {
           this.list = result.data.list.filter(e => {
             return e.game_classification_id !== 0 && e.status !== 'received'
           });
-          this.rule = result.rule_description;
+          this.rule = result.data.rule_description;
         });
     },
     getMoney: function () {

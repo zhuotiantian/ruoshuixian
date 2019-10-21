@@ -9,6 +9,8 @@
           <span style="margin-left:30rpx">得分：{{result.fraction||0}}分</span>
         </p>
         <p style="flex:1;text-align:right">
+          <span class="btn primary-btn" style="margin-right:15rpx" v-if="type=='下一页'&&!showPrevPageBtn" @click="nextPage">下一页</span>
+          <span class="btn primary-btn" style="margin-right:15rpx" v-if="showPrevPageBtn" @click="prevPage">上一页</span>
           <span class="btn primary-btn" @click="playAgain">再次训练</span>
           <button class="btn default-btn shareBtn" open-type="share">
             <image class="share" :src="'/static/images/redPocket/share.png'" />
@@ -68,7 +70,8 @@ export default {
     "seconds",
     "showTips",
     "showGameLevel",
-    "noWait"
+    "noWait",
+    'showPrevPageBtn'
   ],
   onLoad () {
     Object.assign(this.$data, this.$options.data());
