@@ -17,20 +17,21 @@
         </p>
       </template>
       <template v-else>
-        <p style="flex:1;text-align:left">
+        <p style="flex:2;text-align:left">
           <span class="btn default-btn" @click="toHelpPage">帮助</span>
           <span class="btn default-btn" v-if="showTips" @click="showTipsHandler" style="margin-left:30rpx">操作提示</span>
           <span class="btn default-btn type arrow" v-if="showType" style="margin-left:30rpx" @click="showPannel=true">{{selectType}}</span>
         </p>
-        <p style="flex:1;text-align:center" v-if="showIntervalTime">
+        <p style="flex:1;text-align:center;r" v-if="showIntervalTime">
           {{hours==0?'00':'0'+hours}}：{{t_minutes<10?'0'+t_minutes:t_minutes}}：{{t_seconds<10?'0'+t_seconds:t_seconds}}</p>
-        <div style="flex:1;text-align:right">
-          <span v-if="showGameLevel" style="margin-right:15rpx">{{level=='primary'?'初级':'高级'}}快速扑克牌</span>
+        <div style="flex:2;text-align:right;">
+          <span v-if="showGameLevel" style="margin-right:15rpx">{{showGameLevel}}</span>
           <p class="btn primary-btn" v-if="type=='跳过'" @click="toNextPage">跳过</p>
-          <p class="btn primary-btn" v-if="type=='下一页'" @click="nextPage">下一页</p>
+          <p class="btn primary-btn" style="margin-right:15rpx" v-if="type=='下一页'" @click="nextPage">下一页</p>
+          <p class="btn primary-btn" style="margin-right:15rpx" v-if="showPrevPage" @click="prevPage">上一页</p>
           <p class="btn primary-btn" v-if="isInsert" style="margin-right:15rpx" @click="insertPocker">插入空牌</p>
-          <p class="btn submit-btn" v-if="type=='记忆完成'" @click="finishMemary">记忆完成</p>
-          <p class="btn submit-btn" v-if="type=='作答完成'" @click="finish">作答完成</p>
+          <p class="btn submit-btn" v-if="type=='记忆完成'||showFinishButton" @click="finishMemary">记忆完成</p>
+          <p class="btn submit-btn" v-if="type=='作答完成'||showSubmitButton" @click="finish">作答完成</p>
           <p class="btn submit-btn" v-if="type=='开始'" @click="startGame">开始</p>
           <p v-else>&nbsp;</p>
         </div>
@@ -98,7 +99,7 @@ export default {
         跳过: "toNextPage",
         记忆完成: "finishMemary",
         作答完成: "finish",
-        开始: "startGame"
+        开始: "startGame",
       },
       game: [],
       result: [],
@@ -109,7 +110,10 @@ export default {
       level: "",
       hours: 0,
       isPlayAgain: 0,
-      showTip: false
+      showTip: false,
+      showPrevPage: false,
+      showFinishButton: false,
+      showSubmitButton: false,
     };
   },
   watch: {
@@ -126,8 +130,23 @@ export default {
         }
       }
     },
-    type: function () {
-      this.changeTime();
+    type: function (newVal, oldVal) {
+      if ((newVal == '记忆完成' || newVal == '作答完成') && oldVal == '下一页') {
+        this.showPrevPage = true;
+      } else {
+        this.showPrevPage = false;
+      };
+      if (newVal == '下一页' || oldVal == "记忆完成") {
+        this.showFinishButton = true;
+        this.showSubmitButton = false;
+      }
+      if (newVal == '下一页' || oldVal == "作答完成") {
+        this.showSubmitButton = true;
+        this.showFinishButton = false;
+      }
+      if (oldVal !== '下一页') {
+        this.changeTime();
+      }
     }
   },
   methods: {
@@ -139,6 +158,7 @@ export default {
     },
     changeTime: function () {
       switch (this.type) {
+        case "下一页": ;
         case "记忆完成":
           if (!this.memoryTime) {
             this._time = this.rule.memory_time;
@@ -227,6 +247,9 @@ export default {
     },
     nextPage: function () {
       this.$emit("nextPage");
+    },
+    prevPage: function () {
+      this.$emit("prevPage");
     },
     group: function (count, index) {
       this.selectType = count;

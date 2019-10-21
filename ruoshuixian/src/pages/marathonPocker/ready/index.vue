@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CountIndex :nextPage="nextPage" :hideProccess="true"></CountIndex>
+    <CountIndex :nextPage="nextPage"></CountIndex>
   </div>
 </template>
 <script>

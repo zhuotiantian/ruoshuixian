@@ -1,6 +1,6 @@
 <template>
   <div class="contanier">
-    <CardTitle type="记忆完成" @finishMemary="finishMemary"></CardTitle>
+    <CardTitle type="记忆完成" @finishMemary="finishMemary" :showGameLevel="(level=='primary'?'初级':'高级')+'听记数字'"></CardTitle>
     <div class="content">
       <image class="play" :src="'/static/images/firstPage/play.png'"></image>
       <image class="slider" :src="'/static/images/firstPage/slider.png'"></image>
@@ -75,12 +75,12 @@ export default {
   },
   methods: {
     finishMemary: function () {
-      this.innerAudioContext&&this.innerAudioContext.stop();
-      setTimeout(()=>{
+      this.innerAudioContext && this.innerAudioContext.stop();
+      setTimeout(() => {
         wx.reLaunch({
           url: "../answer/main"
         });
-      },200)
+      }, 200)
     }
   }
 };

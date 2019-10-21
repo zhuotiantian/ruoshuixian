@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle :showType="true" type="记忆完成" @finishMemary="finishMemary" @group="group" :pannelContent="pannelContent"></CardTitle>
+    <CardTitle :showType="true" type="记忆完成" :showGameLevel="(level=='primary'?'初级':'高级')+'二进制数字'" @finishMemary="finishMemary" @group="group" :pannelContent="pannelContent"></CardTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <div v-for="(item,index) in rows" :key="index" :class="{item:true,border:counts&&((index+1)%counts==0)&&(index+1)!=rows.length}">

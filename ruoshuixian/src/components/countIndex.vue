@@ -24,7 +24,13 @@
 <script>
 import CardTitle from "@/components/gameTitle"
 export default {
-  props: ["nextPage", "hideProccess"],
+  props: {
+    nextPage: null,
+    hideProccess: {
+      type: Boolean,
+      default: true
+    }
+  },
   components: {
     CardTitle
   },

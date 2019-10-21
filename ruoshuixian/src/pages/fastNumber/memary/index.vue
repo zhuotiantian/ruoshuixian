@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle type="记忆完成" @finishMemary="finishMemary"></CardTitle>
+    <CardTitle type="记忆完成" :showGameLevel="(level=='primary'?'初级':'高级')+'快速数字'" @finishMemary="finishMemary"></CardTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <span class="item" v-for="(item,index) in rows" :key="index">{{item}}</span>

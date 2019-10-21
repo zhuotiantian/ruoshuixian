@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle :showType="true" :showGameLevel="true" ref="title" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary"></CardTitle>
+    <CardTitle :showType="true" :showGameLevel="(level=='primary'?'初级':'高级')+'快速扑克牌'" ref="title" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary"></CardTitle>
     <div class="list">
       <template v-if="pocker.length==0">
         <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
@@ -39,9 +39,9 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    let level = this.$store.state.level;
+    this.level = this.$store.state.level;
     this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level
+      return e.game_level == this.level
     })[0];
     this.pockerNumber = this.$store.state.pockerNumber;
     this.list = this.rule.list;
@@ -70,8 +70,9 @@ export default {
         this.pocker.push(list.splice(i, i + data));
       }
       this.type = "记忆完成";
+      this.currentGroupIndex = 0;
     },
-    this.currentGroupIndex=0;
+
     finishMemary: function () {
       wx.reLaunch({
         url: "../recall/main"

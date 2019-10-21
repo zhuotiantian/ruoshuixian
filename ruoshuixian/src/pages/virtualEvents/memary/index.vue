@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle type="记忆完成" @finishMemary="finishMemary"></CardTitle>
+    <CardTitle type="记忆完成" @finishMemary="finishMemary" :showGameLevel="(level=='primary'?'初级':'高级')+'虚拟事件和日期'"></CardTitle>
     <div class="list">
       <p class="list-title">
         <span>序号</span>
@@ -30,8 +30,8 @@ export default {
         event: this.rule.list.event[index]
       }
     });
-    this.numberList.sort(()=>{
-      return Math.random()>0.5?-1:1
+    this.numberList.sort(() => {
+      return Math.random() > 0.5 ? -1 : 1
     })
   },
   data () {

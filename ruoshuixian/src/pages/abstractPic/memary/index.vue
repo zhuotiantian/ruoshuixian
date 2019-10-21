@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <alertBox :text="text" v-if="showFog" @hideFog="hideFog"></alertBox>
-    <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成" @finishMemary="finishMemary"></CardTitle>
+    <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成" :showGameLevel="(level=='primary'?'初级':'高级')+'抽象图形'" @finishMemary="finishMemary"></CardTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <div class="image" v-for="(item,index) in rows" :key="index">
