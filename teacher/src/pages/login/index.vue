@@ -69,7 +69,7 @@ export default {
             wx.showToast({
               title: "登陆成功"
             });
-            wx.redirectTo({
+            wx.reLaunch({
               url: "/pages/my_teacher/main"
             });
           } else {

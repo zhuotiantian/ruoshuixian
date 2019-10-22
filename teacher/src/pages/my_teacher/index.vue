@@ -46,6 +46,7 @@ export default {
   },
   onShow () {
     let userInfo = this.$store.state.userInfo;
+    console.log(this.$store.state.userInfo);
     if (userInfo) {
       this.token = userInfo.token;
       this.userInfo = userInfo;
