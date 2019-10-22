@@ -44,11 +44,11 @@ export default {
     });
     this.total = this.rule.number;
     this.per = this.rule.number_per_group;
-    this.numberList = this.numberList.sort(() => {
-      return Math.random() > 0.5 ? -1 : 1
-    });
+    this.numberList = this.numberList;
     for (var i = 0; i < this.total; i += this.per) {
-      number.push(this.numberList.slice(i, i + this.per));
+      number.push(this.numberList.slice(i, i + this.per).sort(() => {
+      return Math.random() > 0.5 ? -1 : 1
+    }));
     }
     this.number = number.filter(e => {
       return e.length > 0;

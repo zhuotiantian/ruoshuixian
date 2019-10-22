@@ -165,6 +165,6 @@ page {
   line-height: tovmin(40) !important;
   display: inline-block;
   width: 40%;
-  margin-right: tovmin(20);
+  margin-right: tovmin(10);
 }
 </style>
