@@ -330,12 +330,15 @@ export default {
   width: tovmin(130);
   vertical-align: middle;
   margin-left: tovmin(26);
+  padding: 0;
+  text-align: center;
 }
 
 .share {
   width: tovmin(32);
   height: tovmin(26);
   top: tovmin(6);
+  vertical-align: middle;
 }
 
 .pannel {

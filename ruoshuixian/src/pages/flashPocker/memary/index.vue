@@ -79,7 +79,7 @@ export default {
         this.pocker.push(list.splice(i, i + this.pockerNumber));
       }
       this.type = "记忆完成";
-      this.currentGroupIndex=0;
+      this.currentGroupIndex = 0;
       if (this.time_long) {
         setTimeout(() => {
           this.finishMemary();

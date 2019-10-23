@@ -2,7 +2,11 @@
   <div class="container">
     <CardTitle isResult="true" isPocker="true" showTime="false"></CardTitle>
     <div class="list">
-      <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
+      <em class="arrow arrow-left" @click="prevGroup"></em>
+      <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
+        <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+      </div>
+      <em class="arrow arrow-right" @click="nextGroup"></em>
     </div>
   </div>
 </template>
@@ -16,12 +20,21 @@ export default {
     return {
       pockerCount: 23,
       left: 100,
-      userid: null
+      userid: null,
+      currentGroupIndex: 0,
+      pocker: [],
+      pockerNumber: 0
     };
   },
   onLoad () {
     let userInfo = this.$store.state.userInfo;
     this.userid = userInfo.id;
+    let correct_result = this.$store.state.result.correct_result;
+    this.pockerNumber = this.$store.state.pockerNumber;
+    this.pocker = [];
+    for (var i = 0; i < correct_result.length; i + this.pockerNumber) {
+      this.pocker.push(correct_result.splice(i, i + this.pockerNumber));
+    }
   },
   onShareAppMessage: function (res) {
     return {
@@ -46,6 +59,18 @@ export default {
       return pocker;
     }
   },
+  methods: {
+    prevGroup: function () {
+      if (this.currentGroupIndex > 0) {
+        this.currentGroupIndex--;
+      }
+    },
+    nextGroup: function () {
+      if (this.currentGroupIndex < this.pocker.length - 1) {
+        this.currentGroupIndex++;
+      }
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -57,6 +82,7 @@ export default {
   height: tovmin(30);
   display: flex;
   justify-content: space-between;
+  margin: 0 15vmin;
 }
 
 .container {

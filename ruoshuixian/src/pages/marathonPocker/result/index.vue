@@ -2,15 +2,19 @@
   <div class="container">
     <CardTitle isResult="true" isPocker="true" showTime="false"></CardTitle>
     <div class="list">
-      <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
+      <em class="arrow arrow-left" @click="prevGroup"></em>
+      <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
+        <image class="pocker" ref="pocker" v-for="(item,index) in perPocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+      </div>
+      <em class="arrow arrow-right" @click="nextGroup"></em>
     </div>
-    <!-- <div class="pageFoot">
-            <span class="pageBtn" @click="prevPage">上一页</span>
-            <div class="btn-group">
-                <span class="item active" v-for="(item,index) in pages" :key="index">{{item}}幅</span>
-            </div>
-            <span class="pageBtn" @click="nextPage">下一页</span>
-        </div> -->
+    <div class="pageFoot">
+      <span class="pageBtn" @click="prevPage">上一页</span>
+      <div class="btn-group">
+        <span :class="{item:true, active:item.active}" @click="selectHandler(index,item)" v-for="(item,index) in groupPage[currentPage]" :key="index">{{item.number}}幅</span>
+      </div>
+      <span class="pageBtn" @click="nextPage">下一页</span>
+    </div>
   </div>
 </template>
 <script>
@@ -22,6 +26,21 @@ export default {
   onLoad () {
     let userInfo = this.$store.state.userInfo;
     this.userid = userInfo.id;
+    this.correct_result = this.$store.state.result.correct_result;
+    this.pockerNumber = this.$store.state.pockerNumber;
+    for (var i = 1; i <= this.correct_result.length; i++) {
+      this.pages.push({
+        number: i,
+        active: false
+      });
+    };
+    this.pages[0].active = true;
+    let groupPage = [];
+    for (var i = 0; i < this.pages.length; i += 10) {
+      groupPage.push(this.pages.slice(i, i + 10));
+    };
+    this.groupPage = groupPage;
+    this.group();
   },
   onShareAppMessage: function (res) {
     return {
@@ -39,17 +58,15 @@ export default {
     return {
       pannelContent: ["1", "2", "4", "8"],
       pockerCount: 23,
-
+      pockerNumber: 0,
       left: 100,
-      pages: (() => {
-        let pages = [];
-        for (let i = 1; i <= 10; i++) {
-          pages.push(i);
-        };
-        return pages
-      })(),
+      pages: [],
       userid: null,
-      inviter_id: null
+      inviter_id: null,
+      groupPage: [],
+      currentPage: 0,
+      currentGroupIndex: 0,
+      perPocker: []
     };
   },
   computed: {
@@ -64,27 +81,52 @@ export default {
     }
   },
   methods: {
-    group: function (data) {
-      this.pockerCount = data == "ALL" ? (this.pockerCount = 23) : data;
+    group: function () {
+      let currentIndex = this.groupPage[this.currentPage].filter(e => {
+        return e.active
+      })[0].number - 1;
+      let list = JSON.parse(JSON.stringify(this.correct_result[currentIndex]));
+      this.perPocker = [];
+      for (var i = 0; i < list.length; i + this.pockerNumber) {
+        this.perPocker.push(list.splice(i, i + this.pockerNumber));
+      }
+      this.currentGroupIndex = 0;
     },
     nextPage: function () {
-      if (this.currentPage > 3) {
-        return false
-      } else {
+      if (this.currentPage < this.groupPage.length - 1) {
         this.currentPage++;
-        this.pages = this.pages.map((e) => {
-          return e + 10
-        });
       }
     },
     prevPage: function () {
-      if (this.currentPage > 1) {
-        this.currentPage--
-        this.pages = this.pages.map((e) => {
-          return e - 10
-        });
+      if (this.currentPage > 0) {
+        this.currentPage--;
       }
-    }
+    },
+    prevGroup: function () {
+      if (this.currentGroupIndex > 0) {
+        this.currentGroupIndex--;
+      }
+    },
+    nextGroup: function () {
+      if (this.currentGroupIndex < this.perPocker.length - 1) {
+        this.currentGroupIndex++;
+      }
+    },
+    selectHandler: function (index, item) {
+      this.$set(this.groupPage, this.currentPage, this.groupPage[this.currentPage].map(e => {
+        return {
+          number: e.number,
+          active: false
+        }
+      }));
+      this.$set(this.groupPage[this.currentPage], index, {
+        number: item.number,
+        active: true
+      });
+      this.currentGroupIndex = 0;
+
+      this.pockerNumber && this.group(this.pockerNumber);
+    },
   }
 };
 </script>
