@@ -1,6 +1,11 @@
 <script>
 export default {
-
+  onLaunch: function () {
+    console.log("第一次进入小程序");
+  },
+  onShow: function () {
+    console.log("从后台进入前台");
+  }
 };
 </script>
 

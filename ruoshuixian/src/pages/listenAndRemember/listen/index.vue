@@ -2,11 +2,13 @@
   <div class="contanier">
     <CardTitle type="记忆完成" @finishMemary="finishMemary" :showGameLevel="(level=='primary'?'初级':'高级')+'听记数字'"></CardTitle>
     <div class="content">
-      <image class="play" :src="'/static/images/firstPage/play.png'"></image>
+      <image class="play" v-if="isPlay" :src="'/static/images/firstPage/play.png'" @click="pause"></image>
+      <image class="play" v-else :src="'/static/images/firstPage/pause.png'" @click="play"></image>
       <image class="slider" :src="'/static/images/firstPage/slider.png'"></image>
       <em></em>
     </div>
-    <p class="text">正在播放录音&nbsp;&middot;&nbsp;&middot;&nbsp;&middot;</p>
+    <p class="text" v-if="isPlay">正在播放录音&nbsp;&middot;&nbsp;&middot;&nbsp;&middot;</p>
+    <p class="text" v-else>播放暂停</p>
   </div>
 </template>
 <script>
@@ -21,17 +23,20 @@ export default {
   data () {
     return {
       innerAudioContext: null,
-      level:"primary"
+      level: "primary",
+      isPlay: true,
     };
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data());
-    let level = this.$store.state.level;
+    this.level = this.$store.state.level;
     this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level
+      return e.game_level == this.level
     })[0];
-    let numberList = ['A','B','C'].concat(this.rule.list);
-    // let numberList = ['A','B','C'].concat(eng);
+    let eng = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+    let numberList = this.rule.list.map(e => {
+      return eng[e]
+    });
     let that = this;
     wx.request({
       url: "https://openapi.baidu.com/oauth/2.0/token",
@@ -44,6 +49,7 @@ export default {
       success: function (res) {
         wx.hideLoading();
         let token = res.data.access_token;
+
         let tex = encodeURI(numberList);
         wx.login({
           success: function (res) {
@@ -70,11 +76,6 @@ export default {
       }
     });
   },
-  data () {
-    return {
-      isPaly: true
-    };
-  },
   methods: {
     finishMemary: function () {
       this.innerAudioContext && this.innerAudioContext.stop();
@@ -83,6 +84,14 @@ export default {
           url: "../answer/main"
         });
       }, 200)
+    },
+    pause: function () {
+      this.innerAudioContext.pause();
+      this.isPlay = false;
+    },
+    play: function () {
+      this.innerAudioContext.play();
+      this.isPlay = true;
     }
   }
 };
