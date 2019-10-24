@@ -332,7 +332,7 @@ export default {
   margin-left: tovmin(26);
   padding: 0;
   text-align: center;
-  animation: shinne 2s ease-out infinite;
+  animation: shinne 2s linear infinite;
 }
 
 @keyframes shinne {
