@@ -332,6 +332,19 @@ export default {
   margin-left: tovmin(26);
   padding: 0;
   text-align: center;
+  animation: shinne 2s ease-out infinite;
+}
+
+@keyframes shinne {
+  0% {
+    box-shadow: 0 0 tovmin(10) rgba(255, 255, 255, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 tovmin(20) rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 tovmin(30) rgba(255, 255, 255, 0.8);
+  }
 }
 
 .share {

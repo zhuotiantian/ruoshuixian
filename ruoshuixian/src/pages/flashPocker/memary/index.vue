@@ -81,12 +81,13 @@ export default {
       this.type = "记忆完成";
       this.currentGroupIndex = 0;
       if (this.time_long) {
-        setTimeout(() => {
+        this.memoryInterval = setTimeout(() => {
           this.finishMemary();
         }, this.time_long);
       }
     },
     finishMemary: function () {
+      clearInterval(this.memoryInterval);
       wx.reLaunch({
         url: "../recall/main"
       })

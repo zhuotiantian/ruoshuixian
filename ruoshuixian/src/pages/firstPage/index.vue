@@ -1,11 +1,23 @@
 <template>
   <div class="container">
+    <template v-if="showDetailsFog">
+      <div class="fog"></div>
+      <div class="details-wrapper">
+        <image src="/static/images/firstPage/close.png" @click="showDetailsFog=false"></image>
+        <div class="content">
+          {{details}}
+        </div>
+        <div>
+          <button class="submit-btn btn" @click="showDetailsFog=false">确认</button>
+        </div>
+      </div>
+    </template>
     <div class="content">
       <image class="background" src="/static/images/firstPage/bg.png" />
       <div class="top">
         <swiper autoplay="true" circular="true" v-if="imgUrls.length>0">
           <swiper-item v-for="(item ,index) in imgUrls" :key="index">
-            <image class="top-image" :src="domain+item.image" />
+            <image class="top-image" :src="domain+item.image" @click="showDetails(item)" />
           </swiper-item>
         </swiper>
       </div>
@@ -114,10 +126,16 @@ export default {
       userid: null,
       inviter_id: null,
       registPocket: [],
-      sharePocket: []
+      sharePocket: [],
+      showDetailsFog: false,
+      details: ""
     };
   },
   methods: {
+    showDetails: function (item) {
+      this.showDetailsFog = true;
+      this.details = item.description;
+    },
     hideFog: function () {
       this.showFog = false;
     },
@@ -422,24 +440,6 @@ button image {
   margin-bottom: tovmin(30);
 }
 
-.btn {
-  position: absolute;
-  z-index: 999;
-  top: tovmin(62);
-  left: tovmin(180);
-  width: tovmin(310);
-  text-align: center;
-  font-size: tovmin(24);
-  height: tovmin(60);
-  line-height: tovmin(60);
-  border-radius: tovmin(44);
-  font-weight: bold;
-}
-
-.default-btn {
-  color: $green;
-}
-
 .small-fog {
   width: tovmin(750);
   height: tovmin(608);
@@ -486,5 +486,30 @@ button image {
   left: 44.5%;
   z-index: 1000;
   font-size: 3.2vmin;
+}
+
+.details-wrapper {
+  height: tovmin(444);
+  width: tovmin(460);
+  position: absolute;
+  z-index: 10001;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: tovmin(10);
+  text-align: center;
+}
+.details-wrapper .content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.details-wrapper image {
+  position: absolute;
+  top: tovmin(-68);
+  right: tovmin(-68);
+  height: tovmin(68);
+  width: tovmin(68);
 }
 </style>
