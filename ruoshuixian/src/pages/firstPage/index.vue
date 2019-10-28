@@ -4,9 +4,7 @@
       <div class="fog"></div>
       <div class="details-wrapper">
         <image src="/static/images/firstPage/close.png" @click="showDetailsFog=false"></image>
-        <div class="content">
-          {{details}}
-        </div>
+        <div class="content" v-html="details"></div>
         <div>
           <button class="submit-btn btn" @click="showDetailsFog=false">确认</button>
         </div>
@@ -504,6 +502,7 @@ button image {
   display: flex;
   justify-content: center;
   align-items: center;
+  word-break: break-all;
 }
 .details-wrapper image {
   position: absolute;
