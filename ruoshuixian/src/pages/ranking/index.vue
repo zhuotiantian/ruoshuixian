@@ -4,8 +4,8 @@
       <span style="flex:1">
         <image class="image" :src="domain+avatar"></image>
       </span>
-      <span style="flex:6">我的排名</span>
-      <span style="flex:1">{{index+1}}</span>
+      <h3 style="flex:6">我的排名</h3>
+      <h3 style="flex:1">{{index+1}}</h3>
     </div>
     <div class="content">
       <ul>
@@ -83,6 +83,10 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 0 tovmin(72);
+  background: #fff;
+  color: #333;
+  font-size: tovmin(34);
+  font-weight: 600;
 }
 
 .content {
