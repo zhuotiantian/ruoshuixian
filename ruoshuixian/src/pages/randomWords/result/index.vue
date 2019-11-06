@@ -55,7 +55,7 @@ export default {
       let list = [];
       let wordsList = this.list.map((e, index) => {
         return {
-          words: e.number,
+          words: this.result.correct_result[index],
           result:e.result,
           index: index
         }

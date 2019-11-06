@@ -7,8 +7,8 @@
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <div class="image_div" v-for="(item,index) in rows" :key="index">
           <image class="image" :src="domain+item.image"></image>
-          <span class="input" @click="focus(_index,index)">{{item.text}}</span>
-          <!-- <input type="text" class="input" placeholder="序号" v-model="item.text" @focus="focus" @blur="blur" /> -->
+          <!-- <span class="input" @click="focus(_index,index)">{{item.text}}</span> -->
+          <input type="text" class="input" placeholder="序号" v-model="item.text" @focus="focus" maxlength="1" @blur="blur" />
         </div>
         <span style="margin-left:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
@@ -46,15 +46,14 @@ export default {
     this.per = this.rule.number_per_group;
     this.numberList = this.numberList;
     for (var i = 0; i < this.total; i += this.per) {
-      number.push(this.numberList.slice(i, i + this.per).sort(() => {
-      return Math.random() > 0.5 ? -1 : 1
-    }));
+      number.push(this.numberList.slice(i, i + this.per));
     }
     this.number = number.filter(e => {
       return e.length > 0;
     });
     this.startTime = new Date().getTime();
     this.game_records_id = this.rule.game_records_id;
+    this.game_list = JSON.parse(option.sort);
   },
   data () {
     let array = new Array(5);
@@ -82,18 +81,16 @@ export default {
       this.showFog = false;
     },
     focus: function (_index, index) {
-      this.showKeybord = true;
+      // this.showKeybord = true;
       this._index = _index;
       this.index = index;
     },
     confirm: function () {
       this.endTime = new Date().getTime();
       let new_game_list = [];
-      let game_list = [];
       this.number.forEach(e => {
         e.forEach(m => {
           new_game_list.push(m.text);
-          game_list.push(m.index + 1);
         });
       });
       this.$http
@@ -104,7 +101,9 @@ export default {
             game_time: (this.endTime - this.startTime) / 1000,
             content: JSON.stringify({
               new_game_list,
-              game_list
+              game_list: this.game_list.map(e => {
+                return e + 1
+              })
             })
           },
           header: {

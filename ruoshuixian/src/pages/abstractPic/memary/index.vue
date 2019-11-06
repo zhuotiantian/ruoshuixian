@@ -50,16 +50,23 @@ export default {
     this.per = this.rule.number_per_group;
     let number = [];
     for (var i = 0; i < this.total; i += this.per) {
-      number.push(this.numberList.slice(i, i + this.per));
+      number.push(this.numberList.slice(i, i + this.per).sort(() => {
+        return Math.random() > 0.5 ? -1 : 1
+      }));
     };
     this.number = number.filter(e => {
       return e.length > 0
     });
+    this.sortNumber = this.number.map((e) => { return e }).reduce((current, next) => {
+      return current.concat(next.map((e) => {
+        return e.index
+      }))
+    }, []);
   },
   methods: {
     finishMemary: function () {
       wx.reLaunch({
-        url: "../answer/main?list=" + JSON.stringify(this.numberList)
+        url: "../answer/main?list=" + JSON.stringify(this.numberList) + "&sort=" + JSON.stringify(this.sortNumber)
       });
     }
   }

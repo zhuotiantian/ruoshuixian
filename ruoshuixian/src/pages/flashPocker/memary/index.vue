@@ -35,7 +35,7 @@ export default {
     this.pockerNumber = this.$store.state.pockerNumber;
     let interval = setInterval(() => {
       this.number--;
-      if (!this.number > 0) {
+      if (this.number <= 0) {
         this.group();
         this.showInterval = false;
       }
@@ -80,14 +80,8 @@ export default {
       }
       this.type = "记忆完成";
       this.currentGroupIndex = 0;
-      if (this.time_long) {
-        this.memoryInterval = setTimeout(() => {
-          this.finishMemary();
-        }, this.time_long);
-      }
     },
     finishMemary: function () {
-      clearInterval(this.memoryInterval);
       wx.reLaunch({
         url: "../recall/main"
       })

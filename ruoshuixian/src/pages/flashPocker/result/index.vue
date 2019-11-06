@@ -32,8 +32,10 @@ export default {
     let correct_result = this.$store.state.result.correct_result;
     this.pockerNumber = this.$store.state.pockerNumber;
     this.pocker = [];
-    for (var i = 0; i < correct_result.length; i + this.pockerNumber) {
-      this.pocker.push(correct_result.splice(i, i + this.pockerNumber));
+    if (correct_result) {
+      for (var i = 0; i < correct_result.length; i + this.pockerNumber) {
+        this.pocker.push(correct_result.splice(i, i + this.pockerNumber));
+      }
     }
   },
   onShareAppMessage: function (res) {

@@ -134,20 +134,25 @@ export default {
       }
     },
     type: function (newVal, oldVal) {
+      this.showFinishButton = false;
+      this.showSubmitButton = false;
       if ((newVal == '记忆完成' || newVal == '作答完成') && oldVal == '下一页') {
         this.showPrevPage = true;
+        if (newVal == '记忆完成') {
+
+        }
       } else {
         this.showPrevPage = false;
       };
-      if (newVal == '下一页' || oldVal == "记忆完成") {
+      if (newVal == '下一页' && oldVal == "记忆完成") {
         this.showFinishButton = true;
         this.showSubmitButton = false;
       }
-      if (newVal == '下一页' || oldVal == "作答完成") {
+      if (newVal == '下一页' && oldVal == "作答完成") {
         this.showSubmitButton = true;
         this.showFinishButton = false;
       }
-      if (oldVal !== '下一页') {
+      if (oldVal !== '下一页' && oldVal !== '记忆完成' && oldVal !== '作答完成') {
         this.changeTime();
       }
     }

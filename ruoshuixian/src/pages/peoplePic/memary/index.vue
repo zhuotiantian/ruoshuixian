@@ -34,7 +34,9 @@ export default {
     let per = this.rule.number_per_group;
     let number = [];
     for (var i = 0; i < total; i += per) {
-      number.push(this.numberList.slice(i, i + per));
+      number.push(this.numberList.slice(i, i + per).sort(() => {
+        return Math.random() > 0.5 ? -1 : 1
+      }));
     };
     this.number = number.filter(e => {
       return e.length > 0

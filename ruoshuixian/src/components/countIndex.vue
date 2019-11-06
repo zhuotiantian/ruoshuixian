@@ -1,22 +1,14 @@
 <template>
   <div class="container">
-    <CardTitle :seconds="seconds" type="跳过" pageType="countIndex" :noWait="hideProccess" @toNextPage="toNextPage"></CardTitle>
+    <CardTitle :seconds="seconds" :isShowTime="false" pageType="countIndex" :noWait="hideProccess"></CardTitle>
     <div class="content">
-      <p v-if="memoryTime_minutes>0&&memoryTime_seconds==0">本轮记忆时间：{{memoryTime_minutes}}分钟</p>
-      <p v-if="memoryTime_minutes==0&&memoryTime_seconds>0">本轮记忆时间：{{memoryTime_seconds}}秒</p>
-      <p v-if="memoryTime_minutes>0&&memoryTime_seconds>0">本轮记忆时间：{{memoryTime_minutes}}分{{memoryTime_seconds}}秒</p>
-      <template v-if="!hideProccess">
-        <p :class="{proccess,acticve,active:seconds>3&&seconds<=60}">一分钟准备</p>
-        <p :class="{proccess,active:seconds>1&&seconds<=3}">脑细胞准备</p>
-        <p :class="{proccess,active:seconds>0&&seconds<=1}">开始</p>
-      </template>
-      <template v-else>
-        <p class="active">脑细胞准备一分钟后游戏自动开始</p>
-        <p class="active">或点击“跳过”直接进入游戏</p>
-      </template>
-      <p>
+      <p>本轮记忆时间：{{memoryTime}}秒</p>
+      <p style="margin-top:80rpx">
         <span :class="{radio:true,active:level=='primary'}" @click="selLevel('primary')">初级</span>
         <span :class="{radio:true,active:level=='senior'}" @click="selLevel('senior')">高级</span>
+      </p>
+      <p>
+        <span class="btn submit-btn" @click="toNextPage">开始</span>
       </p>
     </div>
   </div>
@@ -46,18 +38,6 @@ export default {
       return e.game_level == this.level
     })[0];
     this.memoryTime = this.rule.memory_time;
-    this.memoryTime_minutes = Math.floor(this.memoryTime / 60);
-    this.memoryTime_seconds = this.memoryTime % 60;
-    this.timer = setInterval(() => {
-      this.seconds--;
-      if (this.seconds == 0 || this.seconds < 0) {
-        clearInterval(this.timer);
-        let that = this;
-        wx.reLaunch({
-          url: that.nextPage
-        });
-      }
-    }, 1000);
   },
   data () {
     return {
@@ -72,7 +52,11 @@ export default {
   },
   methods: {
     toNextPage: function (time) {
-      this.seconds = time;
+      // this.seconds = time;
+
+      wx.reLaunch({
+        url: this.nextPage
+      });
     },
     selLevel: function (level) {
       this.level = level;
@@ -81,8 +65,6 @@ export default {
         return e.game_level == level
       })[0];
       this.memoryTime = rule.memory_time;
-      this.memoryTime_minutes = Math.floor(this.memoryTime / 60);
-      this.memoryTime_seconds = this.memoryTime % 60;
     }
   },
 }
@@ -91,6 +73,7 @@ export default {
 .container {
   background: $deep-blue;
   color: white;
+  text-align: center;
 }
 
 .content {
@@ -113,5 +96,9 @@ export default {
 
 p.active {
   color: $middle-blue;
+}
+.submit-btn {
+  margin-right: 0 !important;
+  margin-top: tovmin(50);
 }
 </style>

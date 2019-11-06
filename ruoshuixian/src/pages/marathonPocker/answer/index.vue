@@ -210,15 +210,16 @@ export default {
       this.$set(this.pocker[this.selectTopPocker.row][this.selectTopPocker.column], "show", true);
     },
     replace: function () {
-      this.removeActive();
-      this.$set(this.allResult[this.currentIndex - 1], this.selectTopPocker.index, {
+      this.$set(this.result, this.selectTopPocker.index, {
         url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
         rowIndex: this.selectBottomPocker.index,
         columnIndex: this.selectBottomPocker._index,
         active: true
       });
-      this.hidden();
       this.show();
+      this.selectTopPocker.row=this.selectBottomPocker.index;
+      this.selectTopPocker.column=this.selectBottomPocker._index;
+      this.hidden();
     },
     insertBefore: function () {
       if (!this.canAdd) return false; this.canAdd = false; this.canAdd = false;

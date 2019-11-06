@@ -18,7 +18,7 @@ export default {
     CardTitle
   },
   onUnload () {
-    this.innerAudioContext.stop();
+    this.innerAudioContext.destroy();
   },
   data () {
     return {
@@ -61,6 +61,7 @@ export default {
                 let innerAudioContext = wx.createInnerAudioContext();
                 innerAudioContext.src = result.tempFilePath;
                 innerAudioContext.play();
+                innerAudioContext.loop = true;
                 that.innerAudioContext = innerAudioContext;
               }
             });
@@ -78,7 +79,7 @@ export default {
   },
   methods: {
     finishMemary: function () {
-      this.innerAudioContext && this.innerAudioContext.stop();
+      this.innerAudioContext && this.innerAudioContext.destroy();
       setTimeout(() => {
         wx.reLaunch({
           url: "../answer/main"

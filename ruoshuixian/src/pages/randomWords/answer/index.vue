@@ -58,7 +58,7 @@ export default {
     },
     nextPage: function () {
       this.pageIndex = 1;
-      this.type = "作答完成"
+      this.type = "作答完成";
     },
     prevPage: function () {
       this.pageIndex = 0;

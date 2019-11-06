@@ -19,7 +19,7 @@
     </div>
     <div class="list">
       <div class="row" v-for="(item,index) in pocker" :key="index">
-        <image @click="selectPocker($event,index,_index)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show}" v-for="(_item,_index) in item" :key="_index" :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'.png'" />
+        <image @click="selectPocker($event,index,_index)" @touchstart="touchstart" @touchmove="touchmove" @touchend="touchend($event,index,_index)" ref="pocker" :class="{pocker:true,hidden:!_item.show,active:_item.active}" v-for="(_item,_index) in item" :key="_index" :src="'/static/images/pocker/'+(_index/1+1)+'-'+(index/1+1)+'.png'" />
       </div>
     </div>
   </div>
@@ -211,17 +211,19 @@ export default {
     },
     show: function () {
       this.$set(this.pocker[this.selectTopPocker.row][this.selectTopPocker.column], "show", true);
+      this.$set(this.pocker[this.selectTopPocker.row][this.selectTopPocker.column], "active", false);
     },
     replace: function () {
-      this.removeActive();
       this.$set(this.result, this.selectTopPocker.index, {
         url: '/static/images/pocker/' + (this.selectBottomPocker._index / 1 + 1) + '-' + (this.selectBottomPocker.index / 1 + 1) + '.png',
         rowIndex: this.selectBottomPocker.index,
         columnIndex: this.selectBottomPocker._index,
         active: true
       });
-      this.hidden();
       this.show();
+      this.selectTopPocker.row=this.selectBottomPocker.index;
+      this.selectTopPocker.column=this.selectBottomPocker._index;
+      this.hidden();
     },
     insertBefore: function () {
       if (!this.canAdd) return false; this.canAdd = false; this.canAdd = false;
