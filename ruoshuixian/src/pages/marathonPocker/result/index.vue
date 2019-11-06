@@ -133,7 +133,7 @@ export default {
 <style lang="scss" scoped>
 .list {
   text-align: center;
-  margin: 0 auto;
+  margin: 0 15vmin;
   position: relative;
   height: auto;
   height: tovmin(30);

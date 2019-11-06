@@ -168,12 +168,13 @@ export default {
       switch (this.type) {
         case "下一页": ;
         case "记忆完成":
+          console.log(this.memoryTime);
           if (!this.memoryTime) {
             this._time = this.rule.memory_time;
           } else {
             this._time = this.memoryTime;
           }
-
+          console.log(this._time);
           this.t_seconds = this._time % 60;
           this.t_minutes = Math.floor(this._time / 60);
           break;
