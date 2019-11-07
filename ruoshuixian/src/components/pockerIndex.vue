@@ -38,11 +38,12 @@ export default {
   onLoad () {
     Object.assign(this.$data, this.$options.data());
     let rule = this.$store.state.rule
-    this.memoryTime = rule.rules_of_the_game[0].memory_time.split(",").reverse();
     if (this.type == "time") {
+      this.memoryTime = rule.rules_of_the_game[0].memory_time.split(",").reverse();
       this.activeIndex1 = this.memoryTime[0];
     } else {
       this.activeIndex2 = this.memaryNumber[0];
+      this.memoryTime = rule.rules_of_the_game[0].memory_time
     }
   },
   methods: {
@@ -50,7 +51,7 @@ export default {
       if (this.type == "time") {
         this.$store.commit("setMemoryTime", this.activeIndex1);
       } else {
-        this.$store.commit("setMemoryTime", this.memoryTime[0]);
+        this.$store.commit("setMemoryTime", this.memoryTime);
       };
       this.$store.commit("setPockerNumber", this.activeIndex2);
       this.$refs.title.clear();
