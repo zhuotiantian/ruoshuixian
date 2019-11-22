@@ -3,7 +3,7 @@
     <div class="fog" v-if="showDrop||showSuccessBox" @click="showDrop=false"></div>
     <div class="alertBox" v-if="showSuccessBox">
       <image class="image" :src="'/static/images/my/check.png'" />
-      <span>发布成功</span>
+      <span>发送成功</span>
     </div>
     <scroll-view :style="{'height': '90vh'}" scroll-y="true">
       <div class="top">
@@ -22,7 +22,7 @@
       </div>
       <textarea cols="30" rows="10" v-if="!showDrop" v-model="remarks" placeholder="备注"></textarea>
       <p style="text-align:center">
-        <button class="submit-btn btn" @click="sendMessage">点评</button>
+        <button class="submit-btn btn" @click="sendMessage">发送</button>
       </p>
     </scroll-view>
     <div :class="{drop_up:true,up:showDrop,down:!showDrop}">
@@ -172,6 +172,7 @@ export default {
     showStudents: function () {
       this.showDrop = true;
       this.type = "students";
+      this.selectStudentsName = [];
     },
     selectGroup: function (index) {
       this.selectedGroup = index;
@@ -184,14 +185,15 @@ export default {
       this.showDrop = false;
     },
     selectStudents: function (index, id) {
-      if (this.students[index].selected) {
-        this.$set(this.students[index], "selected", false);
+      let item = this.students[index];
+      item.selected = !this.students[index].selected;
+      this.$set(this.students, index, item);
+      if (item.selected) {
+        this.selectedUser.push(item.id);
+        this.selectStudentsName.push(item.nickname);
       } else {
-        this.selectedUser.push(id);
-        this.selectStudentsName = [];
-        this.selectStudentsName.push(this.students[index].nickname);
-        this.$set(this.students[index], "selected", true);
-        this.selectStudentsName = this.selectStudentsName.join(",");
+        this.selectedUser.splice(this.selectedUser.indexOf(item.id), 1);
+        this.selectStudentsName.splice(this.selectStudentsName.indexOf(item.nickname), 1);
       }
     },
     selectGameHan: function (item, index) {
@@ -209,6 +211,7 @@ export default {
 .top .item {
   border-bottom: 1px solid #f3f3f3;
   line-height: tovmin(100);
+  height: tovmin(100);
 }
 
 .top .item {
@@ -300,6 +303,7 @@ textarea {
   height: tovmin(28);
   width: tovmin(32);
   float: right;
+  margin-top: tovmin(30);
 }
 
 .image {

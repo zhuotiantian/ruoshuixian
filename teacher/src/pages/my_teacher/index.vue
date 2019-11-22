@@ -11,6 +11,7 @@
           <p>{{userInfo.mobile}}</p>
         </template>
       </div>
+      <span class="toLogin" @click="backLogin">退出登录</span>
     </div>
     <div class="content">
       <ul>
@@ -46,7 +47,6 @@ export default {
   },
   onShow () {
     let userInfo = this.$store.state.userInfo;
-    console.log(this.$store.state.userInfo);
     if (userInfo) {
       this.token = userInfo.token;
       this.userInfo = userInfo;
@@ -67,6 +67,11 @@ export default {
     }
   },
   methods: {
+    backLogin: function () {
+      wx.redirectTo({
+        url: "/pages/login/main"
+      });
+    },
     getData: function () {
       this.$http.get({
         url: "/api/wxapp.user/index",
@@ -105,6 +110,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.toLogin {
+  font-size: 30rpx;
+  position: absolute;
+  right: 30rpx;
+}
 .userImage {
   height: tovmin(120);
   width: tovmin(120);

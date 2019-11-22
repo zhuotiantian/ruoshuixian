@@ -34,12 +34,12 @@ export default {
         if (result.code == 1) {
           setTimeout(() => {
             this.showSuccessBox = false;
+            wx.redirectTo({
+              url: "pages/my_teacher/message/main"
+            })
           }, 1500)
         }
       })
-      setTimeout(() => {
-        this.showSuccessBox = false;
-      }, 1500);
     }
   },
 }

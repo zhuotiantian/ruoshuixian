@@ -34,6 +34,9 @@ export default {
         if (result.code == 1) {
           setTimeout(() => {
             this.showSuccessBox = false;
+            wx.redirectTo({
+              url: "/pages/my_teacher/main"
+            })
           }, 1500)
         }
       })

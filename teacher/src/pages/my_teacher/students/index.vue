@@ -13,7 +13,7 @@
         </p>
       </div>
       <ul class="list" v-if="active=='学生成绩'">
-        <li v-for="(item,index) in list" :key="index" @click="toComment(item.id)">
+        <li v-for="(item,index) in list" :key="index">
           <span style="flex:1">
             <image class="image" :src="domain+item.avatar"></image>
           </span>
@@ -23,6 +23,7 @@
             <image class="icon" v-if="index==1" :src="'/static/images/ranking/ranking2.png'"></image>
             <image class="icon" v-if="index==2" :src="'/static/images/ranking/ranking3.png'"></image>
           </span>
+          <span @click="toComment(item.id)">点评</span>
         </li>
       </ul>
       <ul class="students" v-else>
@@ -58,6 +59,7 @@ export default {
   onLoad () {
     Object.assign(this.$data, this.$options.data());
     this.token = this.$store.state.userInfo.token;
+    this.userid = this.$store.state.userInfo.id;
     this.getStudents();
   },
   methods: {
@@ -88,7 +90,9 @@ export default {
           token: this.token
         }
       }).then(result => {
-        this.list = result.data;
+        this.list = result.data.filter(e => {
+          return e.user_id !== this.userid;
+        });
         this.list.forEach((e, index) => {
           if (e.nickname == this.currentUser) {
             this.index = index;
