@@ -1,4 +1,4 @@
-const domain = "http://yxcy.wanzhong.ink";
+const domain = "http://rsx.majiangyun.com";
 
 function request(url, method, data, header = {}) {
     wx.showLoading({
