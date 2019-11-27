@@ -3,16 +3,14 @@
     <image class="background" :src="'/static/images/firstPage/bg.png'"></image>
     <div class="login-form">
       <div class="input_div">
-        <input type="text" class="input" placeholder="请输入手机号" v-model="form.mobile" placeholder-style="color:#ccc" />
+        <input type="text" class="input" placeholder="请输入手机号" v-model="mobile" placeholder-style="color:#ccc" />
         <image :src="'/static/images/my/phone.png'" class="icon" style="height:42rpx;width:34rpx"></image>
       </div>
       <div class="input-div">
-        <input type="password" class="input" v-model="form.password" placeholder="密码" placeholder-style="color:#ccc" />
+        <input type="password" class="input" v-model="password" placeholder="密码" placeholder-style="color:#ccc" />
         <image :src="'/static/images/my/password.png'" class="icon" style="height:42rpx;width:34rpx"></image>
       </div>
       <button class="btn submit-btn" @click="login">登 录</button>
-      <!-- <span class="info"> -->
-      <!-- <span @click="toRepassword">忘记密码</span></span> -->
     </div>
   </div>
 </template>
@@ -20,13 +18,8 @@
 export default {
   data () {
     return {
-      seconds: 60,
-      codeLogin: false,
-      form: {
-        mobile: "",
-        password: ""
-      },
-      code: ""
+      mobile: "",
+      password: ""
     };
   },
   onLoad () {
@@ -34,18 +27,14 @@ export default {
   },
   methods: {
     login: function () {
-      const {
-        mobile,
-        password
-      } = this.form;
-      if (mobile == "") {
+      if (this.mobile == "") {
         wx.showToast({
           title: "手机号不能为空",
           icon: "none"
         });
         return false;
       }
-      if (password == "" && this.codeLogin) {
+      if (this.password == "") {
         wx.showToast({
           title: "密码不能为空",
           icon: "none"
@@ -56,8 +45,8 @@ export default {
         .post({
           url: "/api/wxapp.user/teacherLogin",
           data: {
-            mobile,
-            password,
+            mobile: this.mobile,
+            password: this.password,
           },
           header: {
             token: this.token

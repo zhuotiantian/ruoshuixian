@@ -2,7 +2,7 @@
   <div class="container">
     <textarea placeholder-style="color: #c6c6c6;" v-model="content" name="" id="" cols="30" rows="10" placeholder="输入推送消息"></textarea>
     <p style="text-align:center"><button class="btn submit-btn" @click="sendMessage">发送</button></p>
-    <div class="fog" v-if="showSuccessBox"></div>
+    <div class="fog" v-if="showSuccessBox" @click="back"></div>
     <div class="alertBox" v-if="showSuccessBox">
       <image class="image" :src="'/static/images/my/check.png'"></image>
       <span>发送成功</span>
@@ -19,6 +19,13 @@ export default {
     }
   },
   methods: {
+    back: function () {
+      this.showSuccessBox = false;
+      clearTimeout(this.timer);
+      wx.navigateBack({
+        delta: 1
+      });
+    },
     sendMessage: function () {
       this.token = this.$store.state.userInfo.token;
       this.showSuccessBox = true;
@@ -32,12 +39,9 @@ export default {
         }
       }).then(result => {
         if (result.code == 1) {
-          setTimeout(() => {
-            this.showSuccessBox = false;
-            wx.redirectTo({
-              url: "pages/my_teacher/message/main"
-            })
-          }, 1500)
+          this.timer = setTimeout(() => {
+            this.back();
+          }, 1000)
         }
       })
     }

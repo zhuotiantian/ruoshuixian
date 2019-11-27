@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="fog" v-if="showDrop||showSuccessBox" @click="showDrop=false"></div>
+    <div class="fog" v-if="showDrop||showSuccessBox" @click="back"></div>
     <div class="alertBox" v-if="showSuccessBox">
       <image class="image" :src="'/static/images/my/check.png'" />
       <span>发送成功</span>
@@ -144,8 +144,8 @@ export default {
           this.selectedGroup = "";
           this.workname = "";
           this.remarks = "";
-          setTimeout(() => {
-            this.showSuccessBox = false;
+          this.timer = setTimeout(() => {
+            this.back();
           }, 1500);
         });
     },
@@ -202,6 +202,14 @@ export default {
         selected: !item.selected,
         id: item.id
       });
+    },
+    back: function () {
+      this.showDrop = false;
+      this.showSuccessBox = false;
+      clearTimeout(this.timer);
+      wx.navigateBack({
+        delta: 1,
+      })
     }
   }
 };
