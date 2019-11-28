@@ -59,19 +59,6 @@ export default {
                 that.showFog = true;
                 that.$store.commit("setUserInfo", result.data.userInfo);
                 that.token = result.data.userInfo.token;
-                that.$http.post({
-                  url: "/api/wxapp.user/sweepCode",
-                  data: {
-                    id: that.user_id,
-                    group_id: that.user_id,
-                    school_id: that.school_id
-                  },
-                  header: {
-                    token: that.token
-                  }
-                }).then(res => {
-                  console.log("sweepCode", res);
-                })
               }
             });
           }
@@ -100,6 +87,19 @@ export default {
               });
               wx.switchTab({
                 url: "/pages/firstPage/main"
+              });
+              that.$http.post({
+                url: "/api/wxapp.user/sweepCode",
+                data: {
+                  id: that.user_id,
+                  group_id: that.group_id,
+                  school_id: that.school_id
+                },
+                header: {
+                  token: that.token
+                }
+              }).then(res => {
+                console.log("sweepCode", res);
               })
             }
 
