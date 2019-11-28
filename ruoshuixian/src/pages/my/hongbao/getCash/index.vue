@@ -85,7 +85,13 @@ export default {
             token: this.token
           }
         }).then(result => {
-
+           wx.showToast({
+            title: "提现成功",
+            icon: "none"
+          });
+          wx.navigateBack({
+            delta:1
+          });
         });
       }
     },
