@@ -85,9 +85,6 @@ export default {
                 title: "绑定成功！",
                 icon: "none"
               });
-              wx.switchTab({
-                url: "/pages/firstPage/main"
-              });
               that.$http.post({
                 url: "/api/wxapp.user/sweepCode",
                 data: {
@@ -99,10 +96,15 @@ export default {
                   token: that.token
                 }
               }).then(res => {
-                console.log("sweepCode", res);
-              })
+                wx.showToast({
+                  title: "扫码接口参数：user_id:" + that.user_id + "  group_id:" + that.group_id + "  school_id:" + that.school_id,
+                  icon: "none"
+                });
+              });
+              wx.switchTab({
+                url: "/pages/firstPage/main"
+              });
             }
-
           })
         }
       });

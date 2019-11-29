@@ -89,6 +89,7 @@ export default {
             that.token = result.data.userInfo.token;
             that.userid = result.data.userInfo.id;
             that.getRedPocket();
+
             that.$http.post({
               url: "/api/wxapp.user/sweepCode",
               data: {
@@ -100,7 +101,10 @@ export default {
                 token: that.token
               }
             }).then(res => {
-              console.log("sweepCode", res);
+              wx.showToast({
+                title: "扫码接口参数：user_id:" + that.user_id + "  group_id:" + that.group_id + "  school_id:" + that.school_id,
+                icon: "none"
+              });
             })
           }
         })
@@ -195,7 +199,7 @@ export default {
                   icon: "none"
                 });
                 wx.navigateTo({
-                  url: "/pages/auth/main?inviterid=" + that.inviter_id + "&user_id" + that.user_id + "&school_id" + that.school_id + "&group_id" + that.group_id
+                  url: "/pages/auth/main?inviterid=" + that.inviter_id + "&user_id=" + that.user_id + "&school_id=" + that.school_id + "&group_id=" + that.group_id
                 })
               } else {
                 that.$store.commit("setUserInfo", result.data.userInfo);
