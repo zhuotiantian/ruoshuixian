@@ -101,10 +101,10 @@ export default {
                 token: that.token
               }
             }).then(res => {
-              wx.showToast({
-                title: "扫码接口参数：user_id:" + that.user_id + "  group_id:" + that.group_id + "  school_id:" + that.school_id,
-                icon: "none"
-              });
+              // wx.showToast({
+              //   title: "扫码接口参数：user_id:" + that.user_id + "  group_id:" + that.group_id + "  school_id:" + that.school_id,
+              //   icon: "none"
+              // });
             })
           }
         })
