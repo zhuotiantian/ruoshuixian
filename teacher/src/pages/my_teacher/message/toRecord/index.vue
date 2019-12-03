@@ -5,7 +5,7 @@
         <span>{{item.name}}</span>
       </p>
       <span class="remind active" v-if="item.status=='normal'" @click="remind($event,item.students_homework_id)">提醒打卡</span>
-      <span class="remind" v-else @click="remind($event,item.students_homework_id)">已提醒</span>
+      <span class="remind" v-else>已提醒</span>
       <p style="margin-bottom:15px">
         <span class="work-item" v-for="(item,_index) in item.game" :key="_index">{{item}}</span>
       </p>
@@ -56,6 +56,7 @@ export default {
           wx.showToast({
             title: "提醒成功"
           })
+          this.getWorkList();
         }
       })
     }
