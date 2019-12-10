@@ -113,6 +113,8 @@ export default {
         selected: true,
         number: this.number[row][column].number
       });
+      this.rowIndex=row;
+      this.columnIndex=column;
     },
     selectNumber: function (data) {
       let current=this.number[this.rowIndex][this.columnIndex];

@@ -1,7 +1,7 @@
 {
     "pages": [
-        "pages/auth/main",
         "pages/firstPage/main",
+        "pages/auth/main",
         "pages/my/main",
         "pages/my/hongbao/getCash/main",
         "pages/my/record/main",

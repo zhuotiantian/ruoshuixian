@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="fog" v-if="showDrop||showSuccessBox" @click="back"></div>
+    <div class="fog" v-if="showDrop||showSuccessBox" @click="hideDrop"></div>
     <div class="alertBox" v-if="showSuccessBox">
       <image class="image" :src="'/static/images/my/check.png'" />
       <span>发送成功</span>
@@ -170,6 +170,13 @@ export default {
       this.type = "group";
     },
     showStudents: function () {
+      if(this.selectGroupName==="组别"){
+        wx.showToast({
+          title:"请先选择组别！",
+          icon:"none"
+        });
+        return false
+      }
       this.showDrop = true;
       this.type = "students";
       this.selectStudentsName = [];
@@ -195,6 +202,7 @@ export default {
         this.selectedUser.splice(this.selectedUser.indexOf(item.id), 1);
         this.selectStudentsName.splice(this.selectStudentsName.indexOf(item.nickname), 1);
       }
+      
     },
     selectGameHan: function (item, index) {
       this.$set(this.game, index, {
@@ -210,6 +218,17 @@ export default {
       wx.navigateBack({
         delta: 1,
       })
+    },
+    hideDrop:function(){
+      if(this.showDrop){
+        this.showDrop=false;
+        if(this.selectedUser.length===0){
+          this.selectStudentsName=["学生"];
+        }
+      }else{
+        this.back();
+      }
+      
     }
   }
 };
