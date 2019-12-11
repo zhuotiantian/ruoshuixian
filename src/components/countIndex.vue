@@ -90,7 +90,7 @@ export default {
   margin-top: tovmin(118);
 }
 
-.content p span:first-child {
+.content p:not(:last-child) span:first-child {
   margin-right: tovmin(170);
 }
 

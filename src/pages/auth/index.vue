@@ -24,12 +24,17 @@ export default {
   },
   onLoad (options) {
     this.inviter_id = options.inviterid;
-
+    if (options.user_id) this.user_id = options.user_id;
+    if (options.group_id) this.group_id = options.group_id;
+    if (options.school_id) this.school_id = options.school_id;
   },
   data () {
     return {
       inviter_id: null,
-      showFog: false
+      showFog: false,
+      user_id: null,
+      group_id: null,
+      school_id: null
     }
   },
   methods: {
@@ -80,11 +85,26 @@ export default {
                 title: "绑定成功！",
                 icon: "none"
               });
+              that.$http.post({
+                url: "/api/wxapp.user/sweepCode",
+                data: {
+                  id: that.user_id,
+                  group_id: that.group_id,
+                  school_id: that.school_id
+                },
+                header: {
+                  token: that.token
+                }
+              }).then(res => {
+                wx.showToast({
+                  title: "扫码接口参数：user_id:" + that.user_id + "  group_id:" + that.group_id + "  school_id:" + that.school_id,
+                  icon: "none"
+                });
+              });
               wx.switchTab({
                 url: "/pages/firstPage/main"
-              })
+              });
             }
-
           })
         }
       });

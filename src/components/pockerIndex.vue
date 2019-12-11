@@ -43,16 +43,17 @@ export default {
       this.activeIndex1 = this.memoryTime[0];
     } else {
       this.activeIndex2 = this.memaryNumber[0];
+      this.memoryTime = rule.rules_of_the_game[0].memory_time
     }
   },
   methods: {
     toNextPage: function (data) {
       if (this.type == "time") {
         this.$store.commit("setMemoryTime", this.activeIndex1);
-        this.$store.commit("setPockerNumber", this.activeIndex2);
       } else {
-        this.$store.commit("setPockerNumber", this.activeIndex2);
-      }
+        this.$store.commit("setMemoryTime", this.memoryTime);
+      };
+      this.$store.commit("setPockerNumber", this.activeIndex2);
       this.$refs.title.clear();
       wx.reLaunch({
         url: this.nextPage

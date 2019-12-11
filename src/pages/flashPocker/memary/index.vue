@@ -38,6 +38,8 @@ export default {
       if (this.number <= 0) {
         this.group();
         this.showInterval = false;
+        clearInterval(interval);
+
       }
     }, 1000);
   },

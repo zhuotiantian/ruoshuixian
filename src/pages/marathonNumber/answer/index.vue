@@ -114,8 +114,8 @@ export default {
         number: this.number[row][column].number
       });
       this.hasSelect = true;
-      this.rowIndex = row;
-      this.columnIndex = column;
+      this.rowIndex=row;
+      this.columnIndex=column;
     },
     selectNumber: function (data) {
       if (this.rowIndex == null && this.columnIndex == null) return false;
