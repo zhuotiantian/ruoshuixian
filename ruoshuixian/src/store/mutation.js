@@ -23,5 +23,8 @@ const mutations = {
     setUserInfo(state, result) {
         state.userInfo = result;
     },
+    setIsNew(state, isNew) {
+        state.isNew = isNew;
+    }
 };
 export default mutations;

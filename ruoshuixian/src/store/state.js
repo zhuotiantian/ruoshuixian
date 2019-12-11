@@ -6,6 +6,7 @@ const state = {
     result: null,
     pockerNumber: null,
     code: null,
-    userInfo: null
+    userInfo: null,
+    isNew: false
 };
 export default state

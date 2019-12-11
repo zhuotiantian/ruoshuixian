@@ -231,8 +231,10 @@ export default {
         this.sharePocket = result.data.red_envelopes.filter(e => {
           return e.name !== '注册'
         });
+
         if (this.registPocket.length > 0) {
           this.showFog = true;
+          this.$store.commit("setIsNew", true);
         };
         if (this.sharePocket.length > 0) {
           this.showFog1 = true;
