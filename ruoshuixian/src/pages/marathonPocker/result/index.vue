@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle isResult="true" isPocker="true" showTime="false"></CardTitle>
+    <GameTitle :isResult="true" :showCostTime="true"></GameTitle>
     <div class="list">
       <em class="arrow arrow-left" @click="prevGroup"></em>
       <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
@@ -11,17 +11,17 @@
     <div class="pageFoot">
       <span class="pageBtn" @click="prevPage">上一页</span>
       <div class="btn-group">
-        <span :class="{item:true, active:item.active}" @click="selectHandler(index,item)" v-for="(item,index) in groupPage[currentPage]" :key="index">{{item.number}}幅</span>
+        <span :class="{item:true, active:item.active}" @click="selectHandler(index,item)" v-for="(item,index) in groupPage[currentPage]" :key="index">{{item.number}}副</span>
       </div>
       <span class="pageBtn" @click="nextPage">下一页</span>
     </div>
   </div>
 </template>
 <script>
-import CardTitle from "@/components/gameTitle";
+import GameTitle from "@/components/gameTitle_new";
 export default {
   components: {
-    CardTitle
+    GameTitle
   },
   onLoad () {
     let userInfo = this.$store.state.userInfo;
@@ -182,7 +182,7 @@ export default {
   color: $yellow;
 }
 
-.item {
+.pageBtn .item {
   height: tovmin(80);
   width: tovmin(80);
   display: inline-block;
@@ -194,7 +194,7 @@ export default {
   color: $black;
 }
 
-.item.active {
+.pageBtn .item.active {
   color: white;
   background: $middle-blue;
   border: none;

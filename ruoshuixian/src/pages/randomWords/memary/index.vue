@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle @finishMemary="finishMemary" :type="type" :showGameLevel="(level=='primary'?'初级':'高级')+'随机词语'" @nextPage="nextPage" @prevPage="prevPage"></CardTitle>
+    <GameTitle :showIntervalTime='true' ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary" :showChangePageBtn="true" @nextPage="nextPage" @prevPage="prevPage"></GameTitle>
     <div class="list">
       <div class="item-list" v-for="(columns,index) in list" :key="index+1">
         <span v-for="(item,_index) in columns" :key="_index+1"><span>{{item.index+1}}</span>&nbsp;&nbsp;&nbsp;<span>{{item.words}}</span></span>
@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import CardTitle from "@/components/gameTitle";
+import GameTitle from "@/components/gameTitle_new";
 export default {
   components: {
-    CardTitle
+    GameTitle
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
@@ -50,11 +50,15 @@ export default {
     },
     nextPage: function () {
       this.sliceList(100, 200);
-      this.type = "记忆完成";
+      wx.pageScrollTo({
+        scrollTop: 0
+      })
     },
     prevPage: function () {
       this.sliceList(0, 100);
-      this.type = "下一页";
+      wx.pageScrollTo({
+        scrollTop: 0
+      })
     },
     finishMemary: function () {
       wx.reLaunch({

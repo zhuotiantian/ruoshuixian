@@ -1,11 +1,10 @@
 <template>
   <div class="container">
-    <alertBox :text="text" v-if="showFog" @hideFog="hideFog"></alertBox>
-    <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成" :showGameLevel="(level=='primary'?'初级':'高级')+'抽象图形'" @finishMemary="finishMemary"></CardTitle>
+    <GameTitle :showIntervalTime='true' ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <div class="image" v-for="(item,index) in rows" :key="index">
-          <image class="image" :src="domain+item.img" />
+          <image class="image" :src="domain+item.img" lazy-load="true" />
         </div>
         <span style="margin-left:60rpx">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
@@ -13,17 +12,14 @@
   </div>
 </template>
 <script>
-import CardTitle from "@/components/gameTitle"
+import GameTitle from "@/components/gameTitle_new";
 export default {
   components: {
-    CardTitle
+    GameTitle
   },
   data () {
     return {
-      seconds: 0,
-      minutes: 15,
       numberList: [],
-      text: "确定结束作答吗？",
       number: [],
       counts: 0,
 
@@ -50,23 +46,25 @@ export default {
     this.per = this.rule.number_per_group;
     let number = [];
     for (var i = 0; i < this.total; i += this.per) {
-      number.push(this.numberList.slice(i, i + this.per).sort(() => {
+      let arr = this.numberList.slice(i, i + this.per);
+      arr.sort(() => {
         return Math.random() > 0.5 ? -1 : 1
-      }));
+      })
+      number.push(arr);
     };
     this.number = number.filter(e => {
       return e.length > 0
     });
-    this.sortNumber = this.number.map((e) => { return e }).reduce((current, next) => {
-      return current.concat(next.map((e) => {
-        return e.index
-      }))
-    }, []);
   },
   methods: {
     finishMemary: function () {
+      let sort = this.number.reduce((current, next) => {
+        return current.concat(next.map(e => {
+          return e.index
+        }));
+      }, [])
       wx.reLaunch({
-        url: "../answer/main?list=" + JSON.stringify(this.numberList) + "&sort=" + JSON.stringify(this.sortNumber)
+        url: "../answer/main?list=" + JSON.stringify(this.numberList) + "&sort=" + JSON.stringify(sort)
       });
     }
   }

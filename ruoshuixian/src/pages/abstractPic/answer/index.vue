@@ -2,13 +2,13 @@
   <div class="container">
     <div class="fog" v-if="showFog"></div>
     <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
-    <CardTitle type="作答完成" seconds="1800" @finish="finish"></CardTitle>
+    <GameTitle :showIntervalTime='true' :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <div class="image_div" v-for="(item,index) in rows" :key="index">
-          <image class="image" :src="domain+item.image"></image>
-          <!-- <span class="input" @click="focus(_index,index)">{{item.text}}</span> -->
-          <input type="text" class="input" placeholder="序号" v-model="item.text" @focus="focus" maxlength="1" @blur="blur" />
+          <image class="image" :src="domain+item.image" lazy-load="true"></image>
+          <span :class="{input:true,active:item.selected}" @click="focus(_index,index)">{{item.text}}</span>
+          <!-- <input type="text" class="input" placeholder="序号" v-model="item.text" @focus="focus(_index,index)" maxlength="1" @blur="blur" /> -->
         </div>
         <span style="margin-left:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
@@ -17,12 +17,12 @@
   </div>
 </template>
 <script>
-import CardTitle from "@/components/gameTitle";
+import GameTitle from "@/components/gameTitle_new";
 import Keybord from "@/components/Keybord";
 import alertBox from "@/components/alertBox";
 export default {
   components: {
-    CardTitle,
+    GameTitle,
     Keybord,
     alertBox
   },
@@ -39,7 +39,8 @@ export default {
       return {
         image: e.img,
         text: "",
-        index: e.index
+        index: e.index,
+        selected: false,
       }
     });
     this.total = this.rule.number;
@@ -74,16 +75,27 @@ export default {
     };
   },
   methods: {
-    finish: function () {
+    finishAnwser: function () {
       this.showFog = true;
     },
     hideFog: function () {
       this.showFog = false;
     },
     focus: function (_index, index) {
-      // this.showKeybord = true;
+      this.showKeybord = true;
       this._index = _index;
       this.index = index;
+      this.number.forEach((e, i) => {
+        e.forEach((m, j) => {
+          if (i === _index && j === index) {
+            m.selected = true;
+          } else {
+            m.selected = false;
+
+          }
+        })
+      });
+      console.log(this.number);
     },
     confirm: function () {
       this.endTime = new Date().getTime();
@@ -130,13 +142,9 @@ export default {
       this.$set([this._index], this.index, item);
     },
     deleteNumber: function () {
-      let number = this.number;
-      number.forEach((e, rowIndex) => {
-        e.forEach((m, columnIndex) => {
-          m.text = ""
-        })
-      });
-      this.number = number;
+      let item = this.number[this._index][this.index];
+      item.text = "";
+      this.$set([this._index], this.index, item);
     }
   }
 };
@@ -190,5 +198,8 @@ page {
   height: tovmin(40);
   line-height: tovmin(40) !important;
   display: block;
+}
+.input.active {
+  border-bottom: tovmin(2) solid $green;
 }
 </style>

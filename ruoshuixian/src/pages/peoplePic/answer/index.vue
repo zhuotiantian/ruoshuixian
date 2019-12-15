@@ -2,11 +2,11 @@
   <div class="container">
     <div class="fog" v-if="showFog"></div>
     <alertBox text="确定结束作答吗？" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
-    <CardTitle type="作答完成" seconds="1800" @finish="finish"></CardTitle>
+    <GameTitle :showIntervalTime='true' :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <div class="image_div" v-for="(item,index) in rows" :key="index">
-          <image class="image" :src="domain+item.avatar" />
+          <image class="image" :src="domain+item.avatar" lazy-load="true" />
           <input type="text" class="input" placeholder="姓" v-model="item.xing_name" />
           <input type="text" class="input" placeholder="名" v-model="item.ming_name" />
         </div>
@@ -16,11 +16,11 @@
   </div>
 </template>
 <script>
-import CardTitle from "@/components/gameTitle";
+import GameTitle from "@/components/gameTitle";
 import alertBox from "@/components/alertBox";
 export default {
   components: {
-    CardTitle,
+    GameTitle,
     alertBox
   },
   onLoad (option) {
@@ -64,7 +64,7 @@ export default {
     };
   },
   methods: {
-    finish: function () {
+    finishAnwser: function () {
       this.showFog = true;
     },
     hideFog: function () {

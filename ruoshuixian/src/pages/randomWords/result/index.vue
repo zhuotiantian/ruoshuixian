@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle :isResult="true" :type="type" @nextPage="nextPage" @prevPage="prevPage" :showPrevPageBtn="showPrevPageBtn"></CardTitle>
+    <GameTitle ref="title" :isResult="true" :showChangePageBtn="true" @nextPage="nextPage" @prevPage="prevPage"></GameTitle>
     <div class="list">
       <div class="item-list" v-for="(columns,index) in list" :key="index+1">
         <span :class="{item:true, wrong:item.result==1}" v-for="(item,_index) in columns" :key="_index+1"><span>{{item.index+1}}</span>&nbsp;&nbsp;&nbsp;<span>{{item.words}}</span></span>
@@ -10,25 +10,25 @@
 </template>
 
 <script>
-import CardTitle from "@/components/gameTitle"
+import GameTitle from "@/components/gameTitle_new";
 export default {
   components: {
-    CardTitle
+    GameTitle
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data());
     this.result = this.$store.state.result;
-    
+
     let userInfo = this.$store.state.userInfo;
     this.userid = userInfo.id;
-    this.sliceList(0,100);
+    this.sliceList(0, 100);
   },
   data () {
     return {
       list: [],
       userid: null,
-      type:"下一页",
-      showPrevPageBtn:false
+      type: "下一页",
+      showPrevPageBtn: false
     }
   },
   onShareAppMessage: function (res) {
@@ -44,7 +44,7 @@ export default {
     }
   },
   methods: {
-    sliceList:function(start,end){
+    sliceList: function (start, end) {
       let level = this.$store.state.level;
       this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
         return e.game_level == level
@@ -56,7 +56,7 @@ export default {
       let wordsList = this.list.map((e, index) => {
         return {
           words: this.result.correct_result[index],
-          result:e.result,
+          result: e.result,
           index: index
         }
       }).slice(start, end);
@@ -70,11 +70,11 @@ export default {
     },
     nextPage: function () {
       this.sliceList(100, 200);
-      this.showPrevPageBtn=true;
+      this.showPrevPageBtn = true;
     },
     prevPage: function () {
       this.sliceList(0, 100);
-      this.showPrevPageBtn=false;
+      this.showPrevPageBtn = false;
     },
   }
 }
@@ -125,7 +125,6 @@ export default {
   border: tovmin(2) solid $blue-border;
   text-align: center;
 }
-
 .wrong {
   color: $grey-text;
   background: $red;

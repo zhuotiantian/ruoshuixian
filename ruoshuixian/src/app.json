@@ -1,6 +1,10 @@
 {
     "pages": [
         "pages/firstPage/main",
+        "pages/gameIndex/main",
+        "pages/recall/main",
+        "pages/numberResult/main",
+        "pages/numberAnswer/main",
         "pages/auth/main",
         "pages/my/main",
         "pages/my/hongbao/getCash/main",
@@ -15,58 +19,43 @@
         "pages/ranking/main",
         "pages/hongbao/main",
 
-
         "pages/help/main",
-        "pages/abstractPic/main",
+
         "pages/abstractPic/memary/main",
         "pages/abstractPic/result/main",
         "pages/abstractPic/answer/main",
-        "pages/peoplePic/main",
+
         "pages/peoplePic/memary/main",
         "pages/peoplePic/result/main",
         "pages/peoplePic/answer/main",
-        "pages/marathonPocker/main",
-        "pages/marathonPocker/memary/main",
-        "pages/marathonPocker/answer/main",
-        "pages/marathonPocker/recall/main",
-        "pages/marathonPocker/ready/main",
-        "pages/marathonPocker/result/main",
-        "pages/randomWords/main",
+
         "pages/randomWords/memary/main",
         "pages/randomWords/result/main",
         "pages/randomWords/answer/main",
-        "pages/fastNumber/result/main",
-        "pages/fastNumber/main",
-        "pages/fastNumber/answer/main",
+
         "pages/fastNumber/memary/main",
-        "pages/virtualEvents/main",
+
         "pages/virtualEvents/result/main",
         "pages/virtualEvents/answer/main",
         "pages/virtualEvents/memary/main",
-        "pages/binaryNumber/main",
-        "pages/binaryNumber/result/main",
-        "pages/binaryNumber/answer/main",
+
         "pages/binaryNumber/memary/main",
-        "pages/listenAndRemember/main",
-        "pages/listenAndRemember/answer/main",
-        "pages/listenAndRemember/listen/main",
-        "pages/listenAndRemember/result/main",
-        "pages/flashPocker/main",
+
+        "pages/listenAndRemember/memary/main",
+
         "pages/flashPocker/answer/main",
         "pages/flashPocker/memary/main",
-        "pages/flashPocker/recall/main",
         "pages/flashPocker/result/main",
 
-        "pages/fastPocker/main",
-        "pages/fastPocker/ready/main",
         "pages/fastPocker/memary/main",
         "pages/fastPocker/result/main",
         "pages/fastPocker/answer/main",
-        "pages/fastPocker/recall/main",
-        "pages/marathonNumber/main",
-        "pages/marathonNumber/memary/main",
-        "pages/marathonNumber/result/main",
-        "pages/marathonNumber/answer/main"
+
+        "pages/marathonPocker/memary/main",
+        "pages/marathonPocker/answer/main",
+        "pages/marathonPocker/result/main",
+
+        "pages/marathonNumber/memary/main"
 
     ],
     "window": {

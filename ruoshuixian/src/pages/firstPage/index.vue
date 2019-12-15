@@ -182,6 +182,7 @@ export default {
     toGame: function (item) {
       if (this.userInfo) {
         this.$toGame(item.id, item.wxapp_url);
+        this.$store.commit("setGameName", item.name);
       } else {
         let that = this;
         wx.login({
@@ -203,6 +204,7 @@ export default {
                 })
               } else {
                 that.$store.commit("setUserInfo", result.data.userInfo);
+                that.$store.commit("setGameName", item.name);
                 that.$toGame(item.id, item.wxapp_url);
               }
             })

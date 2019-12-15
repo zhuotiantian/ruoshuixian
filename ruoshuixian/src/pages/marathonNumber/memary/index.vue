@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle type="记忆完成" @finishMemary="finishMemary" :showGameLevel="(level=='primary'?'初级':'高级')+'马拉松数字'"></CardTitle>
+    <GameTitle :showIntervalTime='true' ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <span class="item" v-for="(item,index) in rows" :key="index">{{item}}</span>
@@ -10,10 +10,10 @@
   </div>
 </template>
 <script>
-import CardTitle from "@/components/gameTitle"
+import GameTitle from "@/components/gameTitle_new";
 export default {
   components: {
-    CardTitle
+    GameTitle
   },
   onLoad (option) {
     Object.assign(this.$data, this.$options.data())
@@ -45,7 +45,7 @@ export default {
   methods: {
     finishMemary: function () {
       wx.reLaunch({
-        url: "../answer/main"
+        url: "/pages/numberAnswer/main"
       });
     }
   }

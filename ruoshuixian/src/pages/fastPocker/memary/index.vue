@@ -1,25 +1,27 @@
 <template>
   <div class="container">
-    <CardTitle :showType="true" :showGameLevel="(level=='primary'?'初级':'高级')+'快速扑克牌'" ref="title" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary"></CardTitle>
+    <GameTitle :showShowType="true" :showIntervalTime='true' ref="title" @group="group" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
     <div class="list">
       <template v-if="pocker.length==0">
         <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
       </template>
       <template v-else>
-        <em class="arrow arrow-left" @click="prevGroup"></em>
-        <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
-          <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
-        </div>
-        <em class="arrow arrow-right" @click="nextGroup"></em>
+        <em class="arrow arrow-left" @click="prevGroup" v-if="pockerNumber<52"></em>
+        <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
+          <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}">
+            <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+          </div>
+        </scroll-view>
+        <em class="arrow arrow-right" @click="nextGroup" v-if="pockerNumber<52"></em>
       </template>
     </div>
   </div>
 </template>
 <script>
-import CardTitle from "@/components/gameTitle";
+import GameTitle from "@/components/gameTitle_new";
 export default {
   components: {
-    CardTitle
+    GameTitle
   },
   data () {
     return {
@@ -28,8 +30,6 @@ export default {
       bg: 23,
       left: 100,
       pocker: [],
-
-      type: null,
       level: "primary",
       list: [],
       currentGroupIndex: 0,
@@ -64,18 +64,21 @@ export default {
   methods: {
     group: function (data) {
       let list = JSON.parse(JSON.stringify(this.list));
-      this.pockerNumber = data;
+      this.pockerNumber = (data === 'All' ? 52 : data);
       this.pocker = [];
-      for (var i = 0; i < list.length; i + data) {
-        this.pocker.push(list.splice(i, i + data));
+      if (this.pockerNumber === 52) {
+        this.pocker = [list]
+      } else {
+        for (var i = 0; i < list.length; i + data) {
+          this.pocker.push(list.splice(i, i + data));
+        }
       }
-      this.type = "记忆完成";
       this.currentGroupIndex = 0;
     },
 
     finishMemary: function () {
       wx.reLaunch({
-        url: "../recall/main"
+        url: "/pages/recall/main"
       });
     },
     prevGroup: function () {
@@ -105,7 +108,13 @@ export default {
 .container {
   padding-top: tovmin(200);
 }
-
+.pocker-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 196px;
+  white-space: "nowrap";
+}
 .pocker {
   height: tovmin(382);
   width: tovmin(248);

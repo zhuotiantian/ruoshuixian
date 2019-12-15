@@ -38,7 +38,7 @@ Vue.prototype.$toGame = (id, url, fn) => {
             fn();
         } else {
             wx.redirectTo({
-                url
+                url: "/pages/gameIndex/main"
             })
         }
     });

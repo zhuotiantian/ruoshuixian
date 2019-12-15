@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-    <CardTitle :seconds="seconds" :minutes="minutes" type="记忆完成" :showGameLevel="(level=='primary'?'初级':'高级')+'人名头像'" @finishMemary="finishMemary"></CardTitle>
+    <GameTitle :showIntervalTime='true' ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <div class="image" v-for="(item,index) in rows" :key="index">
-          <image class="image" :src="domain+item.avatar" />
-          <span class="name">{{item.name}}</span>
+          <image class="image" :src="domain+item.avatar" lazy-load="true" />
+          <span class="name">{{item.xing_name}}<span style="position:relative;font-size:20rpx;font-weight:bold">·</span>{{item.ming_name}}</span>
         </div>
         <span class="rowName">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
@@ -13,10 +13,10 @@
   </div>
 </template>
 <script>
-import CardTitle from "@/components/gameTitle"
+import GameTitle from "@/components/gameTitle_new";
 export default {
   components: {
-    CardTitle
+    GameTitle
   },
   onLoad (option) {
     Object.assign(this.$data, this.$options.data())
@@ -26,17 +26,18 @@ export default {
     })[0];
     this.numberList = this.rule.list.xing_name.map((e, index) => {
       return {
-        name: e + this.rule.list.ming_name[index],
+        xing_name: e,
+        ming_name: this.rule.list.ming_name[index],
         avatar: this.rule.list.avatar[index]
       }
+    }).sort(() => {
+      return Math.random() > 0.5 ? -1 : 1
     });
     let total = this.rule.number;
     let per = this.rule.number_per_group;
     let number = [];
     for (var i = 0; i < total; i += per) {
-      number.push(this.numberList.slice(i, i + per).sort(() => {
-        return Math.random() > 0.5 ? -1 : 1
-      }));
+      number.push(this.numberList.slice(i, i + per));
     };
     this.number = number.filter(e => {
       return e.length > 0

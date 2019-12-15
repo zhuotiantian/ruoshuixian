@@ -2,7 +2,7 @@
   <div class="container">
     <div class="fog" v-if="showFog"></div>
     <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
-    <CardTitle :type="type" seconds="1800" @finish="finish" @nextPage="nextPage" @prevPage="prevPage"></CardTitle>
+    <GameTitle :showIntervalTime='true' ref="title" :showFinishAnwserBtn="true" @finishAnwser="finishAnwser" :showChangePageBtn="true" @nextPage="nextPage" @prevPage="prevPage"></GameTitle>
     <div class="list">
       <div class="item-list" v-for="(columns,index) in list[pageIndex]" :key="index+1">
         <span v-for="(item,_index) in columns" :key="_index+1"><span>{{item.index+1}}</span>&nbsp;&nbsp;&nbsp;<input type="text" class="input" v-model="item.text"></span>
@@ -12,11 +12,11 @@
 </template>
 
 <script>
-import CardTitle from "@/components/gameTitle"
+import GameTitle from "@/components/gameTitle_new";
 import alertBox from "@/components/alertBox"
 export default {
   components: {
-    CardTitle,
+    GameTitle,
     alertBox
   },
   onLoad () {
@@ -64,7 +64,7 @@ export default {
       this.pageIndex = 0;
       this.type = "下一页";
     },
-    finish: function () {
+    finishAnwser: function () {
       this.showFog = true;
     },
     hideFog: function () {

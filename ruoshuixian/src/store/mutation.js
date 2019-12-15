@@ -25,6 +25,9 @@ const mutations = {
     },
     setIsNew(state, isNew) {
         state.isNew = isNew;
+    },
+    setGameName(state, gameName) {
+        state.gameName = gameName;
     }
 };
 export default mutations;

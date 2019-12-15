@@ -1,17 +1,18 @@
 <template>
   <div class="container">
-    <CardTitle :showType="true" ref="title" :pannelContent="pannelContent" @group="group" :type="type" @finishMemary="finishMemary">
-    </CardTitle>
+    <GameTitle :showShowType="true" :showIntervalTime='true' ref="title" @group="group" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
     <div class="list">
       <template v-if="perPocker.length==0">
         <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
       </template>
       <template v-else>
-        <em class="arrow arrow-left" @click="prevGroup"></em>
-        <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
-          <image class="pocker" ref="pocker" v-for="(item,index) in perPocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
-        </div>
-        <em class="arrow arrow-right" @click="nextGroup"></em>
+        <em class="arrow arrow-left" @click="prevGroup" v-if="pockerNumber<52"></em>
+        <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
+          <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}">
+            <image class="pocker" ref="pocker" v-for="(item,index) in perPocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+          </div>
+        </scroll-view>
+        <em class="arrow arrow-right" @click="nextGroup" v-if="pockerNumber<52"></em>
       </template>
     </div>
     <div class="pageFoot">
@@ -24,10 +25,10 @@
   </div>
 </template>
 <script>
-import CardTitle from "@/components/gameTitle"
+import GameTitle from "@/components/gameTitle_new";
 export default {
   components: {
-    CardTitle
+    GameTitle
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
@@ -53,7 +54,7 @@ export default {
   },
   data () {
     return {
-      pannelContent: ["1", "2", "4", "8"],
+      pannelContent: ["1", "2", "4", "8", 'All'],
       pockerCount: 0,
       bg: 23,
       left: 100,
@@ -90,24 +91,20 @@ export default {
         return e.active
       })[0].number - 1;
       let list = JSON.parse(JSON.stringify(this.pocker[currentIndex]));
+      this.pockerNumber = (data === 'All' ? 52 : data);
       this.perPocker = [];
-      if (data) {
+      if (this.pockerNumber === 52) {
+        this.perPocker = [list]
+      } else {
         for (var i = 0; i < list.length; i + data) {
           this.perPocker.push(list.splice(i, i + data));
         }
-      };
-      this.currentGroupIndex = 0;
-      this.pockerNumber = data;
-      this.type = "记忆完成";
-      if (this.time_long) {
-        setTimeout(() => {
-          this.finishMemary();
-        }, this.time_long);
       }
+      this.currentGroupIndex = 0;
     },
     finishMemary: function () {
       wx.reLaunch({
-        url: "../recall/main"
+        url: "/pages/recall/main"
       })
     },
     nextPage: function () {
@@ -163,7 +160,13 @@ export default {
 .container {
   padding-top: tovmin(200);
 }
-
+.pocker-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 196px;
+  white-space: "nowrap";
+}
 .pocker {
   height: tovmin(382);
   width: tovmin(248);
@@ -208,7 +211,7 @@ export default {
   color: $yellow;
 }
 
-.item {
+.pageBtn .item {
   height: tovmin(80);
   width: tovmin(80);
   display: inline-block;
@@ -220,7 +223,7 @@ export default {
   color: $black;
 }
 
-.item.active {
+.pageBtn .item.active {
   color: white;
   background: $middle-blue;
   border: none;
