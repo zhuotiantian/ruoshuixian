@@ -2,7 +2,7 @@
   <div class="container">
     <div class="fog" v-if="showFog"></div>
     <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
-    <CardTitle seconds="900" type="作答完成" @finish="finish">
+    <GameTitle :showIntervalTime='true' :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
     </CardTitle>
     <div class="list">
       <p class="list-title">
@@ -19,12 +19,12 @@
   </div>
 </template>
 <script>
-import CardTitle from "@/components/gameTitle"
+import GameTitle from "@/components/gameTitle_new"
 import Keybord from "@/components/Keybord"
 import alertBox from "@/components/alertBox"
 export default {
   components: {
-    CardTitle,
+    GameTitle,
     Keybord,
     alertBox
   },
@@ -59,7 +59,7 @@ export default {
       this.activeIndex = index;
       this.showKeybord = true;
     },
-    finish: function (index) {
+    finishAnwser: function (index) {
       this.showFog = true;
     },
     hideFog: function () {

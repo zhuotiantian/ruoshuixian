@@ -7,7 +7,7 @@ const state = {
     pockerNumber: null,
     code: null,
     userInfo: null,
-    isNew: false,
+    isNew: true,
     gameName: "",
     gamePages: {
         "闪视扑克牌": {

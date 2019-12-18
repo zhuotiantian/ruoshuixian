@@ -1,6 +1,7 @@
 <template>
   <div class="game-container">
     <GameTitle />
+    <div v-if="show" class="fog"></div>
     <AlertBoxNoBth v-if="show" :rule="rule" @closeAlertBox="closeAlertBox" />
     <!-- 扑克牌游戏首页 -->
     <div v-if="gameType==='pocker'" class="content">
@@ -107,6 +108,7 @@ export default {
     startGame: function () {
       if (this.currentPage === 'flashPocker') {
         this.$store.commit("setMemoryTime", this.activeTime);
+        this.$store.commit("setPockerNumber", this.activeNum);
       } else if (this.currentPage === 'marathonPocker' || this.currentPage === 'fastPocker') {
         this.$store.commit("setPockerNumber", this.activeNum === 'All' ? 52 : this.activeNum);
       }
@@ -180,7 +182,8 @@ export default {
   border-radius: tovmin(50);
   text-align: center;
   line-height: tovmin(98);
-  font-size: tovmin(34);
+  font-size: 24rpx;
+  font-weight:bold;
   position: absolute;
   bottom: tovmin(140);
   left: 50%;

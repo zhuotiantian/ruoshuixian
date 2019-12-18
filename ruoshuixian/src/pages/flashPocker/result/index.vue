@@ -1,9 +1,12 @@
 <template>
   <div class="container">
-    <GameTitle :isResult="true"></GameTitle>
+    <GameTitle :isResult="true" :showCorrectAnswerBtn="true" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
     <div class="list">
-      <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}">
-        <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+      <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}" v-if="isShowCorrectAnswer">
+        <image class="pocker"  ref="pocker" v-for="(item,index) in correct_result" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+      </div>
+      <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}" v-else>
+        <image class="pocker" :class="{trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
       </div>
     </div>
   </div>
@@ -20,15 +23,24 @@ export default {
       left: 100,
       userid: null,
       pocker: [],
-      pockerNumber: 0
+      pockerNumber: 0,
+      isShowCorrectAnswer:false,
+      correct_result:[]
     };
   },
   onLoad () {
     let userInfo = this.$store.state.userInfo;
     this.userid = userInfo.id;
-    let correct_result = this.$store.state.result.correct_result;
     this.pockerNumber = this.$store.state.pockerNumber;
-    this.pocker = correct_result.slice(0, this.pockerNumber);
+    this.correct_result = this.$store.state.result.correct_result.slice(0, this.pockerNumber);
+    let user_result = this.$store.state.result.right_and_wrong_results;
+    this.pocker = user_result;
+    this.pocker.forEach((e, _index) => {
+      e.trueResult = false;
+      if (e.index === this.correct_result[_index].index && e.color ===this.correct_result[_index].color) {
+        e.trueResult = true;
+      }
+    })
   },
   onShareAppMessage: function (res) {
     return {
@@ -41,6 +53,14 @@ export default {
         console.log("分享失败");
       }
     }
+  },
+  methods:{
+      showCorrectAnswer:function(){
+        this.isShowCorrectAnswer=true;
+      },
+      showMyAnswerHandler:function(){
+           this.isShowCorrectAnswer=false;
+      }
   }
 };
 </script>
@@ -70,5 +90,11 @@ export default {
   transform: translateX(-50%);
   white-space: nowrap;
   height: 196rpx;
+}
+.wrong{
+    border:2rpx solid $red;
+}
+.trueResult{
+    border:2rpx solid $green;
 }
 </style>

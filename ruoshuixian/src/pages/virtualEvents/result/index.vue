@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle :seconds="seconds" :minutes="minutes" :isResult="isResult"></CardTitle>
+    <GameTitle :isResult="true"></GameTitle>
     <div class="list">
       <p class="list-title">
         <span>序号</span>
@@ -18,10 +18,10 @@
   </div>
 </template>
 <script>
-import CardTitle from "@/components/gameTitle"
+import GameTitle from "@/components/gameTitle_new"
 export default {
   components: {
-    CardTitle
+    GameTitle
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())

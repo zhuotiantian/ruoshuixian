@@ -13,10 +13,12 @@
         </template>
         <!-- 结果 -->
         <template v-else>
-          <div>
+          <div class="result_title">
             <span v-if="showCostTime">用时：{{getPayedTime}}</span>
             <span>得分：{{result.fraction||0}}分</span>
             <span class="btn default-btn">历史记录</span>
+            <span class="btn default-btn" v-if="showCorrectAnswerBtn&&!showMyAnswer" @click="showCorrectAnswer">查看正确答案</span>
+            <span class="btn default-btn" v-if="showMyAnswer" @click="showMyAnswerHandler">查看我的答案</span>
           </div>
         </template>
       </div>
@@ -26,7 +28,7 @@
           {{(computedTime.minutes<10?'0':'')+computedTime.minutes}}：
           {{(computedTime.seconds<10?'0':'')+computedTime.seconds}}
         </p>
-        <p v-else-if="startAnwserText">开始作答</p>
+        <p v-else-if="startAnwserText" style="font-size:24rpx">开始作答</p>
       </div>
       <div class="right">
         <!-- 非结果 -->
@@ -136,6 +138,11 @@ export default {
     showChangePageBtn: {
       type: Boolean,
       default: false
+    },
+    //是否显示查看正确答案按钮
+    showCorrectAnswerBtn:{
+        type:Boolean,
+        default:false
     }
   },
   onLoad () {
@@ -186,7 +193,8 @@ export default {
       shouwOperationTips: false,
       showType: '显示方式',
       gameName: "",
-      showPrevPage: false
+      showPrevPage: false,
+      showMyAnswer:false
     }
   },
   methods: {
@@ -265,6 +273,16 @@ export default {
     prevPage: function () {
       this.showPrevPage = false;
       this.$emit("prevPage");
+    },
+    //查看正确答案
+    showCorrectAnswer:function(){
+        this.showMyAnswer=true;
+        this.$emit("showCorrectAnswer");
+    },
+    //查看我提交的答案
+    showMyAnswerHandler:function(){
+    this.showMyAnswer=false;
+    this.$emit("showMyAnswerHandler");
     }
   },
 }
@@ -300,8 +318,8 @@ export default {
   margin-left: 15rpx;
 }
 .helpBtn {
-  background: $yellow;
-  color: $black;
+  background: $red;
+  color: white;
 }
 p {
   text-align: center;
@@ -411,5 +429,8 @@ p {
 
 .tips p:last-child {
   text-align: center;
+}
+.result_title {
+  font-size: 18rpx;
 }
 </style>

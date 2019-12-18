@@ -3,7 +3,7 @@
         <div class="number">
             <span :class="{item:true, active:item==null}" v-for="item in number" :key="item" @click="selectNumber(item)">{{item}}</span>
         </div>
-        <span class="item delete" @click="deleteNumber">X</span>
+        <span class="item delete" @click="deleteNumber">X删除</span>
     </div>
 </template>
 <script>

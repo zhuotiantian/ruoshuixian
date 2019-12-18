@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import GameTitle from "@/components/gameTitle";
+import GameTitle from "@/components/gameTitle_new";
 import alertBox from "@/components/alertBox";
 export default {
   components: {

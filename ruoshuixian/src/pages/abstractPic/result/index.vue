@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle :isResult="true" :sconds="seconds" :minutes="minutes"></CardTitle>
+    <GameTitle :isResult="true"></GameTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <div class="image_div" v-for="(item,index) in rows" :key="index">
@@ -15,10 +15,10 @@
   </div>
 </template>
 <script>
-import CardTitle from "@/components/gameTitle";
+import GameTitle from "@/components/gameTitle_new";
 export default {
   components: {
-    CardTitle
+    GameTitle
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())

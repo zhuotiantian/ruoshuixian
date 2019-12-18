@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <CardTitle type="记忆完成" @finishMemary="finishMemary" :showGameLevel="(level=='primary'?'初级':'高级')+'虚拟事件和日期'"></CardTitle>
+    <GameTitle :showIntervalTime='true' ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
     <div class="list">
       <p class="list-title">
         <span>序号</span>
@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import CardTitle from "@/components/gameTitle"
+import GameTitle from "@/components/gameTitle_new"
 export default {
   components: {
-    CardTitle
+    GameTitle
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())

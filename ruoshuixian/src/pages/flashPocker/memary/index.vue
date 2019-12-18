@@ -71,6 +71,7 @@ export default {
   },
   methods: {
     start: function () {
+      console.log(this.pockerNumber);
       this.pocker = this.list.slice(0, this.pockerNumber);
       this.finishMemary_timer = setTimeout(() => {
         clearTimeout(this.finishMemary_timer);

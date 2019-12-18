@@ -1,10 +1,17 @@
 <template>
   <div class="container">
-    <GameTitle :isResult="true" :showCostTime="true"></GameTitle>
-    <div class="list">
+    <GameTitle :isResult="true" :showCorrectAnswerBtn="true" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
+    <div class="list" v-if="isShowCorrectAnswer">
       <em class="arrow arrow-left" @click="prevGroup"></em>
       <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
-        <image class="pocker" ref="pocker" v-for="(item,index) in perPocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        <image class="pocker" ref="pocker" v-for="(item,index) in perPocker[correctCurrentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+      </div>
+      <em class="arrow arrow-right" @click="nextGroup"></em>
+    </div>
+    <div class="list" v-else>
+      <em class="arrow arrow-left" @click="prevGroup"></em>
+      <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
+        <image :class="{pocker:true,trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in perPocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
       </div>
       <em class="arrow arrow-right" @click="nextGroup"></em>
     </div>
@@ -27,6 +34,7 @@ export default {
     let userInfo = this.$store.state.userInfo;
     this.userid = userInfo.id;
     this.correct_result = this.$store.state.result.correct_result;
+    this.user_result = this.$store.state.result.right_and_wrong_results;
     this.pockerNumber = this.$store.state.pockerNumber;
     for (var i = 1; i <= this.correct_result.length; i++) {
       this.pages.push({
@@ -40,7 +48,7 @@ export default {
       groupPage.push(this.pages.slice(i, i + 10));
     };
     this.groupPage = groupPage;
-    this.group();
+    this.group2();
   },
   onShareAppMessage: function (res) {
     return {
@@ -66,19 +74,10 @@ export default {
       groupPage: [],
       currentPage: 0,
       currentGroupIndex: 0,
-      perPocker: []
+            correctCurrentGroupIndex:0,
+      perPocker: [],
+      isShowCorrectAnswer: false,
     };
-  },
-  computed: {
-    pocker: function () {
-      let pocker = [];
-      let left0 = this.pockerCount == 23 ? 100 : 350 - 10 * this.pockerCount;
-      for (let i = 0; i < this.pockerCount; i++) {
-        let left = left0 + 20 * i;
-        pocker.push(left);
-      }
-      return pocker;
-    }
   },
   methods: {
     group: function () {
@@ -86,6 +85,23 @@ export default {
         return e.active
       })[0].number - 1;
       let list = JSON.parse(JSON.stringify(this.correct_result[currentIndex]));
+      this.perPocker = [];
+      for (var i = 0; i < list.length; i + this.pockerNumber) {
+        this.perPocker.push(list.splice(i, i + this.pockerNumber));
+      }
+      this.correctCurrentGroupIndex = 0;
+    },
+    group2:function(){
+        let currentIndex = this.groupPage[this.currentPage].filter(e => {
+        return e.active
+      })[0].number - 1;
+      this.user_result[currentIndex].forEach((e,_index)=>{
+          e.trueResult = false;
+        if (e.index === this.correct_result[_index].index && e.color === this.correct_result[_index].color) {
+          e.trueResult = true;
+        }
+      })
+      let list = JSON.parse(JSON.stringify(this.user_result[currentIndex]));
       this.perPocker = [];
       for (var i = 0; i < list.length; i + this.pockerNumber) {
         this.perPocker.push(list.splice(i, i + this.pockerNumber));
@@ -102,15 +118,29 @@ export default {
         this.currentPage--;
       }
     },
-    prevGroup: function () {
-      if (this.currentGroupIndex > 0) {
+        prevGroup: function () {
+        if(this.isShowCorrectAnswer){
+if (this.correctCurrentGroupIndex > 0) {
+        this.correctCurrentGroupIndex--;
+      }
+        }else{
+            if (this.currentGroupIndex > 0) {
         this.currentGroupIndex--;
       }
+        }
+      
     },
     nextGroup: function () {
-      if (this.currentGroupIndex < this.perPocker.length - 1) {
-        this.currentGroupIndex++;
+        if(this.isShowCorrectAnswer){
+            if (this.correctCurrentGroupIndex <this.perPocker.length-1) {
+        this.correctCurrentGroupIndex++;
       }
+        }else{
+        if (this.currentGroupIndex <this.perPocker.length - 1) {
+            this.currentGroupIndex++;
+            }
+        }
+      
     },
     selectHandler: function (index, item) {
       this.$set(this.groupPage, this.currentPage, this.groupPage[this.currentPage].map(e => {
@@ -127,6 +157,17 @@ export default {
 
       this.pockerNumber && this.group(this.pockerNumber);
     },
+    showCorrectAnswer: function () {
+        this.group();
+        this.currentPage=0;
+      this.isShowCorrectAnswer = true;
+    },
+    showMyAnswerHandler: function () {
+        this.group2();
+      this.isShowCorrectAnswer = false;
+        this.currentPage=0;
+
+    }
   }
 };
 </script>
