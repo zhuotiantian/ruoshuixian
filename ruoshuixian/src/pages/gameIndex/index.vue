@@ -9,8 +9,16 @@
         <div>
           <p>本轮记忆时间：{{returnHourAndMinutes}}</p>
           <p style="margin-top:40rpx">
-            <span :class="{radio:true,active:level=='primary'}" @click="selLevel('primary')">初级玩家</span>
-            <span :class="{radio:true,active:level=='senior'}" @click="selLevel('senior')">高级玩家</span>
+            <span @click="selLevel('primary')">
+              <image class="radioBtn" src="/static/images/firstPage/circle_active.png" v-if="level=='primary'"></image>
+              <image class="radioBtn" src="/static/images/firstPage/circle.png" v-if="level=='senior'"></image>
+              <span :class="{active:level=='primary'}" @click="selLevel('primary')">初级玩家</span>
+            </span>
+            <span @click="selLevel('senior')">
+              <image class="radioBtn" src="/static/images/firstPage/circle_active.png" v-if="level=='senior'"></image>
+              <image class="radioBtn" src="/static/images/firstPage/circle.png" v-if="level=='primary'"></image>
+              <span :class="{active:level=='senior'}">高级玩家</span>
+            </span>
           </p>
         </div>
       </template>
@@ -39,8 +47,16 @@
       <div>
         <p>本轮记忆时间：{{returnHourAndMinutes}}</p>
         <p style="margin-top:40rpx">
-          <span :class="{radio:true,active:level=='primary'}" @click="selLevel('primary')">初级玩家</span>
-          <span :class="{radio:true,active:level=='senior'}" @click="selLevel('senior')">高级玩家</span>
+          <span @click="selLevel('primary')">
+            <image class="radioBtn" src="/static/images/firstPage/circle_active.png" v-if="level=='primary'"></image>
+            <image class="radioBtn" src="/static/images/firstPage/circle.png" v-if="level=='senior'"></image>
+            <span :class="{active:level=='primary'}" @click="selLevel('primary')">初级玩家</span>
+          </span>
+          <span @click="selLevel('senior')">
+            <image class="radioBtn" src="/static/images/firstPage/circle_active.png" v-if="level=='senior'"></image>
+            <image class="radioBtn" src="/static/images/firstPage/circle.png" v-if="level=='primary'"></image>
+            <span :class="{active:level=='senior'}">高级玩家</span>
+          </span>
         </p>
       </div>
       <div class="btn submit-btn" @click="startGame">开始作答</div>
@@ -183,7 +199,7 @@ export default {
   text-align: center;
   line-height: tovmin(98);
   font-size: 24rpx;
-  font-weight:bold;
+  font-weight: bold;
   position: absolute;
   bottom: tovmin(140);
   left: 50%;
@@ -205,5 +221,11 @@ export default {
 
 p.active {
   color: $middle-blue;
+}
+.radioBtn {
+  width: 18rpx;
+  height: 18rpx;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>

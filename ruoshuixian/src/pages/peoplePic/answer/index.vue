@@ -48,6 +48,8 @@ export default {
     });
     this.startTime = new Date().getTime();
     this.game_records_id = this.rule.game_records_id;
+    console.log(option.sort);
+    this.sort = JSON.parse(option.sort);
   },
   data () {
     return {
@@ -92,7 +94,7 @@ export default {
               xing_name,
               ming_name,
               avatar
-            })
+            }),
           },
           header: {
             token: this.token

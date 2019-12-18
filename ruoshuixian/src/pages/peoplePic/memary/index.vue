@@ -58,7 +58,7 @@ export default {
   methods: {
     finishMemary: function () {
       wx.reLaunch({
-        url: "../answer/main"
+        url: "../answer/main?sort=" + JSON.stringify(this.numberList)
       })
     }
   }

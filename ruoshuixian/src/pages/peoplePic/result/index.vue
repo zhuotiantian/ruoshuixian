@@ -5,8 +5,8 @@
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <div class="image_div" v-for="(item,index) in rows" :key="index">
           <image class="image" :src="domain+item.avatar" />
-          <span class="result name">{{item.name}}</span>
-          <span :class="{answer:item.result==0,wrong:item.result==1, name:true}">{{item.result_name}}</span>
+          <span class="result_name name">{{item.name}}</span>
+          <span :class="{answer:item.result==0,wrong:item.result==1}">{{item.result_name}}</span>
         </div>
         <span>row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
@@ -101,6 +101,7 @@ page {
   width: tovmin(200);
   margin-right: tovmin(40);
   text-align: center;
+  position: relative;
 }
 
 .image {
@@ -116,7 +117,7 @@ page {
   display: block;
 }
 
-.result {
+.result_name {
   color: white;
 }
 
@@ -127,5 +128,8 @@ page {
 .wrong {
   color: $red;
   border-bottom: tovmin(2) solid $red;
+  min-width: 20rpx;
+  min-height: 20rpx;
+  display: block;
 }
 </style>
