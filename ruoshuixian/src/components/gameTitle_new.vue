@@ -16,7 +16,7 @@
           <div class="result_title">
             <span v-if="showCostTime">用时：{{getPayedTime}}</span>
             <span>得分：{{result.fraction||0}}分</span>
-            <span class="btn default-btn">历史记录</span>
+            <span class="btn default-btn" @click="toHistory">历史记录</span>
             <span class="btn default-btn" v-if="showCorrectAnswerBtn&&!showMyAnswer" @click="showCorrectAnswer">查看正确答案</span>
             <span class="btn default-btn" v-if="showMyAnswer" @click="showMyAnswerHandler">查看我的答案</span>
           </div>
@@ -140,9 +140,9 @@ export default {
       default: false
     },
     //是否显示查看正确答案按钮
-    showCorrectAnswerBtn:{
-        type:Boolean,
-        default:false
+    showCorrectAnswerBtn: {
+      type: Boolean,
+      default: false
     }
   },
   onLoad () {
@@ -194,7 +194,7 @@ export default {
       showType: '显示方式',
       gameName: "",
       showPrevPage: false,
-      showMyAnswer:false
+      showMyAnswer: false
     }
   },
   methods: {
@@ -232,7 +232,15 @@ export default {
     },
     //跳转到游戏帮助页面
     toHelp: function () {
-
+      wx.navigateTo({
+        url: "/pages/help/main"
+      })
+    },
+    //跳转到游戏历史记录页面
+    toHistory: function () {
+      wx.navigateTo({
+        url: "/pages/history/main"
+      })
     },
     //显示操作提示
     showTipsHandler: function () {
@@ -275,14 +283,14 @@ export default {
       this.$emit("prevPage");
     },
     //查看正确答案
-    showCorrectAnswer:function(){
-        this.showMyAnswer=true;
-        this.$emit("showCorrectAnswer");
+    showCorrectAnswer: function () {
+      this.showMyAnswer = true;
+      this.$emit("showCorrectAnswer");
     },
     //查看我提交的答案
-    showMyAnswerHandler:function(){
-    this.showMyAnswer=false;
-    this.$emit("showMyAnswerHandler");
+    showMyAnswerHandler: function () {
+      this.showMyAnswer = false;
+      this.$emit("showMyAnswerHandler");
     }
   },
 }

@@ -41,7 +41,7 @@ export default {
 .container {
   color: white;
   padding: tovmin(30);
-  text-align: center;
+  text-align: left;
 }
 
 .image {
