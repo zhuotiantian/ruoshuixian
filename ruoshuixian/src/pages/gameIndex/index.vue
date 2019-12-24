@@ -198,7 +198,7 @@ export default {
   border-radius: tovmin(50);
   text-align: center;
   line-height: tovmin(98);
-  font-size: 24rpx;
+  font-size: tovmin(48);
   font-weight: bold;
   position: absolute;
   bottom: tovmin(140);
