@@ -29,12 +29,12 @@ export default {
       left: 100,
       userid: null,
       currentGroupIndex: 0,
-      correctCurrentGroupIndex:0,
+      correctCurrentGroupIndex: 0,
       pocker: [],
       pockerNumber: 0,
       isShowCorrectAnswer: false,
       correct_result: [],
-      showCorrectResult:[],
+      showCorrectResult: [],
     };
   },
   onLoad () {
@@ -43,19 +43,19 @@ export default {
     this.pockerNumber = this.$store.state.pockerNumber;
     this.correct_result = this.$store.state.result.correct_result;
     let user_result = this.$store.state.result.right_and_wrong_results;
-      user_result.forEach((e, _index) => {
-        e.trueResult = false;
-        if (e.index === this.correct_result[_index].index && e.color === this.correct_result[_index].color) {
-          e.trueResult = true;
-        }
-      })
-      this.pocker = [];
-      for (var i = 0; i < user_result.length; i + this.pockerNumber) {
-        this.pocker.push(user_result.splice(i, i + this.pockerNumber));
+    user_result.forEach((e, _index) => {
+      e.trueResult = false;
+      if (e.index === this.correct_result[_index].index && e.color === this.correct_result[_index].color) {
+        e.trueResult = true;
       }
-      for (var i = 0; i < this.correct_result.length; i + this.pockerNumber) {
-        this.showCorrectResult.push(this.correct_result.splice(i, i + this.pockerNumber));
-      }
+    })
+    this.pocker = [];
+    for (var i = 0; i < user_result.length; i + this.pockerNumber) {
+      this.pocker.push(user_result.splice(i, i + this.pockerNumber));
+    }
+    for (var i = 0; i < this.correct_result.length; i + this.pockerNumber) {
+      this.showCorrectResult.push(this.correct_result.splice(i, i + this.pockerNumber));
+    }
   },
   onShareAppMessage: function (res) {
     return {
@@ -71,28 +71,28 @@ export default {
   },
   methods: {
     prevGroup: function () {
-        if(this.isShowCorrectAnswer){
-if (this.correctCurrentGroupIndex > 0) {
-        this.correctCurrentGroupIndex--;
-      }
-        }else{
-            if (this.currentGroupIndex > 0) {
-        this.currentGroupIndex--;
-      }
+      if (this.isShowCorrectAnswer) {
+        if (this.correctCurrentGroupIndex > 0) {
+          this.correctCurrentGroupIndex--;
         }
-      
+      } else {
+        if (this.currentGroupIndex > 0) {
+          this.currentGroupIndex--;
+        }
+      }
+
     },
     nextGroup: function () {
-        if(this.isShowCorrectAnswer){
-            if (this.correctCurrentGroupIndex <this.showCorrectResult.length-1) {
-        this.correctCurrentGroupIndex++;
-      }
-        }else{
-        if (this.currentGroupIndex <this.pocker.length - 1) {
-            this.currentGroupIndex++;
-            }
+      if (this.isShowCorrectAnswer) {
+        if (this.correctCurrentGroupIndex < this.showCorrectResult.length - 1) {
+          this.correctCurrentGroupIndex++;
         }
-      
+      } else {
+        if (this.currentGroupIndex < this.pocker.length - 1) {
+          this.currentGroupIndex++;
+        }
+      }
+
     },
     showCorrectAnswer: function () {
       this.isShowCorrectAnswer = true;
@@ -135,10 +135,10 @@ if (this.correctCurrentGroupIndex > 0) {
   width: tovmin(30);
   margin: 0 tovmin(60);
 }
-.wrong{
-    border:2rpx solid $red;
+.wrong {
+  border: tovmin(4) solid $red;
 }
-.trueResult{
-    border:2rpx solid $green;
+.trueResult {
+  border: tovmin(4) solid $green;
 }
 </style>

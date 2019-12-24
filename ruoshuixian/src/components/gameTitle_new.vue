@@ -154,7 +154,7 @@ export default {
     this.result = this.$store.state.result;
     this.gameid = this.$store.state.gameid;
     this.pockerNumber = this.$store.state.pockerNumber;
-    this.gameName = this.$store.state.gameName;
+    this.gameName = this.$getGameInfo("name");
     if (this.gameName === '二进制数字') {
       this.pannelContent = ["不划线", "三个一组", "六个一组"];
     } else {
@@ -206,8 +206,7 @@ export default {
       } else if (this.isRecall) {//回忆时间
         time = this.rule.recollect_time
       } else if (this.showFinishAnwserBtn) {
-        let gameName = this.$store.state.gameName;
-        time = this.$store.state.gamePages[gameName].answerTime;
+        time = this.$getGameInfo("answerTime");
       }
       this.getTime(time);
       this.interval = setInterval(() => {
@@ -323,7 +322,7 @@ export default {
   text-align: right;
 }
 .title span:not(:first-child) {
-  margin-left: 15rpx;
+  margin-left: tovmin(30);
 }
 .helpBtn {
   background: $red;
@@ -439,6 +438,6 @@ p {
   text-align: center;
 }
 .result_title {
-  font-size: 18rpx;
+  font-size: tovmin(36);
 }
 </style>

@@ -72,8 +72,9 @@ export default {
     AlertBoxNoBth
   },
   onLoad () {
-    this.currentPage = this.$store.state.gamePages[this.$store.state.gameName].path;
-    this.rule = this.$store.state.gamePages[this.$store.state.gameName].rule;
+    this.currentPage = this.$getGameInfo("wxapp_url").split("/")[2];
+    console.log(this.$getGameInfo("wxapp_url").split("/"));
+    this.rule = this.$getGameInfo("rule");
     this.show = this.$store.state.isNew;
     this.page = (this.currentPage !== 'flashPocker' ? "first" : "second");
     if (this.currentPage === 'flashPocker' || this.currentPage === 'fastPocker' || this.currentPage === 'marathonPocker') {
@@ -112,7 +113,7 @@ export default {
     this.memoryTime = rule.memory_time.split(",").reverse();
     this.activeTime = this.memoryTime[0];
     wx.setNavigationBarTitle({
-      title: this.$store.state.gameName
+      title: this.$getGameInfo("name")
     })
   },
   methods: {
@@ -223,8 +224,8 @@ p.active {
   color: $middle-blue;
 }
 .radioBtn {
-  width: 18rpx;
-  height: 18rpx;
+  width: tovmin(36);
+  height: tovmin(36);
   display: inline-block;
   vertical-align: middle;
 }

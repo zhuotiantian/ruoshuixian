@@ -66,7 +66,7 @@ export default {
   },
   onLoad (options) {
     Object.assign(this.$data, this.$options.data());
-    this.gameName = this.$store.state.gameName;
+    
     if (this.gameName === '马拉松扑克牌') {
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {

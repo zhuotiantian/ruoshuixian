@@ -128,8 +128,8 @@ page {
 .wrong {
   color: $red;
   border-bottom: tovmin(2) solid $red;
-  min-width: 20rpx;
-  min-height: 20rpx;
+  min-width: tovmin(40);
+  min-height: tovmin(40);
   display: block;
 }
 </style>

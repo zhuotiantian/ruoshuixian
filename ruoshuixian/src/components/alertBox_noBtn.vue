@@ -27,16 +27,16 @@ export default {
 <style lang="scss" scoped>
 .alertBox {
   background: $yellow;
-  border-radius: 20rpx;
-  height: 190rpx;
-  width: 340rpx;
+  border-radius: tovmin(40);
+  height: tovmin(380);
+  width: tovmin(680);
   margin: 0 auto;
   position: fixed;
   top: 50%;
   transform: translate(-50%, -50%);
   left: 50%;
   z-index: 1002;
-  font-size: 18rpx;
+  font-size: tovmin(38);
   color: #3e3e3e;
 }
 .alertBox > .wrapper {
@@ -47,17 +47,17 @@ export default {
 }
 .alertBox > .wrapper > h1,
 .alertBox > .wrapper > p {
-  line-height: 40rpx;
+  line-height: tovmin(80);
 }
 .closeBtn {
   position: absolute;
-  right: -20rpx;
-  top: -20rpx;
-  height: 18rpx;
-  width: 18rpx;
+  right: tovmin(-40);
+  top: tovmin(-40);
+  height: tovmin(36);
+  width: tovmin(36);
 }
 .red {
   color: $red;
-  font-size: 14rpx;
+  font-size: tovmin(28);
 }
 </style>

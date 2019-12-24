@@ -46,7 +46,7 @@ export default {
     for (var i = 0; i < total; i += per) {
       number.push(this.result.slice(i, i + per));
     };
-    this.gameName = this.$store.state.gameName;
+    this.gameName = this.$getGameInfo("name");
     this.number = number;
   },
   mounted () {

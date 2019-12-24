@@ -175,14 +175,32 @@ export default {
           }
         })
         .then(result => {
+          let rules = [
+            ["自由选择闪视时间和张数", "回忆并选出看到的扑克牌"],
+            ["在最短时间内记忆52张扑克牌", "回忆并按顺序作答出所记扑克牌"],
+            ["按顺序记忆并作答出所记扑克牌", "记忆牌副越多越好"],
+            ["按顺序记忆并作答出所记数字", "记忆的数字越多越好"],
+            ["按顺序记忆并作答出所记数字", "记忆速度越快越好"],
+            ["按顺序记忆并作答出所记词语", "记忆的数字越多越好"],
+            ["按顺序记忆并作答出所记词语", "记忆的词语越多越好"],
+            ["记忆人名头像，越多越好", "作答时将人名和头像正确搭配"],
+            ["记忆抽象图形，越多越好", "作答时将每行正确次序标注出来"],
+            ["按照播放数字顺序记忆并作答所听数字", "记得越多越好"],
+            ["记忆虚拟事件和日期，越多越好", "记忆虚拟事件和日期，越多越好"]
+          ];
+          let answerTime = [0, 300, 7200, 1800, 900, 7200, 1800, 1800, 1800, 1800, 300, 900];
+          result.data.game_list.forEach((e, index) => {
+            e.rule = rules[index];
+            e.anserTime = answerTime[index];
+          });
           this.games = result.data.game_list;
+          this.$store.commit("setGameList", result.data.game_list);
           this.imgUrls = result.data.rotary_planting_map;
         });
     },
     toGame: function (item) {
       if (this.userInfo) {
         this.$toGame(item.id, item.wxapp_url);
-        this.$store.commit("setGameName", item.name);
       } else {
         let that = this;
         wx.login({
@@ -204,7 +222,6 @@ export default {
                 })
               } else {
                 that.$store.commit("setUserInfo", result.data.userInfo);
-                that.$store.commit("setGameName", item.name);
                 that.$toGame(item.id, item.wxapp_url);
               }
             })

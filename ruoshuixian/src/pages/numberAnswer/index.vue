@@ -45,7 +45,7 @@ export default {
     this.startTime = new Date().getTime();
     this.game_records_id = this.rule.game_records_id;
     this.selected(this.rowIndex, this.columnIndex);
-    this.gameName = this.$store.state.gameName;
+    this.gameName = this.$getGameInfo("name");
   },
   mounted () {
     wx.setNavigationBarTitle({

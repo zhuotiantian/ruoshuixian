@@ -81,7 +81,7 @@ export default {
   right: tovmin(430);
   border: tovmin(2) solid #363636;
   box-sizing: border-box;
-  width: 50rpx;
+  width: tovmin(100);
 }
 
 .down {
