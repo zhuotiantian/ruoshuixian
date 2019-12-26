@@ -4,7 +4,7 @@
       <li v-for="(item,index) in list" :key="index">
         <span>得分：{{item.fraction}}</span>
         <span>耗时：{{item.game_time}}s</span>
-        <span>时间：</span>
+        <span>时间：{{item.createtime}}</span>
       </li>
     </ul>
   </div>
@@ -37,6 +37,16 @@ export default {
           }
         })
         .then(result => {
+          result.data.forEach(e => {
+            let init_time = new Date(e.createtime * 1000);
+            let formateTime = init_time.getFullYear() + "-" +
+              (Number(init_time.getMonth() + 1) < 10 ? "0" : "") + Number(init_time.getMonth() + 1) + "-" +
+              (init_time.getDate() + 1 < 10 ? "0" : "") + init_time.getDate() + " " +
+              (init_time.getHours() + 1 < 10 ? "0" : "") + init_time.getHours() + ":" +
+              (init_time.getMinutes() + 1 < 10 ? "0" : "") + init_time.getMinutes() + ":" +
+              (init_time.getSeconds() + 1 < 10 ? "0" : "") + init_time.getSeconds()
+            e.createtime = formateTime
+          })
           this.list = result.data;
         });
     }

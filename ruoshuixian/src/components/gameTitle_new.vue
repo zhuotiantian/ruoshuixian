@@ -201,9 +201,9 @@ export default {
     interval: function () {
       var time;
       if (this.showFinishMemoryBtn) {//记忆时间
-        time = this.rule.memory_time;
+        time = parseInt(this.rule.memory_time);
       } else if (this.isRecall) {//回忆时间
-        time = this.rule.recollect_time
+        time = parseInt(this.rule.recollect_time)
       } else if (this.showFinishAnwserBtn) {
         time = this.$getGameInfo("answerTime");
         console.log(this.$getGameInfo("answerTime"));

@@ -141,8 +141,8 @@ export default {
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
         return e.game_level == level
       })[0];
-      this.memoryTime = rule.memory_time;
-      this.$store.commit("setMemoryTime", rule.memory_time);
+      this.memoryTime = parseInt(rule.memory_time);
+      this.$store.commit("setMemoryTime", parseInt(rule.memory_time));
     },
     //点击确定
     confirm: function () {
