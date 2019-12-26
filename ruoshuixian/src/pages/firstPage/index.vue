@@ -191,7 +191,7 @@ export default {
           let answerTime = [0, 300, 7200, 1800, 900, 7200, 1800, 1800, 1800, 1800, 300, 900];
           result.data.game_list.forEach((e, index) => {
             e.rule = rules[index];
-            e.anserTime = answerTime[index];
+            e.answerTime = answerTime[index];
           });
           this.games = result.data.game_list;
           this.$store.commit("setGameList", result.data.game_list);

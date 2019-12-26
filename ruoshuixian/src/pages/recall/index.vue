@@ -24,7 +24,7 @@ export default {
   methods: {
     startGame: function () {
       wx.reLaunch({
-        url: "/pages/" + this.$getGameInfo("name") + "/answer/main"
+        url: "/pages/" + this.$getGameInfo("wxapp_url").split("/")[2] + "/answer/main"
       })
     }
   }

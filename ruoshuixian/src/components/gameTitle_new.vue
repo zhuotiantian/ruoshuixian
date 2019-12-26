@@ -45,9 +45,8 @@
         <template v-else>
           <div>
             <span class="btn primary-btn" @click="playAgain">再次训练</span>
-            <button class="btn default-btn shareBtn" open-type="share">
-              <image class="share" :src="'/static/images/redPocket/share.png'" />
-              分享
+            <button class="shareBtn" open-type="share">
+              <image class="share" :src="'/static/images/firstPage/share.gif'" />
             </button>
           </div>
         </template>
@@ -207,6 +206,7 @@ export default {
         time = this.rule.recollect_time
       } else if (this.showFinishAnwserBtn) {
         time = this.$getGameInfo("answerTime");
+        console.log(this.$getGameInfo("answerTime"));
       }
       this.getTime(time);
       this.interval = setInterval(() => {
@@ -334,35 +334,20 @@ p {
 .pannel-title {
   background: $light-blue;
 }
-.shareBtn {
-  background: white;
-  color: $black;
-  text-align: right;
-  width: tovmin(130);
-  vertical-align: middle;
-  margin-left: tovmin(26);
-  padding: 0;
-  text-align: center;
-  animation: shinne 2s linear infinite;
-}
-
-@keyframes shinne {
-  0% {
-    box-shadow: 0 0 tovmin(10) rgba(255, 255, 255, 0.8);
-  }
-  50% {
-    box-shadow: 0 0 tovmin(20) rgba(255, 255, 255, 0.8);
-  }
-  100% {
-    box-shadow: 0 0 tovmin(30) rgba(255, 255, 255, 0.8);
-  }
-}
 
 .share {
-  width: tovmin(32);
-  height: tovmin(26);
+  width: tovmin(100);
+  height: tovmin(100);
   top: tovmin(6);
   vertical-align: middle;
+}
+.shareBtn {
+  background: transparent;
+  height: tovmin(150);
+  width: tovmin(150);
+  float: right;
+  position: relative;
+  top: tovmin(-27);
 }
 .pannel {
   position: fixed;

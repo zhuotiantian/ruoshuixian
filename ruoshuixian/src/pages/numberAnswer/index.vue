@@ -28,6 +28,7 @@ export default {
     this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
       return e.game_level == this.level
     })[0];
+    this.gameName = this.$getGameInfo("name");
     this.token = this.$store.state.userInfo.token;
     this.numberList = this.rule.list.map(e => {
       return {
@@ -45,7 +46,6 @@ export default {
     this.startTime = new Date().getTime();
     this.game_records_id = this.rule.game_records_id;
     this.selected(this.rowIndex, this.columnIndex);
-    this.gameName = this.$getGameInfo("name");
   },
   mounted () {
     wx.setNavigationBarTitle({
@@ -106,23 +106,14 @@ export default {
         }
       })
     },
+    //选中格子
     selected: function (row, column) {
-      let number = this.number.map(e => {
-        return e
-      });
-      number.forEach(e => {
-        e.forEach(m => {
-          m.selected = false;
-        })
-      });
-      this.number = number;
-      this.$set(this.number[row], column, {
-        selected: true,
-        number: this.number[row][column].number
-      });
       this.rowIndex = row;
       this.columnIndex = column;
+      this.cleanActive();
+      this.active();
     },
+    //选择填写的数字
     selectNumber: function (data) {
       let current = this.number[this.rowIndex][this.columnIndex];
       if (current.selected) {
@@ -138,11 +129,39 @@ export default {
       }
       this.$set(this.number[this.rowIndex][this.columnIndex], "selected", true);
     },
+    //删除填写的数字
     deleteNumber: function () {
       let current = this.number[this.rowIndex][this.columnIndex];
-      current.number = "";
-      this.$set(this.number[this.rowIndex], this.columnIndex, current);
+      if (current.number !== "") {
+        current.number = ""
+      }
+      this.backSpace();
+    },
+    // 去掉所有的选中状态
+    cleanActive: function () {
+      let number = this.number.concat();
+      number.forEach(e => {
+        e.forEach(m => {
+          m.selected = false;
+        })
+      })
+      this.number = number;
+    },
+    // 为格子添加选中状态
+    active: function () {
+      let item = this.number[this.rowIndex][this.columnIndex];
+      item.selected = true;
+      this.$set(this.number[this.rowIndex], this.columnIndex, item);
+    },
+    // 退格
+    backSpace: function () {
       this.$set(this.number[this.rowIndex][this.columnIndex], "selected", false);
+      if (this.columnIndex === 0 && this.rowIndex > 0) {
+        this.rowIndex--;
+        this.columnIndex == this.number[this.rowIndex].length - 1;
+      } else if (this.columnIndex > 0) {
+        this.columnIndex--;
+      }
       this.$set(this.number[this.rowIndex][this.columnIndex], "selected", true);
     }
   }
