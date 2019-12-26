@@ -9,6 +9,7 @@
     </div>
     <p class="text" v-if="isPlay">正在播放录音&nbsp;&middot;&nbsp;&middot;&nbsp;&middot;</p>
     <p class="text" v-else>播放暂停</p>
+    <div class="interval" v-if="showInterval">{{number}}秒</div>
   </div>
 </template>
 <script>
@@ -20,64 +21,70 @@ export default {
   onUnload () {
     this.innerAudioContext.destroy();
   },
+  onReady () {
+    this.innerAudioContext = wx.createInnerAudioContext();
+    this.innerAudioContext.onError(function (res) {
+      console.log(res);
+      wx.showToast({
+        title: '语音播放失败',
+        icon: 'none',
+      })
+    })
+  },
   data () {
     return {
       innerAudioContext: null,
       level: "primary",
       isPlay: true,
+      showInterval: true,
+      number: 3,
+      numberList: []
     };
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data());
-    this.level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];
-    let eng = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
-    let numberList = this.rule.list.map(e => {
-      return eng[e]
-    });
-    let that = this;
-    wx.request({
-      url: "https://openapi.baidu.com/oauth/2.0/token",
-      method: "GET",
-      data: {
-        grant_type: "client_credentials",
-        client_id: "Ty51KGGMStzsF2MaXDmaMG0j",
-        client_secret: "g4LN0RcXzUGKsyzK8jBscXHcYRiGSQEv"
-      },
-      success: function (res) {
-        wx.hideLoading();
-        let token = res.data.access_token;
-
-        let tex = encodeURIComponent(numberList.slice(0, 100));
-        wx.login({
-          success: function (res) {
-            let cuid = res.code;
-            var url = `https://tsn.baidu.com/text2audio?lan=zh&ctp=1&cuid=${cuid}&tok=${token}&tex=${tex}&vol=9&per=0&spd=1&pit=5&aue=3`;
-            wx.downloadFile({
-              url: url,
-              success: function (result) {
-                let innerAudioContext = wx.createInnerAudioContext();
-                innerAudioContext.src = result.tempFilePath;
-                innerAudioContext.play();
-                innerAudioContext.loop = true;
-                that.innerAudioContext = innerAudioContext;
-              }
-            });
-          }
-        })
-
-      },
-      fail: function (res) {
-        wx.hideLoading();
-      },
-      complete: function () {
-        wx.hideLoading();
+  },
+  mounted () {
+    this.getGameData();
+    //记忆前的倒计时
+    let interval = setInterval(() => {
+      this.number--;
+      if (this.number <= 0) {
+        this.showInterval = false;
+        this.toYuyin()
+        clearInterval(interval);
       }
-    });
+    }, 1000);
   },
   methods: {
+    // 获取数据
+    getGameData: function () {
+      this.level = this.$store.state.level;
+      this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == this.level
+      })[0];
+      let eng = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+      this.numberList = this.rule.list.map(e => {
+        return eng[e]
+      });
+    },
+    toYuyin: function () {
+      let plugin = requirePlugin("WechatSI");
+      let that = this;
+      plugin.textToSpeech({
+        lang: "en_US",
+        tts: true,
+        content: this.numberList.join(","),
+        success: function (res) {
+          console.log("succ tts", res.filename);
+          that.innerAudioContext.src = res.filename
+          that.innerAudioContext.play();
+        },
+        fail: function (res) {
+          console.log("fail tts", res)
+        }
+      })
+    },
     finishMemary: function () {
       this.innerAudioContext && this.innerAudioContext.destroy();
       setTimeout(() => {
@@ -134,5 +141,18 @@ em {
 
 .text {
   margin-top: tovmin(100);
+}
+.interval {
+  position: fixed;
+  width: tovmin(200);
+  height: tovmin(200);
+  line-height: tovmin(200);
+  background: rgba(0, 0, 0, 0.3);
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border-radius: tovmin(200);
+  text-align: center;
+  font-size: tovmin(40);
 }
 </style>

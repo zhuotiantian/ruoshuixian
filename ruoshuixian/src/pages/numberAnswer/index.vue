@@ -180,7 +180,7 @@ page {
 
 .list {
   margin-top: tovmin(200);
-  margin-bottom: tovmin(180);
+  margin-bottom: tovmin(360);
 }
 
 .row {

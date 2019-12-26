@@ -22,6 +22,7 @@ let _store = Vue.prototype.$store;
 Vue.prototype.$toGame = (id, url, fn) => {
   _store.commit("setGameId", id);
   _store.commit("setLevel", "primary");
+  wx.showLoading();
   let userInfo = _store.state.userInfo;
   let token = userInfo.token;
   http
@@ -36,6 +37,7 @@ Vue.prototype.$toGame = (id, url, fn) => {
     })
     .then(result => {
       _store.commit("setRule", result.data);
+      wx.hideLoading();
       if (fn) {
         fn();
       } else {

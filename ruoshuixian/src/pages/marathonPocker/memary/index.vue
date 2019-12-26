@@ -91,7 +91,7 @@ export default {
         this.groupPage[this.currentPage].filter(e => {
           return e.active;
         })[0].number - 1;
-      let list = JSON.parse(JSON.stringify(this.pocker[currentIndex]));
+      let list = JSON.parse(JSON.stringify(this.pocker));
       this.pockerNumber = data === "All" ? 52 : data;
       this.perPocker = [];
       if (this.pockerNumber === 52) {
