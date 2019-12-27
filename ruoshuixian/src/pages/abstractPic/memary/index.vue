@@ -50,6 +50,12 @@ export default {
       arr.sort(() => {
         return Math.random() > 0.5 ? -1 : 1
       })
+      arr.sort(() => {
+        return Math.random() > 0.5 ? -1 : 1
+      })
+      arr.sort(() => {
+        return Math.random() > 0.5 ? -1 : 1
+      })
       number.push(arr);
     };
     this.number = number.filter(e => {

@@ -20,6 +20,7 @@ export default {
   },
   onUnload () {
     this.innerAudioContext.destroy();
+    clearInterval(this.interval);
   },
   onReady () {
     this.innerAudioContext = wx.createInnerAudioContext();
@@ -47,7 +48,7 @@ export default {
   mounted () {
     this.getGameData();
     //记忆前的倒计时
-    let interval = setInterval(() => {
+    this.interval = setInterval(() => {
       this.number--;
       if (this.number <= 0) {
         this.showInterval = false;

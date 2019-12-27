@@ -46,6 +46,7 @@ export default {
               (init_time.getMinutes() + 1 < 10 ? "0" : "") + init_time.getMinutes() + ":" +
               (init_time.getSeconds() + 1 < 10 ? "0" : "") + init_time.getSeconds()
             e.createtime = formateTime
+            e.game_time = Number(e.game_time).toFixed(2)
           })
           this.list = result.data;
         });

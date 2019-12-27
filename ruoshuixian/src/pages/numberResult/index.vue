@@ -3,8 +3,8 @@
     <GameTitle :isResult="true"></GameTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
-        <span :class="{item:true, wrong:item.result==1}" v-for="(item,index) in rows" :key="index">{{item.number}}</span>
-        <span>row&nbsp;&nbsp;{{_index+1}}</span>
+        <span :class="{item:true, wrong:item.result==1}" v-for="(item,index) in rows" :key="index">{{item.correct_result}}</span>
+        <span style="width:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
   </div>
@@ -39,7 +39,12 @@ export default {
     this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
       return e.game_level == level
     })[0];
-    this.result = this.$store.state.result.right_and_wrong_results;
+    let result = this.$store.state.result;
+    let correct_result = result.correct_result;
+    result.right_and_wrong_results.forEach((e, index) => {
+      e.correct_result = correct_result[index]
+    });
+    this.result = result.right_and_wrong_results;
     let total = this.rule.number;
     let per = this.rule.number_per_group;
     let number = [];

@@ -5,7 +5,7 @@
       <p class="list-title">
         <span>序号</span>
         <span>时间</span>
-        <span>&nbsp;</span>
+        <span>正确答案</span>
         <span style="flex:3;">事件</span>
       </p>
       <p v-for="(item,index) in numberList" :key="index">
@@ -65,7 +65,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .list {
-  margin: tovmin(150) tovmin(30) auto tovmin(130);
+  margin: tovmin(100) tovmin(30) auto tovmin(130);
   color: white;
 }
 

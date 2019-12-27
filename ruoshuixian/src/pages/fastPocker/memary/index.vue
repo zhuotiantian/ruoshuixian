@@ -8,7 +8,7 @@
       <template v-else>
         <em class="arrow arrow-left" @click="prevGroup" v-if="pockerNumber<52"></em>
         <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
-          <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}">
+          <div class="pocker-wrapper" :style="{width:pockerNumber<16?((pockerNumber-1)*40+124+'rpx'):'97%'}">
             <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
           </div>
         </scroll-view>
@@ -120,6 +120,7 @@ export default {
   width: tovmin(248);
   margin-right: tovmin(30);
   position: absolute;
+  transform: rotate(-180deg);
 }
 
 .pocker-bg {

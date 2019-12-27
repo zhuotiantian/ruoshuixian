@@ -2,18 +2,18 @@
   <div class="container">
     <GameTitle :isResult="true" :showCorrectAnswerBtn="true" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
     <div class="list" v-if="isShowCorrectAnswer">
-      <em class="arrow arrow-left" @click="prevGroup"></em>
-      <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
-        <image class="pocker" ref="pocker" v-for="(item,index) in showCorrectResult[correctCurrentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
-      </div>
-      <em class="arrow arrow-right" @click="nextGroup"></em>
+      <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
+        <div class="pocker-wrapper" style="97%">
+          <image class="pocker" ref="pocker" v-for="(item,index) in showCorrectResult" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        </div>
+      </scroll-view>
     </div>
     <div class="list" v-else>
-      <em class="arrow arrow-left" @click="prevGroup"></em>
-      <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
-        <image :class="{pocker:true,trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
-      </div>
-      <em class="arrow arrow-right" @click="nextGroup"></em>
+      <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
+        <div class="pocker-wrapper" :style="{width:pocker.length<52?((pocker.length-1)*40+124+'rpx'):'97%'}">
+          <image :class="{pocker:true,trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        </div>
+      </scroll-view>
     </div>
   </div>
 </template>
@@ -28,10 +28,7 @@ export default {
       pockerCount: 23,
       left: 100,
       userid: null,
-      currentGroupIndex: 0,
-      correctCurrentGroupIndex: 0,
       pocker: [],
-      pockerNumber: 0,
       isShowCorrectAnswer: false,
       correct_result: [],
       showCorrectResult: [],
@@ -40,7 +37,6 @@ export default {
   onLoad () {
     let userInfo = this.$store.state.userInfo;
     this.userid = userInfo.id;
-    this.pockerNumber = this.$store.state.pockerNumber;
     this.correct_result = this.$store.state.result.correct_result;
     let user_result = this.$store.state.result.right_and_wrong_results;
     user_result.forEach((e, _index) => {
@@ -49,13 +45,8 @@ export default {
         e.trueResult = true;
       }
     })
-    this.pocker = [];
-    for (var i = 0; i < user_result.length; i + this.pockerNumber) {
-      this.pocker.push(user_result.splice(i, i + this.pockerNumber));
-    }
-    for (var i = 0; i < this.correct_result.length; i + this.pockerNumber) {
-      this.showCorrectResult.push(this.correct_result.splice(i, i + this.pockerNumber));
-    }
+    this.pocker = user_result;
+    this.showCorrectResult = this.correct_result
   },
   onShareAppMessage: function (res) {
     return {
@@ -108,7 +99,7 @@ export default {
   text-align: center;
   position: relative;
   height: auto;
-  height: tovmin(30);
+  height: 58vmin;
   display: flex;
   justify-content: space-between;
   margin: 0 15vmin;
@@ -140,5 +131,12 @@ export default {
 }
 .trueResult {
   border: tovmin(4) solid $green;
+}
+.pocker-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 196px;
+  white-space: "nowrap";
 }
 </style>

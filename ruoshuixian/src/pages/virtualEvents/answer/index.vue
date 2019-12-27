@@ -3,7 +3,6 @@
     <div class="fog" v-if="showFog"></div>
     <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
     <GameTitle :showIntervalTime='true' :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
-    </CardTitle>
     <div class="list">
       <p class="list-title">
         <span>序号</span>

@@ -144,6 +144,9 @@ export default {
       default: false
     }
   },
+  onUnload: function () {
+    clearInterval(this.interval);
+  },
   onLoad () {
     Object.assign(this.$data, this.$options.data());
     this.level = this.$store.state.level;
@@ -206,10 +209,10 @@ export default {
         time = parseInt(this.rule.recollect_time)
       } else if (this.showFinishAnwserBtn) {
         time = this.$getGameInfo("answerTime");
-        console.log(this.$getGameInfo("answerTime"));
       }
       this.getTime(time);
       this.interval = setInterval(() => {
+        console.log("interval...");
         time--;
         if (time === 0) {
           clearInterval(this.interval);
@@ -228,6 +231,7 @@ export default {
       let minutes = Math.floor((time - hour * 3600) / 60);
       let seconds = (time - hour * 3600 - minutes * 60);
       this.computedTime = { hour, minutes, seconds };
+      console.log(this.computedTime);
     },
     //跳转到游戏帮助页面
     toHelp: function () {
@@ -257,7 +261,7 @@ export default {
     playAgain: function () {
       this.$toGame(this.gameid, "", () => {
         wx.reLaunch({
-          url: "/pages/gameIndex/main"
+          url: "/pages/gameIndex/main?type=playAgain"
         });
       });
     },
@@ -296,16 +300,18 @@ export default {
 </script>
 <style lang="scss" scoped>
 .title {
-  font-size: tovmin(30);
+  font-size: 4vmin;
   display: flex;
   justify-content: space-between;
-  padding: tovmin(40) tovmin(30) tovmin(30) tovmin(30);
+  padding: 0 4vmin 0 4vmin;
   position: fixed;
   top: 0;
   width: calc(100% - 30rpx);
-  background: $deep-blue;
+  background: #173771;
   color: white;
   z-index: 999;
+  height: 14vmin;
+  line-height: 14vmin;
 }
 .title .left {
   flex: 3;
@@ -333,6 +339,8 @@ p {
 }
 .pannel-title {
   background: $light-blue;
+  font-size: tovmin(48);
+  font-weight: bold;
 }
 
 .share {

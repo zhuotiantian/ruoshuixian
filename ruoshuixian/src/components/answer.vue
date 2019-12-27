@@ -4,8 +4,8 @@
       <p v-if="operationType!==''">请在待选区域选择需要{{operationType}}的牌</p>
       <template v-else>
         <div class="btn default-btn" @click.stop="replace">替换</div>
-        <div class="btn default-btn" @click="insertBefore">从前插入</div>
-        <div class="btn default-btn" @click="insertAfter">从后插入</div>
+        <div class="btn default-btn" @click="insertBefore">从左插入</div>
+        <div class="btn default-btn" @click="insertAfter">从右插入</div>
         <div class="btn default-btn" @click="back">退回</div>
       </template>
     </div>
@@ -66,7 +66,7 @@ export default {
   },
   onLoad (options) {
     Object.assign(this.$data, this.$options.data());
-    
+
     if (this.gameName === '马拉松扑克牌') {
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
@@ -119,6 +119,7 @@ export default {
     },
     //从待选区域选择扑克
     selectPocker: function (rowIndex, columnIndex) {
+      this.$emit("hideAnwserText");
       if (this.notBack) {
         this.result.push({
           url: '/static/images/pocker/' + columnIndex + '-' + rowIndex + '.png',
@@ -222,6 +223,7 @@ export default {
       this.operationType = "";
       this.selectedTopPocker = {};
       this.notBack = true;
+
     },
     nextPage: function () {
       if (this.currentPage > 3) {
@@ -258,7 +260,7 @@ export default {
   position: absolute;
   min-width: 100%;
   height: 100%;
-  bottom: 5vmin;
+  bottom: 7vmin;
 }
 
 .result image {

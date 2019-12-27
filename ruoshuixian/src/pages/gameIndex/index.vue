@@ -23,15 +23,15 @@
         </div>
       </template>
       <template v-else>
-        <div>
+        <div style="font-size:24rpx">
           <div v-if="currentPage==='flashPocker'">
-            <span class="label">请选择闪视时间：</span>
+            <span class="label">闪视时间：</span>
             <div class="btn-group">
               <span v-for="(item,index) in memoryTime" :class="{active:activeTime==item}" @click="activeTime=item" :key="index">{{item}}秒</span>
             </div>
           </div>
           <div>
-            <span class="label">请选择显示方式：</span>
+            <span class="label">显示张数：</span>
             <div class="btn-group">
               <span v-for="(item,index) in pockerNum" :class="{active:activeNum==item}" @click="activeNum=item" :key="index">{{item}}张</span>
               <span v-if="currentPage==='fastPocker'||currentPage==='marathonPocker'" :class="{active:activeNum=='All'}" @click="activeNum='All'">All</span>
@@ -46,6 +46,7 @@
     <div v-else class="content">
       <div>
         <p>本轮记忆时间：{{returnHourAndMinutes}}</p>
+        <p>请选择</p>
         <p style="margin-top:40rpx">
           <span @click="selLevel('primary')">
             <image class="radioBtn" src="/static/images/firstPage/circle_active.png" v-if="level=='primary'"></image>
@@ -59,7 +60,7 @@
           </span>
         </p>
       </div>
-      <div class="btn submit-btn" @click="startGame">开始作答</div>
+      <div class="btn submit-btn" @click="startGame">开始游戏</div>
     </div>
   </div>
 </template>
@@ -71,9 +72,11 @@ export default {
     GameTitle,
     AlertBoxNoBth
   },
-  onLoad () {
+  onLoad (options) {
+    if (options.type === 'playAgain') {
+      this.$store.commit("setIsNew", false);
+    }
     this.currentPage = this.$getGameInfo("wxapp_url").split("/")[2];
-    console.log(this.$getGameInfo("wxapp_url").split("/"));
     this.rule = this.$getGameInfo("rule");
     this.show = this.$store.state.isNew;
     this.page = (this.currentPage !== 'flashPocker' ? "first" : "second");
@@ -165,6 +168,7 @@ export default {
   width: 76%;
   text-align: center;
   justify-content: center;
+  font-size: tovmin(48);
 }
 .content > div > div {
   display: flex;
@@ -174,7 +178,6 @@ export default {
   height: tovmin(56);
   line-height: tovmin(56);
   font-weight: bold;
-  font-size: tovmin(28);
 }
 
 .btn-group span {
@@ -182,7 +185,6 @@ export default {
   width: tovmin(100);
   height: tovmin(56);
   display: inline-block;
-  font-size: tovmin(26);
 }
 
 .btn-group .active {

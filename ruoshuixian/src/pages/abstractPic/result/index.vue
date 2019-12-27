@@ -28,12 +28,14 @@ export default {
     this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
       return e.game_level == level
     })[0];
-    this.result = this.$store.state.result.right_and_wrong_results;
+    let result = this.$store.state.result;
+    let correct_result = result.correct_result;
+    this.result = result.right_and_wrong_results;
     let number = [];
     this.numberList = this.rule.list.map((e, index) => {
       return {
         image: e,
-        text: this.result[index].number,
+        text: correct_result[index],
         result: this.result[index].result
       }
     });

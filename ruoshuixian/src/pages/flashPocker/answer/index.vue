@@ -2,8 +2,8 @@
   <div class="container">
     <div class="fog" v-if="showFog"></div>
     <alertBox :text="text" v-if="showFog&&!showTip" @hideFog="hideFog" @confirm="confirm"></alertBox>
-    <GameTitle :startAnwserText="true" :showTips="true" :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
-    <Answer ref="answer" />
+    <GameTitle :startAnwserText="startAnwserText" :showTips="true" :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
+    <Answer ref="answer" @hideAnwserText="hideAnwserText" />
   </div>
 </template>
 <script>
@@ -20,7 +20,8 @@ export default {
     return {
       showFog: false,
       showTip: false,
-      canAdd: false
+      canAdd: false,
+      startAnwserText: true
     }
   },
   onLoad () {
@@ -34,6 +35,12 @@ export default {
     this.game_records_id = this.rule.game_records_id;
   },
   methods: {
+    hideAnwserText: function () {
+      console.log("111");
+      if (this.startAnwserText) {
+        this.startAnwserText = false;
+      }
+    },
     finishAnwser: function () {
       let result = this.$refs.answer.result;
       this.showFog = true;
@@ -81,7 +88,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
-  padding-top: tovmin(140);
+  padding-top: tovmin(200);
   color: white;
   text-align: center;
 }

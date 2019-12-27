@@ -95,7 +95,6 @@ export default {
           }
         })
       });
-      console.log(this.number);
     },
     confirm: function () {
       this.endTime = new Date().getTime();
@@ -105,6 +104,7 @@ export default {
           new_game_list.push(m.text);
         });
       });
+      console.log(this.game_list);
       this.$http
         .post({
           url: "/api/wxapp.game/submitTheGame",
