@@ -66,7 +66,7 @@ export default {
   },
   onLoad (options) {
     Object.assign(this.$data, this.$options.data());
-
+    this.gameName = this.$getGameInfo("name");
     if (this.gameName === '马拉松扑克牌') {
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
@@ -74,7 +74,7 @@ export default {
       })[0];
       this.list = rule.list;
       // 生成所有pock的副数
-      for (var i = 1; i <= this.list.length; i++) {
+      for (var i = 1; i <= this.list.length / 52; i++) {
         this.pages.push({
           number: i,
           active: false
@@ -272,7 +272,7 @@ export default {
 
 .result-div {
   display: flex;
-  height: tovmin(190);
+  height: tovmin(220);
   align-items: center;
 }
 .pageFoot {

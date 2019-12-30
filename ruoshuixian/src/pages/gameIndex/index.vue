@@ -7,7 +7,7 @@
     <div v-if="gameType==='pocker'" class="content">
       <template v-if="page==='first'">
         <div>
-          <p>本轮记忆时间：{{returnHourAndMinutes}}</p>
+          <div style="margin-bottom:30rpx;font-size:20rpx;font-weight:bold">请选择</div>
           <p style="margin-top:40rpx">
             <span @click="selLevel('primary')">
               <image class="radioBtn" src="/static/images/firstPage/circle_active.png" v-if="level=='primary'"></image>
@@ -24,7 +24,9 @@
       </template>
       <template v-else>
         <div style="font-size:24rpx">
-          <div v-if="currentPage==='flashPocker'">
+          <p v-if="currentPage === 'fastPocker' || currentPage === 'marathonPocker'" style="position:absolute;top:5vmin;left:50%;z-index:9999;font-size:16rpx;transform: translateX(-50%);">本轮记忆时间：{{returnHourAndMinutes}}</p>
+          <div style="margin-bottom:30rpx">点击选择</div>
+          <div v-if="currentPage==='flashPocker'" style="margin-bottom:15rpx">
             <span class="label">闪视时间：</span>
             <div class="btn-group">
               <span v-for="(item,index) in memoryTime" :class="{active:activeTime==item}" @click="activeTime=item" :key="index">{{item}}秒</span>
@@ -45,7 +47,6 @@
     <!-- 其他游戏首页 -->
     <div v-else class="content">
       <div>
-        <p>本轮记忆时间：{{returnHourAndMinutes}}</p>
         <p>请选择</p>
         <p style="margin-top:40rpx">
           <span @click="selLevel('primary')">
@@ -77,6 +78,7 @@ export default {
       this.$store.commit("setIsNew", false);
     }
     this.currentPage = this.$getGameInfo("wxapp_url").split("/")[2];
+    console.log(this.currentPage);
     this.rule = this.$getGameInfo("rule");
     this.show = this.$store.state.isNew;
     this.page = (this.currentPage !== 'flashPocker' ? "first" : "second");
@@ -102,10 +104,9 @@ export default {
   },
   computed: {
     returnHourAndMinutes: function () {
-      let hour = Math.floor(this.memoryTime / 3600);
-      let minutes = Math.floor((this.memoryTime - hour * 3600) / 60);
-      let seconds = (this.memoryTime - hour * 3600 - minutes * 60);
-      return (hour !== 0 ? hour + '小时' : '') + (minutes !== 0 ? minutes + '分钟' : '') + (seconds !== 0 ? seconds + '秒' : '')
+      let minutes = Math.floor(this.memoryTime / 60);
+      let seconds = (this.memoryTime - minutes * 60);
+      return (minutes !== 0 ? minutes + '分钟' : '') + (seconds !== 0 ? seconds + '秒' : '')
     }
   },
   mounted () {
@@ -162,13 +163,13 @@ export default {
 }
 
 .content {
-  margin: tovmin(240) auto auto auto;
+  margin: tovmin(180) auto auto auto;
   display: flex;
   flex-direction: column;
   width: 76%;
   text-align: center;
   justify-content: center;
-  font-size: tovmin(48);
+  font-size: tovmin(36);
 }
 .content > div > div {
   display: flex;
@@ -177,7 +178,6 @@ export default {
 .label {
   height: tovmin(56);
   line-height: tovmin(56);
-  font-weight: bold;
 }
 
 .btn-group span {
@@ -185,6 +185,7 @@ export default {
   width: tovmin(100);
   height: tovmin(56);
   display: inline-block;
+  font-size: tovmin(36);
 }
 
 .btn-group .active {

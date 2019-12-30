@@ -7,7 +7,7 @@
       </template>
       <template v-else>
         <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}">
-          <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*40+'rpx','z-index':pocker.length-1-index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+          <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
         </div>
       </template>
     </div>

@@ -339,10 +339,12 @@ p {
 }
 .pannel-title {
   background: $light-blue;
-  font-size: tovmin(48);
+  font-size: tovmin(34);
   font-weight: bold;
 }
-
+.pannel p {
+  font-size: tovmin(26);
+}
 .share {
   width: tovmin(100);
   height: tovmin(100);
@@ -378,7 +380,7 @@ p {
 }
 
 .pannel p.active {
-  background: $light-blue;
+  background: #f5f5f5;
 }
 
 .arrow-left::after {

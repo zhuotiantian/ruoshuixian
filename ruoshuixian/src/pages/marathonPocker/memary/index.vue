@@ -18,7 +18,7 @@
     <div class="pageFoot">
       <span class="pageBtn" @click="prevPage">上一页</span>
       <div class="btn-group">
-        <span :class="{ item: true, active: item.active }" @click="selectHandler(index, item)" v-for="(item, index) in groupPage[currentPage]" :key="index">{{ item.number }}幅</span>
+        <span :class="{ item: true, active: item.active }" @click="selectHandler(index, item)" v-for="(item, index) in groupPage[currentPage]" :key="index">{{ item.number }}副</span>
       </div>
       <span class="pageBtn" @click="nextPage">下一页</span>
     </div>
@@ -37,14 +37,21 @@ export default {
       return e.game_level == level;
     })[0];
     this.pockerNumber = this.$store.state.pockerNumber;
-    this.pocker = this.rule.list;
+    let pocker = this.rule.list;
+    let list = [];
+    for (var i = 0; i < pocker.length; i += 10) {
+      list.push(pocker.slice(i, i + 10));
+    }
+    this.pocker = list;
     // 生成pock的副数
-    for (var i = 1; i <= this.pocker.length; i++) {
-      this.pages.push({
+    let pages = [];
+    for (var i = 1; i <= list.length; i++) {
+      pages.push({
         number: i,
         active: false
       });
     }
+    this.pages = pages;
     this.pages[0].active = true;
     let groupPage = [];
     for (var i = 0; i < this.pages.length; i += 10) {
@@ -91,7 +98,7 @@ export default {
         this.groupPage[this.currentPage].filter(e => {
           return e.active;
         })[0].number - 1;
-      let list = JSON.parse(JSON.stringify(this.pocker));
+      let list = JSON.parse(JSON.stringify(this.pocker[currentIndex]));
       this.pockerNumber = data === "All" ? 52 : data;
       this.perPocker = [];
       if (this.pockerNumber === 52) {
