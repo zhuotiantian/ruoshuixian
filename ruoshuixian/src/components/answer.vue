@@ -1,5 +1,5 @@
 <template>
-  <div class="answer-wrapper">
+  <div class="answer-wrapper" :style="{height:gameName==='马拉松扑克牌'?'61vmin':'79vmin'}">
     <div class="btnGroup" style="position:relative:z-index:998;" v-if="hasToOperationPocker">
       <p v-if="operationType!==''">请在待选区域选择需要{{operationType}}的牌</p>
       <template v-else>
@@ -18,7 +18,14 @@
       </scroll-view>
       <em class="arrow arrow-right" v-if="result.length>0" style="flex:1;"></em>
     </div>
-    <scroll-view scroll-y="true" :style="{height:result.length>0?(hasToOperationPocker?'44vmin':'50vmin'):'100%',marginTop:'3vmin'}">
+    <scroll-view scroll-y="true" v-if="gameName==='马拉松扑克牌'" :style="{height:result.length>0?(hasToOperationPocker?'calc(100% - 40vmin)':'calc(100% - 32vmin)'):'100%',marginTop: '3vmin'}">
+      <div class="list">
+        <div class="row" v-for="(row,rowIndex) in pocker" :key="rowIndex">
+          <image @click="selectPocker(item.row,item.column)" ref="pocker" :class="{pocker,hidden:!item.show,active:item.active}" v-for="(item,columnIndex) in row" :src="'/static/images/pocker/'+item.column+'-'+item.row+'.png'" :key="columnIndex"></image>
+        </div>
+      </div>
+    </scroll-view>
+    <scroll-view scroll-y="true" v-else :style="{height:result.length>0?(hasToOperationPocker?'calc(100% - 40vmin)':'calc(100% - 33vmin)'):'100%',marginTop: '3vmin'}">
       <div class="list">
         <div class="row" v-for="(row,rowIndex) in pocker" :key="rowIndex">
           <image @click="selectPocker(item.row,item.column)" ref="pocker" :class="{pocker,hidden:!item.show,active:item.active}" v-for="(item,columnIndex) in row" :src="'/static/images/pocker/'+item.column+'-'+item.row+'.png'" :key="columnIndex"></image>
@@ -75,7 +82,6 @@ export default {
       })[0];
       let perGroupNumber = rule.number_per_group;
       // 生成所有pock的副数
-      console.log(this.list.length / perGroupNumber);
       for (var i = 1; i <= this.list.length / perGroupNumber; i++) {
         this.pages.push({
           number: i,
@@ -92,6 +98,7 @@ export default {
       this.select(0, this.pages[0]);
     }
   },
+
   methods: {
     select: function (index, item) {
       let currentPage = this.groupPage[this.currentPage];

@@ -45,14 +45,12 @@ export default {
         game_records_id = this.$store.state.ruleList.game_records_id,
         token = this.$store.state.userInfo.token;
       for (var i = 0; i < allResults.length; i++) {
-        let item = [];
         for (var j = 0; j < allResults[i].length; j++) {
-          item.push({
+          params.push({
             index: allResults[i][j].columnIndex,
             color: allResults[i][j].rowIndex,
           })
         };
-        params.push(item)
       }
       this.$http.post({
         url: "/api/wxapp.game/submitTheGame",

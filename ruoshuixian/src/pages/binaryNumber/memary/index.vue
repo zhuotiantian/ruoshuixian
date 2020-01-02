@@ -35,10 +35,10 @@ export default {
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
         return e.game_level == level
       })[0];
-      this.numberList = this.$store.state.ruleList.list;
+      let numberList = this.$store.state.ruleList.list;
       let total = rule.number, per = rule.number_per_group, number = [];
-      for (var i = 0; i < this.total; i += this.per) {
-        number.push(this.numberList.slice(i, i + this.per));
+      for (var i = 0; i < total; i += per) {
+        number.push(numberList.slice(i, i + per));
       };
       this.number = number;
     },
@@ -71,7 +71,7 @@ page {
 }
 
 .list {
-  margin-top: tovmin(200);
+  margin-top: tovmin(150);
   margin-bottom: tovmin(30);
 }
 

@@ -84,7 +84,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
-  padding-top: tovmin(200);
+  padding-top: tovmin(120);
   color: white;
   text-align: center;
 }

@@ -153,12 +153,13 @@ export default {
           token: token
         }
       }).then(result => {
-        this.$store.commit("setRuleList", result.data)
+        this.$store.commit("setRuleList", result.data);
+        //跳转到下一个页面
+        wx.reLaunch({
+          url: "/pages/" + this.currentPage + "/memary/main"
+        })
       })
-      //跳转到下一个页面
-      wx.reLaunch({
-        url: "/pages/" + this.currentPage + "/memary/main"
-      })
+
     },
     //选择等级
     selLevel: function (level) {

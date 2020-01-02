@@ -214,7 +214,6 @@ export default {
       }
       this.getTime(time);
       this.timer = setInterval(() => {
-        console.log("interval...");
         time--;
         if (time === 0) {
           clearInterval(this.interval);
@@ -233,7 +232,6 @@ export default {
       let minutes = Math.floor((time - hour * 3600) / 60);
       let seconds = (time - hour * 3600 - minutes * 60);
       this.computedTime = { hour, minutes, seconds };
-      console.log(this.computedTime);
     },
     //跳转到游戏帮助页面
     toHelp: function () {
@@ -323,7 +321,7 @@ export default {
   flex: 2;
   display: flex;
   align-items: center;
-  justify-content:center;
+  justify-content: center;
 }
 .title .right {
   flex: 4;
