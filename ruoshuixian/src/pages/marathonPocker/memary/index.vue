@@ -32,32 +32,7 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data());
-    let level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level;
-    })[0];
-    this.pockerNumber = this.$store.state.pockerNumber;
-    let pocker = this.rule.list;
-    let list = [];
-    for (var i = 0; i < pocker.length; i += 10) {
-      list.push(pocker.slice(i, i + 10));
-    }
-    this.pocker = list;
-    // 生成pock的副数
-    let pages = [];
-    for (var i = 1; i <= list.length; i++) {
-      pages.push({
-        number: i,
-        active: false
-      });
-    }
-    this.pages = pages;
-    this.pages[0].active = true;
-    let groupPage = [];
-    for (var i = 0; i < this.pages.length; i += 10) {
-      groupPage.push(this.pages.slice(i, i + 10));
-    }
-    this.groupPage = groupPage;
+    this.init();
   },
   data () {
     return {
@@ -77,10 +52,6 @@ export default {
       pockerNumber: 0
     };
   },
-  mounted: function () {
-    this.group(this.pockerNumber);
-    this.$refs.title.selectType = this.pockerNumber;
-  },
   computed: {
     bgCounts: function () {
       let bgCounts = [];
@@ -93,6 +64,36 @@ export default {
     }
   },
   methods: {
+    init: function () {
+      this.pockerNumber = this.$store.state.pockerNumber;
+      let pocker = this.$store.state.ruleList.list;
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      let perGroupNumber = rule.number_per_group;
+      let list = [];
+      for (var i = 0; i < pocker.length; i += perGroupNumber) {
+        list.push(pocker.slice(i, i + perGroupNumber));
+      }
+      this.pocker = list;
+      // 生成pock的副数
+      let pages = [];
+      for (var i = 1; i <= list.length; i++) {
+        pages.push({
+          number: i,
+          active: false
+        });
+      }
+      this.pages = pages;
+      this.pages[0].active = true;
+      let groupPage = [];
+      for (var i = 0; i < this.pages.length; i += 10) {
+        groupPage.push(this.pages.slice(i, i + 10));
+      }
+      this.groupPage = groupPage;
+      this.group(this.pockerNumber);
+    },
     group: function (data) {
       let currentIndex =
         this.groupPage[this.currentPage].filter(e => {

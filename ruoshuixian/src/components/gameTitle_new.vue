@@ -17,8 +17,8 @@
             <span v-if="showCostTime">用时：{{getPayedTime}}</span>
             <span>得分：{{result.fraction||0}}分</span>
             <span class="btn default-btn" @click="toHistory">历史记录</span>
-            <span class="btn default-btn" v-if="showCorrectAnswerBtn&&!showMyAnswer" @click="showCorrectAnswer">查看正确答案</span>
-            <span class="btn default-btn" v-if="showMyAnswer" @click="showMyAnswerHandler">查看我的答案</span>
+            <span class="btn default-btn" v-if="showCorrectAnswerBtn&&!showMyAnswer" @click="showCorrectAnswer">正确答案</span>
+            <span class="btn default-btn" v-if="showMyAnswer" @click="showMyAnswerHandler">我的提交</span>
           </div>
         </template>
       </div>
@@ -44,6 +44,8 @@
         <!-- 结果 -->
         <template v-else>
           <div>
+            <span class="btn primary-btn" v-if="showChangePageBtn&&!showPrevPage" @click="nextPage">下一页</span>
+            <span class="btn primary-btn" v-if="showChangePageBtn&&showPrevPage" @click="prevPage">上一页</span>
             <span class="btn primary-btn" @click="playAgain">再次训练</span>
             <button class="shareBtn" open-type="share">
               <image class="share" :src="'/static/images/firstPage/share.gif'" />
@@ -75,8 +77,8 @@
         <div class="fog" @click="shouwOperationTips=false"></div>
         <div class="tips">
           <p style="margin-bottom:30rpx">你可以通过以下两种方式对扑克牌的顺序进行修改</p>
-          <p>方式一、双击屏幕上半区的任意一张扑克，将这张扑克牌退回原位。</p>
-          <p>方式二、单击屏幕上半区的任意一张扑克，然后长按下半区的任意一张扑克，进行“替换位置/从前面插入/从后面插入”操作。</p>
+          <p>方式一、点击屏幕上半区的任意一张扑克，点击“退回”将这张扑克牌退回原位。</p>
+          <p>方式二、点击屏幕上半区的任意一张扑克，点击“替换/从左插入/从右面插入”后点击下半区的任意一张扑克进行“替换/从左插入/从右面插入”操作。</p>
           <p>
             <span class="btn default-btn" @click="shouwOperationTips=false">我知道了</span>
           </p>
@@ -145,7 +147,7 @@ export default {
     }
   },
   onUnload: function () {
-    clearInterval(this.interval);
+    clearInterval(this.timer);
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data());
@@ -164,7 +166,7 @@ export default {
     }
     this.showGameLevel = this.gameName !== '闪视扑克牌' && this.showFinishMemoryBtn
     if ((this.showFinishMemoryBtn || this.isRecall || this.showFinishAnwserBtn) && this.showIntervalTime) {
-      clearInterval(this.interval);
+      clearInterval(this.timer);
       this.interval();
     }
   },
@@ -211,7 +213,7 @@ export default {
         time = this.$getGameInfo("answerTime");
       }
       this.getTime(time);
-      this.interval = setInterval(() => {
+      this.timer = setInterval(() => {
         console.log("interval...");
         time--;
         if (time === 0) {
@@ -314,17 +316,17 @@ export default {
   line-height: 14vmin;
 }
 .title .left {
-  flex: 3;
+  flex: 4;
   text-align: left;
 }
 .title .center {
-  flex: 1;
-  text-align: center;
+  flex: 2;
   display: flex;
   align-items: center;
+  justify-content:center;
 }
 .title .right {
-  flex: 3;
+  flex: 4;
   text-align: right;
 }
 .title span:not(:first-child) {
@@ -357,7 +359,7 @@ p {
   width: tovmin(150);
   float: right;
   position: relative;
-  top: tovmin(-27);
+  top: tovmin(-5);
 }
 .pannel {
   position: fixed;

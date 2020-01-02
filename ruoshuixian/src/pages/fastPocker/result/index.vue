@@ -3,14 +3,14 @@
     <GameTitle :isResult="true" :showCorrectAnswerBtn="true" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
     <div class="list" v-if="isShowCorrectAnswer">
       <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
-        <div class="pocker-wrapper" style="97%">
+        <div class="pocker-wrapper" style="width:97%">
           <image class="pocker" ref="pocker" v-for="(item,index) in showCorrectResult" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
         </div>
       </scroll-view>
     </div>
     <div class="list" v-else>
       <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
-        <div class="pocker-wrapper" :style="{width:pocker.length<52?((pocker.length-1)*40+124+'rpx'):'97%','max-width':'97%'}">
+        <div class="pocker-wrapper" :style="{width:(pocker.length<52?((pocker.length-1)*40+124+'rpx'):'97%'),'max-width':'97%'}">
           <image :class="{pocker:true,trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
         </div>
       </scroll-view>

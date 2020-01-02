@@ -44,9 +44,9 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data());
+    this.getGameData();
   },
   mounted () {
-    this.getGameData();
     //记忆前的倒计时
     this.interval = setInterval(() => {
       this.number--;
@@ -60,12 +60,8 @@ export default {
   methods: {
     // 获取数据
     getGameData: function () {
-      this.level = this.$store.state.level;
-      this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == this.level
-      })[0];
       let eng = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
-      this.numberList = this.rule.list.map(e => {
+      this.numberList = this.$store.state.ruleList.list.map(e => {
         return eng[e]
       });
     },

@@ -8,18 +8,27 @@
 </template>
 <script>
 export default {
-  props: ["showKeybord", "counts"],
-  data () {
+  props: {
+    showKeybord: {
+      type: Boolean,
+      default: false
+    }
+  },
+  onLoad: function () {
     let number = null;
-    if (this.counts == "5") {
+    let gameName = this.$getGameInfo("name");
+    if (gameName == "5") {
       number = [1, 2, 3, 4, 5];
-    } else if (this.counts == "2") {
+    } else if (gameName == "二进制数字") {
       number = [0, , , , 1];
     } else {
       number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
     }
+    this.number = number;
+  },
+  data () {
     return {
-      number: number,
+      number: [],
       showKeybord: false,
     }
   },
@@ -36,7 +45,6 @@ export default {
 <style lang="scss" scoped>
 .keybord {
   position: fixed;
-  // height: tovmin(240);
   width: 100%;
   background: white;
   z-index: 101;

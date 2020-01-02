@@ -47,7 +47,8 @@
     <!-- 其他游戏首页 -->
     <div v-else class="content">
       <div>
-        <p>请选择</p>
+        <p style="position:absolute;top:5vmin;left:50%;z-index:9999;font-size:16rpx;transform: translateX(-50%);">本轮记忆时间：{{returnHourAndMinutes}}</p>
+        <div style="margin-bottom:30rpx">请选择</div>
         <p style="margin-top:40rpx">
           <span @click="selLevel('primary')">
             <image class="radioBtn" src="/static/images/firstPage/circle_active.png" v-if="level=='primary'"></image>
@@ -77,29 +78,20 @@ export default {
     if (options.type === 'playAgain') {
       this.$store.commit("setIsNew", false);
     }
-    this.currentPage = this.$getGameInfo("wxapp_url").split("/")[2];
-    console.log(this.currentPage);
-    this.rule = this.$getGameInfo("rule");
-    this.show = this.$store.state.isNew;
-    this.page = (this.currentPage !== 'flashPocker' ? "first" : "second");
-    if (this.currentPage === 'flashPocker' || this.currentPage === 'fastPocker' || this.currentPage === 'marathonPocker') {
-      this.gameType = 'pocker';
-    } else {
-      this.gameType = 'other';
-    }
+    this.init();
   },
   data () {
     return {
       rule: [],
       show: false,
       memoryTime: [],
-      pockerNum: ["1", "2", "4", "8"],
+      pockerNum: [1, 2, 4, 8],
       activeTime: "",
-      activeNum: "4",
+      activeNum: 4,
       currentPage: "",
       page: "first",
-      level: "",
-      gameType: 'pocker'
+      gameType: 'pocker',
+      level: 'primary'
     }
   },
   computed: {
@@ -110,17 +102,29 @@ export default {
     }
   },
   mounted () {
-    this.level = this.$store.state.level;
-    let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];
-    this.memoryTime = rule.memory_time.split(",").reverse();
-    this.activeTime = this.memoryTime[0];
     wx.setNavigationBarTitle({
       title: this.$getGameInfo("name")
     })
   },
   methods: {
+    init: function () {
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      this.memoryTime = rule.memory_time.split(",").reverse();
+      this.activeTime = this.memoryTime[0];
+      this.currentPage = this.$getGameInfo("wxapp_url").split("/")[2];
+      this.rule = this.$getGameInfo("rule");
+      this.show = this.$store.state.isNew;
+      this.page = (this.currentPage !== 'flashPocker' ? "first" : "second");
+      if (this.currentPage === 'flashPocker' || this.currentPage === 'fastPocker' || this.currentPage === 'marathonPocker') {
+        this.gameType = 'pocker';
+      } else {
+        this.gameType = 'other';
+      }
+      this.activeNum = 4;
+    },
     //关闭弹窗
     closeAlertBox: function () {
       this.show = false;
@@ -133,6 +137,24 @@ export default {
       } else if (this.currentPage === 'marathonPocker' || this.currentPage === 'fastPocker') {
         this.$store.commit("setPockerNumber", this.activeNum === 'All' ? 52 : this.activeNum);
       }
+      console.log("ready-page pockernumber", this.activeNum);
+      this.getGameList();
+    },
+    getGameList: function () {
+      let game_id = this.$store.state.gameid;
+      let game_level = this.level;
+      let token = this.$store.state.userInfo.token;
+      this.$http.get({
+        url: "/api/wxapp.game/getGameContent",
+        data: {
+          game_id, game_level
+        },
+        header: {
+          token: token
+        }
+      }).then(result => {
+        this.$store.commit("setRuleList", result.data)
+      })
       //跳转到下一个页面
       wx.reLaunch({
         url: "/pages/" + this.currentPage + "/memary/main"
@@ -163,17 +185,18 @@ export default {
 }
 
 .content {
-  margin: tovmin(180) auto auto auto;
+  margin: tovmin(150) auto tovmin(50) auto;
   display: flex;
   flex-direction: column;
-  width: 76%;
+  width: 90%;
   text-align: center;
-  justify-content: center;
+  fjustify-content: center;
   font-size: tovmin(36);
 }
 .content > div > div {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .label {
   height: tovmin(56);

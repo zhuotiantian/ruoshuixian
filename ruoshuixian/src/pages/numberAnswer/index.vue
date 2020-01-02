@@ -9,7 +9,7 @@
         <span style="width:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
-    <Keybord :showKeybord="showKeybord" :counts="gameName==='二进制数字'?2:10" @selectNumber="selectNumber" @deleteNumber="deleteNumber"></Keybord>
+    <Keybord :showKeybord="showKeybord" @selectNumber="selectNumber" @deleteNumber="deleteNumber"></Keybord>
   </div>
 </template>
 <script>
@@ -24,28 +24,7 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data());
-    this.level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];
-    this.gameName = this.$getGameInfo("name");
-    this.token = this.$store.state.userInfo.token;
-    this.numberList = this.rule.list.map(e => {
-      return {
-        number: "",
-        selected: false
-      }
-    });
-    this.total = this.rule.number;
-    this.per = this.rule.number_per_group;
-    let number = [];
-    for (var i = 0; i < this.total; i += this.per) {
-      number.push(this.numberList.slice(i, i + this.per));
-    };
-    this.number = number;
-    this.startTime = new Date().getTime();
-    this.game_records_id = this.rule.game_records_id;
-    this.selected(this.rowIndex, this.columnIndex);
+    this.init();
   },
   mounted () {
     wx.setNavigationBarTitle({
@@ -57,17 +36,32 @@ export default {
       showKeybord: true,
       showFog: false,
       number: [],
-      total: 0,
-      per: 0,
-      game_records_id: 1,
-      rule: {},
-      level: "primary",
       rowIndex: 0,
       columnIndex: 0,
-      gameName: ""
+      gameName: "",
+      count: 10
     }
   },
   methods: {
+    init: function () {
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      let numberList = this.$store.state.ruleList.list.map(e => {
+        return {
+          number: "",
+          selected: false
+        }
+      });
+      let total = rule.number, per = rule.number_per_group, number = [];
+      for (var i = 0; i < total; i += per) {
+        number.push(numberList.slice(i, i + per));
+      };
+      this.number = number;
+      this.startTime = new Date().getTime();
+      this.selected(this.rowIndex, this.columnIndex);
+    },
     finishAnwser: function () {
       this.showFog = true;
     },
@@ -75,7 +69,8 @@ export default {
       this.showFog = false;
     },
     confirm: function () {
-      this.endTime = new Date().getTime();
+      let token = this.$store.state.userInfo.token, game_records_id = this.$store.state.ruleList.game_records_id;
+      let endTime = new Date().getTime();
       let result = [];
       this.number.forEach(e => {
         e.forEach(m => {
@@ -85,12 +80,12 @@ export default {
       this.$http.post({
         url: "/api/wxapp.game/submitTheGame",
         data: {
-          game_records_id: this.game_records_id,
-          game_time: (this.endTime - this.startTime) / 1000,
+          game_records_id,
+          game_time: (endTime - this.startTime) / 1000,
           content: JSON.stringify(result)
         },
         header: {
-          token: this.token
+          token
         }
       }).then(result => {
         if (result.code == 1) {

@@ -17,26 +17,25 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    let level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level
-    })[0];
     this.sliceList(0, 100);
   },
   data () {
     return {
       list: [],
-      level: "primary",
       per: 0,
       type: "下一页"
     };
   },
   methods: {
     sliceList: function (start, end) {
-      let per = this.rule.number_per_group;
-      let total = this.rule.number;
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      let per = rule.number_per_group;
+      let total = rule.number;
       let list = [];
-      let wordsList = this.rule.list.map((e, index) => {
+      let wordsList = this.$store.state.ruleList.list.map((e, index) => {
         return {
           words: e,
           index: index

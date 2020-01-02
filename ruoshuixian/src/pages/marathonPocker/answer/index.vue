@@ -25,15 +25,12 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    this.level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];;
-    this.token = this.$store.state.userInfo.token;
-    this.startTime = new Date().getTime();
-    this.game_records_id = this.rule.game_records_id;
+    this.init();
   },
   methods: {
+    init: function () {
+      this.startTime = new Date().getTime();
+    },
     finishAnwser: function (data) {
       let result = this.$refs.answer.result;
       this.showFog = true;
@@ -43,8 +40,10 @@ export default {
     },
     confirm: function () {
       this.endTime = new Date().getTime();
-      let allResults = this.$refs.answer.allResult;
-      let params = [];
+      let allResults = this.$refs.answer.allResult,
+        params = [],
+        game_records_id = this.$store.state.ruleList.game_records_id,
+        token = this.$store.state.userInfo.token;
       for (var i = 0; i < allResults.length; i++) {
         let item = [];
         for (var j = 0; j < allResults[i].length; j++) {
@@ -58,12 +57,12 @@ export default {
       this.$http.post({
         url: "/api/wxapp.game/submitTheGame",
         data: {
-          game_records_id: this.game_records_id,
+          game_records_id,
           game_time: (this.endTime - this.startTime) / 1000,
           content: JSON.stringify(params)
         },
         header: {
-          token: this.token
+          token
         }
       }).then(result => {
         if (result.code == 1) {

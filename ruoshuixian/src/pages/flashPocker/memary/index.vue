@@ -22,26 +22,7 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    let level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level
-    })[0];
-    //获取记忆时间
-    this.time_long = this.$store.state.memoryTime * 1000;
-    //获取扑克牌
-    this.list = this.rule.list;
-    //获取记忆张数
-    this.pockerNumber = this.$store.state.pockerNumber;
-    //记忆前的倒计时
-    let interval = setInterval(() => {
-      this.number--;
-      if (this.number <= 0) {
-        this.showInterval = false;
-        this.showFinishMemoryBtn = true;
-        this.start();
-        clearInterval(interval);
-      }
-    }, 1000);
+    this.init();
   },
   data () {
     return {
@@ -49,9 +30,6 @@ export default {
       bg: 23,
       left: 100,
       pocker: [],
-      rule: {},
-      type: null,
-      level: "primary",
       pockerNumber: 0,
       showInterval: true,
       number: 3,
@@ -70,13 +48,26 @@ export default {
     },
   },
   methods: {
+    init: function () {
+      //记忆前的倒计时
+      let interval = setInterval(() => {
+        this.number--;
+        if (this.number <= 0) {
+          this.showInterval = false;
+          this.showFinishMemoryBtn = true;
+          this.start();
+          clearInterval(interval);
+        }
+      }, 1000);
+    },
     start: function () {
-      console.log(this.pockerNumber);
-      this.pocker = this.list.slice(0, this.pockerNumber);
+      let list = this.$store.state.ruleList.list, time_long = this.$store.state.memoryTime * 1000;
+      this.pockerNumber = this.$store.state.pockerNumber
+      this.pocker = list.slice(0, this.pockerNumber);
       this.finishMemary_timer = setTimeout(() => {
         clearTimeout(this.finishMemary_timer);
         this.finishMemary();
-      }, this.time_long)
+      }, time_long)
     },
     finishMemary: function () {
       clearTimeout(this.finishMemary_timer);

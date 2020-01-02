@@ -30,21 +30,15 @@ export default {
       bg: 23,
       left: 100,
       pocker: [],
-      level: "primary",
       list: [],
       currentGroupIndex: 0,
-      rule: {},
       pockerNumber: 0,
     };
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    this.level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];
     this.pockerNumber = this.$store.state.pockerNumber;
-    this.list = this.rule.list;
+    this.list = this.$store.state.ruleList.list;
   },
   computed: {
     bgCounts: function () {
@@ -63,7 +57,7 @@ export default {
   },
   methods: {
     group: function (data) {
-      let list = JSON.parse(JSON.stringify(this.list));
+      let list = this.list;
       this.pockerNumber = (data === 'All' ? 52 : data);
       this.pocker = [];
       if (this.pockerNumber === 52) {

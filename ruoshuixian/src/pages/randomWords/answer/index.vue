@@ -21,25 +21,21 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    this.level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];
-    this.token = this.$store.state.userInfo.token;
-    this.startTime = new Date().getTime();
-    this.game_records_id = this.rule.game_records_id;
-    this.spliceList();
+    this.init();
   },
   data () {
     return {
       list: [],
       showFog: false,
       text: "确定结束作答吗？",
-      type: "下一页",
       pageIndex: 0
     }
   },
   methods: {
+    init: function () {
+      this.startTime = new Date().getTime();
+      this.spliceList();
+    },
     spliceList: function (start, end) {
       let per = this.rule.number_per_group;
       let total = this.rule.number;
@@ -58,11 +54,9 @@ export default {
     },
     nextPage: function () {
       this.pageIndex = 1;
-      this.type = "作答完成";
     },
     prevPage: function () {
       this.pageIndex = 0;
-      this.type = "下一页";
     },
     finishAnwser: function () {
       this.showFog = true;
@@ -72,9 +66,7 @@ export default {
       this.showFog = false;
     },
     confirm: function () {
-      this.endTime = new Date().getTime();
-      let result = [];
-      let list = this.list[0].concat(this.list[1]);
+      let endTime = new Date().getTime(), token = this.$store.state.userInfo.token, game_records_id = this.$store.state.ruleList.game_records_id, result = [], list = this.list[0].concat(this.list[1]);
       list.forEach(e => {
         e.forEach(m => {
           result.push(m.text);
@@ -83,12 +75,12 @@ export default {
       this.$http.post({
         url: "/api/wxapp.game/submitTheGame",
         data: {
-          game_records_id: this.game_records_id,
-          game_time: (this.endTime - this.startTime) / 1000,
+          game_records_id,
+          game_time: (endTime - this.startTime) / 1000,
           content: JSON.stringify(result)
         },
         header: {
-          token: this.token
+          token
         }
       }).then(result => {
         if (result.code == 1) {

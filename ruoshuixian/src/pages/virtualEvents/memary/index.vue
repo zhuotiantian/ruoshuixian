@@ -20,27 +20,26 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    let level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level
-    })[0];
-    this.numberList = this.rule.list.date.map((e, index) => {
-      return {
-        date: e,
-        event: this.rule.list.event[index]
-      }
-    });
-    this.numberList.sort(() => {
-      return Math.random() > 0.5 ? -1 : 1
-    })
+    this.init();
   },
   data () {
     return {
-      numberList: [],
-      level: "primary"
+      numberList: []
     }
   },
   methods: {
+    init: function () {
+      let list = this.$store.state.ruleList.list;
+      this.numberList = list.date.map((e, index) => {
+        return {
+          date: e,
+          event: list.event[index]
+        }
+      });
+      this.numberList.sort(() => {
+        return Math.random() > 0.5 ? -1 : 1
+      })
+    },
     finishMemary: function () {
       wx.reLaunch({
         url: "../answer/main"

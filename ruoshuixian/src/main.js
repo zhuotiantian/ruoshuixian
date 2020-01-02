@@ -22,6 +22,7 @@ let _store = Vue.prototype.$store;
 Vue.prototype.$toGame = (id, url, fn) => {
   _store.commit("setGameId", id);
   _store.commit("setLevel", "primary");
+  _store.commit("setPockerNumber", 0);
   wx.showLoading();
   let userInfo = _store.state.userInfo;
   let token = userInfo.token;
