@@ -8,7 +8,7 @@
       <template v-else>
         <em class="arrow arrow-left" @click="prevGroup" v-if="pockerNumber < 52"></em>
         <scroll-view :style="{width: '78%',height: '100%','white-space': 'nowrap',margin: '0 auto',flex: '10'}" scroll-x="true">
-          <div class="pocker-wrapper" :style="{ width: (pockerNumber - 1) * 40 + 124 + 'rpx' }">
+          <div class="pocker-wrapper" :style="{width:pockerNumber<52?((pockerNumber-1)*40+124+'rpx'):'97%'}">
             <image class="pocker" ref="pocker" v-for="(item, index) in perPocker[currentGroupIndex]" :style="{ left: index * 40 + 'rpx', 'z-index': index }" :key="index" :src="'/static/images/pocker/' +item.index +'-' +item.color +'.png'" />
           </div>
         </scroll-view>
@@ -18,7 +18,7 @@
     <div class="pageFoot">
       <span class="pageBtn" @click="prevPage">上一页</span>
       <div class="btn-group">
-        <span :class="{ item: true, active: item.active }" @click="selectHandler(index, item)" v-for="(item, index) in groupPage[currentPage]" :key="index">{{ item.number }}幅</span>
+        <span :class="{ item: true, active: item.active }" @click="selectHandler(index, item)" v-for="(item, index) in groupPage[currentPage]" :key="index">{{ item.number }}副</span>
       </div>
       <span class="pageBtn" @click="nextPage">下一页</span>
     </div>
@@ -32,25 +32,7 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data());
-    let level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level;
-    })[0];
-    this.pockerNumber = this.$store.state.pockerNumber;
-    this.pocker = this.rule.list;
-    // 生成pock的副数
-    for (var i = 1; i <= this.pocker.length; i++) {
-      this.pages.push({
-        number: i,
-        active: false
-      });
-    }
-    this.pages[0].active = true;
-    let groupPage = [];
-    for (var i = 0; i < this.pages.length; i += 10) {
-      groupPage.push(this.pages.slice(i, i + 10));
-    }
-    this.groupPage = groupPage;
+    this.init();
   },
   data () {
     return {
@@ -70,10 +52,6 @@ export default {
       pockerNumber: 0
     };
   },
-  mounted: function () {
-    this.group(this.pockerNumber);
-    this.$refs.title.selectType = this.pockerNumber;
-  },
   computed: {
     bgCounts: function () {
       let bgCounts = [];
@@ -86,6 +64,36 @@ export default {
     }
   },
   methods: {
+    init: function () {
+      this.pockerNumber = this.$store.state.pockerNumber;
+      let pocker = this.$store.state.ruleList.list;
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      let perGroupNumber = rule.number_per_group;
+      let list = [];
+      for (var i = 0; i < pocker.length; i += perGroupNumber) {
+        list.push(pocker.slice(i, i + perGroupNumber));
+      }
+      this.pocker = list;
+      // 生成pock的副数
+      let pages = [];
+      for (var i = 1; i <= list.length; i++) {
+        pages.push({
+          number: i,
+          active: false
+        });
+      }
+      this.pages = pages;
+      this.pages[0].active = true;
+      let groupPage = [];
+      for (var i = 0; i < this.pages.length; i += 10) {
+        groupPage.push(this.pages.slice(i, i + 10));
+      }
+      this.groupPage = groupPage;
+      this.group(this.pockerNumber);
+    },
     group: function (data) {
       let currentIndex =
         this.groupPage[this.currentPage].filter(e => {

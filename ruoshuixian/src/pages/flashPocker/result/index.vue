@@ -3,7 +3,7 @@
     <GameTitle :isResult="true" :showCorrectAnswerBtn="true" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
     <div class="list">
       <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}" v-if="isShowCorrectAnswer">
-        <image class="pocker"  ref="pocker" v-for="(item,index) in correct_result" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        <image class="pocker" ref="pocker" v-for="(item,index) in correct_result" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
       </div>
       <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}" v-else>
         <image class="pocker" :class="{trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
@@ -24,8 +24,8 @@ export default {
       userid: null,
       pocker: [],
       pockerNumber: 0,
-      isShowCorrectAnswer:false,
-      correct_result:[]
+      isShowCorrectAnswer: false,
+      correct_result: []
     };
   },
   onLoad () {
@@ -37,7 +37,7 @@ export default {
     this.pocker = user_result;
     this.pocker.forEach((e, _index) => {
       e.trueResult = false;
-      if (e.index === this.correct_result[_index].index && e.color ===this.correct_result[_index].color) {
+      if (e.index === this.correct_result[_index].index && e.color === this.correct_result[_index].color) {
         e.trueResult = true;
       }
     })
@@ -54,13 +54,13 @@ export default {
       }
     }
   },
-  methods:{
-      showCorrectAnswer:function(){
-        this.isShowCorrectAnswer=true;
-      },
-      showMyAnswerHandler:function(){
-           this.isShowCorrectAnswer=false;
-      }
+  methods: {
+    showCorrectAnswer: function () {
+      this.isShowCorrectAnswer = true;
+    },
+    showMyAnswerHandler: function () {
+      this.isShowCorrectAnswer = false;
+    }
   }
 };
 </script>
@@ -89,12 +89,12 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
-  height: 196rpx;
+  height: tovmin(392);
 }
-.wrong{
-    border:2rpx solid $red;
+.wrong {
+  border: tovmin(4) solid $red;
 }
-.trueResult{
-    border:2rpx solid $green;
+.trueResult {
+  border: tovmin(4) solid $green;
 }
 </style>

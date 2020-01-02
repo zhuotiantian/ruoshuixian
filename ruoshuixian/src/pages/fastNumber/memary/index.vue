@@ -17,30 +17,26 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data());
-    let level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level
-    })[0];
-    let total = this.rule.number;
-    let per = this.rule.number_per_group;
-    this.numberList = this.rule.list;
-    let number = [];
-    for (var i = 0; i < total; i += per) {
-      number.push(this.numberList.slice(i, i + per));
-    };
-    this.number = number;
+    this.init();
   },
   data () {
     return {
-      number: [],
-      numberList: [],
-      total: 0,
-      per: 0,
-      level: "primary",
-      rule: {}
+      number: []
     }
   },
   methods: {
+    init: function () {
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      let total = rule.number, per = rule.number_per_group, number = [];
+      let numberList = this.$store.state.ruleList.list;
+      for (var i = 0; i < total; i += per) {
+        number.push(numberList.slice(i, i + per));
+      };
+      this.number = number;
+    },
     finishMemary: function () {
       wx.reLaunch({
         url: "/pages/numberAnswer/main"

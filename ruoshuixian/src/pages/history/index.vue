@@ -39,15 +39,15 @@ export default {
         .then(result => {
           result.data.forEach(e => {
             let init_time = new Date(e.createtime * 1000);
-            let formateTime =
-              init_time.getFullYear() + "-" +
+            let formateTime = init_time.getFullYear() + "-" +
               (Number(init_time.getMonth() + 1) < 10 ? "0" : "") + Number(init_time.getMonth() + 1) + "-" +
               (init_time.getDate() + 1 < 10 ? "0" : "") + init_time.getDate() + " " +
-              (init_time.getHours() < 10 ? "0" : "") + init_time.getHours() + ":" +
-              (init_time.getMinutes() < 10 ? "0" : "") + init_time.getMinutes() + ":" +
-              (init_time.getSeconds() < 10 ? "0" : "") + init_time.getSeconds()
+              (init_time.getHours() + 1 < 10 ? "0" : "") + init_time.getHours() + ":" +
+              (init_time.getMinutes() + 1 < 10 ? "0" : "") + init_time.getMinutes() + ":" +
+              (init_time.getSeconds() + 1 < 10 ? "0" : "") + init_time.getSeconds()
             e.createtime = formateTime
-          });
+            e.game_time = Number(e.game_time).toFixed(2)
+          })
           this.list = result.data;
         });
     }
@@ -62,25 +62,25 @@ page {
 .history-wrapper {
   width: calc(100% - 30rpx);
   height: calc(100% - 30rpx);
-  margin: 15rpx;
+  margin: tovmin(30);
 }
 .history-wrapper .list {
   height: 100%;
   width: 100%;
   background: #0e2754;
   color: white;
-  padding: 10rpx 20rpx;
-  border-radius: 20rpx;
+  padding: tovmin(20) tovmin(40);
+  border-radius: tovmin(40);
   box-sizing: border-box;
   overflow-y: auto;
 }
 .history-wrapper .list li {
   display: flex;
   justify-content: space-around;
-  line-height: 40rpx;
+  line-height: tovmin(80);
 }
 .history-wrapper .list li:not(:last-child) {
-  border-bottom: 0.5rpx solid #eaeaea;
+  border-bottom: tomvin(1) solid #eaeaea;
 }
 .history-wrapper .list li > span {
   flex: 1;

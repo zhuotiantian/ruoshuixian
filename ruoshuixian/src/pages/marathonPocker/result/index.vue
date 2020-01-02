@@ -2,18 +2,18 @@
   <div class="container">
     <GameTitle :isResult="true" :showCorrectAnswerBtn="true" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
     <div class="list" v-if="isShowCorrectAnswer">
-      <em class="arrow arrow-left" @click="prevGroup"></em>
-      <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
-        <image class="pocker" ref="pocker" v-for="(item,index) in perPocker[correctCurrentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
-      </div>
-      <em class="arrow arrow-right" @click="nextGroup"></em>
+      <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
+        <div class="pocker-wrapper" style="width:97%">
+          <image class="pocker" ref="pocker" v-for="(item,index) in perPocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        </div>
+      </scroll-view>
     </div>
     <div class="list" v-else>
-      <em class="arrow arrow-left" @click="prevGroup"></em>
-      <div :style="{width:(pockerNumber-1)*40+124+'rpx',height:'196px','white-space':'nowrap','position':'relative'}">
-        <image :class="{pocker:true,trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in perPocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
-      </div>
-      <em class="arrow arrow-right" @click="nextGroup"></em>
+      <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
+        <div class="pocker-wrapper" :style="{width:(pocker.length<52?((pocker.length-1)*40+124+'rpx'):'97%'),'max-width':'97%'}">
+          <image :class="{pocker:true,trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in perPocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        </div>
+      </scroll-view>
     </div>
     <div class="pageFoot">
       <span class="pageBtn" @click="prevPage">上一页</span>
@@ -73,8 +73,6 @@ export default {
       inviter_id: null,
       groupPage: [],
       currentPage: 0,
-      currentGroupIndex: 0,
-            correctCurrentGroupIndex:0,
       perPocker: [],
       isShowCorrectAnswer: false,
     };
@@ -85,28 +83,20 @@ export default {
         return e.active
       })[0].number - 1;
       let list = JSON.parse(JSON.stringify(this.correct_result[currentIndex]));
-      this.perPocker = [];
-      for (var i = 0; i < list.length; i + this.pockerNumber) {
-        this.perPocker.push(list.splice(i, i + this.pockerNumber));
-      }
-      this.correctCurrentGroupIndex = 0;
+      this.perPocker = list;
     },
-    group2:function(){
-        let currentIndex = this.groupPage[this.currentPage].filter(e => {
+    group2: function () {
+      let currentIndex = this.groupPage[this.currentPage].filter(e => {
         return e.active
       })[0].number - 1;
-      this.user_result[currentIndex].forEach((e,_index)=>{
-          e.trueResult = false;
+      this.user_result[currentIndex].forEach((e, _index) => {
+        e.trueResult = false;
         if (e.index === this.correct_result[_index].index && e.color === this.correct_result[_index].color) {
           e.trueResult = true;
         }
       })
       let list = JSON.parse(JSON.stringify(this.user_result[currentIndex]));
-      this.perPocker = [];
-      for (var i = 0; i < list.length; i + this.pockerNumber) {
-        this.perPocker.push(list.splice(i, i + this.pockerNumber));
-      }
-      this.currentGroupIndex = 0;
+      this.perPocker = list;
     },
     nextPage: function () {
       if (this.currentPage < this.groupPage.length - 1) {
@@ -117,30 +107,6 @@ export default {
       if (this.currentPage > 0) {
         this.currentPage--;
       }
-    },
-        prevGroup: function () {
-        if(this.isShowCorrectAnswer){
-if (this.correctCurrentGroupIndex > 0) {
-        this.correctCurrentGroupIndex--;
-      }
-        }else{
-            if (this.currentGroupIndex > 0) {
-        this.currentGroupIndex--;
-      }
-        }
-      
-    },
-    nextGroup: function () {
-        if(this.isShowCorrectAnswer){
-            if (this.correctCurrentGroupIndex <this.perPocker.length-1) {
-        this.correctCurrentGroupIndex++;
-      }
-        }else{
-        if (this.currentGroupIndex <this.perPocker.length - 1) {
-            this.currentGroupIndex++;
-            }
-        }
-      
     },
     selectHandler: function (index, item) {
       this.$set(this.groupPage, this.currentPage, this.groupPage[this.currentPage].map(e => {
@@ -158,14 +124,14 @@ if (this.correctCurrentGroupIndex > 0) {
       this.pockerNumber && this.group(this.pockerNumber);
     },
     showCorrectAnswer: function () {
-        this.group();
-        this.currentPage=0;
+      this.group();
+      this.currentPage = 0;
       this.isShowCorrectAnswer = true;
     },
     showMyAnswerHandler: function () {
-        this.group2();
+      this.group2();
       this.isShowCorrectAnswer = false;
-        this.currentPage=0;
+      this.currentPage = 0;
 
     }
   }
@@ -239,5 +205,12 @@ if (this.correctCurrentGroupIndex > 0) {
   color: white;
   background: $middle-blue;
   border: none;
+}
+.pocker-wrapper{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 196px;
+  white-space: "nowrap";
 }
 </style>

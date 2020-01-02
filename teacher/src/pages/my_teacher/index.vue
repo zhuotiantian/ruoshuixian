@@ -111,9 +111,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .toLogin {
-  font-size: 30rpx;
+  font-size: tovmin(60);
   position: absolute;
-  right: 30rpx;
+  right: tovmin(60);
 }
 .userImage {
   height: tovmin(120);

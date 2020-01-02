@@ -18,22 +18,19 @@ export default {
   onLoad () {
     Object.assign(this.$data, this.$options.data());
     this.result = this.$store.state.result;
-
-    let userInfo = this.$store.state.userInfo;
-    this.userid = userInfo.id;
     this.sliceList(0, 100);
   },
   data () {
     return {
       list: [],
       userid: null,
-      type: "下一页",
       showPrevPageBtn: false
     }
   },
   onShareAppMessage: function (res) {
+    let userid = this.$store.state.userInfo.id;
     return {
-      path: "pages/firstPage/main?id=" + this.userid,
+      path: "pages/firstPage/main?id=" + userid,
       title: "随机词语，一起来玩吧！",
       success: function () {
         console.log("分享成功");
@@ -46,14 +43,11 @@ export default {
   methods: {
     sliceList: function (start, end) {
       let level = this.$store.state.level;
-      this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
         return e.game_level == level
       })[0];
-      let per = this.rule.number_per_group;
-      let total = this.rule.number;
-      this.list = this.result.right_and_wrong_results;
-      let list = [];
-      let wordsList = this.list.map((e, index) => {
+      let per = rule.number_per_group, total = rule.number, right_and_wrong_results = this.result.right_and_wrong_results, list = [];
+      let wordsList = right_and_wrong_results.map((e, index) => {
         return {
           words: this.result.correct_result[index],
           result: e.result,
@@ -64,9 +58,6 @@ export default {
         list.push(wordsList.slice(i, i + per));
       }
       this.list = list;
-      console.log(list);
-
-      this.per = per;
     },
     nextPage: function () {
       this.sliceList(100, 200);

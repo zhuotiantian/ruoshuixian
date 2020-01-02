@@ -3,7 +3,6 @@
     <div class="fog" v-if="showFog"></div>
     <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
     <GameTitle :showIntervalTime='true' :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
-    </CardTitle>
     <div class="list">
       <p class="list-title">
         <span>序号</span>
@@ -30,19 +29,7 @@ export default {
   },
   onLoad (option) {
     Object.assign(this.$data, this.$options.data())
-    this.level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];;
-    this.token = this.$store.state.userInfo.token;
-    this.numberList = this.rule.list.date.map((e, index) => {
-      return {
-        date: "",
-        event: this.rule.list.event[index]
-      }
-    });
-    this.startTime = new Date().getTime();
-    this.game_records_id = this.rule.game_records_id;
+    this.init();
   },
   data () {
     return {
@@ -55,6 +42,21 @@ export default {
     }
   },
   methods: {
+    init: function () {
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      let list = this.$store.state.ruleList.list;
+      this.numberList = list.date.map((e, index) => {
+        return {
+          date: "",
+          event: list.event[index]
+        }
+      });
+      this.startTime = new Date().getTime();
+
+    },
     focus: function (index) {
       this.activeIndex = index;
       this.showKeybord = true;
@@ -66,9 +68,7 @@ export default {
       this.showFog = false;
     },
     confirm: function () {
-      this.endTime = new Date().getTime();
-      let date = [];
-      let event = [];
+      let token = this.$store.state.userInfo.token, game_records_id = this.rule.game_records_id, endTime = new Date().getTime(), date = [], event = [];
       this.numberList.forEach(e => {
         date.push(e.date);
         event.push(e.event);
@@ -76,15 +76,15 @@ export default {
       this.$http.post({
         url: "/api/wxapp.game/submitTheGame",
         data: {
-          game_records_id: this.game_records_id,
-          game_time: (this.endTime - this.startTime) / 1000,
+          game_records_id,
+          game_time: (endTime - this.startTime) / 1000,
           content: JSON.stringify({
             date: date,
             event: event
           })
         },
         header: {
-          token: this.token
+          token
         }
       }).then(result => {
         if (result.code == 1) {

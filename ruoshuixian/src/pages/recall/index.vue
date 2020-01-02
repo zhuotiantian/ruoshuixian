@@ -14,7 +14,7 @@ export default {
     GameTitle
   },
   onLoad: function () {
-    this.gameName = this.$store.state.gameName;
+    this.gameName = this.$getGameInfo("name");
   },
   mounted () {
     wx.setNavigationBarTitle({
@@ -24,7 +24,7 @@ export default {
   methods: {
     startGame: function () {
       wx.reLaunch({
-        url: "/pages/" + this.$store.state.gamePages[this.gameName].path + "/answer/main"
+        url: "/pages/" + this.$getGameInfo("wxapp_url").split("/")[2] + "/answer/main"
       })
     }
   }
@@ -58,8 +58,8 @@ export default {
   border-radius: tovmin(50);
   text-align: center;
   line-height: tovmin(98);
-  font-size: 24rpx;
-  font-weight:bold;
+  font-size: tovmin(48);
+  font-weight: bold;
   position: absolute;
   bottom: tovmin(140);
   left: 50%;

@@ -8,7 +8,6 @@
         <div class="image_div" v-for="(item,index) in rows" :key="index">
           <image class="image" :src="domain+item.image" lazy-load="true"></image>
           <span :class="{input:true,active:item.selected}" @click="focus(_index,index)">{{item.text}}</span>
-          <!-- <input type="text" class="input" placeholder="序号" v-model="item.text" @focus="focus(_index,index)" maxlength="1" @blur="blur" /> -->
         </div>
         <span style="margin-left:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
@@ -28,33 +27,7 @@ export default {
   },
   onLoad (option) {
     Object.assign(this.$data, this.$options.data());
-    let list = JSON.parse(option.list);
-    this.level = this.$store.state.level;
-    this.token = this.$store.state.userInfo.token;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];
-    let number = [];
-    this.numberList = list.map((e, index) => {
-      return {
-        image: e.img,
-        text: "",
-        index: e.index,
-        selected: false,
-      }
-    });
-    this.total = this.rule.number;
-    this.per = this.rule.number_per_group;
-    this.numberList = this.numberList;
-    for (var i = 0; i < this.total; i += this.per) {
-      number.push(this.numberList.slice(i, i + this.per));
-    }
-    this.number = number.filter(e => {
-      return e.length > 0;
-    });
-    this.startTime = new Date().getTime();
-    this.game_records_id = this.rule.game_records_id;
-    this.game_list = JSON.parse(option.sort);
+    this.init();
   },
   data () {
     let array = new Array(5);
@@ -63,18 +36,56 @@ export default {
       text: "确定结束作答吗？",
       number: [],
       counts: 0,
-
       showFog: false,
       showKeybord: false,
       total: 0,
       per: 0,
       domain: this.$http.domain,
-      level: "primary",
-      numberList: [],
-      rule: {}
+      numberList: []
     };
   },
   methods: {
+    init: function () {
+      let list = JSON.parse(option.list);
+      let level = this.$store.state.level;
+      this.token = this.$store.state.userInfo.token;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      let beforeSort = [],
+        afterSort = [];
+      for (var i = 0; i < list.length; i++) {
+        for (var j = 0; j < list[i].length; j++) {
+          beforeSort.push({
+            image: list[i][j].img,
+            text: "",
+            index: list[i][j].index,
+            selected: false
+          })
+        }
+      }
+      this.beforeSort = beforeSort;
+      let total = rule.number;
+      let per = rule.number_per_group;
+      for (var i = 0; i < total; i += per) {
+        let arr = beforeSort.slice(i, i + per);
+        arr.sort(e => {
+          return Math.random() > 0.5 ? 1 : -1
+        })
+        afterSort.push(arr);
+      }
+      this.number = afterSort.filter(e => {
+        return e.length > 0;
+      });
+      this.afterSort = afterSort.concat().reduce((total, next) => {
+        next.forEach(e => {
+          total.push(e.index + 1)
+        })
+        return total
+      }, [])
+      this.startTime = new Date().getTime();
+      this.game_records_id = this.$store.state.ruleList.game_records_id;
+    },
     finishAnwser: function () {
       this.showFog = true;
     },
@@ -95,7 +106,6 @@ export default {
           }
         })
       });
-      console.log(this.number);
     },
     confirm: function () {
       this.endTime = new Date().getTime();
@@ -107,14 +117,14 @@ export default {
       });
       this.$http
         .post({
-          url: "/api/wxapp.game/submitTheGame",
+          url: "/api/wxapp.game/submitTheGame?",
           data: {
             game_records_id: this.game_records_id,
             game_time: (this.endTime - this.startTime) / 1000,
             content: JSON.stringify({
               new_game_list,
-              game_list: this.game_list.map(e => {
-                return e + 1
+              game_list: this.afterSort.map(e => {
+                return e
               })
             })
           },
@@ -126,7 +136,7 @@ export default {
           if (result.code == 1) {
             this.$store.commit("setResult", result.data);
             wx.redirectTo({
-              url: "../result/main"
+              url: "../result/main?list=" + JSON.stringify(this.number)
             });
           } else {
             wx.showToast({
@@ -139,7 +149,7 @@ export default {
     selectNumber: function (data) {
       let item = this.number[this._index][this.index];
       item.text = data;
-      this.$set([this._index], this.index, item);
+      this.$set(this.number[this._index], this.index, item);
     },
     deleteNumber: function () {
       let item = this.number[this._index][this.index];

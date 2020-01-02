@@ -20,31 +20,9 @@ export default {
   components: {
     GameTitle
   },
-  onLoad () {
+  onLoad (option) {
     Object.assign(this.$data, this.$options.data())
-    let level = this.$store.state.level;
-    let userInfo = this.$store.state.userInfo;
-    this.userid = userInfo.id;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level
-    })[0];
-    this.result = this.$store.state.result.right_and_wrong_results;
-    let number = [];
-    this.numberList = this.rule.list.map((e, index) => {
-      return {
-        image: e,
-        text: this.result[index].number,
-        result: this.result[index].result
-      }
-    });
-    let total = this.rule.number;
-    let per = this.rule.number_per_group;
-    for (var i = 0; i < total; i += per) {
-      number.push(this.numberList.slice(i, i + per));
-    }
-    this.number = number.filter(e => {
-      return e.length > 0;
-    });
+    this.init();
   },
   onShareAppMessage: function (res) {
     return {
@@ -65,6 +43,39 @@ export default {
       userid: null
     };
   },
+  methods: {
+    init: function () {
+      let level = this.$store.state.level,
+        result = this.$store.state.result,
+        correct_result = result.correct_result,
+        number = [],
+        list = JSON.parse(option.list);
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      let total = rule.number;
+      let per = rule.number_per_group;
+      this.userid = this.$store.state.userInfo.id;
+      this.result = result.right_and_wrong_results;
+      let sortList = list.reduce((a, b) => {
+        a.push(...b)
+        return a
+      }, [])
+      this.numberList = sortList.map((e, index) => {
+        return {
+          image: e.image,
+          text: correct_result[index],
+          result: this.result[index].result
+        }
+      });
+      for (var i = 0; i < total; i += per) {
+        number.push(this.numberList.slice(i, i + per));
+      }
+      this.number = number.filter(e => {
+        return e.length > 0;
+      });
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

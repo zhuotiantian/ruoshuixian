@@ -24,13 +24,9 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    this.level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];
     this.token = this.$store.state.userInfo.token;
     this.startTime = new Date().getTime();
-    this.game_records_id = this.rule.game_records_id;
+    this.game_records_id = this.$store.state.ruleList.game_records_id;
   },
   methods: {
     finishAnwser: function () {

@@ -4,8 +4,8 @@
       <p v-if="operationType!==''">请在待选区域选择需要{{operationType}}的牌</p>
       <template v-else>
         <div class="btn default-btn" @click.stop="replace">替换</div>
-        <div class="btn default-btn" @click="insertBefore">从前插入</div>
-        <div class="btn default-btn" @click="insertAfter">从后插入</div>
+        <div class="btn default-btn" @click="insertBefore">从右插入</div>
+        <div class="btn default-btn" @click="insertAfter">从坐插入</div>
         <div class="btn default-btn" @click="back">退回</div>
       </template>
     </div>
@@ -66,15 +66,17 @@ export default {
   },
   onLoad (options) {
     Object.assign(this.$data, this.$options.data());
-    this.gameName = this.$store.state.gameName;
+    this.gameName = this.$getGameInfo("name");
     if (this.gameName === '马拉松扑克牌') {
+      this.list = this.$store.state.ruleList.list;
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
         return e.game_level == level
       })[0];
-      this.list = rule.list;
+      let perGroupNumber = rule.number_per_group;
       // 生成所有pock的副数
-      for (var i = 1; i <= this.list.length; i++) {
+      console.log(this.list.length / perGroupNumber);
+      for (var i = 1; i <= this.list.length / perGroupNumber; i++) {
         this.pages.push({
           number: i,
           active: false
@@ -119,6 +121,7 @@ export default {
     },
     //从待选区域选择扑克
     selectPocker: function (rowIndex, columnIndex) {
+      this.$emit("hideAnwserText");
       if (this.notBack) {
         this.result.push({
           url: '/static/images/pocker/' + columnIndex + '-' + rowIndex + '.png',
@@ -222,6 +225,7 @@ export default {
       this.operationType = "";
       this.selectedTopPocker = {};
       this.notBack = true;
+
     },
     nextPage: function () {
       if (this.currentPage > 3) {
@@ -258,7 +262,7 @@ export default {
   position: absolute;
   min-width: 100%;
   height: 100%;
-  bottom: 5vmin;
+  bottom: 8vmin;
 }
 
 .result image {
@@ -270,7 +274,7 @@ export default {
 
 .result-div {
   display: flex;
-  height: tovmin(190);
+  height: tovmin(250);
   align-items: center;
 }
 .pageFoot {

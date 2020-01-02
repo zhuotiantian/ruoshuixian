@@ -19,32 +19,29 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    let level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level
-    })[0];
-    this.numberList = this.rule.list;
-    this.total = this.rule.number;
-    this.per = this.rule.number_per_group;
-    let number = [];
-    for (var i = 0; i < this.total; i += this.per) {
-      number.push(this.numberList.slice(i, i + this.per));
-    };
-    this.number = number;
+    this.init();
   },
   data () {
     return {
       number: [],
       counts: 0,
       numberList: [],
-      pannelContent: ["不划线", "三个一组", "六个一组"],
-      total: 0,
-      per: 0,
-      level: "primary",
-      rule: {}
+      pannelContent: ["不划线", "三个一组", "六个一组"]
     }
   },
   methods: {
+    init: function () {
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      this.numberList = this.$store.state.ruleList.list;
+      let total = rule.number, per = rule.number_per_group, number = [];
+      for (var i = 0; i < this.total; i += this.per) {
+        number.push(this.numberList.slice(i, i + this.per));
+      };
+      this.number = number;
+    },
     group: function (data) {
       if (data == '三个一组') {
         this.counts = 3;

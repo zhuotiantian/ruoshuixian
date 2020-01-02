@@ -8,7 +8,7 @@
       <template v-else>
         <em class="arrow arrow-left" @click="prevGroup" v-if="pockerNumber<52"></em>
         <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
-          <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}">
+          <div class="pocker-wrapper" :style="{width:pockerNumber<16?((pockerNumber-1)*40+124+'rpx'):'97%'}">
             <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
           </div>
         </scroll-view>
@@ -30,21 +30,15 @@ export default {
       bg: 23,
       left: 100,
       pocker: [],
-      level: "primary",
       list: [],
       currentGroupIndex: 0,
-      rule: {},
       pockerNumber: 0,
     };
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    this.level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];
     this.pockerNumber = this.$store.state.pockerNumber;
-    this.list = this.rule.list;
+    this.list = this.$store.state.ruleList.list;
   },
   computed: {
     bgCounts: function () {
@@ -63,7 +57,7 @@ export default {
   },
   methods: {
     group: function (data) {
-      let list = JSON.parse(JSON.stringify(this.list));
+      let list = this.list;
       this.pockerNumber = (data === 'All' ? 52 : data);
       this.pocker = [];
       if (this.pockerNumber === 52) {
@@ -120,6 +114,7 @@ export default {
   width: tovmin(248);
   margin-right: tovmin(30);
   position: absolute;
+  transform: rotate(-180deg);
 }
 
 .pocker-bg {

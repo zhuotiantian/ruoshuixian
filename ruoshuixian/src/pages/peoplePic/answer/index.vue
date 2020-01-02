@@ -25,47 +25,41 @@ export default {
   },
   onLoad (option) {
     Object.assign(this.$data, this.$options.data())
-    this.level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];;
-    this.token = this.$store.state.userInfo.token;
-    this.numberList = this.rule.list.xing_name.map((e, index) => {
-      return {
-        xing_name: "",
-        ming_name: "",
-        avatar: this.rule.list.avatar[index]
-      };
-    });
-    this.total = this.rule.number;
-    this.per = this.rule.number_per_group;
-    let number = [];
-    for (var i = 0; i < this.total; i += this.per) {
-      number.push(this.numberList.slice(i, i + this.per));
-    }
-    this.number = number.filter(e => {
-      return e.length > 0;
-    });
-    this.startTime = new Date().getTime();
-    this.game_records_id = this.rule.game_records_id;
-    console.log(option.sort);
-    this.sort = JSON.parse(option.sort);
+    this.init();
   },
   data () {
     return {
       number: [],
       counts: 0,
-
       showFog: false,
-      total: 0,
-      per: 0,
-      domain: this.$http.domain,
-      numberList: [],
-      level: "primary",
-      rule: {}
-    };
+      domain: this.$http.domain
+    }
   },
   methods: {
+    init: function () {
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];;
+      let list = this.$store.state.ruleList.list;
+      let numberList = list.xing_name.map((e, index) => {
+        return {
+          xing_name: "",
+          ming_name: "",
+          avatar: list.avatar[index]
+        };
+      }).sort(e => {
+        return Math.random() > 0.5 ? 1 : -1
+      });
+      let total = rule.number, per = rule.number_per_group, number = [];
+      for (var i = 0; i < this.total; i += per) {
+        number.push(numberList.slice(i, i + per));
+      }
+      this.number = number.filter(e => {
+        return e.length > 0;
+      });
+      this.startTime = new Date().getTime();
+    },
     finishAnwser: function () {
       this.showFog = true;
     },
@@ -73,10 +67,7 @@ export default {
       this.showFog = false;
     },
     confirm: function () {
-      this.endTime = new Date().getTime();
-      let xing_name = [];
-      let ming_name = [];
-      let avatar = [];
+      let endTime = new Date().getTime(), xing_name = [], ming_name = [], avatar = [], token = this.$store.state.userInfo.token, game_records_id = this.$store.state.ruleList.game_records_id;
       this.number.forEach(e => {
         e.forEach(m => {
           xing_name.push(m.xing_name);
@@ -88,8 +79,8 @@ export default {
         .post({
           url: "/api/wxapp.game/submitTheGame",
           data: {
-            game_records_id: this.game_records_id,
-            game_time: (this.endTime - this.startTime) / 1000,
+            game_records_id,
+            game_time: (endTime - this.startTime) / 1000,
             content: JSON.stringify({
               xing_name,
               ming_name,
@@ -97,14 +88,14 @@ export default {
             }),
           },
           header: {
-            token: this.token
+            token
           }
         })
         .then(result => {
           if (result.code == 1) {
             this.$store.commit("setResult", result.data);
             wx.reLaunch({
-              url: "../result/main"
+              url: "../result/main?list=" + JSON.stringify(this.numberList)
             })
           } else {
             wx.showToast({

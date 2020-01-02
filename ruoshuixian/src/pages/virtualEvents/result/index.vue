@@ -5,7 +5,7 @@
       <p class="list-title">
         <span>序号</span>
         <span>时间</span>
-        <span>&nbsp;</span>
+        <span>正确答案</span>
         <span style="flex:3;">事件</span>
       </p>
       <p v-for="(item,index) in numberList" :key="index">
@@ -25,25 +25,12 @@ export default {
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    let level = this.$store.state.level;
-    this.result = this.$store.state.result.right_and_wrong_results;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level
-    })[0];
-    let userInfo = this.$store.state.userInfo;
-    this.userid = userInfo.id;
-    this.numberList = this.rule.list.date.map((e, index) => {
-      return {
-        date: e,
-        event: this.rule.list.event[index],
-        answer: this.result[index].number,
-        isRight: this.result[index].result == 0,
-      }
-    });
+    this.init();
   },
   onShareAppMessage: function (res) {
+    let userid = this.$store.state.userInfo.id;
     return {
-      path: "pages/firstPage/main?id=" + this.userid,
+      path: "pages/firstPage/main?id=" + userid,
       title: "虚拟事件和日期，一起来玩吧！",
       success: function () {
         console.log("分享成功");
@@ -60,12 +47,27 @@ export default {
       numberList: [],
       userid: null
     }
+  },
+  methods: {
+    init: function () {
+      this.result = this.$store.state.result.right_and_wrong_results;
+
+      let list = this.$store.state.ruleList.list;
+      this.numberList = list.date.map((e, index) => {
+        return {
+          date: e,
+          event: list.event[index],
+          answer: this.result[index].number,
+          isRight: this.result[index].result == 0,
+        }
+      });
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
 .list {
-  margin: tovmin(150) tovmin(30) auto tovmin(130);
+  margin: tovmin(100) tovmin(30) auto tovmin(130);
   color: white;
 }
 

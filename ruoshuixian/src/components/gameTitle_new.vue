@@ -17,8 +17,8 @@
             <span v-if="showCostTime">用时：{{getPayedTime}}</span>
             <span>得分：{{result.fraction||0}}分</span>
             <span class="btn default-btn" @click="toHistory">历史记录</span>
-            <span class="btn default-btn" v-if="showCorrectAnswerBtn&&!showMyAnswer" @click="showCorrectAnswer">查看正确答案</span>
-            <span class="btn default-btn" v-if="showMyAnswer" @click="showMyAnswerHandler">查看我的答案</span>
+            <span class="btn default-btn" v-if="showCorrectAnswerBtn&&!showMyAnswer" @click="showCorrectAnswer">正确答案</span>
+            <span class="btn default-btn" v-if="showMyAnswer" @click="showMyAnswerHandler">我的提交</span>
           </div>
         </template>
       </div>
@@ -44,10 +44,11 @@
         <!-- 结果 -->
         <template v-else>
           <div>
+            <span class="btn primary-btn" v-if="showChangePageBtn&&!showPrevPage" @click="nextPage">下一页</span>
+            <span class="btn primary-btn" v-if="showChangePageBtn&&showPrevPage" @click="prevPage">上一页</span>
             <span class="btn primary-btn" @click="playAgain">再次训练</span>
-            <button class="btn default-btn shareBtn" open-type="share">
-              <image class="share" :src="'/static/images/redPocket/share.png'" />
-              分享
+            <button class="shareBtn" open-type="share">
+              <image class="share" :src="'/static/images/firstPage/share.gif'" />
             </button>
           </div>
         </template>
@@ -76,8 +77,8 @@
         <div class="fog" @click="shouwOperationTips=false"></div>
         <div class="tips">
           <p style="margin-bottom:30rpx">你可以通过以下两种方式对扑克牌的顺序进行修改</p>
-          <p>方式一、双击屏幕上半区的任意一张扑克，将这张扑克牌退回原位。</p>
-          <p>方式二、单击屏幕上半区的任意一张扑克，然后长按下半区的任意一张扑克，进行“替换位置/从前面插入/从后面插入”操作。</p>
+          <p>方式一、点击屏幕上半区的任意一张扑克，点击“退回”将这张扑克牌退回原位。</p>
+          <p>方式二、点击屏幕上半区的任意一张扑克，点击“替换/从左插入/从右面插入”后点击下半区的任意一张扑克进行“替换/从左插入/从右面插入”操作。</p>
           <p>
             <span class="btn default-btn" @click="shouwOperationTips=false">我知道了</span>
           </p>
@@ -145,6 +146,9 @@ export default {
       default: false
     }
   },
+  onUnload: function () {
+    clearInterval(this.timer);
+  },
   onLoad () {
     Object.assign(this.$data, this.$options.data());
     this.level = this.$store.state.level;
@@ -154,7 +158,7 @@ export default {
     this.result = this.$store.state.result;
     this.gameid = this.$store.state.gameid;
     this.pockerNumber = this.$store.state.pockerNumber;
-    this.gameName = this.$store.state.gameName;
+    this.gameName = this.$getGameInfo("name");
     if (this.gameName === '二进制数字') {
       this.pannelContent = ["不划线", "三个一组", "六个一组"];
     } else {
@@ -162,7 +166,7 @@ export default {
     }
     this.showGameLevel = this.gameName !== '闪视扑克牌' && this.showFinishMemoryBtn
     if ((this.showFinishMemoryBtn || this.isRecall || this.showFinishAnwserBtn) && this.showIntervalTime) {
-      clearInterval(this.interval);
+      clearInterval(this.timer);
       this.interval();
     }
   },
@@ -202,15 +206,15 @@ export default {
     interval: function () {
       var time;
       if (this.showFinishMemoryBtn) {//记忆时间
-        time = this.rule.memory_time;
+        time = parseInt(this.rule.memory_time);
       } else if (this.isRecall) {//回忆时间
-        time = this.rule.recollect_time
+        time = parseInt(this.rule.recollect_time)
       } else if (this.showFinishAnwserBtn) {
-        let gameName = this.$store.state.gameName;
-        time = this.$store.state.gamePages[gameName].answerTime;
+        time = this.$getGameInfo("answerTime");
       }
       this.getTime(time);
-      this.interval = setInterval(() => {
+      this.timer = setInterval(() => {
+        console.log("interval...");
         time--;
         if (time === 0) {
           clearInterval(this.interval);
@@ -229,6 +233,7 @@ export default {
       let minutes = Math.floor((time - hour * 3600) / 60);
       let seconds = (time - hour * 3600 - minutes * 60);
       this.computedTime = { hour, minutes, seconds };
+      console.log(this.computedTime);
     },
     //跳转到游戏帮助页面
     toHelp: function () {
@@ -258,7 +263,7 @@ export default {
     playAgain: function () {
       this.$toGame(this.gameid, "", () => {
         wx.reLaunch({
-          url: "/pages/gameIndex/main"
+          url: "/pages/gameIndex/main?type=playAgain"
         });
       });
     },
@@ -297,33 +302,35 @@ export default {
 </script>
 <style lang="scss" scoped>
 .title {
-  font-size: tovmin(30);
+  font-size: 4vmin;
   display: flex;
   justify-content: space-between;
-  padding: tovmin(40) tovmin(30) tovmin(30) tovmin(30);
+  padding: 0 4vmin 0 4vmin;
   position: fixed;
   top: 0;
   width: calc(100% - 30rpx);
-  background: $deep-blue;
+  background: #173771;
   color: white;
   z-index: 999;
+  height: 14vmin;
+  line-height: 14vmin;
 }
 .title .left {
-  flex: 3;
+  flex: 4;
   text-align: left;
 }
 .title .center {
-  flex: 1;
-  text-align: center;
+  flex: 2;
   display: flex;
   align-items: center;
+  justify-content:center;
 }
 .title .right {
-  flex: 3;
+  flex: 4;
   text-align: right;
 }
 .title span:not(:first-child) {
-  margin-left: 15rpx;
+  margin-left: tovmin(30);
 }
 .helpBtn {
   background: $red;
@@ -334,36 +341,25 @@ p {
 }
 .pannel-title {
   background: $light-blue;
+  font-size: tovmin(34);
+  font-weight: bold;
 }
-.shareBtn {
-  background: white;
-  color: $black;
-  text-align: right;
-  width: tovmin(130);
-  vertical-align: middle;
-  margin-left: tovmin(26);
-  padding: 0;
-  text-align: center;
-  animation: shinne 2s linear infinite;
+.pannel p {
+  font-size: tovmin(26);
 }
-
-@keyframes shinne {
-  0% {
-    box-shadow: 0 0 tovmin(10) rgba(255, 255, 255, 0.8);
-  }
-  50% {
-    box-shadow: 0 0 tovmin(20) rgba(255, 255, 255, 0.8);
-  }
-  100% {
-    box-shadow: 0 0 tovmin(30) rgba(255, 255, 255, 0.8);
-  }
-}
-
 .share {
-  width: tovmin(32);
-  height: tovmin(26);
+  width: tovmin(100);
+  height: tovmin(100);
   top: tovmin(6);
   vertical-align: middle;
+}
+.shareBtn {
+  background: transparent;
+  height: tovmin(150);
+  width: tovmin(150);
+  float: right;
+  position: relative;
+  top: tovmin(-5);
 }
 .pannel {
   position: fixed;
@@ -386,7 +382,7 @@ p {
 }
 
 .pannel p.active {
-  background: $light-blue;
+  background: #f5f5f5;
 }
 
 .arrow-left::after {
@@ -439,6 +435,6 @@ p {
   text-align: center;
 }
 .result_title {
-  font-size: 18rpx;
+  font-size: tovmin(36);
 }
 </style>

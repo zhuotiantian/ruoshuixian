@@ -21,30 +21,7 @@ export default {
   },
   onLoad (option) {
     Object.assign(this.$data, this.$options.data())
-    let level = this.$store.state.level;
-    this.result = this.$store.state.result.right_and_wrong_results;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == level
-    })[0];
-    let userInfo = this.$store.state.userInfo;
-    this.userid = userInfo.id;
-    this.numberList = this.rule.list.xing_name.map((e, index) => {
-      return {
-        name: e + this.rule.list.ming_name[index],
-        result_name: this.result[index].result_name,
-        avatar: this.rule.list.avatar[index],
-        result: this.result[index].result
-      }
-    });
-    let total = this.rule.number;
-    let per = this.rule.number_per_group;
-    let number = [];
-    for (var i = 0; i < total; i += per) {
-      number.push(this.numberList.slice(i, i + per));
-    };
-    this.number = number.filter(e => {
-      return e.length > 0
-    });
+    this.init()
   },
   onShareAppMessage: function (res) {
     return {
@@ -64,6 +41,32 @@ export default {
       domain: this.$http.domain
     };
   },
+  methods: {
+    init: function () {
+      let level = this.$store.state.level;
+      this.result = this.$store.state.result.right_and_wrong_results;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      this.userid = this.$store.state.userInfo.id;
+      let list = JSON.parse(option.list);
+      let numberList = list.map((e, index) => {
+        return {
+          name: this.result[index].name,
+          result_name: this.result[index].result_name,
+          avatar: e.avatar,
+          result: this.result[index].result
+        }
+      });
+      let total = rule.number, per = rule.number_per_group, number = [];
+      for (var i = 0; i < total; i += per) {
+        number.push(numberList.slice(i, i + per));
+      };
+      this.number = number.filter(e => {
+        return e.length > 0
+      });
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -128,8 +131,8 @@ page {
 .wrong {
   color: $red;
   border-bottom: tovmin(2) solid $red;
-  min-width: 20rpx;
-  min-height: 20rpx;
+  min-width: tovmin(40);
+  min-height: tovmin(40);
   display: block;
 }
 </style>

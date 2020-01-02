@@ -22,49 +22,40 @@ export default {
       numberList: [],
       number: [],
       counts: 0,
-
       total: 0,
       per: 0,
       domain: this.$http.domain,
-      level: "primary",
       numberList: []
     }
   },
   onLoad (option) {
     Object.assign(this.$data, this.$options.data())
-    this.level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];
-    this.numberList = this.rule.list.map((e, index) => {
-      return {
-        img: e,
-        index: index
-      }
-    });
-    this.total = this.rule.number;
-    this.per = this.rule.number_per_group;
-    let number = [];
-    for (var i = 0; i < this.total; i += this.per) {
-      let arr = this.numberList.slice(i, i + this.per);
-      arr.sort(() => {
-        return Math.random() > 0.5 ? -1 : 1
-      })
-      number.push(arr);
-    };
-    this.number = number.filter(e => {
-      return e.length > 0
-    });
+    this.init()
   },
   methods: {
+    init: function () {
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      let total = rule.number, per = rule.number_per_group, number = [];
+      this.numberList = this.$store.state.ruleList.list.map((e, index) => {
+        return {
+          img: e,
+          index: index
+        }
+      });
+      for (var i = 0; i < total; i += per) {
+        let arr = this.numberList.slice(i, i + per);
+        number.push(arr);
+      };
+      this.number = number.filter(e => {
+        return e.length > 0
+      });
+    },
     finishMemary: function () {
-      let sort = this.number.reduce((current, next) => {
-        return current.concat(next.map(e => {
-          return e.index
-        }));
-      }, [])
       wx.reLaunch({
-        url: "../answer/main?list=" + JSON.stringify(this.numberList) + "&sort=" + JSON.stringify(sort)
+        url: "../answer/main?list=" + JSON.stringify(this.number)
       });
     }
   }

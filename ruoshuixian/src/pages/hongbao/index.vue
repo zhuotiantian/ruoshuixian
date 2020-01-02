@@ -85,7 +85,7 @@ export default {
             title: "领取成功",
             icon: "success"
           });
-          wx.reLaunch({
+          wx.navigateTo({
             url: "/pages/my/hongbao/main"
           });
           this.showFog = false;

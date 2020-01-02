@@ -7,7 +7,7 @@
     <div v-if="gameType==='pocker'" class="content">
       <template v-if="page==='first'">
         <div>
-          <p>本轮记忆时间：{{returnHourAndMinutes}}</p>
+          <div style="margin-bottom:30rpx;font-size:20rpx;font-weight:bold">请选择</div>
           <p style="margin-top:40rpx">
             <span @click="selLevel('primary')">
               <image class="radioBtn" src="/static/images/firstPage/circle_active.png" v-if="level=='primary'"></image>
@@ -23,15 +23,17 @@
         </div>
       </template>
       <template v-else>
-        <div>
-          <div v-if="currentPage==='flashPocker'">
-            <span class="label">请选择闪视时间：</span>
+        <div style="font-size:24rpx">
+          <p v-if="currentPage === 'fastPocker' || currentPage === 'marathonPocker'" style="position:absolute;top:5vmin;left:50%;z-index:9999;font-size:16rpx;transform: translateX(-50%);">本轮记忆时间：{{returnHourAndMinutes}}</p>
+          <div style="margin-bottom:30rpx">点击选择</div>
+          <div v-if="currentPage==='flashPocker'" style="margin-bottom:15rpx">
+            <span class="label">闪视时间：</span>
             <div class="btn-group">
               <span v-for="(item,index) in memoryTime" :class="{active:activeTime==item}" @click="activeTime=item" :key="index">{{item}}秒</span>
             </div>
           </div>
           <div>
-            <span class="label">请选择显示方式：</span>
+            <span class="label">显示张数：</span>
             <div class="btn-group">
               <span v-for="(item,index) in pockerNum" :class="{active:activeNum==item}" @click="activeNum=item" :key="index">{{item}}张</span>
               <span v-if="currentPage==='fastPocker'||currentPage==='marathonPocker'" :class="{active:activeNum=='All'}" @click="activeNum='All'">All</span>
@@ -45,7 +47,8 @@
     <!-- 其他游戏首页 -->
     <div v-else class="content">
       <div>
-        <p>本轮记忆时间：{{returnHourAndMinutes}}</p>
+        <p style="position:absolute;top:5vmin;left:50%;z-index:9999;font-size:16rpx;transform: translateX(-50%);">本轮记忆时间：{{returnHourAndMinutes}}</p>
+        <div style="margin-bottom:30rpx">请选择</div>
         <p style="margin-top:40rpx">
           <span @click="selLevel('primary')">
             <image class="radioBtn" src="/static/images/firstPage/circle_active.png" v-if="level=='primary'"></image>
@@ -59,7 +62,7 @@
           </span>
         </p>
       </div>
-      <div class="btn submit-btn" @click="startGame">开始作答</div>
+      <div class="btn submit-btn" @click="startGame">开始游戏</div>
     </div>
   </div>
 </template>
@@ -71,51 +74,57 @@ export default {
     GameTitle,
     AlertBoxNoBth
   },
-  onLoad () {
-    this.currentPage = this.$store.state.gamePages[this.$store.state.gameName].path;
-    this.rule = this.$store.state.gamePages[this.$store.state.gameName].rule;
-    this.show = this.$store.state.isNew;
-    this.page = (this.currentPage !== 'flashPocker' ? "first" : "second");
-    if (this.currentPage === 'flashPocker' || this.currentPage === 'fastPocker' || this.currentPage === 'marathonPocker') {
-      this.gameType = 'pocker';
-    } else {
-      this.gameType = 'other';
+  onLoad (options) {
+    if (options.type === 'playAgain') {
+      this.$store.commit("setIsNew", false);
     }
+    this.init();
   },
   data () {
     return {
       rule: [],
       show: false,
       memoryTime: [],
-      pockerNum: ["1", "2", "4", "8"],
+      pockerNum: [1, 2, 4, 8],
       activeTime: "",
-      activeNum: "4",
+      activeNum: 4,
       currentPage: "",
       page: "first",
-      level: "",
-      gameType: 'pocker'
+      gameType: 'pocker',
+      level: 'primary'
     }
   },
   computed: {
     returnHourAndMinutes: function () {
-      let hour = Math.floor(this.memoryTime / 3600);
-      let minutes = Math.floor((this.memoryTime - hour * 3600) / 60);
-      let seconds = (this.memoryTime - hour * 3600 - minutes * 60);
-      return (hour !== 0 ? hour + '小时' : '') + (minutes !== 0 ? minutes + '分钟' : '') + (seconds !== 0 ? seconds + '秒' : '')
+      let minutes = Math.floor(this.memoryTime / 60);
+      let seconds = (this.memoryTime - minutes * 60);
+      return (minutes !== 0 ? minutes + '分钟' : '') + (seconds !== 0 ? seconds + '秒' : '')
     }
   },
   mounted () {
-    this.level = this.$store.state.level;
-    let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];
-    this.memoryTime = rule.memory_time.split(",").reverse();
-    this.activeTime = this.memoryTime[0];
     wx.setNavigationBarTitle({
-      title: this.$store.state.gameName
+      title: this.$getGameInfo("name")
     })
   },
   methods: {
+    init: function () {
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      this.memoryTime = rule.memory_time.split(",").reverse();
+      this.activeTime = this.memoryTime[0];
+      this.currentPage = this.$getGameInfo("wxapp_url").split("/")[2];
+      this.rule = this.$getGameInfo("rule");
+      this.show = this.$store.state.isNew;
+      this.page = (this.currentPage !== 'flashPocker' ? "first" : "second");
+      if (this.currentPage === 'flashPocker' || this.currentPage === 'fastPocker' || this.currentPage === 'marathonPocker') {
+        this.gameType = 'pocker';
+      } else {
+        this.gameType = 'other';
+      }
+      this.activeNum = 4;
+    },
     //关闭弹窗
     closeAlertBox: function () {
       this.show = false;
@@ -128,6 +137,24 @@ export default {
       } else if (this.currentPage === 'marathonPocker' || this.currentPage === 'fastPocker') {
         this.$store.commit("setPockerNumber", this.activeNum === 'All' ? 52 : this.activeNum);
       }
+      console.log("ready-page pockernumber", this.activeNum);
+      this.getGameList();
+    },
+    getGameList: function () {
+      let game_id = this.$store.state.gameid;
+      let game_level = this.level;
+      let token = this.$store.state.userInfo.token;
+      this.$http.get({
+        url: "/api/wxapp.game/getGameContent",
+        data: {
+          game_id, game_level
+        },
+        header: {
+          token: token
+        }
+      }).then(result => {
+        this.$store.commit("setRuleList", result.data)
+      })
       //跳转到下一个页面
       wx.reLaunch({
         url: "/pages/" + this.currentPage + "/memary/main"
@@ -140,8 +167,8 @@ export default {
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
         return e.game_level == level
       })[0];
-      this.memoryTime = rule.memory_time;
-      this.$store.commit("setMemoryTime", rule.memory_time);
+      this.memoryTime = parseInt(rule.memory_time);
+      this.$store.commit("setMemoryTime", parseInt(rule.memory_time));
     },
     //点击确定
     confirm: function () {
@@ -158,22 +185,22 @@ export default {
 }
 
 .content {
-  margin: tovmin(240) auto auto auto;
+  margin: tovmin(150) auto tovmin(50) auto;
   display: flex;
   flex-direction: column;
-  width: 76%;
+  width: 90%;
   text-align: center;
-  justify-content: center;
+  fjustify-content: center;
+  font-size: tovmin(36);
 }
 .content > div > div {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .label {
   height: tovmin(56);
   line-height: tovmin(56);
-  font-weight: bold;
-  font-size: tovmin(28);
 }
 
 .btn-group span {
@@ -181,7 +208,7 @@ export default {
   width: tovmin(100);
   height: tovmin(56);
   display: inline-block;
-  font-size: tovmin(26);
+  font-size: tovmin(36);
 }
 
 .btn-group .active {
@@ -198,7 +225,7 @@ export default {
   border-radius: tovmin(50);
   text-align: center;
   line-height: tovmin(98);
-  font-size: 24rpx;
+  font-size: tovmin(48);
   font-weight: bold;
   position: absolute;
   bottom: tovmin(140);
@@ -223,8 +250,8 @@ p.active {
   color: $middle-blue;
 }
 .radioBtn {
-  width: 18rpx;
-  height: 18rpx;
+  width: tovmin(36);
+  height: tovmin(36);
   display: inline-block;
   vertical-align: middle;
 }

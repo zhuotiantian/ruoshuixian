@@ -2,8 +2,8 @@
   <div class="container">
     <div class="fog" v-if="showFog"></div>
     <alertBox :text="text" v-if="showFog&&!showTip" @hideFog="hideFog" @confirm="confirm"></alertBox>
-    <GameTitle :startAnwserText="true" :showTips="true" :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
-    <Answer ref="answer" />
+    <GameTitle :startAnwserText="startAnwserText" :showTips="true" :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
+    <Answer ref="answer" @hideAnwserText="hideAnwserText" />
   </div>
 </template>
 <script>
@@ -20,20 +20,23 @@ export default {
     return {
       showFog: false,
       showTip: false,
-      canAdd: false
+      canAdd: false,
+      startAnwserText: true
     }
   },
   onLoad () {
     Object.assign(this.$data, this.$options.data())
-    this.level = this.$store.state.level;
-    this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
-    })[0];
     this.token = this.$store.state.userInfo.token;
     this.startTime = new Date().getTime();
-    this.game_records_id = this.rule.game_records_id;
+    this.game_records_id = this.$store.state.ruleList.game_records_id;
   },
   methods: {
+    hideAnwserText: function () {
+      console.log("111");
+      if (this.startAnwserText) {
+        this.startAnwserText = false;
+      }
+    },
     finishAnwser: function () {
       let result = this.$refs.answer.result;
       this.showFog = true;
@@ -81,7 +84,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
-  padding-top: tovmin(140);
+  padding-top: tovmin(200);
   color: white;
   text-align: center;
 }
