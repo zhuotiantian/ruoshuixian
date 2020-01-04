@@ -51,8 +51,9 @@ export default {
       }).sort(e => {
         return Math.random() > 0.5 ? 1 : -1
       });
+      this.numberList = numberList;
       let total = rule.number, per = rule.number_per_group, number = [];
-      for (var i = 0; i < this.total; i += per) {
+      for (var i = 0; i < total; i += per) {
         number.push(numberList.slice(i, i + per));
       }
       this.number = number.filter(e => {

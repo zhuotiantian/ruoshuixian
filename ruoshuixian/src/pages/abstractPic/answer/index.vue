@@ -27,7 +27,7 @@ export default {
   },
   onLoad (option) {
     Object.assign(this.$data, this.$options.data());
-    this.init();
+    this.init(option);
   },
   data () {
     let array = new Array(5);
@@ -45,7 +45,7 @@ export default {
     };
   },
   methods: {
-    init: function () {
+    init: function (option) {
       let list = JSON.parse(option.list);
       let level = this.$store.state.level;
       this.token = this.$store.state.userInfo.token;

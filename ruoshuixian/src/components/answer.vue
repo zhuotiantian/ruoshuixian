@@ -269,7 +269,7 @@ export default {
   position: absolute;
   min-width: 100%;
   height: 100%;
-  bottom: 8vmin;
+  bottom: 7vmin;
 }
 
 .result image {

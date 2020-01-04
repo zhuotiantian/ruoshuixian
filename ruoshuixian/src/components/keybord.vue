@@ -17,7 +17,7 @@ export default {
   onLoad: function () {
     let number = null;
     let gameName = this.$getGameInfo("name");
-    if (gameName == "5") {
+    if (gameName == "抽象图形") {
       number = [1, 2, 3, 4, 5];
     } else if (gameName == "二进制数字") {
       number = [0, , , , 1];

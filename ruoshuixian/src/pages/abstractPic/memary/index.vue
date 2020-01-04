@@ -42,7 +42,7 @@ export default {
       this.numberList = this.$store.state.ruleList.list.map((e, index) => {
         return {
           img: e,
-          index: index
+          index: index % 5
         }
       });
       for (var i = 0; i < total; i += per) {

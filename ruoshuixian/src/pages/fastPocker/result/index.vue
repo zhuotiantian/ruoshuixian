@@ -46,7 +46,8 @@ export default {
       }
     })
     this.pocker = user_result;
-    this.showCorrectResult = this.correct_result
+    this.showCorrectResult = this.correct_result;
+    this.isShowCorrectAnswer = false;
   },
   onShareAppMessage: function (res) {
     return {

@@ -52,8 +52,8 @@ export default {
       this.number--;
       if (this.number <= 0) {
         this.showInterval = false;
-        this.toYuyin()
-        clearInterval(interval);
+        this.innerAudioContext.play();
+        clearInterval(this.interval);
       }
     }, 1000);
   },
@@ -64,6 +64,7 @@ export default {
       this.numberList = this.$store.state.ruleList.list.map(e => {
         return eng[e]
       });
+      this.toYuyin()
     },
     toYuyin: function () {
       let plugin = requirePlugin("WechatSI");
@@ -75,7 +76,6 @@ export default {
         success: function (res) {
           console.log("succ tts", res.filename);
           that.innerAudioContext.src = res.filename
-          that.innerAudioContext.play();
         },
         fail: function (res) {
           console.log("fail tts", res)

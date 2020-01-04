@@ -21,7 +21,7 @@ export default {
   },
   onLoad (option) {
     Object.assign(this.$data, this.$options.data())
-    this.init()
+    this.init(option)
   },
   onShareAppMessage: function (res) {
     return {
@@ -42,7 +42,7 @@ export default {
     };
   },
   methods: {
-    init: function () {
+    init: function (option) {
       let level = this.$store.state.level;
       this.result = this.$store.state.result.right_and_wrong_results;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {

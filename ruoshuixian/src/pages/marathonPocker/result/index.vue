@@ -49,6 +49,7 @@ export default {
     };
     this.groupPage = groupPage;
     this.group2();
+    this.isShowCorrectAnswer = false;
   },
   onShareAppMessage: function (res) {
     return {
@@ -206,7 +207,7 @@ export default {
   background: $middle-blue;
   border: none;
 }
-.pocker-wrapper{
+.pocker-wrapper {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);

@@ -22,7 +22,7 @@ export default {
   },
   onLoad (option) {
     Object.assign(this.$data, this.$options.data())
-    this.init();
+    this.init(option);
   },
   onShareAppMessage: function (res) {
     return {
@@ -44,7 +44,7 @@ export default {
     };
   },
   methods: {
-    init: function () {
+    init: function (option) {
       let level = this.$store.state.level,
         result = this.$store.state.result,
         correct_result = result.correct_result,

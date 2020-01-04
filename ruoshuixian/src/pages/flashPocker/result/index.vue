@@ -35,6 +35,7 @@ export default {
     this.correct_result = this.$store.state.result.correct_result.slice(0, this.pockerNumber);
     let user_result = this.$store.state.result.right_and_wrong_results;
     this.pocker = user_result;
+    this.isShowCorrectAnswer = false;
     this.pocker.forEach((e, _index) => {
       e.trueResult = false;
       if (e.index === this.correct_result[_index].index && e.color === this.correct_result[_index].color) {

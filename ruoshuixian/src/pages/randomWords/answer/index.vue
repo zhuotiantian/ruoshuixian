@@ -37,10 +37,14 @@ export default {
       this.spliceList();
     },
     spliceList: function (start, end) {
-      let per = this.rule.number_per_group;
-      let total = this.rule.number;
+      let level = this.$store.state.level;
+      let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
+        return e.game_level == level
+      })[0];
+      let per = rule.number_per_group;
+      let total = rule.number;
       let list = [];
-      let wordsList = this.rule.list.map((e, index) => {
+      let wordsList = this.$store.state.ruleList.list.map((e, index) => {
         return {
           text: "",
           index: index
