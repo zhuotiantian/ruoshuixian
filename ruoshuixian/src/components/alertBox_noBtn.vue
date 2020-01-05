@@ -1,16 +1,22 @@
 <template>
-  <div class="alertBox">
-    <div class="wrapper">
-      <image src="/static/images/firstPage/guanbi.png" class="closeBtn" @click="close"></image>
-      <h1>游戏规则</h1>
-      <p v-for="(item,index) in rule" :key="index">{{index+1}}、{{item}}</p>
-      <p class="red">(详情见左上角帮助)</p>
+  <div class="alertBox-container">
+    <div class="fog" v-if="show"></div>
+    <div class="alertBox" v-if="show">
+      <div class="wrapper">
+        <image src="/static/images/firstPage/guanbi.png" class="closeBtn" @click="close"></image>
+        <h1>游戏规则</h1>
+        <p v-for="(item,index) in rule" :key="index">{{index+1}}、{{item}}</p>
+        <p class="red">(详情见左上角帮助)</p>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
   props: ["rule"],
+  onLoad: function () {
+    this.show = this.$store.state.isNew;
+  },
   data () {
     return {
       show: false,
@@ -18,13 +24,17 @@ export default {
   },
   methods: {
     close: function () {
-      this.$emit("closeAlertBox");
+      this.show = false;
     }
   }
 }
 
 </script>
 <style lang="scss" scoped>
+.alertBox-container {
+  height: 100%;
+  width: 100%;
+}
 .alertBox {
   background: $yellow;
   border-radius: tovmin(40);

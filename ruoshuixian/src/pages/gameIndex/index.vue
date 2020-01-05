@@ -1,8 +1,7 @@
 <template>
   <div class="game-container">
     <GameTitle />
-    <div v-if="show" class="fog"></div>
-    <AlertBoxNoBth v-if="show" :rule="rule" @closeAlertBox="closeAlertBox" />
+    <AlertBoxNoBth :rule="rule" />
     <!-- 扑克牌游戏首页 -->
     <div v-if="gameType==='pocker'" class="content">
       <template v-if="page==='first'">
@@ -116,7 +115,7 @@ export default {
       this.activeTime = this.memoryTime[0];
       this.currentPage = this.$getGameInfo("wxapp_url").split("/")[2];
       this.rule = this.$getGameInfo("rule");
-      this.show = this.$store.state.isNew;
+
       this.page = (this.currentPage !== 'flashPocker' ? "first" : "second");
       if (this.currentPage === 'flashPocker' || this.currentPage === 'fastPocker' || this.currentPage === 'marathonPocker') {
         this.gameType = 'pocker';
@@ -124,10 +123,6 @@ export default {
         this.gameType = 'other';
       }
       this.activeNum = 4;
-    },
-    //关闭弹窗
-    closeAlertBox: function () {
-      this.show = false;
     },
     //开始游戏
     startGame: function () {
