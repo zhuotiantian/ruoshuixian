@@ -54,7 +54,7 @@ export default {
 
 .alertBox p:last-child {
   display: flex;
-  height: calc(100% - 106rpx);
+  height: 10vmin;
   align-items: center;
 }
 

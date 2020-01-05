@@ -80,9 +80,8 @@ export default {
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
         return e.game_level == level
       })[0];
-      let perGroupNumber = rule.number_per_group;
       // 生成所有pock的副数
-      for (var i = 1; i <= this.list.length / perGroupNumber; i++) {
+      for (var i = 1; i <= this.list.length; i++) {
         this.pages.push({
           number: i,
           active: false

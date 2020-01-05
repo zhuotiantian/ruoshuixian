@@ -71,15 +71,10 @@ export default {
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
         return e.game_level == level
       })[0];
-      let perGroupNumber = rule.number_per_group;
-      let list = [];
-      for (var i = 0; i < pocker.length; i += perGroupNumber) {
-        list.push(pocker.slice(i, i + perGroupNumber));
-      }
-      this.pocker = list;
+      this.pocker = pocker;
       // 生成pock的副数
       let pages = [];
-      for (var i = 1; i <= list.length; i++) {
+      for (var i = 1; i <= pocker.length; i++) {
         pages.push({
           number: i,
           active: false

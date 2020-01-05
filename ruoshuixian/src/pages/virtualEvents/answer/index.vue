@@ -68,7 +68,7 @@ export default {
       this.showFog = false;
     },
     confirm: function () {
-      let token = this.$store.state.userInfo.token, game_records_id = this.rule.game_records_id, endTime = new Date().getTime(), date = [], event = [];
+      let token = this.$store.state.userInfo.token, game_records_id = this.$store.state.ruleList.game_records_id, endTime = new Date().getTime(), date = [], event = [];
       this.numberList.forEach(e => {
         date.push(e.date);
         event.push(e.event);

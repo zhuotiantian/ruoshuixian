@@ -69,7 +69,6 @@ export default {
 .list {
   text-align: center;
   position: relative;
-  height: auto;
   height: tovmin(30);
   display: flex;
   justify-content: space-between;

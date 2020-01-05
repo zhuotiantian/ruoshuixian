@@ -10,7 +10,7 @@
     </div>
     <div class="list" v-else>
       <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
-        <div class="pocker-wrapper" :style="{width:(pocker.length<52?((pocker.length-1)*40+124+'rpx'):'97%'),'max-width':'97%'}">
+        <div class="pocker-wrapper" :style="{width:(perPocker.length<52?((perPocker.length-1)*40+124+'rpx'):'97%'),'max-width':'97%'}">
           <image :class="{pocker:true,trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in perPocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
         </div>
       </scroll-view>
@@ -67,7 +67,6 @@ export default {
     return {
       pannelContent: ["1", "2", "4", "8"],
       pockerCount: 23,
-      pockerNumber: 0,
       left: 100,
       pages: [],
       userid: null,
@@ -120,20 +119,19 @@ export default {
         number: item.number,
         active: true
       });
-      this.currentGroupIndex = 0;
-
-      this.pockerNumber && this.group(this.pockerNumber);
+      this.isShowCorrectAnswer ? this.group() : this.group2();
     },
     showCorrectAnswer: function () {
-      this.group();
       this.currentPage = 0;
       this.isShowCorrectAnswer = true;
+      this.group();
+      this.selectHandler(0, { number: 1 });
     },
     showMyAnswerHandler: function () {
-      this.group2();
       this.isShowCorrectAnswer = false;
       this.currentPage = 0;
-
+      this.group2();
+      this.selectHandler(0, { number: 1 });
     }
   }
 };
@@ -143,8 +141,7 @@ export default {
   text-align: center;
   margin: 0 15vmin;
   position: relative;
-  height: auto;
-  height: tovmin(30);
+  height: tovmin(380);
   display: flex;
   justify-content: space-between;
 }
