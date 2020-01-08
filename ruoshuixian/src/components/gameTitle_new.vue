@@ -6,27 +6,54 @@
         <template v-if="!isResult">
           <div>
             <span class="btn default-btn helpBtn" @click="toHelp">帮助</span>
-            <span class="btn default-btn" v-if="showTips" @click="showTipsHandler">操作提示</span>
-            <span class="btn default-btn type arrow " v-if="showShowType&&gameName!=='二进制数字'" style="margin-left:30rpx" @click="showShowTypePannel=true">{{pockerNumber===52?'All':pockerNumber}}</span>
-            <span class="btn default-btn type arrow" v-if="showShowType&&gameName==='二进制数字'" style="margin-left:30rpx" @click="showShowTypePannel=true">{{showType}}</span>
+            <span
+              class="btn default-btn"
+              v-if="showTips"
+              @click="showTipsHandler"
+              >操作提示</span
+            >
+            <span
+              class="btn default-btn type arrow "
+              v-if="showShowType && gameName !== '二进制数字'"
+              style="margin-left:30rpx"
+              @click="showShowTypePannel = true"
+              >{{ pockerNumber === 52 ? "All" : pockerNumber }}</span
+            >
+            <span
+              class="btn default-btn type arrow"
+              v-if="showShowType && gameName === '二进制数字'"
+              style="margin-left:30rpx"
+              @click="showShowTypePannel = true"
+              >{{ showType }}</span
+            >
           </div>
         </template>
         <!-- 结果 -->
         <template v-else>
           <div class="result_title">
-            <span v-if="showCostTime">用时：{{getPayedTime}}</span>
-            <span>得分：{{result.fraction||0}}分</span>
+            <span v-if="showCostTime">用时：{{ getPayedTime }}</span>
+            <span>得分：{{ result.fraction || 0 }}分</span>
             <span class="btn default-btn" @click="toHistory">历史记录</span>
-            <span class="btn default-btn" v-if="showCorrectAnswerBtn&&!showMyAnswer" @click="showCorrectAnswer">正确答案</span>
-            <span class="btn default-btn" v-if="showMyAnswer" @click="showMyAnswerHandler">我的提交</span>
+            <span
+              class="btn default-btn"
+              v-if="showCorrectAnswerBtn && !showMyAnswer"
+              @click="showCorrectAnswer"
+              >正确答案</span
+            >
+            <span
+              class="btn default-btn"
+              v-if="showMyAnswer"
+              @click="showMyAnswerHandler"
+              >我的提交</span
+            >
           </div>
         </template>
       </div>
       <div class="center">
         <p v-if="showIntervalTime">
-          {{computedTime.hour<10?('0'+computedTime.hour):''}}：
-          {{(computedTime.minutes<10?'0':'')+computedTime.minutes}}：
-          {{(computedTime.seconds<10?'0':'')+computedTime.seconds}}
+          {{ computedTime.hour < 10 ? "0" + computedTime.hour : "" }}：
+          {{ (computedTime.minutes < 10 ? "0" : "") + computedTime.minutes }}：
+          {{ (computedTime.seconds < 10 ? "0" : "") + computedTime.seconds }}
         </p>
         <p v-else-if="startAnwserText" style="font-size:24rpx">开始作答</p>
       </div>
@@ -34,21 +61,54 @@
         <!-- 非结果 -->
         <template v-if="!isResult">
           <div>
-            <span v-if="showGameLevel">{{returnCurrentGameLevel}}</span>
-            <span class="btn primary-btn" v-if="showChangePageBtn&&!showPrevPage" @click="nextPage">下一页</span>
-            <span class="btn primary-btn" v-if="showChangePageBtn&&showPrevPage" @click="prevPage">上一页</span>
-            <span class="btn submit-btn" v-if="showFinishMemoryBtn" @click="finishMemary">记忆完成</span>
-            <span class="btn submit-btn" v-if="showFinishAnwserBtn" @click="finishAnwser">作答完成</span>
+            <span v-if="showGameLevel">{{ returnCurrentGameLevel }}</span>
+            <span
+              class="btn primary-btn"
+              v-if="showChangePageBtn && !showPrevPage"
+              @click="nextPage"
+              >下一页</span
+            >
+            <span
+              class="btn primary-btn"
+              v-if="showChangePageBtn && showPrevPage"
+              @click="prevPage"
+              >上一页</span
+            >
+            <span
+              class="btn submit-btn"
+              v-if="showFinishMemoryBtn"
+              @click="finishMemary"
+              >记忆完成</span
+            >
+            <span
+              class="btn submit-btn"
+              v-if="showFinishAnwserBtn"
+              @click="finishAnwser"
+              >作答完成</span
+            >
           </div>
         </template>
         <!-- 结果 -->
         <template v-else>
           <div>
-            <span class="btn primary-btn" v-if="showChangePageBtn&&!showPrevPage" @click="nextPage">下一页</span>
-            <span class="btn primary-btn" v-if="showChangePageBtn&&showPrevPage" @click="prevPage">上一页</span>
+            <span
+              class="btn primary-btn"
+              v-if="showChangePageBtn && !showPrevPage"
+              @click="nextPage"
+              >下一页</span
+            >
+            <span
+              class="btn primary-btn"
+              v-if="showChangePageBtn && showPrevPage"
+              @click="prevPage"
+              >上一页</span
+            >
             <span class="btn primary-btn" @click="playAgain">再次训练</span>
             <button class="shareBtn" open-type="share">
-              <image class="share" :src="'/static/images/firstPage/share.gif'" />
+              <image
+                class="share"
+                :src="'/static/images/firstPage/share.gif'"
+              />
             </button>
           </div>
         </template>
@@ -56,17 +116,39 @@
     </div>
     <template v-if="showShowTypePannel">
       <div>
-        <div class="fog" @click="showShowTypePannel=false"></div>
-        <div :class="{pannel:true,down:showShowTypePannel,up:!showShowTypePannel}">
+        <div class="fog" @click="showShowTypePannel = false"></div>
+        <div
+          :class="{
+            pannel: true,
+            down: showShowTypePannel,
+            up: !showShowTypePannel
+          }"
+        >
           <p class="pannel-title">显示方式</p>
-          <template v-if="showShowType&&gameName!=='二进制数字'">
+          <template v-if="showShowType && gameName !== '二进制数字'">
             <div>
-              <p v-for="(item,index) in pannelContent" :key="index" @click.stop="group(item,index)" :class="{active:item==(pockerNumber===52?'All':pockerNumber)}">{{item}}</p>
+              <p
+                v-for="(item, index) in pannelContent"
+                :key="index"
+                @click.stop="group(item, index)"
+                :class="{
+                  active: item == (pockerNumber === 52 ? 'All' : pockerNumber)
+                }"
+              >
+                {{ item }}
+              </p>
             </div>
           </template>
           <template v-else>
             <div>
-              <p v-for="(item,index) in pannelContent" :key="index" @click.stop="group(item,index)" :class="{active:item==showType}">{{item}}</p>
+              <p
+                v-for="(item, index) in pannelContent"
+                :key="index"
+                @click.stop="group(item, index)"
+                :class="{ active: item == showType }"
+              >
+                {{ item }}
+              </p>
             </div>
           </template>
         </div>
@@ -74,13 +156,21 @@
     </template>
     <template v-if="shouwOperationTips">
       <div>
-        <div class="fog" @click="shouwOperationTips=false"></div>
+        <div class="fog" @click="shouwOperationTips = false"></div>
         <div class="tips">
-          <p style="margin-bottom:30rpx">你可以通过以下两种方式对扑克牌的顺序进行修改</p>
-          <p>方式一、点击屏幕上半区的任意一张扑克，点击“退回”将这张扑克牌退回原位。</p>
-          <p>方式二、点击屏幕上半区的任意一张扑克，点击“替换/从左插入/从右面插入”后点击下半区的任意一张扑克进行“替换/从左插入/从右面插入”操作。</p>
+          <p style="margin-bottom:30rpx">
+            你可以通过以下两种方式对扑克牌的顺序进行修改
+          </p>
           <p>
-            <span class="btn default-btn" @click="shouwOperationTips=false">我知道了</span>
+            方式一、点击屏幕上半区的任意一张扑克，点击“退回”将这张扑克牌退回原位。
+          </p>
+          <p>
+            方式二、点击屏幕上半区的任意一张扑克，点击“替换/从左插入/从右面插入”后点击下半区的任意一张扑克进行“替换/从左插入/从右面插入”操作。
+          </p>
+          <p>
+            <span class="btn default-btn" @click="shouwOperationTips = false"
+              >我知道了</span
+            >
           </p>
         </div>
       </div>
@@ -146,41 +236,51 @@ export default {
       default: false
     }
   },
-  onUnload: function () {
+  onUnload: function() {
     clearInterval(this.timer);
   },
-  onLoad () {
+  onLoad() {
     Object.assign(this.$data, this.$options.data());
     this.level = this.$store.state.level;
     this.rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-      return e.game_level == this.level
+      return e.game_level == this.level;
     })[0];
     this.result = this.$store.state.result;
     this.gameid = this.$store.state.gameid;
     this.pockerNumber = this.$store.state.pockerNumber;
     this.gameName = this.$getGameInfo("name");
-    if (this.gameName === '二进制数字') {
+    if (this.gameName === "二进制数字") {
       this.pannelContent = ["不划线", "三个一组", "六个一组"];
     } else {
-      this.pannelContent = ['1', '2', '4', '8', 'All'];
+      this.pannelContent = ["1", "2", "4", "8", "All"];
     }
-    this.showGameLevel = this.gameName !== '闪视扑克牌' && this.showFinishMemoryBtn
-    if ((this.showFinishMemoryBtn || this.isRecall || this.showFinishAnwserBtn) && this.showIntervalTime) {
+    this.showGameLevel =
+      this.gameName !== "闪视扑克牌" && this.showFinishMemoryBtn;
+    if (
+      (this.showFinishMemoryBtn || this.isRecall || this.showFinishAnwserBtn) &&
+      this.showIntervalTime
+    ) {
       clearInterval(this.timer);
       this.interval();
     }
   },
   computed: {
     //返回所耗时长
-    getPayedTime: function () {
-      return this.result && Math.round(this.result.game_time / 60) + '分' + Math.floor(this.result.game_time % 60) + "秒"
+    getPayedTime: function() {
+      return (
+        this.result &&
+        Math.round(this.result.game_time / 60) +
+          "分" +
+          Math.floor(this.result.game_time % 60) +
+          "秒"
+      );
     },
     // 返回当前游戏等级文本
-    returnCurrentGameLevel: function () {
-      return (this.level === 'primary' ? '初级' : '高级') + this.gameName
+    returnCurrentGameLevel: function() {
+      return (this.level === "primary" ? "初级" : "高级") + this.gameName;
     }
   },
-  data () {
+  data() {
     return {
       gameid: null,
       rule: {},
@@ -195,20 +295,22 @@ export default {
       },
       showGameLevel: false,
       shouwOperationTips: false,
-      showType: '显示方式',
+      showType: "显示方式",
       gameName: "",
       showPrevPage: false,
       showMyAnswer: false
-    }
+    };
   },
   methods: {
     //倒计时定时器
-    interval: function () {
+    interval: function() {
       var time;
-      if (this.showFinishMemoryBtn) {//记忆时间
+      if (this.showFinishMemoryBtn) {
+        //记忆时间
         time = parseInt(this.rule.memory_time);
-      } else if (this.isRecall) {//回忆时间
-        time = parseInt(this.rule.recollect_time)
+      } else if (this.isRecall) {
+        //回忆时间
+        time = parseInt(this.rule.recollect_time);
       } else if (this.showFinishAnwserBtn) {
         time = this.$getGameInfo("answerTime");
       }
@@ -225,40 +327,40 @@ export default {
         } else {
           this.getTime(time);
         }
-      }, 1000)
+      }, 1000);
     },
-    getTime: function (time) {
+    getTime: function(time) {
       let hour = Math.floor(time / 3600);
       let minutes = Math.floor((time - hour * 3600) / 60);
-      let seconds = (time - hour * 3600 - minutes * 60);
+      let seconds = time - hour * 3600 - minutes * 60;
       this.computedTime = { hour, minutes, seconds };
     },
     //跳转到游戏帮助页面
-    toHelp: function () {
+    toHelp: function() {
       wx.navigateTo({
         url: "/pages/help/main"
-      })
+      });
     },
     //跳转到游戏历史记录页面
-    toHistory: function () {
+    toHistory: function() {
       wx.navigateTo({
         url: "/pages/history/main"
-      })
+      });
     },
     //显示操作提示
-    showTipsHandler: function () {
+    showTipsHandler: function() {
       this.shouwOperationTips = true;
     },
     //点击记忆完成
-    finishMemary: function () {
+    finishMemary: function() {
       this.$emit("finishMemary");
     },
     //作答完成
-    finishAnwser: function () {
+    finishAnwser: function() {
       this.$emit("finishAnwser");
     },
     //再次训练
-    playAgain: function () {
+    playAgain: function() {
       this.$toGame(this.gameid, "", () => {
         wx.reLaunch({
           url: "/pages/gameIndex/main?type=playAgain"
@@ -266,8 +368,8 @@ export default {
       });
     },
     //选择显示方式
-    group: function (item) {
-      if (this.gameName !== '二进制数字') {
+    group: function(item) {
+      if (this.gameName !== "二进制数字") {
         this.pockerNumber = item;
         this.$store.commit("setPockerNumber", item);
       } else {
@@ -277,26 +379,26 @@ export default {
       this.$emit("group", item);
     },
     //点击下一页
-    nextPage: function () {
+    nextPage: function() {
       this.showPrevPage = true;
       this.$emit("nextPage");
     },
-    prevPage: function () {
+    prevPage: function() {
       this.showPrevPage = false;
       this.$emit("prevPage");
     },
     //查看正确答案
-    showCorrectAnswer: function () {
+    showCorrectAnswer: function() {
       this.showMyAnswer = true;
       this.$emit("showCorrectAnswer");
     },
     //查看我提交的答案
-    showMyAnswerHandler: function () {
+    showMyAnswerHandler: function() {
       this.showMyAnswer = false;
       this.$emit("showMyAnswerHandler");
     }
-  },
-}
+  }
+};
 </script>
 <style lang="scss" scoped>
 .title {

@@ -9,8 +9,6 @@ page {
   font-family: "Noto Sans S Chinese";
   background-color: $deep-blue;
   -webkit-text-size-adjust: 100%;
-  overflow-y: auto;
-
 }
 
 ::-webkit-scrollbar {
@@ -74,7 +72,7 @@ page {
   border: tovmin(2) solid white;
   display: inline-block;
   vertical-align: middle;
-  margin-right: tovmin(10)
+  margin-right: tovmin(10);
 }
 
 .radio.active::before {
@@ -85,7 +83,7 @@ page {
   border: tovmin(2) solid $yellow;
   display: inline-block;
   vertical-align: middle;
-  margin-right: tovmin(10)
+  margin-right: tovmin(10);
 }
 
 .radio.active::after {
@@ -136,5 +134,5 @@ page {
 }
 
 .btnGroup .btn {
-  margin: 0 tovmin(16)
+  margin: 0 tovmin(16);
 }

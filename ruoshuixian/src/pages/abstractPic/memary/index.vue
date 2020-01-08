@@ -1,12 +1,17 @@
 <template>
   <div class="container">
-    <GameTitle :showIntervalTime='true' ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
+    <GameTitle
+      :showIntervalTime="true"
+      ref="title"
+      :showFinishMemoryBtn="true"
+      @finishMemary="finishMemary"
+    ></GameTitle>
     <div class="list">
-      <div class="row" v-for="(rows,_index) in number" :key="_index">
-        <div class="image" v-for="(item,index) in rows" :key="index">
-          <image class="image" :src="domain+item.img" lazy-load="true" />
+      <div class="row" v-for="(rows, _index) in number" :key="_index">
+        <div class="image" v-for="(item, index) in rows" :key="index">
+          <image class="image" :src="domain + item.img" lazy-load="true" />
         </div>
-        <span style="margin-left:60rpx">row&nbsp;&nbsp;{{_index+1}}</span>
+        <span>row&nbsp;&nbsp;{{ _index + 1 }}</span>
       </div>
     </div>
   </div>
@@ -17,7 +22,7 @@ export default {
   components: {
     GameTitle
   },
-  data () {
+  data() {
     return {
       numberList: [],
       number: [],
@@ -26,40 +31,42 @@ export default {
       per: 0,
       domain: this.$http.domain,
       numberList: []
-    }
+    };
   },
-  onLoad (option) {
-    Object.assign(this.$data, this.$options.data())
-    this.init()
+  onLoad(option) {
+    Object.assign(this.$data, this.$options.data());
+    this.init();
   },
   methods: {
-    init: function () {
+    init: function() {
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == level
+        return e.game_level == level;
       })[0];
-      let total = rule.number, per = rule.number_per_group, number = [];
+      let total = rule.number,
+        per = rule.number_per_group,
+        number = [];
       this.numberList = this.$store.state.ruleList.list.map((e, index) => {
         return {
           img: e,
           index: index % 5
-        }
+        };
       });
       for (var i = 0; i < total; i += per) {
         let arr = this.numberList.slice(i, i + per);
         number.push(arr);
-      };
+      }
       this.number = number.filter(e => {
-        return e.length > 0
+        return e.length > 0;
       });
     },
-    finishMemary: function () {
+    finishMemary: function() {
       wx.reLaunch({
         url: "../answer/main?list=" + JSON.stringify(this.number)
       });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 page {
