@@ -1,6 +1,6 @@
 {
-    "navigationBarTitleText": "我的记录",
-    "usingComponents": {
-        "painter": "/static/painter/painter"
-    }
+  "navigationBarTitleText": "我的记录",
+  "usingComponents": {
+    "painter": "/static/myPainter/painter"
+  }
 }

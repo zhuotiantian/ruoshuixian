@@ -17,47 +17,64 @@ export default {
   components: {
     GameTitle
   },
-  onLoad () {
-    Object.assign(this.$data, this.$options.data())
-    this.init();
+  onLoad() {
+    Object.assign(this.$data, this.$options.data());
   },
-  data () {
+  data() {
     return {
       number: [],
-      counts: 0,
-      numberList: [],
-      pannelContent: ["不划线", "三个一组", "六个一组"]
-    }
+      counts: 0
+    };
+  },
+  mounted() {
+    this.init();
   },
   methods: {
-    init: function () {
+    init: function() {
+      wx.showLoading({
+        title: "加载中"
+      });
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == level
+        return e.game_level == level;
       })[0];
       let numberList = this.$store.state.ruleList.list;
-      let total = rule.number, per = rule.number_per_group, number = [];
+      let total = rule.number,
+        per = rule.number_per_group,
+        number = [];
       for (var i = 0; i < total; i += per) {
         number.push(numberList.slice(i, i + per));
-      };
-      this.number = number;
+      }
+      this.allNumber = number;
+      this.number = number.slice(0, 10);
+      this.lastIndex = 10;
+      wx.hideLoading();
     },
-    group: function (data) {
-      if (data == '三个一组') {
+    group: function(data) {
+      if (data == "三个一组") {
         this.counts = 3;
-      } else if (data == '六个一组') {
+      } else if (data == "六个一组") {
         this.counts = 6;
       } else {
         this.counts = 0;
       }
     },
-    finishMemary: function () {
+    finishMemary: function() {
       wx.reLaunch({
         url: "/pages/numberAnswer/main"
       });
     }
+  },
+  onReachBottom: function(e) {
+    if (this.lastIndex < this.allNumber.length) {
+      // 获取滚动条当前位置
+      this.number = this.number.concat(
+        this.allNumber.slice(this.lastIndex, this.lastIndex + 10)
+      );
+      this.lastIndex += 10;
+    }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 page {

@@ -15,34 +15,48 @@ export default {
   components: {
     GameTitle
   },
-  onLoad (option) {
-    Object.assign(this.$data, this.$options.data())
+  onLoad(option) {
+    Object.assign(this.$data, this.$options.data());
     this.init();
   },
-  data () {
+  data() {
     return {
       number: []
+    };
+  },
+  onReachBottom: function(e) {
+    if (this.lastIndex < this.allNumber.length) {
+      // 获取滚动条当前位置
+      this.number = this.number.concat(
+        this.allNumber.slice(this.lastIndex, this.lastIndex + 10)
+      );
+      this.lastIndex += 10;
     }
   },
   methods: {
-    init: function () {
+    init: function() {
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == level
+        return e.game_level == level;
       })[0];
-      let numberList = this.$store.state.ruleList.list, total = rule.number, per = rule.number_per_group, number = [];
+      let numberList = this.$store.state.ruleList.list,
+        total = rule.number,
+        per = rule.number_per_group,
+        number = [];
       for (var i = 0; i < total; i += per) {
         number.push(numberList.slice(i, i + per));
-      };
-      this.number = number;
+      }
+      this.allNumber = number;
+      this.number = number.slice(0, 10);
+      this.lastIndex = 10;
     },
-    finishMemary: function () {
+    finishMemary: function() {
       wx.reLaunch({
         url: "/pages/numberAnswer/main"
       });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 page {

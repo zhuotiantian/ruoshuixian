@@ -1,9 +1,9 @@
 <template>
   <div class="alertBox-container">
-    <div class="fog" v-if="show"></div>
+    <div class="fog" v-if="show" @click="close"></div>
     <div class="alertBox" v-if="show">
-      <div class="wrapper">
-        <image src="/static/images/firstPage/guanbi.png" class="closeBtn" @click="close"></image>
+      <div class="wrapper" @click="close">
+        <image src="/static/images/firstPage/guanbi.png" class="closeBtn"></image>
         <h1>游戏规则</h1>
         <p v-for="(item,index) in rule" :key="index">{{index+1}}、{{item}}</p>
         <p class="red">(详情见左上角帮助)</p>
@@ -14,21 +14,21 @@
 <script>
 export default {
   props: ["rule"],
-  onLoad: function () {
+  onLoad: function() {
     this.show = this.$store.state.isNew;
   },
-  data () {
+  data() {
     return {
-      show: false,
-    }
+      show: false
+    };
   },
   methods: {
-    close: function () {
+    close: function() {
       this.show = false;
+      console.log("111");
     }
   }
-}
-
+};
 </script>
 <style lang="scss" scoped>
 .alertBox-container {

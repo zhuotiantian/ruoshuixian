@@ -1,4 +1,5 @@
 {
-    "navigationBarTitleText": "二进制数字",
-    "pageOrientation": "landscape"
+  "navigationBarTitleText": "二进制数字",
+  "pageOrientation": "landscape",
+  "enablePullDownRefresh": true
 }

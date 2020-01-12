@@ -1,25 +1,24 @@
 <template>
   <div class="container">
-    <div class="fog" v-if="showPannel" @click="showPannel=false"></div>
+    <div class="fog" v-if="showPannel" @click="showPannel = false"></div>
     <div class="header">
-      <span :class="{active:active=='打卡记录'}" @click="active='打卡记录'">打卡记录</span>
-      <span :class="{active:active=='成绩记录'}" @click="active='成绩记录'">成绩记录</span>
+      <span :class="{ active: active == '打卡记录' }" @click="active = '打卡记录'">打卡记录</span>
+      <span :class="{ active: active == '成绩记录' }" @click="active = '成绩记录'">成绩记录</span>
     </div>
     <div class="content">
-
-      <ul class="list" v-if="active=='打卡记录'">
+      <ul class="list" v-if="active == '打卡记录'">
         <scroll-view>
-          <li v-for="(item,index) in list" :key="index">
-            <span>{{item.createtime}}</span>
+          <li v-for="(item, index) in list" :key="index">
+            <span>{{ item.createtime }}</span>
             <span>打卡成功</span>
           </li>
         </scroll-view>
       </ul>
       <ul class="list" v-else>
-        <li v-for="(item,index) in scores" :key="index">
-          <span>{{item.game}}</span>
+        <li v-for="(item, index) in scores" :key="index">
+          <span>{{ item.game }}</span>
           <span @click="toShare(item)">
-            <span>{{item.fraction}}</span>
+            <span>{{ item.fraction }}</span>
             <span>
               <image class="image" :src="'/static/images/my/share.png'"></image>
             </span>
@@ -28,47 +27,61 @@
         </li>
         <painter @imgOK="onImgOk" :palette="template" style="position:fixed;top:-99999px" />
       </ul>
-
     </div>
-    <div :class="{drop_up:true,up:showPannel,down:!showPannel}">
+    <div :class="{ drop_up: true, up: showPannel, down: !showPannel }">
       <button open-type="share">发送给好友</button>
       <button @click="alertBox">生成海报</button>
-      <button style="text-align:center;width:calc(100% - 10vmin)" @click="showPannel=false">取消</button>
+      <button style="text-align:center;width:calc(100% - 10vmin)" @click="showPannel = false">
+        取消
+      </button>
     </div>
 
     <template v-if="showFog">
-
       <div class="fog"></div>
       <div class="alertBox" id="wrapper">
         <div class="top draw">
           <div class="alertHeader draw">
             <div class="userImage draw">
-              <image class="image draw" data-type="radius-image" :data-url="icon==''?userInfo.avatar:icon" :src="icon==''?userInfo.avatar:icon" @click="uploadImg"></image>
+              <image class="image draw" data-type="radius-image" :data-url="icon == '' ? userInfo.avatar : icon" :src="icon == '' ? userInfo.avatar : icon" @click="uploadImg"></image>
             </div>
             <div class="draw">
-              <p class="draw" data-type="text" :data-text="userInfo.nickname">{{userInfo.nickname}}</p>
-              <p class="info draw" data-type="text" :data-text="'给你推荐了一款好玩的游戏《'+currentGameInfo.game+'》'">给你推荐了一款好玩的游戏《{{currentGameInfo.game}}》</p>
+              <p class="draw" data-type="text" :data-text="userInfo.nickname">
+                {{ userInfo.nickname }}
+              </p>
+              <p class="info draw" data-type="text" :data-text="'给你推荐了一款好玩的游戏《' + currentGameInfo.game + '》'">
+                给你推荐了一款好玩的游戏《{{ currentGameInfo.game }}》
+              </p>
             </div>
           </div>
           <div class="alertContent draw">
             <div class="draw">
               <p class="draw" data-type="text" data-text="得分">得分</p>
-              <p class="data draw" data-type="text" :data-text="currentGameInfo.fraction">{{currentGameInfo.fraction}}</p>
+              <p class="data draw" data-type="text" :data-text="currentGameInfo.fraction">
+                {{ currentGameInfo.fraction }}
+              </p>
             </div>
             <div class="draw">
               <p class="draw" data-type="text" data-text="排名">排名</p>
-              <p class="data draw" data-type="text" :data-text="currentGameInfo.ranking">{{currentGameInfo.ranking}}</p>
+              <p class="data draw" data-type="text" :data-text="currentGameInfo.ranking">
+                {{ currentGameInfo.ranking }}
+              </p>
             </div>
           </div>
-          <image class="draw" data-type="image" :data-url="domain+currentGameInfo.img" :src="domain+currentGameInfo.img"></image>
+          <image class="draw" data-type="image" :data-url="domain + currentGameInfo.img" :src="domain + currentGameInfo.img"></image>
           <div class="bottom draw">
-            <p class="draw" data-type="text" data-text="快来挑战我吧~">快来挑战我吧~</p>
-            <image class="draw" data-type="image" :data-url="domain+currentGameInfo.img" :src="domain+currentGameInfo.img"></image>
+            <p class="draw" data-type="text" data-text="快来挑战我吧~">
+              快来挑战我吧~
+            </p>
+            <image class="draw" data-type="image" :data-url="domain + currentGameInfo.img" :src="domain + currentGameInfo.img"></image>
           </div>
         </div>
         <div class="footer">
-          <button class="btn" style="flex:3" @click="drawCanvas">保存成图片</button>
-          <button class="btn" style="flex:1;background-color:white;color:inherit;margin-left:30rpx" @click="showFog=false">取消</button>
+          <button class="btn" style="flex:3" @click="drawCanvas">
+            保存成图片
+          </button>
+          <button class="btn" style="flex:1;background-color:white;color:inherit;margin-left:30rpx" @click="showFog = false">
+            取消
+          </button>
         </div>
       </div>
     </template>
@@ -76,7 +89,7 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       active: "打卡记录",
       list: [],
@@ -92,19 +105,19 @@ export default {
       userid: null
     };
   },
-  onShareAppMessage: function (res) {
+  onShareAppMessage: function(res) {
     return {
       path: "pages/firstPage/main?id=" + this.userid,
       title: "来跟我一起玩吧~~",
-      success: function () {
+      success: function() {
         console.log("分享成功");
       },
-      error: function () {
+      error: function() {
         console.log("分享失败");
       }
     };
   },
-  onLoad () {
+  onLoad() {
     Object.assign(this.$data, this.$options.data());
     this.userInfo = this.$store.state.userInfo;
     this.token = this.userInfo.token;
@@ -113,51 +126,59 @@ export default {
     this.getScoreList();
     let that = this;
     wx.getSystemInfo({
-      success: (res) => {
+      success: res => {
         that.width = res.screenWidth;
         that.height = res.screenHeight;
       }
-    })
+    });
   },
   methods: {
-    onImgOk: function (e) {
+    onImgOk: function(e) {
       wx.hideLoading();
+      this.showFog = true;
+      this.showPannel = false;
       this.imagePath = e.mp.detail.path;
     },
-    drawCanvas: function () {
+    drawCanvas: function() {
       let that = this;
       wx.saveImageToPhotosAlbum({
         filePath: this.imagePath,
         success: res => {
           wx.showModal({
-            title: '已保存到系统相册',
+            title: "已保存到系统相册",
             success: res => {
               this.showFog = false;
             },
             error: err => {
-              if (err.errMsg === "saveImageToPhotosAlbum:fail:auth denied" || err.errMsg === "saveImageToPhotosAlbum:fail auth deny") {
+              if (
+                err.errMsg === "saveImageToPhotosAlbum:fail:auth denied" ||
+                err.errMsg === "saveImageToPhotosAlbum:fail auth deny"
+              ) {
                 wx.openSetting({
                   success: result => {
                     this.drawCanvas();
                   }
-                })
+                });
               }
             }
-          })
+          });
         },
         fail: err => {
-          if (err.errMsg === "saveImageToPhotosAlbum:fail:auth denied" || err.errMsg === "saveImageToPhotosAlbum:fail auth deny") {
+          if (
+            err.errMsg === "saveImageToPhotosAlbum:fail:auth denied" ||
+            err.errMsg === "saveImageToPhotosAlbum:fail auth deny"
+          ) {
             wx.openSetting({
               success: result => {
                 this.drawCanvas();
               }
-            })
+            });
           }
         }
-      })
-      this.template = {} // 重置,下次点击生成时重新生成
+      });
+      this.template = {}; // 重置,下次点击生成时重新生成
     },
-    getList: function () {
+    getList: function() {
       this.$http
         .get({
           url: "/api/wxapp.student/punchInRecord",
@@ -169,8 +190,15 @@ export default {
           if (result.code == 1) {
             result.data.forEach(e => {
               let init_time = new Date(e.createtime * 1000);
-              let formateTime = init_time.getFullYear() + "-" + (Number(init_time.getMonth() + 1) < 10 ? "0" : "") + Number(init_time.getMonth() + 1) + "-" + (init_time.getDate() + 1 < 10 ? "0" : "") + init_time.getDate()
-              e.createtime = formateTime
+              let formateTime =
+                init_time.getFullYear() +
+                "-" +
+                (Number(init_time.getMonth() + 1) < 10 ? "0" : "") +
+                Number(init_time.getMonth() + 1) +
+                "-" +
+                (init_time.getDate() + 1 < 10 ? "0" : "") +
+                init_time.getDate();
+              e.createtime = formateTime;
             });
             this.list = result.data;
           } else {
@@ -181,135 +209,11 @@ export default {
           }
         });
     },
-    toShare: function (item) {
+    toShare: function(item) {
       this.currentGameInfo = item;
-      wx.showLoading({
-        title: '生成中',
-        success: res => {
-          this.showPannel = true;
-        }
-      });
-      this.showFog = false;
-      this.template = {
-        background: "#173771",
-        width: '875px',
-        height: '1301px',
-        views: [{
-          type: 'image',
-          url: this.userInfo.avatar,
-          css: {
-            top: '30px',
-            left: '30px',
-            width: '96px',
-            height: '96px',
-            borderRadius: "48px",
-          }
-        }, {
-          type: 'text',
-          text: this.userInfo.nickname,
-          css: {
-            top: '30px',
-            left: '156px',
-            fontSize: "40px",
-            color: "white"
-          }
-        },
-        {
-          type: 'text',
-          text: '给你推荐了一款好玩的游戏《' + this.currentGameInfo.game + '》',
-          css: {
-            top: '90px',
-            left: '156px',
-            fontSize: "20px",
-            color: "#999999"
-          }
-        },
-        {
-          type: 'rect',
-          css: {
-            top: '200px',
-            left: '30px',
-            height: "198px",
-            width: "815px",
-            color: "#F8B551",
-            borderRadius: "20px",
-          }
-        },
-        {
-          type: 'text',
-          text: '得分',
-          css: {
-            top: '230px',
-            left: '156px',
-            fontSize: "40px",
-            color: "#333"
-          }
-        },
-        {
-          type: 'text',
-          text: '排名',
-          css: {
-            top: '230px',
-            right: '156px',
-            fontSize: "36px",
-            color: "#333"
-          }
-        },
-        {
-          type: 'text',
-          text: String(this.currentGameInfo.fraction),
-          css: {
-            top: '300px',
-            left: '175px',
-            fontSize: "36px",
-            color: "#333"
-          }
-        },
-        {
-          type: 'text',
-          text: String(this.currentGameInfo.ranking),
-          css: {
-            top: '300px',
-            right: '175px',
-            fontSize: "36px",
-            color: "#333"
-          }
-        },
-        {
-          type: 'image',
-          url: this.domain + this.currentGameInfo.img,
-          css: {
-            top: '450px',
-            left: '30px',
-            width: '815px',
-            height: '258px',
-            borderRadius: "20px",
-          }
-        },
-        {
-          type: 'text',
-          text: "快来一起玩吧~",
-          css: {
-            bottom: '300px',
-            left: "330px",
-            fontSize: "36px",
-            color: "white"
-          }
-        },
-        {
-          type: 'image',
-          url: this.domain + this.currentGameInfo.img,
-          css: {
-            bottom: '60px',
-            left: '350px',
-            width: '168px',
-            height: '168px',
-          }
-        },
-        ]
-      };
+      this.showPannel = true;
     },
-    getScoreList: function () {
+    getScoreList: function() {
       this.$http
         .get({
           url: "/api/wxapp.game/achievement",
@@ -328,11 +232,132 @@ export default {
           }
         });
     },
-    alertBox: function () {
-      this.showFog = true;
-      this.showPannel = false;
-    },
-
+    alertBox: function() {
+      wx.showLoading({
+        title: "生成中"
+      });
+      this.template = {
+        background: "#173771",
+        width: "875px",
+        height: "1301px",
+        views: [
+          {
+            type: "image",
+            url: this.userInfo.avatar,
+            css: {
+              top: "30px",
+              left: "30px",
+              width: "96px",
+              height: "96px",
+              borderRadius: "48px"
+            }
+          },
+          {
+            type: "text",
+            text: this.userInfo.nickname,
+            css: {
+              top: "30px",
+              left: "156px",
+              fontSize: "40px",
+              color: "white"
+            }
+          },
+          {
+            type: "text",
+            text:
+              "给你推荐了一款好玩的游戏《" + this.currentGameInfo.game + "》",
+            css: {
+              top: "90px",
+              left: "156px",
+              fontSize: "20px",
+              color: "#999999"
+            }
+          },
+          {
+            type: "rect",
+            css: {
+              top: "200px",
+              left: "30px",
+              height: "198px",
+              width: "815px",
+              color: "#F8B551",
+              borderRadius: "20px"
+            }
+          },
+          {
+            type: "text",
+            text: "得分",
+            css: {
+              top: "230px",
+              left: "156px",
+              fontSize: "40px",
+              color: "#333"
+            }
+          },
+          {
+            type: "text",
+            text: "排名",
+            css: {
+              top: "230px",
+              right: "156px",
+              fontSize: "36px",
+              color: "#333"
+            }
+          },
+          {
+            type: "text",
+            text: String(this.currentGameInfo.fraction),
+            css: {
+              top: "300px",
+              left: "175px",
+              fontSize: "36px",
+              color: "#333"
+            }
+          },
+          {
+            type: "text",
+            text: String(this.currentGameInfo.ranking),
+            css: {
+              top: "300px",
+              right: "175px",
+              fontSize: "36px",
+              color: "#333"
+            }
+          },
+          {
+            type: "image",
+            url: this.domain + this.currentGameInfo.img,
+            css: {
+              top: "450px",
+              left: "30px",
+              width: "815px",
+              height: "258px",
+              borderRadius: "20px"
+            }
+          },
+          {
+            type: "text",
+            text: "快来一起玩吧~",
+            css: {
+              bottom: "300px",
+              left: "330px",
+              fontSize: "36px",
+              color: "white"
+            }
+          },
+          {
+            type: "image",
+            url: this.domain + this.currentGameInfo.img,
+            css: {
+              bottom: "60px",
+              left: "350px",
+              width: "168px",
+              height: "168px"
+            }
+          }
+        ]
+      };
+    }
   }
 };
 </script>

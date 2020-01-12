@@ -6,26 +6,9 @@
         <template v-if="!isResult">
           <div>
             <span class="btn default-btn helpBtn" @click="toHelp">帮助</span>
-            <span
-              class="btn default-btn"
-              v-if="showTips"
-              @click="showTipsHandler"
-              >操作提示</span
-            >
-            <span
-              class="btn default-btn type arrow "
-              v-if="showShowType && gameName !== '二进制数字'"
-              style="margin-left:30rpx"
-              @click="showShowTypePannel = true"
-              >{{ pockerNumber === 52 ? "All" : pockerNumber }}</span
-            >
-            <span
-              class="btn default-btn type arrow"
-              v-if="showShowType && gameName === '二进制数字'"
-              style="margin-left:30rpx"
-              @click="showShowTypePannel = true"
-              >{{ showType }}</span
-            >
+            <span class="btn default-btn" v-if="showTips" @click="showTipsHandler">操作提示</span>
+            <span class="btn default-btn type arrow " v-if="showShowType && gameName !== '二进制数字'" style="margin-left:30rpx" @click="showShowTypePannel = true">{{ pockerNumber === 52 ? "All" : pockerNumber }}</span>
+            <span class="btn default-btn type arrow" v-if="showShowType && gameName === '二进制数字'" style="margin-left:30rpx" @click="showShowTypePannel = true">{{ showType }}</span>
           </div>
         </template>
         <!-- 结果 -->
@@ -34,18 +17,8 @@
             <span v-if="showCostTime">用时：{{ getPayedTime }}</span>
             <span>得分：{{ result.fraction || 0 }}分</span>
             <span class="btn default-btn" @click="toHistory">历史记录</span>
-            <span
-              class="btn default-btn"
-              v-if="showCorrectAnswerBtn && !showMyAnswer"
-              @click="showCorrectAnswer"
-              >正确答案</span
-            >
-            <span
-              class="btn default-btn"
-              v-if="showMyAnswer"
-              @click="showMyAnswerHandler"
-              >我的提交</span
-            >
+            <span class="btn default-btn" v-if="showCorrectAnswerBtn && !showMyAnswer" @click="showCorrectAnswer">正确答案</span>
+            <span class="btn default-btn" v-if="showMyAnswer" @click="showMyAnswerHandler">我的提交</span>
           </div>
         </template>
       </div>
@@ -62,53 +35,20 @@
         <template v-if="!isResult">
           <div>
             <span v-if="showGameLevel">{{ returnCurrentGameLevel }}</span>
-            <span
-              class="btn primary-btn"
-              v-if="showChangePageBtn && !showPrevPage"
-              @click="nextPage"
-              >下一页</span
-            >
-            <span
-              class="btn primary-btn"
-              v-if="showChangePageBtn && showPrevPage"
-              @click="prevPage"
-              >上一页</span
-            >
-            <span
-              class="btn submit-btn"
-              v-if="showFinishMemoryBtn"
-              @click="finishMemary"
-              >记忆完成</span
-            >
-            <span
-              class="btn submit-btn"
-              v-if="showFinishAnwserBtn"
-              @click="finishAnwser"
-              >作答完成</span
-            >
+            <span class="btn primary-btn" v-if="showChangePageBtn && !showPrevPage" @click="nextPage">下一页</span>
+            <span class="btn primary-btn" v-if="showChangePageBtn && showPrevPage" @click="prevPage">上一页</span>
+            <span class="btn submit-btn" v-if="showFinishMemoryBtn" @click="finishMemary">记忆完成</span>
+            <span class="btn submit-btn" v-if="showFinishAnwserBtn" @click="finishAnwser">作答完成</span>
           </div>
         </template>
         <!-- 结果 -->
         <template v-else>
           <div>
-            <span
-              class="btn primary-btn"
-              v-if="showChangePageBtn && !showPrevPage"
-              @click="nextPage"
-              >下一页</span
-            >
-            <span
-              class="btn primary-btn"
-              v-if="showChangePageBtn && showPrevPage"
-              @click="prevPage"
-              >上一页</span
-            >
+            <span class="btn primary-btn" v-if="showChangePageBtn && !showPrevPage" @click="nextPage">下一页</span>
+            <span class="btn primary-btn" v-if="showChangePageBtn && showPrevPage" @click="prevPage">上一页</span>
             <span class="btn primary-btn" @click="playAgain">再次训练</span>
             <button class="shareBtn" open-type="share">
-              <image
-                class="share"
-                :src="'/static/images/firstPage/share.gif'"
-              />
+              <image class="share" :src="'/static/images/firstPage/share.gif'" />
             </button>
           </div>
         </template>
@@ -117,36 +57,24 @@
     <template v-if="showShowTypePannel">
       <div>
         <div class="fog" @click="showShowTypePannel = false"></div>
-        <div
-          :class="{
+        <div :class="{
             pannel: true,
             down: showShowTypePannel,
             up: !showShowTypePannel
-          }"
-        >
+          }">
           <p class="pannel-title">显示方式</p>
           <template v-if="showShowType && gameName !== '二进制数字'">
             <div>
-              <p
-                v-for="(item, index) in pannelContent"
-                :key="index"
-                @click.stop="group(item, index)"
-                :class="{
+              <p v-for="(item, index) in pannelContent" :key="index" @click.stop="group(item, index)" :class="{
                   active: item == (pockerNumber === 52 ? 'All' : pockerNumber)
-                }"
-              >
+                }">
                 {{ item }}
               </p>
             </div>
           </template>
           <template v-else>
             <div>
-              <p
-                v-for="(item, index) in pannelContent"
-                :key="index"
-                @click.stop="group(item, index)"
-                :class="{ active: item == showType }"
-              >
+              <p v-for="(item, index) in pannelContent" :key="index" @click.stop="group(item, index)" :class="{ active: item == showType }">
                 {{ item }}
               </p>
             </div>
@@ -168,9 +96,7 @@
             方式二、点击屏幕上半区的任意一张扑克，点击“替换/从左插入/从右面插入”后点击下半区的任意一张扑克进行“替换/从左插入/从右面插入”操作。
           </p>
           <p>
-            <span class="btn default-btn" @click="shouwOperationTips = false"
-              >我知道了</span
-            >
+            <span class="btn default-btn" @click="shouwOperationTips = false">我知道了</span>
           </p>
         </div>
       </div>

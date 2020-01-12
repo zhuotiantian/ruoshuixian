@@ -1,5 +1,5 @@
 <template>
-  <div :class="{down:showKeybord,up:!showKeybord,keybord:true}">
+  <div class="keybord">
     <div class="number">
       <span :class="{item:true, active:item==null}" v-for="item in number" :key="item" @click="selectNumber(item)">{{item}}</span>
     </div>
@@ -14,7 +14,7 @@ export default {
       default: false
     }
   },
-  onLoad: function () {
+  onLoad: function() {
     let number = null;
     let gameName = this.$getGameInfo("name");
     if (gameName == "抽象图形") {
@@ -26,21 +26,21 @@ export default {
     }
     this.number = number;
   },
-  data () {
+  data() {
     return {
       number: [],
-      showKeybord: false,
-    }
+      showKeybord: false
+    };
   },
   methods: {
-    selectNumber: function (data) {
+    selectNumber: function(data) {
       this.$emit("selectNumber", data);
     },
-    deleteNumber: function () {
+    deleteNumber: function() {
       this.$emit("deleteNumber");
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .keybord {
@@ -48,7 +48,7 @@ export default {
   width: 100%;
   background: white;
   z-index: 101;
-  bottom: tovmin(-500);
+  bottom: tovmin(0);
   padding: tovmin(40);
   display: flex;
   align-items: center;
@@ -92,35 +92,35 @@ export default {
   width: tovmin(100);
 }
 
-.down {
-  animation: slide-down 0.5s;
-  animation-fill-mode: forwards;
-}
+// .down {
+//   animation: slide-down 0.5s;
+//   animation-fill-mode: forwards;
+// }
 
-.up {
-  animation: slide-up 0.5s;
-  animation-fill-mode: forwards;
-}
+// .up {
+//   animation: slide-up 0.5s;
+//   animation-fill-mode: forwards;
+// }
 
-@keyframes slide-down {
-  from {
-    bottom: tovmin(-500);
-  }
+// @keyframes slide-down {
+//   from {
+//     bottom: tovmin(-500);
+//   }
 
-  to {
-    bottom: 0;
-    display: block;
-  }
-}
+//   to {
+//     bottom: 0;
+//     display: block;
+//   }
+// }
 
-@keyframes slide-up {
-  from {
-    bottom: 0;
-  }
+// @keyframes slide-up {
+//   from {
+//     bottom: 0;
+//   }
 
-  to {
-    bottom: tovmin(-500);
-    display: none;
-  }
-}
+//   to {
+//     bottom: tovmin(-500);
+//     display: none;
+//   }
+// }
 </style>

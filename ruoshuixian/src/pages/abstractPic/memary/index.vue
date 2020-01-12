@@ -1,11 +1,6 @@
 <template>
   <div class="container">
-    <GameTitle
-      :showIntervalTime="true"
-      ref="title"
-      :showFinishMemoryBtn="true"
-      @finishMemary="finishMemary"
-    ></GameTitle>
+    <GameTitle :showIntervalTime="true" ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
     <div class="list">
       <div class="row" v-for="(rows, _index) in number" :key="_index">
         <div class="image" v-for="(item, index) in rows" :key="index">
@@ -37,6 +32,15 @@ export default {
     Object.assign(this.$data, this.$options.data());
     this.init();
   },
+  onReachBottom: function(e) {
+    if (this.lastIndex < this.allNumber.length) {
+      // 获取滚动条当前位置
+      this.number = this.number.concat(
+        this.allNumber.slice(this.lastIndex, this.lastIndex + 4)
+      );
+      this.lastIndex += 4;
+    }
+  },
   methods: {
     init: function() {
       let level = this.$store.state.level;
@@ -56,9 +60,9 @@ export default {
         let arr = this.numberList.slice(i, i + per);
         number.push(arr);
       }
-      this.number = number.filter(e => {
-        return e.length > 0;
-      });
+      this.allNumber = number.concat();
+      this.number = number.slice(0, 4);
+      this.lastIndex = 4;
     },
     finishMemary: function() {
       wx.reLaunch({

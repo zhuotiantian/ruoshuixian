@@ -186,7 +186,7 @@ export default {
   flex-direction: column;
   width: 90%;
   text-align: center;
-  fjustify-content: center;
+  justify-content: center;
   font-size: tovmin(36);
 }
 .content > div > div {

@@ -61,7 +61,8 @@
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#173771",
     "navigationBarTitleText": "若水轩",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "white",
+    "enablePullDownRefresh": true
   },
   "permission": {
     "scope.userLocation": {
