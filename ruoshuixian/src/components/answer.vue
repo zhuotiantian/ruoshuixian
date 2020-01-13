@@ -5,15 +5,15 @@
       <template v-else>
         <div class="btn default-btn" @click.stop="replace">替换</div>
         <div class="btn default-btn" @click="insertBefore">从右插入</div>
-        <div class="btn default-btn" @click="insertAfter">从坐插入</div>
+        <div class="btn default-btn" @click="insertAfter">从左插入</div>
         <div class="btn default-btn" @click="back">退回</div>
       </template>
     </div>
     <div class="result-div" v-if="result.length>0">
       <em class="arrow arrow-left" style="flex:1;"></em>
-      <scroll-view :style="{width:'99%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
-        <div class="result" :style="{width:102+(result.length-1)*20+'rpx'}">
-          <image @click="selectSelectedPocker(index,item)" :class="{pocker:true,active:item.selected}" :style="{right:(result.length-index)*30+'rpx'}" v-for="(item,index) in result" :key="index" :src="item.url" ref="pocker" />
+      <scroll-view :style="{width:'80%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true" :scroll-left="80+(result.length-1)*20+'px'">
+        <div class="result" :style="{width:80+(result.length-1)*20+'px'}">
+          <image @click="selectSelectedPocker(index,item)" :class="{pocker:true,active:item.selected}" :style="{right:(result.length-index)*20+'px'}" v-for="(item,index) in result" :key="index" :src="item.url" ref="pocker" />
         </div>
       </scroll-view>
       <em class="arrow arrow-right" v-if="result.length>0" style="flex:1;"></em>
@@ -43,7 +43,7 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     let pocker = [];
     for (let j = 1; j <= 4; j++) {
       let columns = [];
@@ -54,7 +54,7 @@ export default {
           row: j,
           column: i
         });
-      };
+      }
       pocker.push(columns);
     }
     return {
@@ -65,20 +65,20 @@ export default {
       notBack: true,
       gameName: "",
       allResult: [],
-      pages: [],//分组后的
+      pages: [], //分组后的
       currentIndex: 0,
       currentPage: 0,
       groupPage: []
-    }
+    };
   },
-  onLoad (options) {
+  onLoad(options) {
     Object.assign(this.$data, this.$options.data());
     this.gameName = this.$getGameInfo("name");
-    if (this.gameName === '马拉松扑克牌') {
+    if (this.gameName === "马拉松扑克牌") {
       this.list = this.$store.state.ruleList.list;
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == level
+        return e.game_level == level;
       })[0];
       // 生成所有pock的副数
       for (var i = 1; i <= this.list.length; i++) {
@@ -87,19 +87,19 @@ export default {
           active: false
         });
         this.allResult.push([]);
-      };
+      }
       //一页显示10副
       let groupPage = [];
       for (var i = 0; i < this.pages.length; i += 10) {
         groupPage.push(this.pages.slice(i, i + 10));
-      };
+      }
       this.groupPage = groupPage;
       this.select(0, this.pages[0]);
     }
   },
 
   methods: {
-    select: function (index, item) {
+    select: function(index, item) {
       let currentPage = this.groupPage[this.currentPage];
       this.groupPage[this.currentPage].forEach(e => {
         e.active = false;
@@ -112,32 +112,31 @@ export default {
       this.pocker.forEach(e => {
         e.forEach(m => {
           m.show = true;
-        })
-      })
+        });
+      });
       if (this.allResult[this.currentIndex].length === 0) {
         this.result = [];
-
       } else {
         this.result = this.allResult[this.currentIndex];
         this.result.forEach(e => {
           this.hiddenPocker(e.rowIndex, e.columnIndex);
-        })
+        });
       }
       this.clearStatus();
     },
     //从待选区域选择扑克
-    selectPocker: function (rowIndex, columnIndex) {
+    selectPocker: function(rowIndex, columnIndex) {
       this.$emit("hideAnwserText");
       if (this.notBack) {
         this.result.push({
-          url: '/static/images/pocker/' + columnIndex + '-' + rowIndex + '.png',
+          url: "/static/images/pocker/" + columnIndex + "-" + rowIndex + ".png",
           rowIndex,
           columnIndex,
           selected: false
         });
         this.hiddenPocker(rowIndex, columnIndex);
       } else {
-        if (this.operationType === '替换') {
+        if (this.operationType === "替换") {
           let { item, index } = this.selectedTopPocker;
           this.showPocker(item.rowIndex, item.columnIndex);
           this.hiddenPocker(rowIndex, columnIndex);
@@ -147,14 +146,16 @@ export default {
           this.$set(this.result, index, {
             rowIndex: rowIndex,
             columnIndex: columnIndex,
-            url: '/static/images/pocker/' + columnIndex + '-' + rowIndex + '.png',
+            url:
+              "/static/images/pocker/" + columnIndex + "-" + rowIndex + ".png",
             selected: false
           });
-        } else if (this.operationType === '从前插入') {
+        } else if (this.operationType === "从前插入") {
           this.hiddenPocker(rowIndex, columnIndex);
           let { index } = this.selectedTopPocker;
           this.result.splice(index + 1, 0, {
-            url: '/static/images/pocker/' + columnIndex + '-' + rowIndex + '.png',
+            url:
+              "/static/images/pocker/" + columnIndex + "-" + rowIndex + ".png",
             rowIndex,
             columnIndex,
             selected: false
@@ -163,7 +164,8 @@ export default {
           this.hiddenPocker(rowIndex, columnIndex);
           let { index } = this.selectedTopPocker;
           this.result.splice(index, 0, {
-            url: '/static/images/pocker/' + columnIndex + '-' + rowIndex + '.png',
+            url:
+              "/static/images/pocker/" + columnIndex + "-" + rowIndex + ".png",
             rowIndex,
             columnIndex,
             selected: false
@@ -172,35 +174,36 @@ export default {
 
         this.clearStatus();
       }
-      if (this.gameName === '马拉松扑克牌') {
+      if (this.gameName === "马拉松扑克牌") {
         this.allResult[this.currentIndex] = this.result;
       }
     },
     //隐藏待选区已经选择的扑克牌
-    hiddenPocker: function (rowIndex, columnIndex) {
+    hiddenPocker: function(rowIndex, columnIndex) {
       this.$set(this.pocker[rowIndex - 1][columnIndex - 1], "show", false);
     },
     //显示待选区域扑克牌
-    showPocker: function (rowIndex, columnIndex) {
+    showPocker: function(rowIndex, columnIndex) {
       this.$set(this.pocker[rowIndex - 1][columnIndex - 1], "show", true);
     },
     //选择/取消选择已选择区域的扑克牌
-    selectSelectedPocker: function (index, item) {
+    selectSelectedPocker: function(index, item) {
       this.result.forEach((e, _index) => {
         if (_index !== index) {
           e.selected = false;
         }
-      })
+      });
       this.$set(this.result[index], "selected", !this.result[index].selected);
       this.hasToOperationPocker = this.result.some(e => {
-        return e.selected
+        return e.selected;
       });
       this.selectedTopPocker = {
-        index, item
+        index,
+        item
       };
     },
     //退回扑克牌
-    back: function () {
+    back: function() {
       let { index, item } = this.selectedTopPocker;
       let { rowIndex, columnIndex } = item;
       this.result.splice(index, 1);
@@ -208,51 +211,50 @@ export default {
       this.clearStatus();
     },
     //替换扑克牌
-    replace: function () {
-      this.operationType = '替换';
+    replace: function() {
+      this.operationType = "替换";
       this.notBack = false;
     },
     //从前插入
-    insertBefore: function () {
-      this.operationType = '从前插入';
+    insertBefore: function() {
+      this.operationType = "从前插入";
       this.notBack = false;
     },
     //从后插入
-    insertAfter: function () {
-      this.operationType = '从后插入';
+    insertAfter: function() {
+      this.operationType = "从后插入";
       this.notBack = false;
     },
     //重置状态
-    clearStatus: function () {
+    clearStatus: function() {
       this.result.forEach((e, _index) => {
         e.selected = false;
-      })
+      });
       this.hasToOperationPocker = false;
       this.operationType = "";
       this.selectedTopPocker = {};
       this.notBack = true;
-
     },
-    nextPage: function () {
+    nextPage: function() {
       if (this.currentPage > 3) {
-        return false
+        return false;
       } else {
         this.currentPage++;
-        this.pages = this.pages.map((e) => {
-          return e + 10
+        this.pages = this.pages.map(e => {
+          return e + 10;
         });
       }
     },
-    prevPage: function () {
+    prevPage: function() {
       if (this.currentPage > 1) {
-        this.currentPage--
-        this.pages = this.pages.map((e) => {
-          return e - 10
+        this.currentPage--;
+        this.pages = this.pages.map(e => {
+          return e - 10;
         });
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>
 <style lang="scss" scope>
 .pocker {
@@ -265,10 +267,11 @@ export default {
   visibility: hidden;
 }
 .result {
-  position: absolute;
+  position: relative;
   min-width: 100%;
   height: 100%;
   bottom: 7vmin;
+  right: 0;
 }
 
 .result image {

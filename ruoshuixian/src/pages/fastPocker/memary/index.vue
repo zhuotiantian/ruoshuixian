@@ -8,8 +8,8 @@
       <template v-else>
         <em class="arrow arrow-left" @click="prevGroup" v-if="pockerNumber<52"></em>
         <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
-          <div class="pocker-wrapper" :style="{width:pockerNumber<16?((pockerNumber-1)*40+124+'rpx'):'97%'}">
-            <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+          <div class="pocker-wrapper" :style="{width:pockerNumber<16?((pockerNumber-1)*20+103+'px'):'97%'}">
+            <image class="pocker" ref="pocker" v-for="(item,index) in pocker[currentGroupIndex]" :style="{left:index*20+'px','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
           </div>
         </scroll-view>
         <em class="arrow arrow-right" @click="nextGroup" v-if="pockerNumber<52"></em>
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     group: function (data) {
-      let list = this.list;
+      let list = this.list.concat();
       this.pockerNumber = (data === 'All' ? 52 : data);
       this.pocker = [];
       if (this.pockerNumber === 52) {

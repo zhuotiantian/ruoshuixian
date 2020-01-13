@@ -1,7 +1,7 @@
 <template>
   <div class="game-container">
     <GameTitle />
-    <AlertBoxNoBth :rule="rule" />
+    <AlertBoxNoBth :rule="rule" :show="show" />
     <!-- 扑克牌游戏首页 -->
     <div v-if="gameType==='pocker'" class="content">
       <template v-if="page==='first'">
@@ -67,111 +67,125 @@
 </template>
 <script>
 import GameTitle from "@/components/gameTitle_new";
-import AlertBoxNoBth from "@/components/alertBox_noBtn"
+import AlertBoxNoBth from "@/components/alertBox_noBtn";
 export default {
   components: {
     GameTitle,
     AlertBoxNoBth
   },
-  onLoad (options) {
-    if (options.type === 'playAgain') {
-      this.$store.commit("setIsNew", false);
+  onLoad(options) {
+    if (options.type === "playAgain") {
+      this.show = false;
     }
     this.init();
   },
-  data () {
+  data() {
     return {
       rule: [],
-      show: false,
+      show: true,
       memoryTime: [],
       pockerNum: [1, 2, 4, 8],
       activeTime: "",
       activeNum: 4,
       currentPage: "",
       page: "first",
-      gameType: 'pocker',
-      level: 'primary'
-    }
+      gameType: "pocker",
+      level: "primary"
+    };
   },
   computed: {
-    returnHourAndMinutes: function () {
+    returnHourAndMinutes: function() {
       let minutes = Math.floor(this.memoryTime / 60);
-      let seconds = (this.memoryTime - minutes * 60);
-      return (minutes !== 0 ? minutes + '分钟' : '') + (seconds !== 0 ? seconds + '秒' : '')
+      let seconds = this.memoryTime - minutes * 60;
+      return (
+        (minutes !== 0 ? minutes + "分钟" : "") +
+        (seconds !== 0 ? seconds + "秒" : "")
+      );
     }
   },
-  mounted () {
+  mounted() {
     wx.setNavigationBarTitle({
       title: this.$getGameInfo("name")
-    })
+    });
   },
   methods: {
-    init: function () {
+    init: function() {
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == level
+        return e.game_level == level;
       })[0];
       this.memoryTime = rule.memory_time.split(",").reverse();
       this.activeTime = this.memoryTime[0];
       this.currentPage = this.$getGameInfo("wxapp_url").split("/")[2];
       this.rule = this.$getGameInfo("rule");
 
-      this.page = (this.currentPage !== 'flashPocker' ? "first" : "second");
-      if (this.currentPage === 'flashPocker' || this.currentPage === 'fastPocker' || this.currentPage === 'marathonPocker') {
-        this.gameType = 'pocker';
+      this.page = this.currentPage !== "flashPocker" ? "first" : "second";
+      if (
+        this.currentPage === "flashPocker" ||
+        this.currentPage === "fastPocker" ||
+        this.currentPage === "marathonPocker"
+      ) {
+        this.gameType = "pocker";
       } else {
-        this.gameType = 'other';
+        this.gameType = "other";
       }
       this.activeNum = 4;
     },
     //开始游戏
-    startGame: function () {
-      if (this.currentPage === 'flashPocker') {
+    startGame: function() {
+      if (this.currentPage === "flashPocker") {
         this.$store.commit("setMemoryTime", this.activeTime);
         this.$store.commit("setPockerNumber", this.activeNum);
-      } else if (this.currentPage === 'marathonPocker' || this.currentPage === 'fastPocker') {
-        this.$store.commit("setPockerNumber", this.activeNum === 'All' ? 52 : this.activeNum);
+      } else if (
+        this.currentPage === "marathonPocker" ||
+        this.currentPage === "fastPocker"
+      ) {
+        this.$store.commit(
+          "setPockerNumber",
+          this.activeNum === "All" ? 52 : this.activeNum
+        );
       }
-      console.log("ready-page pockernumber", this.activeNum);
       this.getGameList();
     },
-    getGameList: function () {
+    getGameList: function() {
       let game_id = this.$store.state.gameid;
       let game_level = this.level;
       let token = this.$store.state.userInfo.token;
-      this.$http.get({
-        url: "/api/wxapp.game/getGameContent",
-        data: {
-          game_id, game_level
-        },
-        header: {
-          token: token
-        }
-      }).then(result => {
-        this.$store.commit("setRuleList", result.data);
-        //跳转到下一个页面
-        wx.reLaunch({
-          url: "/pages/" + this.currentPage + "/memary/main"
+      this.$http
+        .get({
+          url: "/api/wxapp.game/getGameContent",
+          data: {
+            game_id,
+            game_level
+          },
+          header: {
+            token: token
+          }
         })
-      })
-
+        .then(result => {
+          this.$store.commit("setRuleList", result.data);
+          //跳转到下一个页面
+          wx.reLaunch({
+            url: "/pages/" + this.currentPage + "/memary/main"
+          });
+        });
     },
     //选择等级
-    selLevel: function (level) {
+    selLevel: function(level) {
       this.level = level;
       this.$store.commit("setLevel", level);
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == level
+        return e.game_level == level;
       })[0];
       this.memoryTime = parseInt(rule.memory_time);
       this.$store.commit("setMemoryTime", parseInt(rule.memory_time));
     },
     //点击确定
-    confirm: function () {
-      this.page = 'second'
+    confirm: function() {
+      this.page = "second";
     }
-  },
-}
+  }
+};
 </script>
 <style lang="scss" scoped>
 .game-container {

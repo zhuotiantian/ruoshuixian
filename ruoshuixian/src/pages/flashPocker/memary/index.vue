@@ -66,7 +66,7 @@ export default {
       this.pocker = list.slice(0, this.pockerNumber);
       this.finishMemary_timer = setTimeout(() => {
         clearTimeout(this.finishMemary_timer);
-        this.finishMemary();
+        // this.finishMemary();
       }, time_long)
     },
     finishMemary: function () {

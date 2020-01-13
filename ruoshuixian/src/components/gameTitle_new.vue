@@ -93,7 +93,7 @@
             方式一、点击屏幕上半区的任意一张扑克，点击“退回”将这张扑克牌退回原位。
           </p>
           <p>
-            方式二、点击屏幕上半区的任意一张扑克，点击“替换/从左插入/从右面插入”后点击下半区的任意一张扑克进行“替换/从左插入/从右面插入”操作。
+            方式二、点击屏幕上半区的任意一张扑克，点击“替换/从左插入/从右插入”后点击下半区的任意一张扑克进行“替换/从左插入/从右面插入”操作。
           </p>
           <p>
             <span class="btn default-btn" @click="shouwOperationTips = false">我知道了</span>
@@ -331,10 +331,10 @@ export default {
   font-size: 4vmin;
   display: flex;
   justify-content: space-between;
-  padding: 0 4vmin 0 4vmin;
+  padding: 0 15px;
   position: fixed;
   top: 0;
-  width: calc(100% - 30rpx);
+  width: calc(100% - 30px);
   background: #173771;
   color: white;
   z-index: 999;
@@ -365,14 +365,11 @@ export default {
 p {
   text-align: center;
 }
-.pannel-title {
-  background: $light-blue;
-  font-size: tovmin(34);
-  font-weight: bold;
-}
+
 .pannel p {
   font-size: tovmin(26);
 }
+
 .share {
   width: tovmin(100);
   height: tovmin(100);
@@ -410,7 +407,12 @@ p {
 .pannel p.active {
   background: #f5f5f5;
 }
-
+.pannel-title {
+  background: $light-blue;
+  font-size: 24px !important;
+  line-height: 70px !important;
+  font-weight: bold;
+}
 .arrow-left::after {
   top: 0.2vmin;
   left: -0.2vmin;

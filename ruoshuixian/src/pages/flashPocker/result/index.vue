@@ -2,11 +2,11 @@
   <div class="container">
     <GameTitle :isResult="true" :showCorrectAnswerBtn="true" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
     <div class="list">
-      <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}" v-if="isShowCorrectAnswer">
-        <image class="pocker" ref="pocker" v-for="(item,index) in correct_result" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+      <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+62+'px'}" v-if="isShowCorrectAnswer">
+        <image class="pocker" ref="pocker" v-for="(item,index) in correct_result" :style="{left:index*20+'px','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
       </div>
-      <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}" v-else>
-        <image class="pocker" :class="{trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+      <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+62+'px'}" v-else>
+        <image class="pocker" :class="{trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*20+'px','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
       </div>
     </div>
   </div>
@@ -71,7 +71,7 @@ export default {
   position: relative;
   height: tovmin(30);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin: 0 15vmin;
 }
 

@@ -4,14 +4,14 @@
     <div class="list" v-if="isShowCorrectAnswer">
       <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
         <div class="pocker-wrapper" style="width:97%">
-          <image class="pocker" ref="pocker" v-for="(item,index) in perPocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+          <image class="pocker" ref="pocker" v-for="(item,index) in perPocker" :style="{left:index*20+'px','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
         </div>
       </scroll-view>
     </div>
     <div class="list" v-else>
       <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
-        <div class="pocker-wrapper" :style="{width:(perPocker.length<52?((perPocker.length-1)*40+124+'rpx'):'97%'),'max-width':'97%'}">
-          <image :class="{pocker:true,trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in perPocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        <div class="pocker-wrapper" :style="{width:(perPocker.length<52?((perPocker.length-1)*20+62+'px'):'97%'),'max-width':'97%'}">
+          <image :class="{pocker:true,trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in perPocker" :style="{left:index*20+'px','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
         </div>
       </scroll-view>
     </div>

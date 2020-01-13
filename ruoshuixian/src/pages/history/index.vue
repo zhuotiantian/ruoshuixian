@@ -3,7 +3,7 @@
     <ul class="list">
       <li v-for="(item,index) in list" :key="index">
         <span>得分：{{item.fraction}}</span>
-        <span>耗时：{{item.game_time}}s</span>
+        <span>耗时：{{item.game_time}}</span>
         <span>时间：{{item.createtime}}</span>
       </li>
     </ul>
@@ -11,12 +11,12 @@
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       list: []
     };
   },
-  onLoad: function () {
+  onLoad: function() {
     Object.assign(this.$data, this.$options.data());
     this.token = this.$store.state.userInfo.token;
     this.game_level = this.$store.state.level;
@@ -24,7 +24,7 @@ export default {
     this.getHistoryList();
   },
   methods: {
-    getHistoryList: function () {
+    getHistoryList: function() {
       this.$http
         .get({
           url: "/api/wxapp.game/gameHistory",
@@ -39,15 +39,31 @@ export default {
         .then(result => {
           result.data.forEach(e => {
             let init_time = new Date(e.createtime * 1000);
-            let formateTime = init_time.getFullYear() + "-" +
-              (Number(init_time.getMonth() + 1) < 10 ? "0" : "") + Number(init_time.getMonth() + 1) + "-" +
-              (init_time.getDate() + 1 < 10 ? "0" : "") + init_time.getDate() + " " +
-              (init_time.getHours() + 1 < 10 ? "0" : "") + init_time.getHours() + ":" +
-              (init_time.getMinutes() + 1 < 10 ? "0" : "") + init_time.getMinutes() + ":" +
-              (init_time.getSeconds() + 1 < 10 ? "0" : "") + init_time.getSeconds()
-            e.createtime = formateTime
-            e.game_time = Number(e.game_time).toFixed(2)
-          })
+            let formateTime =
+              init_time.getFullYear() +
+              "-" +
+              (Number(init_time.getMonth() + 1) < 10 ? "0" : "") +
+              Number(init_time.getMonth() + 1) +
+              "-" +
+              (init_time.getDate() + 1 < 10 ? "0" : "") +
+              init_time.getDate() +
+              " " +
+              (init_time.getHours() + 1 < 10 ? "0" : "") +
+              init_time.getHours() +
+              ":" +
+              (init_time.getMinutes() + 1 < 10 ? "0" : "") +
+              init_time.getMinutes() +
+              ":" +
+              (init_time.getSeconds() + 1 < 10 ? "0" : "") +
+              init_time.getSeconds();
+            e.createtime = formateTime;
+            let seconds = Math.round(e.game_time);
+            let minutes = Math.floor(seconds / 60);
+            let calc_seconds = seconds - minutes * 60;
+            e.game_time =
+              (minutes > 0 ? minutes + "分" : "") +
+              (calc_seconds > 0 ? calc_seconds + "秒" : "");
+          });
           this.list = result.data;
         });
     }
