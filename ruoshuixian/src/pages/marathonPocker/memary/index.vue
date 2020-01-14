@@ -3,7 +3,7 @@
     <GameTitle :showShowType="true" :showIntervalTime="true" ref="title" @group="group" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
     <div class="list">
       <template v-if="perPocker.length == 0">
-        <image class="pocker-bg" v-for="(item, index) in bgCounts" :key="index" :style="{ left: item + 'rpx' }" :src="'/static/images/firstPage/pockerbg.png'" />
+        <image class="pocker-bg" v-for="(item, index) in bgCounts" :key="index" :style="{ left: item + 'px' }" :src="'/static/images/firstPage/pockerbg.png'" />
       </template>
       <template v-else>
         <em class="arrow arrow-left" @click="prevGroup" v-if="pockerNumber < 52"></em>

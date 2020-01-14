@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <GameTitle :isResult="true" :showCorrectAnswerBtn="true" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
+    <GameTitle :isResult="true" :showCorrectAnswerBtn="showCorrectBtn" :showMyAnswer="showMyAnswer" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
     <div class="list" v-if="isShowCorrectAnswer">
       <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
         <div class="pocker-wrapper" style="width:97%">
@@ -10,7 +10,7 @@
     </div>
     <div class="list" v-else>
       <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
-        <div class="pocker-wrapper" :style="{width:(pocker.length<52?((pocker.length-1)*20+62+'px'):'97%'),'max-width':'97%'}">
+        <div class="pocker-wrapper" :style="{width:(pocker.length<52?((pocker.length-1)*20+124+'px'):'97%'),'max-width':'97%'}">
           <image :class="{pocker:true,trueResult:item.trueResult,wrong:!item.trueResult}" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*20+'px','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
         </div>
       </scroll-view>
@@ -23,7 +23,7 @@ export default {
   components: {
     GameTitle
   },
-  data () {
+  data() {
     return {
       pockerCount: 23,
       left: 100,
@@ -32,37 +32,42 @@ export default {
       isShowCorrectAnswer: false,
       correct_result: [],
       showCorrectResult: [],
+      showCorrectBtn: true,
+      showMyAnswer: false
     };
   },
-  onLoad () {
+  onLoad() {
     let userInfo = this.$store.state.userInfo;
     this.userid = userInfo.id;
     this.correct_result = this.$store.state.result.correct_result;
     let user_result = this.$store.state.result.right_and_wrong_results;
     user_result.forEach((e, _index) => {
       e.trueResult = false;
-      if (e.index === this.correct_result[_index].index && e.color === this.correct_result[_index].color) {
+      if (
+        e.index === this.correct_result[_index].index &&
+        e.color === this.correct_result[_index].color
+      ) {
         e.trueResult = true;
       }
-    })
+    });
     this.pocker = user_result;
     this.showCorrectResult = this.correct_result;
     this.isShowCorrectAnswer = false;
   },
-  onShareAppMessage: function (res) {
+  onShareAppMessage: function(res) {
     return {
       path: "pages/firstPage/main?id=" + this.userid,
       title: "快速扑克牌，一起来玩吧！",
-      success: function () {
+      success: function() {
         console.log("分享成功");
       },
-      error: function () {
+      error: function() {
         console.log("分享失败");
       }
-    }
+    };
   },
   methods: {
-    prevGroup: function () {
+    prevGroup: function() {
       if (this.isShowCorrectAnswer) {
         if (this.correctCurrentGroupIndex > 0) {
           this.correctCurrentGroupIndex--;
@@ -72,9 +77,8 @@ export default {
           this.currentGroupIndex--;
         }
       }
-
     },
-    nextGroup: function () {
+    nextGroup: function() {
       if (this.isShowCorrectAnswer) {
         if (this.correctCurrentGroupIndex < this.showCorrectResult.length - 1) {
           this.correctCurrentGroupIndex++;
@@ -84,12 +88,15 @@ export default {
           this.currentGroupIndex++;
         }
       }
-
     },
-    showCorrectAnswer: function () {
+    showCorrectAnswer: function() {
+      this.showMyAnswer = true;
+      this.showCorrectBtn = false;
       this.isShowCorrectAnswer = true;
     },
-    showMyAnswerHandler: function () {
+    showMyAnswerHandler: function() {
+      this.showMyAnswer = false;
+      this.showCorrectBtn = true;
       this.isShowCorrectAnswer = false;
     }
   }

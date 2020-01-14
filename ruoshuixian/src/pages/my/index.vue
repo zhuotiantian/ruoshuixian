@@ -5,37 +5,31 @@
         <image class="image" :src="userInfo.avatar"></image>
       </div>
       <div>
-        <p v-if="userInfo.nickname==null">未登录</p>
+        <p v-if="userInfo.nickname == null">未登录</p>
         <template v-else>
-          <p>{{userInfo.nickname}}</p>
-          <p>{{userInfo.mobile}}</p>
+          <p>{{ userInfo.nickname }}</p>
+          <p>{{ userInfo.mobile }}</p>
         </template>
       </div>
-
     </div>
     <div class="content">
       <ul>
         <li @click="toRanking">
-          <image class="item" style="height:44rpx;width:42rpx;" :src="'/static/images/my/my_icon2.png'">
-          </image>
+          <image class="item" style="height:22px;width:21px;" :src="'/static/images/my/my_icon2.png'"> </image>
           <span>排行榜</span>
         </li>
         <button open-type="share">
           <li>
-            <image class="item" style="height:40rpx;width:46rpx;" :src="'/static/images/my/my_icon3.png'">
-            </image>
+            <image class="item" style="height:20px;width:23px;" :src="'/static/images/my/my_icon3.png'"> </image>
             <span>分享邀请</span>
-
           </li>
         </button>
         <li @click="toRecord">
-          <image class="item" style="height:48rpx;width:38rpx;" :src="'/static/images/my/my_icon4.png'">
-          </image>
+          <image class="item" style="height:24px;width:19px;" :src="'/static/images/my/my_icon4.png'"> </image>
           <span>我的记录</span>
         </li>
         <li @click="toMessage">
-          <image class="item" style="height:44rpx;width:46rpx;" :src="'/static/images/my/my_icon5.png'">
-            、</image>
+          <image class="item" style="height:22px;width:23px;" :src="'/static/images/my/my_icon5.png'"> 、</image>
           <span class="last">我的消息</span>
         </li>
       </ul>
@@ -49,7 +43,7 @@ export default {
   components: {
     CardFooter
   },
-  onLoad () {
+  onLoad() {
     Object.assign(this.$data, this.$options.data());
     let userInfo = this.$store.state.userInfo;
     if (userInfo) {
@@ -59,32 +53,34 @@ export default {
     } else {
       let that = this;
       wx.login({
-        success: function (res) {
-          that.$http.post({
-            url: "/api/wxapp.user/login",
-            data: {
-              code: res.code,
-              type: "user"
-            }
-          }).then(result => {
-            if (typeof result.data.userInfo !== 'object' || !result.data) {
-              wx.showToast({
-                title: result.msg,
-                icon: "none"
-              });
-              wx.navigateTo({
-                url: "/pages/auth/main?inviterid=" + that.inviter_id
-              })
-            } else {
-              that.$store.commit("setUserInfo", result.data.userInfo);
-              that.userInfo = result.data.userInfo;
-            }
-          })
+        success: function(res) {
+          that.$http
+            .post({
+              url: "/api/wxapp.user/login",
+              data: {
+                code: res.code,
+                type: "user"
+              }
+            })
+            .then(result => {
+              if (typeof result.data.userInfo !== "object" || !result.data) {
+                wx.showToast({
+                  title: result.msg,
+                  icon: "none"
+                });
+                wx.navigateTo({
+                  url: "/pages/auth/main?inviterid=" + that.inviter_id
+                });
+              } else {
+                that.$store.commit("setUserInfo", result.data.userInfo);
+                that.userInfo = result.data.userInfo;
+              }
+            });
         }
-      })
+      });
     }
   },
-  data () {
+  data() {
     return {
       userInfo: {},
       domain: this.$http.domain,
@@ -94,53 +90,54 @@ export default {
       code: null
     };
   },
-  onShareAppMessage: function (res) {
+  onShareAppMessage: function(res) {
     let path = "pages/firstPage/main?id=" + this.userid;
     return {
       title: "11种脑力游戏，一起来玩吧！",
       path: path,
-      success: function () {
+      success: function() {
         console.log("分享成功");
       },
-      error: function () {
+      error: function() {
         console.log("分享失败");
       }
     };
   },
-  onShow () {
+  onShow() {
     wx.hideTabBar();
   },
   methods: {
-    getData: function () {
-      this.$http.get({
-        url: "/api/wxapp.user/index",
-        header: {
-          token: this.token
-        }
-      }).then(result => {
-        if (result.code == 1) {
-          this.mobile = result.data.mobile;
-
-        }
-      })
+    getData: function() {
+      this.$http
+        .get({
+          url: "/api/wxapp.user/index",
+          header: {
+            token: this.token
+          }
+        })
+        .then(result => {
+          if (result.code == 1) {
+            this.mobile = result.data.mobile;
+          }
+        });
     },
-    toRanking: function () {
+    toRanking: function() {
       let url = "./ranking/main";
       this.to(url);
     },
-    toHongbao: function () {
+    toHongbao: function() {
       let url = "./hongbao/main";
       this.to(url);
     },
-    toRecord: function () {
+    toRecord: function() {
       let url = "./record/main";
       this.to(url);
     },
-    toMessage: function () {
+    toMessage: function() {
       let url = "./message/main";
       this.to(url);
     },
-    to: function (url) {
+    to: function(url) {
       wx.navigateTo({
         url
       });
@@ -203,8 +200,8 @@ export default {
 }
 
 .item {
-  height: tovmin(44);
-  width: tovmin(42);
+  // height: tovmin(44);
+  // width: tovmin(42);
   margin-right: tovmin(38);
 }
 

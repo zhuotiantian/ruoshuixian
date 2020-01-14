@@ -1,5 +1,5 @@
 <template>
-  <div class="keybord">
+  <div class="keybord" v-if="showKeybord">
     <div class="number">
       <span :class="{item:true, active:item==null}" v-for="item in number" :key="item" @click="selectNumber(item)">{{item}}</span>
     </div>
@@ -28,8 +28,7 @@ export default {
   },
   data() {
     return {
-      number: [],
-      showKeybord: false
+      number: []
     };
   },
   methods: {
@@ -86,41 +85,9 @@ export default {
   color: $black;
   position: absolute;
   top: tovmin(40);
-  right: tovmin(430);
+  right: tovmin(400);
   border: tovmin(2) solid #363636;
   box-sizing: border-box;
   width: tovmin(100);
 }
-
-// .down {
-//   animation: slide-down 0.5s;
-//   animation-fill-mode: forwards;
-// }
-
-// .up {
-//   animation: slide-up 0.5s;
-//   animation-fill-mode: forwards;
-// }
-
-// @keyframes slide-down {
-//   from {
-//     bottom: tovmin(-500);
-//   }
-
-//   to {
-//     bottom: 0;
-//     display: block;
-//   }
-// }
-
-// @keyframes slide-up {
-//   from {
-//     bottom: 0;
-//   }
-
-//   to {
-//     bottom: tovmin(-500);
-//     display: none;
-//   }
-// }
 </style>

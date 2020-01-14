@@ -102,7 +102,7 @@ export default {
 .content {
   padding: tovmin(30);
   background: $grey-background;
-  height: calc(100% - 60rpx);
+  height: calc(100% - 60px);
   position: absolute;
   width: 100%;
 }

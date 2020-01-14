@@ -79,7 +79,7 @@
           <button class="btn" style="flex:3" @click="drawCanvas">
             保存成图片
           </button>
-          <button class="btn" style="flex:1;background-color:white;color:inherit;margin-left:30rpx" @click="showFog = false">
+          <button class="btn" style="flex:1;background-color:white;color:inherit;margin-left:30px" @click="showFog = false">
             取消
           </button>
         </div>
@@ -462,7 +462,7 @@ export default {
 .content {
   padding: tovmin(30);
   background-color: $grey-background;
-  height: calc(100% - 172rpx);
+  height: calc(100% - 172px);
   font-size: tovmin(28);
 }
 

@@ -116,17 +116,17 @@ export default {
 </script>
 <style lang="scss" scoped>
 page {
-  height: calc(100% - 150rpx) !important;
+  height: calc(100% - 150px) !important;
 }
 
 .container {
   background: $deep-blue;
   color: white;
-  height: calc(100% - 150rpx);
+  height: calc(100% - 150px);
 }
 
 .list {
-  height: calc(100% - 150rpx);
+  height: calc(100% - 150px);
   margin: tovmin(150) tovmin(30) auto tovmin(30);
 }
 

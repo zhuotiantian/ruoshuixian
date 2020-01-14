@@ -154,7 +154,7 @@ export default {
 }
 
 .content {
-  height: calc(100% - 132rpx);
+  height: calc(100% - 132px);
 }
 
 .header {

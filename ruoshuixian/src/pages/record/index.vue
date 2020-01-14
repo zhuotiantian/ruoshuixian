@@ -1,67 +1,67 @@
 <template>
   <div class="container">
     <div class="content">
-      <div v-for="(item,index) in list" :key="index" @click="toDetails(item.students_homework_details_id)">
+      <div v-for="(item, index) in list" :key="index" @click="toDetails(item.students_homework_details_id)">
         <div class="img_div">
-          {{item.name}}
+          {{ item.name }}
           <image class="image" :src="'/static/images/firstPage/recordList.png'"></image>
         </div>
-        <p class="p">{{item.remarks}}</p>
+        <p class="p">{{ item.remarks }}</p>
       </div>
     </div>
     <CardFooter :index="3"></CardFooter>
   </div>
 </template>
 <script>
-import CardFooter from "@/components/footer"
+import CardFooter from "@/components/footer";
 export default {
   components: {
     CardFooter
   },
-  data () {
+  data() {
     return {
-
       list: []
-    }
+    };
   },
-  onShow () {
+  onShow() {
     wx.hideTabBar();
     this.token && this.getList();
   },
-  onLoad () {
+  onLoad() {
     Object.assign(this.$data, this.$options.data());
     this.token = this.$store.state.userInfo.token;
     this.getList();
   },
   methods: {
-    getList: function () {
-      this.$http.get({
-        url: "/api/wxapp.user/taskListForCarding",
-        header: {
-          token: this.token
-        }
-      }).then(result => {
-        this.list = result.data;
-      });
+    getList: function() {
+      this.$http
+        .get({
+          url: "/api/wxapp.user/taskListForCarding",
+          header: {
+            token: this.token
+          }
+        })
+        .then(result => {
+          this.list = result.data;
+        });
     },
-    toDetails: function (id) {
+    toDetails: function(id) {
       wx.navigateTo({
-        url: "./details/main?students_homework_details_id=" + id,
-
+        url: "./details/main?students_homework_details_id=" + id
       });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
 .content {
-  padding: tovmin(30);
+  padding: 30px;
   background: white;
-  font-size: tovmin(26);
+  font-size: 26px;
   position: absolute;
-  height: calc(100% - 100rpx);
-  width: calc(100% - 60rpx);
+  height: calc(100% - 100px);
+  width: calc(100% - 60px);
   overflow-y: auto;
   z-index: -1;
 }

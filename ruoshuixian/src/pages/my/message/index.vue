@@ -51,8 +51,8 @@ export default {
   padding: tovmin(30);
   background: white;
   position: absolute;
-  height: calc(100% - 60rpx);
-  width: calc(100% - 60rpx);
+  height: calc(100% - 60px);
+  width: calc(100% - 60px);
   overflow-y: scroll;
 }
 

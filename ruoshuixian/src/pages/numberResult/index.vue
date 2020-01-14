@@ -4,7 +4,7 @@
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <span :class="{item:true, wrong:item.result==1}" v-for="(item,index) in rows" :key="index">{{item.correct_result}}</span>
-        <span style="width:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
+        <span style="width:50px">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
   </div>
@@ -75,13 +75,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 page {
-  height: calc(100% - 150rpx) !important;
+  height: calc(100% - 150px) !important;
 }
 
 .container {
   background: $deep-blue;
   color: white;
-  height: calc(100% - 150rpx);
+  height: calc(100% - 150px);
 }
 
 .list {

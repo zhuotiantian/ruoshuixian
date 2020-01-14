@@ -1,12 +1,13 @@
 <template>
   <div class="container">
+    <p class="info" v-if="!showKeybord">加载中...</p>
     <div class="fog" v-if="showFog"></div>
     <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
-    <GameTitle :showIntervalTime='true' :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
+    <GameTitle :showIntervalTime='showKeybord' :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <span :class="{item:true,selected:item.selected}" v-for="(item,index) in rows" :key="index" @click="selected(_index,index)">{{item.number}}</span>
-        <span style="width:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
+        <span style="width:50px">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
     <Keybord :showKeybord="showKeybord" @selectNumber="selectNumber" @deleteNumber="deleteNumber"></Keybord>
@@ -24,16 +25,15 @@ export default {
   },
   onLoad() {
     Object.assign(this.$data, this.$options.data());
-    this.init();
-  },
-  mounted() {
+
     wx.setNavigationBarTitle({
-      title: this.gameName
+      title: this.$getGameInfo("name")
     });
+    this.init();
   },
   data() {
     return {
-      showKeybord: true,
+      showKeybord: false,
       showFog: false,
       number: [],
       rowIndex: 0,
@@ -60,7 +60,9 @@ export default {
       for (var i = 0; i < total; i += per) {
         number.push(numberList.slice(i, i + per));
       }
+      this.number = number;
       this.startTime = new Date().getTime();
+      this.showKeybord = true;
       this.selected(this.rowIndex, this.columnIndex);
     },
     finishAnwser: function() {
@@ -179,13 +181,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 page {
-  height: calc(100% - 150rpx) !important;
+  height: calc(100% - 150px) !important;
 }
 
 .container {
   background: $deep-blue;
   color: white;
-  height: calc(100% - 150rpx);
+  height: calc(100% - 150px);
 }
 
 .list {

@@ -7,8 +7,8 @@
           <div>
             <span class="btn default-btn helpBtn" @click="toHelp">帮助</span>
             <span class="btn default-btn" v-if="showTips" @click="showTipsHandler">操作提示</span>
-            <span class="btn default-btn type arrow " v-if="showShowType && gameName !== '二进制数字'" style="margin-left:30rpx" @click="showShowTypePannel = true">{{ pockerNumber === 52 ? "All" : pockerNumber }}</span>
-            <span class="btn default-btn type arrow" v-if="showShowType && gameName === '二进制数字'" style="margin-left:30rpx" @click="showShowTypePannel = true">{{ showType }}</span>
+            <span class="btn default-btn type arrow " v-if="showShowType && gameName !== '二进制数字'" style="margin-left:15px" @click="showShowTypePannel = true">{{ pockerNumber === 52 ? "All" : pockerNumber }}</span>
+            <span class="btn default-btn type arrow" v-if="showShowType && gameName === '二进制数字'" style="margin-left:15px" @click="showShowTypePannel = true">{{ showType }}</span>
           </div>
         </template>
         <!-- 结果 -->
@@ -17,18 +17,17 @@
             <span v-if="showCostTime">用时：{{ getPayedTime }}</span>
             <span>得分：{{ result.fraction || 0 }}分</span>
             <span class="btn default-btn" @click="toHistory">历史记录</span>
-            <span class="btn default-btn" v-if="showCorrectAnswerBtn && !showMyAnswer" @click="showCorrectAnswer">正确答案</span>
+            <span class="btn default-btn" v-if="showCorrectAnswerBtn" @click="showCorrectAnswer">正确答案</span>
             <span class="btn default-btn" v-if="showMyAnswer" @click="showMyAnswerHandler">我的提交</span>
           </div>
         </template>
       </div>
-      <div class="center">
+      <div class="center" v-if="!isResult">
         <p v-if="showIntervalTime">
-          {{ computedTime.hour < 10 ? "0" + computedTime.hour : "" }}：
-          {{ (computedTime.minutes < 10 ? "0" : "") + computedTime.minutes }}：
+          {{ computedTime.hour < 10 ? "0" + computedTime.hour : "" }}： {{ (computedTime.minutes < 10 ? "0" : "") + computedTime.minutes }}：
           {{ (computedTime.seconds < 10 ? "0" : "") + computedTime.seconds }}
         </p>
-        <p v-else-if="startAnwserText" style="font-size:24rpx">开始作答</p>
+        <p v-else-if="startAnwserText" style="font-size:24px">开始作答</p>
       </div>
       <div class="right">
         <!-- 非结果 -->
@@ -62,7 +61,7 @@
             down: showShowTypePannel,
             up: !showShowTypePannel
           }">
-          <p class="pannel-title">显示方式</p>
+          <div class="pannel-title" style="font-size:24px;line-height:80px">显示方式</div>
           <template v-if="showShowType && gameName !== '二进制数字'">
             <div>
               <p v-for="(item, index) in pannelContent" :key="index" @click.stop="group(item, index)" :class="{
@@ -86,14 +85,14 @@
       <div>
         <div class="fog" @click="shouwOperationTips = false"></div>
         <div class="tips">
-          <p style="margin-bottom:30rpx">
+          <p style="margin-bottom:15px">
             你可以通过以下两种方式对扑克牌的顺序进行修改
           </p>
           <p>
             方式一、点击屏幕上半区的任意一张扑克，点击“退回”将这张扑克牌退回原位。
           </p>
           <p>
-            方式二、点击屏幕上半区的任意一张扑克，点击“替换/从左插入/从右插入”后点击下半区的任意一张扑克进行“替换/从左插入/从右面插入”操作。
+            方式二、点击屏幕上半区的任意一张扑克，点击“替换/从左插入/从右插入”后点击下半区的任意一张扑克进行“替换/从左插入/从右插入”操作。
           </p>
           <p>
             <span class="btn default-btn" @click="shouwOperationTips = false">我知道了</span>
@@ -160,6 +159,11 @@ export default {
     showCorrectAnswerBtn: {
       type: Boolean,
       default: false
+    },
+    //是否显示查看正确答案按钮
+    showMyAnswer: {
+      type: Boolean,
+      default: false
     }
   },
   onUnload: function() {
@@ -223,8 +227,7 @@ export default {
       shouwOperationTips: false,
       showType: "显示方式",
       gameName: "",
-      showPrevPage: false,
-      showMyAnswer: false
+      showPrevPage: false
     };
   },
   methods: {
@@ -315,12 +318,10 @@ export default {
     },
     //查看正确答案
     showCorrectAnswer: function() {
-      this.showMyAnswer = true;
       this.$emit("showCorrectAnswer");
     },
     //查看我提交的答案
     showMyAnswerHandler: function() {
-      this.showMyAnswer = false;
       this.$emit("showMyAnswerHandler");
     }
   }
@@ -331,10 +332,10 @@ export default {
   font-size: 4vmin;
   display: flex;
   justify-content: space-between;
-  padding: 0 15px;
+  padding: 0 10px;
   position: fixed;
   top: 0;
-  width: calc(100% - 30px);
+  width: calc(100% - 20px);
   background: #173771;
   color: white;
   z-index: 999;
@@ -395,13 +396,13 @@ p {
   // height: 100%;
 }
 .pannel p:first-child {
-  height: tovmin(150);
-  line-height: tovmin(150);
+  height: 35px;
+  line-height: 35px;
 }
 
 .pannel p {
-  height: tovmin(120);
-  line-height: tovmin(120);
+  height: 30px;
+  line-height: 30px;
 }
 
 .pannel p.active {
@@ -409,8 +410,8 @@ p {
 }
 .pannel-title {
   background: $light-blue;
-  font-size: 24px !important;
-  line-height: 70px !important;
+  // font-size: 24px !important;
+  // line-height: 70px !important;
   font-weight: bold;
 }
 .arrow-left::after {

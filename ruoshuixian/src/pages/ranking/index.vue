@@ -92,7 +92,7 @@ export default {
 .content {
   background: $grey-background;
   padding: tovmin(30);
-  height: calc(100% - 192rpx);
+  height: calc(100% - 192px);
   overflow-y: auto;
 }
 

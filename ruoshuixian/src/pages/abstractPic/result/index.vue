@@ -20,23 +20,23 @@ export default {
   components: {
     GameTitle
   },
-  onLoad (option) {
-    Object.assign(this.$data, this.$options.data())
+  onLoad(option) {
+    Object.assign(this.$data, this.$options.data());
     this.init(option);
   },
-  onShareAppMessage: function (res) {
+  onShareAppMessage: function(res) {
     return {
       path: "pages/firstPage/main?id=" + this.userid,
       title: "抽象图形，一起来玩吧！",
-      success: function () {
+      success: function() {
         console.log("分享成功");
       },
-      error: function () {
+      error: function() {
         console.log("分享失败");
       }
-    }
+    };
   },
-  data () {
+  data() {
     return {
       number: [],
       domain: this.$http.domain,
@@ -44,29 +44,29 @@ export default {
     };
   },
   methods: {
-    init: function (option) {
+    init: function(option) {
       let level = this.$store.state.level,
         result = this.$store.state.result,
         correct_result = result.correct_result,
         number = [],
         list = JSON.parse(option.list);
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == level
+        return e.game_level == level;
       })[0];
       let total = rule.number;
       let per = rule.number_per_group;
       this.userid = this.$store.state.userInfo.id;
       this.result = result.right_and_wrong_results;
       let sortList = list.reduce((a, b) => {
-        a.push(...b)
-        return a
-      }, [])
+        a.push(...b);
+        return a;
+      }, []);
       this.numberList = sortList.map((e, index) => {
         return {
           image: e.image,
           text: correct_result[index],
           result: this.result[index].result
-        }
+        };
       });
       for (var i = 0; i < total; i += per) {
         number.push(this.numberList.slice(i, i + per));
@@ -80,13 +80,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 page {
-  height: calc(100% - 150rpx) !important;
+  height: calc(100% - 75px) !important;
 }
 
 .container {
   background: $deep-blue;
   color: white;
-  height: calc(100% - 150rpx);
+  height: calc(100% - 75px);
 }
 
 .list {

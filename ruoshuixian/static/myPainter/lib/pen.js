@@ -156,7 +156,7 @@ export default class Painter {
           }
         }
         const fontWeight = view.css.fontWeight === 'bold' ? 'bold' : 'normal';
-        view.css.fontSize = view.css.fontSize ? view.css.fontSize : '20rpx';
+        view.css.fontSize = view.css.fontSize ? view.css.fontSize : '20px';
         this.ctx.font = `normal ${fontWeight} ${view.css.fontSize.toPx()}px ${view.css.fontFamily ? view.css.fontFamily : 'sans-serif'}`;
         // this.ctx.setFontSize(view.css.fontSize.toPx());
         // 计算行数

@@ -9,7 +9,7 @@
           <image class="image" :src="domain+item.image" lazy-load="true"></image>
           <span :class="{input:true,active:item.selected}" @click="focus(_index,index)">{{item.text}}</span>
         </div>
-        <span style="margin-left:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
+        <span style="margin-left:25px">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
     <Keybord :showKeybord="showKeybord" counts="5" @selectNumber="selectNumber" @deleteNumber="deleteNumber"></Keybord>
@@ -25,11 +25,11 @@ export default {
     Keybord,
     alertBox
   },
-  onLoad (option) {
+  onLoad(option) {
     Object.assign(this.$data, this.$options.data());
     this.init(option);
   },
-  data () {
+  data() {
     let array = new Array(5);
     let rows = new Array(3);
     return {
@@ -45,12 +45,12 @@ export default {
     };
   },
   methods: {
-    init: function (option) {
+    init: function(option) {
       let list = JSON.parse(option.list);
       let level = this.$store.state.level;
       this.token = this.$store.state.userInfo.token;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == level
+        return e.game_level == level;
       })[0];
       let beforeSort = [],
         afterSort = [];
@@ -61,7 +61,7 @@ export default {
             text: "",
             index: list[i][j].index,
             selected: false
-          })
+          });
         }
       }
       this.beforeSort = beforeSort;
@@ -70,8 +70,8 @@ export default {
       for (var i = 0; i < total; i += per) {
         let arr = beforeSort.slice(i, i + per);
         arr.sort(e => {
-          return Math.random() > 0.5 ? 1 : -1
-        })
+          return Math.random() > 0.5 ? 1 : -1;
+        });
         afterSort.push(arr);
       }
       this.number = afterSort.filter(e => {
@@ -79,20 +79,20 @@ export default {
       });
       this.afterSort = afterSort.concat().reduce((total, next) => {
         next.forEach(e => {
-          total.push(e.index + 1)
-        })
-        return total
-      }, [])
+          total.push(e.index + 1);
+        });
+        return total;
+      }, []);
       this.startTime = new Date().getTime();
       this.game_records_id = this.$store.state.ruleList.game_records_id;
     },
-    finishAnwser: function () {
+    finishAnwser: function() {
       this.showFog = true;
     },
-    hideFog: function () {
+    hideFog: function() {
       this.showFog = false;
     },
-    focus: function (_index, index) {
+    focus: function(_index, index) {
       this.showKeybord = true;
       this._index = _index;
       this.index = index;
@@ -102,12 +102,11 @@ export default {
             m.selected = true;
           } else {
             m.selected = false;
-
           }
-        })
+        });
       });
     },
-    confirm: function () {
+    confirm: function() {
       this.endTime = new Date().getTime();
       let new_game_list = [];
       this.number.forEach(e => {
@@ -124,7 +123,7 @@ export default {
             content: JSON.stringify({
               new_game_list,
               game_list: this.afterSort.map(e => {
-                return e
+                return e;
               })
             })
           },
@@ -146,12 +145,12 @@ export default {
           }
         });
     },
-    selectNumber: function (data) {
+    selectNumber: function(data) {
       let item = this.number[this._index][this.index];
       item.text = data;
       this.$set(this.number[this._index], this.index, item);
     },
-    deleteNumber: function () {
+    deleteNumber: function() {
       let item = this.number[this._index][this.index];
       item.text = "";
       this.$set([this._index], this.index, item);
@@ -161,13 +160,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 page {
-  height: calc(100% - 150rpx) !important;
+  height: calc(100% - 75px) !important;
 }
 
 .container {
   background: $deep-blue;
   color: white;
-  height: calc(100% - 150rpx);
+  height: calc(100% - 75px);
 }
 
 .list {

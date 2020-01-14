@@ -6,7 +6,7 @@
       <input type="number" v-model="inputMoney" @input="change">
       <span class="allCash" @click="getAllCash">全部提现</span>
       <p>可提现金额：{{money}}</p>
-      <div style="text-align:center;margin-top:30rpx">
+      <div style="text-align:center;margin-top:30px">
         <p class="btn submit-btn" @click="tixian">提现</p>
       </div>
     </div>
@@ -103,10 +103,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
-  height: calc(100% - 60rpx);
+  height: calc(100% - 60px);
   background: #f7f7f7;
   position: absolute;
-  width: calc(100% - 60rpx);
+  width: calc(100% - 60px);
   font-size: tovmin(28);
   padding: tovmin(30);
 }

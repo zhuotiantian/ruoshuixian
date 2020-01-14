@@ -76,8 +76,8 @@ page {
   width: 100%;
 }
 .history-wrapper {
-  width: calc(100% - 30rpx);
-  height: calc(100% - 30rpx);
+  width: calc(100% - 30px);
+  height: calc(100% - 30px);
   margin: tovmin(30);
 }
 .history-wrapper .list {

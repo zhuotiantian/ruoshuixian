@@ -3,11 +3,11 @@
     <GameTitle :showFinishMemoryBtn="showFinishMemoryBtn" @finishMemary="finishMemary" />
     <div class="list">
       <template v-if="pocker.length==0">
-        <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'rpx'}" :src="'/static/images/firstPage/pockerbg.png'" />
+        <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'px'}" :src="'/static/images/firstPage/pockerbg.png'" />
       </template>
       <template v-else>
-        <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'rpx'}">
-          <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*40+'rpx','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'px'}">
+          <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*40+'px','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
         </div>
       </template>
     </div>

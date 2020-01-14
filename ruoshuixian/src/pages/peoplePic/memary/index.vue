@@ -5,7 +5,7 @@
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <div class="image" v-for="(item,index) in rows" :key="index">
           <image class="image" :src="domain+item.avatar" lazy-load="true" />
-          <span class="name">{{item.xing_name}}<span style="position:relative;font-size:20rpx;font-weight:bold">·</span>{{item.ming_name}}</span>
+          <span class="name">{{item.xing_name}}<span style="position:relative;font-size:20px;font-weight:bold">·</span>{{item.ming_name}}</span>
         </div>
         <span class="rowName">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
@@ -59,13 +59,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 page {
-  height: calc(100% - 150rpx) !important;
+  height: calc(100% - 150px) !important;
 }
 
 .container {
   background: $deep-blue;
   color: white;
-  height: calc(100% - 150rpx);
+  height: calc(100% - 150px);
 }
 
 .list {

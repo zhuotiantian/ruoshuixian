@@ -11,8 +11,8 @@
     </div>
     <div class="result-div" v-if="result.length>0">
       <em class="arrow arrow-left" style="flex:1;"></em>
-      <scroll-view :style="{width:'80%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true" :scroll-left="80+(result.length-1)*20+'px'">
-        <div class="result" :style="{width:80+(result.length-1)*20+'px'}">
+      <scroll-view :style="{width:'80%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true" :scroll-left="101+(result.length-1)*20+'px'">
+        <div class="result" :style="{width:101+(result.length-1)*20+'px'}">
           <image @click="selectSelectedPocker(index,item)" :class="{pocker:true,active:item.selected}" :style="{right:(result.length-index)*20+'px'}" v-for="(item,index) in result" :key="index" :src="item.url" ref="pocker" />
         </div>
       </scroll-view>

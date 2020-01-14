@@ -1,6 +1,6 @@
-@function tovmin($rpx) {
-  //$rpx为需要转换的字号
-  @return #{$rpx * 100 / 750}vmin;
+@function tovmin($px) {
+  //$px为需要转换的字号
+  @return #{$px * 100 / 750}vmin;
 }
 
 page {
@@ -135,4 +135,11 @@ page {
 
 .btnGroup .btn {
   margin: 0 tovmin(16);
+}
+.info {
+  color: white;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
 }

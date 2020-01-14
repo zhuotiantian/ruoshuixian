@@ -17,106 +17,116 @@
   </div>
 </template>
 <script>
-import alertBox from "@/components/alertBox"
+import alertBox from "@/components/alertBox";
 export default {
   components: {
     alertBox
   },
-  onLoad (options) {
+  onLoad(options) {
     this.inviter_id = options.inviterid;
     if (options.user_id) this.user_id = options.user_id;
     if (options.group_id) this.group_id = options.group_id;
     if (options.school_id) this.school_id = options.school_id;
   },
-  data () {
+  data() {
     return {
       inviter_id: null,
       showFog: false,
       user_id: null,
       group_id: null,
       school_id: null
-    }
+    };
   },
   methods: {
-    getUserInfo: function (e) {
+    getUserInfo: function(e) {
       if (e.mp.detail.iv) {
         let that = this;
         wx.login({
-          success: function (res) {
+          success: function(res) {
             let params = {
               rawData: JSON.stringify(e.mp.detail),
               code: res.code,
-              type: "user",
+              type: "user"
             };
             if (that.inviter_id && that.inviter_id !== "null") {
               params.inviter_id = that.inviter_id;
             }
-            that.$http.post({
-              url: "/api/wxapp.user/login",
-              data: params
-            }).then(result => {
-              if (result.code == 1) {
-                that.showFog = true;
-                that.$store.commit("setUserInfo", result.data.userInfo);
-                that.token = result.data.userInfo.token;
-              }
-            });
+            that.$http
+              .post({
+                url: "/api/wxapp.user/login",
+                data: params
+              })
+              .then(result => {
+                if (result.code == 1) {
+                  that.showFog = true;
+                  that.$store.commit("setUserInfo", result.data.userInfo);
+                  that.token = result.data.userInfo.token;
+                }
+              });
           }
         });
       }
     },
-    getPhoneNumber: function (e) {
+    getPhoneNumber: function(e) {
       let that = this;
       wx.login({
-        success: function (res) {
-          that.$http.post({
-            url: "/api/wxapp.user/bindingMobilePhoneNumber",
-            data: {
-              code: res.code,
-              type: "user",
-              rawData: JSON.stringify(e.mp.detail)
-            },
-            header: {
-              token: that.token
-            }
-          }).then(result => {
-            if (result.code == 1) {
-              wx.showToast({
-                title: "绑定成功！",
-                icon: "none"
-              });
-              that.$http.post({
-                url: "/api/wxapp.user/sweepCode",
-                data: {
-                  id: that.user_id,
-                  group_id: that.group_id,
-                  school_id: that.school_id
-                },
-                header: {
-                  token: that.token
-                }
-              }).then(res => {
+        success: function(res) {
+          that.$http
+            .post({
+              url: "/api/wxapp.user/bindingMobilePhoneNumber",
+              data: {
+                code: res.code,
+                type: "user",
+                rawData: JSON.stringify(e.mp.detail)
+              },
+              header: {
+                token: that.token
+              }
+            })
+            .then(result => {
+              if (result.code == 1) {
                 wx.showToast({
-                  title: "扫码接口参数：user_id:" + that.user_id + "  group_id:" + that.group_id + "  school_id:" + that.school_id,
+                  title: "绑定成功！",
                   icon: "none"
                 });
-              });
-              wx.switchTab({
-                url: "/pages/firstPage/main"
-              });
-            }
-          })
+                that.$http
+                  .post({
+                    url: "/api/wxapp.user/sweepCode",
+                    data: {
+                      id: that.user_id,
+                      group_id: that.group_id,
+                      school_id: that.school_id
+                    },
+                    header: {
+                      token: that.token
+                    }
+                  })
+                  .then(res => {
+                    wx.showToast({
+                      title:
+                        "扫码接口参数：user_id:" +
+                        that.user_id +
+                        "  group_id:" +
+                        that.group_id +
+                        "  school_id:" +
+                        that.school_id,
+                      icon: "none"
+                    });
+                  });
+                wx.switchTab({
+                  url: "/pages/firstPage/main"
+                });
+              }
+            });
         }
       });
     },
-    hideFog: function () {
+    hideFog: function() {
       this.showFog = false;
     },
-    confirm: function () {
-
-    }
+    confirm: function() {}
   }
-}
+};
 </script>
 <style scoped lang="scss">
 .wrapper {
@@ -177,7 +187,7 @@ p {
 
 .alertBox p:last-child {
   display: flex;
-  height: calc(100% - 220rpx);
+  height: calc(100% - 110px);
   align-items: center;
   background-color: $deep-blue;
   margin-bottom: tovmin(0);

@@ -65,8 +65,8 @@ export default {
   background: white;
   font-size: tovmin(26);
   position: absolute;
-  height: calc(100% - 100rpx);
-  width: calc(100% - 60rpx);
+  height: calc(100% - 100px);
+  width: calc(100% - 60px);
   overflow-y: auto;
   z-index: -1;
 }

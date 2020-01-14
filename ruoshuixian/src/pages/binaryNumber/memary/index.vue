@@ -6,7 +6,7 @@
         <div v-for="(item,index) in rows" :key="index" :class="{item:true,border:counts&&((index+1)%counts==0)&&(index+1)!=rows.length}">
           <span>{{item}}</span>
         </div>
-        <span style="width:50rpx">row&nbsp;&nbsp;{{_index+1}}</span>
+        <span style="width:25px">row&nbsp;&nbsp;{{_index+1}}</span>
       </div>
     </div>
   </div>
@@ -78,13 +78,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 page {
-  height: calc(100% - 150rpx) !important;
+  height: calc(100% - 75px) !important;
 }
 
 .container {
   background: $deep-blue;
   color: white;
-  height: calc(100% - 150rpx);
+  height: calc(100% - 75px);
 }
 
 .list {

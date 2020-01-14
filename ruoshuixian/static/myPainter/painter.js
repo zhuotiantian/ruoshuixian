@@ -215,9 +215,9 @@ function setStringPrototype() {
   String.prototype.toPx = function toPx(minus) {
     let reg;
     if (minus) {
-      reg = /^-?[0-9]+([.]{1}[0-9]+){0,1}(rpx|px)$/g;
+      reg = /^-?[0-9]+([.]{1}[0-9]+){0,1}(px|px)$/g;
     } else {
-      reg = /^[0-9]+([.]{1}[0-9]+){0,1}(rpx|px)$/g;
+      reg = /^[0-9]+([.]{1}[0-9]+){0,1}(px|px)$/g;
     }
     const results = reg.exec(this);
     if (!this || !results) {
@@ -228,7 +228,7 @@ function setStringPrototype() {
     const value = parseFloat(this);
 
     let res = 0;
-    if (unit === 'rpx') {
+    if (unit === 'px') {
       res = Math.round(value * screenK);
     } else if (unit === 'px') {
       res = value;
