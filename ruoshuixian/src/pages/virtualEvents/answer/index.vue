@@ -18,95 +18,100 @@
   </div>
 </template>
 <script>
-import GameTitle from "@/components/gameTitle_new"
-import Keybord from "@/components/Keybord"
-import alertBox from "@/components/alertBox"
+import GameTitle from "@/components/gameTitle_new";
+import Keybord from "@/components/Keybord";
+import alertBox from "@/components/alertBox";
 export default {
   components: {
     GameTitle,
     Keybord,
     alertBox
   },
-  onLoad (option) {
-    Object.assign(this.$data, this.$options.data())
+  onLoad(option) {
+    Object.assign(this.$data, this.$options.data());
     this.init();
   },
-  data () {
+  data() {
     return {
       showFog: false,
       text: "确定结束作答吗？",
       rule: {},
       numberList: [],
       activeIndex: null,
-      showKeybord: false,
-    }
+      showKeybord: false
+    };
   },
   methods: {
-    init: function () {
+    init: function() {
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == level
+        return e.game_level == level;
       })[0];
       let list = this.$store.state.ruleList.list;
       this.numberList = list.date.map((e, index) => {
         return {
           date: "",
           event: list.event[index]
-        }
+        };
       });
       this.startTime = new Date().getTime();
-
     },
-    focus: function (index) {
+    focus: function(index) {
       this.activeIndex = index;
       this.showKeybord = true;
     },
-    finishAnwser: function (index) {
+    finishAnwser: function(index) {
       this.showFog = true;
     },
-    hideFog: function () {
+    hideFog: function() {
       this.showFog = false;
     },
-    confirm: function () {
-      let token = this.$store.state.userInfo.token, game_records_id = this.$store.state.ruleList.game_records_id, endTime = new Date().getTime(), date = [], event = [];
+    confirm: function() {
+      let token = this.$store.state.userInfo.token,
+        game_records_id = this.$store.state.ruleList.game_records_id,
+        endTime = new Date().getTime(),
+        date = [],
+        event = [];
       this.numberList.forEach(e => {
         date.push(e.date);
         event.push(e.event);
       });
-      this.$http.post({
-        url: "/api/wxapp.game/submitTheGame",
-        data: {
-          game_records_id,
-          game_time: (endTime - this.startTime) / 1000,
-          content: JSON.stringify({
-            date: date,
-            event: event
-          })
-        },
-        header: {
-          token
-        }
-      }).then(result => {
-        if (result.code == 1) {
-          this.$store.commit("setResult", result.data);
-          wx.reLaunch({
-            url: "../result/main"
-          })
-        } else {
-          wx.showToast({
-            title: result.msg,
-            icon: "none"
-          });
-        }
-      })
+      this.$http
+        .post({
+          url: "/api/wxapp.game/submitTheGame",
+          data: {
+            game_records_id,
+            game_time: (endTime - this.startTime) / 1000,
+            content: JSON.stringify({
+              date: date,
+              event: event
+            })
+          },
+          header: {
+            token
+          }
+        })
+        .then(result => {
+          if (result.code == 1) {
+            this.$store.commit("setResult", result.data);
+            wx.reLaunch({
+              url: "../result/main"
+            });
+          } else {
+            wx.showToast({
+              title: result.msg,
+              icon: "none"
+            });
+          }
+        });
     },
-    selectNumber: function (data) {
+    selectNumber: function(data) {
       let date = this.numberList[this.activeIndex].date;
       if (date.length < 4) {
         this.$set(this.numberList[this.activeIndex], "date", date + data);
       }
     },
-    deleteNumber: function () {
+    deleteNumber: function() {
       let date = this.numberList[this.activeIndex].date.split("");
       date.pop();
       this.$set(this.numberList[this.activeIndex], "date", date.join(""));
@@ -127,7 +132,7 @@ page {
 
 .list {
   height: calc(100% - 150px);
-  margin: tovmin(150) tovmin(30) auto tovmin(30);
+  margin: tovmin(150) tovmin(30) 48vmin tovmin(30);
 }
 
 .list p {

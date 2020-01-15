@@ -23,36 +23,40 @@ export default {
     GameTitle,
     alertBox
   },
-  onLoad (option) {
-    Object.assign(this.$data, this.$options.data())
+  onLoad(option) {
+    Object.assign(this.$data, this.$options.data());
     this.init();
   },
-  data () {
+  data() {
     return {
       number: [],
       counts: 0,
       showFog: false,
       domain: this.$http.domain
-    }
+    };
   },
   methods: {
-    init: function () {
+    init: function() {
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == level
-      })[0];;
+        return e.game_level == level;
+      })[0];
       let list = this.$store.state.ruleList.list;
-      let numberList = list.xing_name.map((e, index) => {
-        return {
-          xing_name: "",
-          ming_name: "",
-          avatar: list.avatar[index]
-        };
-      }).sort(e => {
-        return Math.random() > 0.5 ? 1 : -1
-      });
+      let numberList = list.xing_name
+        .map((e, index) => {
+          return {
+            xing_name: "",
+            ming_name: "",
+            avatar: list.avatar[index]
+          };
+        })
+        .sort(e => {
+          return Math.random() > 0.5 ? 1 : -1;
+        });
       this.numberList = numberList;
-      let total = rule.number, per = rule.number_per_group, number = [];
+      let total = rule.number,
+        per = rule.number_per_group,
+        number = [];
       for (var i = 0; i < total; i += per) {
         number.push(numberList.slice(i, i + per));
       }
@@ -61,14 +65,19 @@ export default {
       });
       this.startTime = new Date().getTime();
     },
-    finishAnwser: function () {
+    finishAnwser: function() {
       this.showFog = true;
     },
-    hideFog: function () {
+    hideFog: function() {
       this.showFog = false;
     },
-    confirm: function () {
-      let endTime = new Date().getTime(), xing_name = [], ming_name = [], avatar = [], token = this.$store.state.userInfo.token, game_records_id = this.$store.state.ruleList.game_records_id;
+    confirm: function() {
+      let endTime = new Date().getTime(),
+        xing_name = [],
+        ming_name = [],
+        avatar = [],
+        token = this.$store.state.userInfo.token,
+        game_records_id = this.$store.state.ruleList.game_records_id;
       this.number.forEach(e => {
         e.forEach(m => {
           xing_name.push(m.xing_name);
@@ -86,7 +95,7 @@ export default {
               xing_name,
               ming_name,
               avatar
-            }),
+            })
           },
           header: {
             token
@@ -97,7 +106,7 @@ export default {
             this.$store.commit("setResult", result.data);
             wx.reLaunch({
               url: "../result/main?list=" + JSON.stringify(this.numberList)
-            })
+            });
           } else {
             wx.showToast({
               title: result.msg,
@@ -123,7 +132,7 @@ page {
 .list {
   margin-top: tovmin(200);
   margin-left: tovmin(180);
-  margin-top: tovmin(230);
+  margin-bottom: 26vmin;
 }
 
 .row {

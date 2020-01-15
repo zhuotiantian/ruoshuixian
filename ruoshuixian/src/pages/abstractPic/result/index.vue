@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <GameTitle :isResult="true"></GameTitle>
+    <GameTitle :isResult="true" :showCorrectAnswerBtn="showCorrectBtn" :showMyAnswer="showMyAnswer" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
     <div class="list">
       <div class="row" v-for="(rows,_index) in number" :key="_index">
         <div class="image_div" v-for="(item,index) in rows" :key="index">
@@ -40,7 +40,9 @@ export default {
     return {
       number: [],
       domain: this.$http.domain,
-      userid: null
+      userid: null,
+      showCorrectBtn: true,
+      showMyAnswer: false
     };
   },
   methods: {
@@ -64,7 +66,7 @@ export default {
       this.numberList = sortList.map((e, index) => {
         return {
           image: e.image,
-          text: correct_result[index],
+          text: this.result[index].number,
           result: this.result[index].result
         };
       });
@@ -73,6 +75,20 @@ export default {
       }
       this.number = number.filter(e => {
         return e.length > 0;
+      });
+    },
+    showCorrectAnswer: function() {
+      this.showMyAnswer = true;
+      this.showCorrectBtn = false;
+      wx.pageScrollTo({
+        scrollTop: 0
+      });
+    },
+    showMyAnswerHandler: function() {
+      this.showMyAnswer = false;
+      this.showCorrectBtn = true;
+      wx.pageScrollTo({
+        scrollTop: 0
       });
     }
   }

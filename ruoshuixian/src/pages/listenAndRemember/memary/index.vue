@@ -1,15 +1,24 @@
 <template>
   <div class="contanier">
     <GameTitle :showIntervalTime='true' ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
-    <div class="content">
-      <image class="play" v-if="isPlay" :src="'/static/images/firstPage/play.png'" @click="pause"></image>
-      <image class="play" v-else :src="'/static/images/firstPage/pause.png'" @click="play"></image>
-      <image class="slider" :src="'/static/images/firstPage/slider.png'"></image>
-      <em></em>
+    <div v-if="!canPlay">
+      <p class="info">正在加载音频文件...</p>
     </div>
-    <p class="text" v-if="isPlay">正在播放录音&nbsp;&middot;&nbsp;&middot;&nbsp;&middot;</p>
-    <p class="text" v-else>播放暂停</p>
-    <div class="interval" v-if="showInterval">{{number}}秒</div>
+    <template v-else>
+      <div class="content">
+        <image class="play" v-if="isPlay" :src="'/static/images/firstPage/play.png'" @click="pause"></image>
+        <image class="play" v-else :src="'/static/images/firstPage/pause.png'" @click="play"></image>
+        <image class="slider" :src="'/static/images/firstPage/slider.png'"></image>
+        <em></em>
+      </div>
+      <template v-if="!showInterval">
+        <div>
+          <p class="text" v-if="isPlay">正在播放录音&nbsp;&middot;&nbsp;&middot;&nbsp;&middot;</p>
+          <p class="text" v-else>播放暂停</p>
+        </div>
+      </template>
+      <div class="interval" v-else>{{number}}秒</div>
+    </template>
   </div>
 </template>
 <script>
@@ -18,83 +27,95 @@ export default {
   components: {
     GameTitle
   },
-  onUnload () {
+  onUnload() {
     this.innerAudioContext.destroy();
     clearInterval(this.interval);
   },
-  onReady () {
+  onReady() {
     this.innerAudioContext = wx.createInnerAudioContext();
-    this.innerAudioContext.onError(function (res) {
+    this.innerAudioContext.onError(function(res) {
       console.log(res);
       wx.showToast({
-        title: '语音播放失败',
-        icon: 'none',
-      })
-    })
+        title: "语音播放失败",
+        icon: "none"
+      });
+    });
   },
-  data () {
+  data() {
     return {
       innerAudioContext: null,
       level: "primary",
-      isPlay: true,
+      isPlay: false,
       showInterval: true,
       number: 3,
-      numberList: []
+      numberList: [],
+      canPlay: false
     };
   },
-  onLoad () {
+  onLoad() {
     Object.assign(this.$data, this.$options.data());
     this.getGameData();
   },
-  mounted () {
-    //记忆前的倒计时
-    this.interval = setInterval(() => {
-      this.number--;
-      if (this.number <= 0) {
-        this.showInterval = false;
-        this.innerAudioContext.play();
-        clearInterval(this.interval);
-      }
-    }, 1000);
-  },
   methods: {
     // 获取数据
-    getGameData: function () {
-      let eng = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+    getGameData: function() {
+      let eng = [
+        "zero",
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine"
+      ];
       this.numberList = this.$store.state.ruleList.list.map(e => {
-        return eng[e]
+        return eng[e];
       });
-      this.toYuyin()
+      this.toYuyin();
     },
-    toYuyin: function () {
+    toYuyin: function() {
       let plugin = requirePlugin("WechatSI");
       let that = this;
       plugin.textToSpeech({
         lang: "en_US",
         tts: true,
         content: this.numberList.join(","),
-        success: function (res) {
+        success: function(res) {
           console.log("succ tts", res.filename);
-          that.innerAudioContext.src = res.filename
+          that.canPlay = true;
+          //记忆前的倒计时
+          that.interval = setInterval(() => {
+            that.number--;
+            if (that.number <= 0) {
+              that.showInterval = false;
+              that.isPlay = true;
+              that.innerAudioContext.play();
+              clearInterval(that.interval);
+            }
+          }, 1000);
+          that.innerAudioContext.src = res.filename;
         },
-        fail: function (res) {
-          console.log("fail tts", res)
+        fail: function(res) {
+          console.log("fail tts", res);
         }
-      })
+      });
     },
-    finishMemary: function () {
+    finishMemary: function() {
       this.innerAudioContext && this.innerAudioContext.destroy();
       setTimeout(() => {
         wx.reLaunch({
           url: "/pages/numberAnswer/main"
         });
-      }, 200)
+      }, 200);
     },
-    pause: function () {
+    pause: function() {
       this.innerAudioContext.pause();
       this.isPlay = false;
     },
-    play: function () {
+    play: function() {
       this.innerAudioContext.play();
       this.isPlay = true;
     }

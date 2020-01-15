@@ -85,8 +85,7 @@ page {
 
 .list {
   margin-top: tovmin(160);
-  margin-left: tovmin(230);
-  margin-top: tovmin(180);
+  margin-left: tovmin(200);
 }
 
 .row {

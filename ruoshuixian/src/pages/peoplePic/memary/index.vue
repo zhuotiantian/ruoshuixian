@@ -18,44 +18,47 @@ export default {
   components: {
     GameTitle
   },
-  onLoad (option) {
-    Object.assign(this.$data, this.$options.data())
+  onLoad(option) {
+    Object.assign(this.$data, this.$options.data());
     this.init();
   },
-  data () {
+  data() {
     return {
       number: [],
       domain: this.$http.domain
-    }
+    };
   },
   methods: {
-    init: function () {
-      let level = this.$store.state.level, list = this.$store.state.ruleList.list;
+    init: function() {
+      let level = this.$store.state.level,
+        list = this.$store.state.ruleList.list;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
-        return e.game_level == level
+        return e.game_level == level;
       })[0];
       let numberList = list.xing_name.map((e, index) => {
         return {
           xing_name: e,
           ming_name: list.ming_name[index],
           avatar: list.avatar[index]
-        }
+        };
       });
-      let total = rule.number, per = rule.number_per_group, number = [];
+      let total = rule.number,
+        per = rule.number_per_group,
+        number = [];
       for (var i = 0; i < total; i += per) {
         number.push(numberList.slice(i, i + per));
-      };
+      }
       this.number = number.filter(e => {
-        return e.length > 0
+        return e.length > 0;
       });
     },
-    finishMemary: function () {
+    finishMemary: function() {
       wx.reLaunch({
         url: "../answer/main"
-      })
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 page {
@@ -70,8 +73,7 @@ page {
 
 .list {
   margin-top: tovmin(200);
-  margin-left: tovmin(230);
-  margin-top: tovmin(230);
+  margin-left: tovmin(200);
 }
 
 .row {
