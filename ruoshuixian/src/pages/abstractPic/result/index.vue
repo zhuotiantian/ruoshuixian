@@ -2,15 +2,25 @@
   <div class="container">
     <GameTitle :isResult="true" :showCorrectAnswerBtn="showCorrectBtn" :showMyAnswer="showMyAnswer" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
     <div class="list">
-      <div class="row" v-for="(rows,_index) in number" :key="_index">
-        <div class="image_div" v-for="(item,index) in rows" :key="index">
-          <image class="image" :src="domain+item.image" />
-          <span class="input">{{item.text}}</span>
-          <image class="icon" v-if="item.result==0" :src="'/static/images/my/select.png'" />
-          <image class="icon" v-else :src="'/static/images/my/wrong.png'" />
+      <template v-if="showCorrectBtn">
+        <div class="row" v-for="(rows,_index) in number" :key="_index">
+          <div class="image_div" v-for="(item,index) in rows" :key="index">
+            <image class="image" :src="domain+item.image" />
+            <span class="input">{{item.text}}</span>
+            <image class="icon" v-if="item.result==0" :src="'/static/images/my/select.png'" />
+            <image class="icon" v-else :src="'/static/images/my/wrong.png'" />
+          </div>
+          <span>row&nbsp;&nbsp;{{_index+1}}</span>
         </div>
-        <span>row&nbsp;&nbsp;{{_index+1}}</span>
-      </div>
+      </template>
+      <template v-else>
+        <div class="row" v-for="(rows,_index) in corrrect_result" :key="_index">
+          <div class="image_div" v-for="(item,index) in rows" :key="index">
+            <image class="image" :src="domain+item" />
+          </div>
+          <span>row&nbsp;&nbsp;{{_index+1}}</span>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -42,7 +52,8 @@ export default {
       domain: this.$http.domain,
       userid: null,
       showCorrectBtn: true,
-      showMyAnswer: false
+      showMyAnswer: false,
+      corrrect_result: []
     };
   },
   methods: {
@@ -51,7 +62,9 @@ export default {
         result = this.$store.state.result,
         correct_result = result.correct_result,
         number = [],
-        list = JSON.parse(option.list);
+        list = JSON.parse(option.list),
+        corrrect_result = this.$store.state.ruleList.list,
+        list1 = [];
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
         return e.game_level == level;
       })[0];
@@ -72,10 +85,13 @@ export default {
       });
       for (var i = 0; i < total; i += per) {
         number.push(this.numberList.slice(i, i + per));
+        list1.push(corrrect_result.slice(i, i + per));
       }
       this.number = number.filter(e => {
         return e.length > 0;
       });
+
+      this.corrrect_result = list1;
     },
     showCorrectAnswer: function() {
       this.showMyAnswer = true;

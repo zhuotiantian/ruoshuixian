@@ -5,7 +5,7 @@
       <scroll-view :style="{height:'94vmin'}" :scroll-y="true" :scroll-top="scrollTop">
         <div class="list-wrapper" v-if="showMyAnswer">
           <div class="item-list" v-for="(columns,index) in correct_result" :key="index+1">
-            <span :class="{item:true}" v-for="(item,_index) in columns" :key="_index+1"><span>{{index+1}}</span>&nbsp;&nbsp;&nbsp;<span>{{item}}</span></span>
+            <span :class="{item:true}" v-for="(item,_index) in columns" :key="_index+1"><span>{{item.index+1}}</span>&nbsp;&nbsp;&nbsp;<span>{{item.number}}</span></span>
           </div>
         </div>
         <div class="list-wrapper" v-else>
@@ -63,7 +63,14 @@ export default {
         total = rule.number,
         right_and_wrong_results = this.result.right_and_wrong_results,
         list = [],
-        correct_result = this.result.correct_result,
+        correct_result = this.result.correct_result
+          .map((e, index) => {
+            return {
+              index: index,
+              number: e
+            };
+          })
+          .slice(start, end),
         list1 = [];
       let wordsList = right_and_wrong_results
         .map((e, index) => {
