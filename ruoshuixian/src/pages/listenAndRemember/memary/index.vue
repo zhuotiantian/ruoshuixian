@@ -1,6 +1,6 @@
 <template>
   <div class="contanier">
-    <GameTitle :showIntervalTime='true' ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
+    <GameTitle :showIntervalTime="true" ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
     <div v-if="!canPlay">
       <p class="info">正在加载音频文件...</p>
     </div>
@@ -17,7 +17,7 @@
           <p class="text" v-else>播放暂停</p>
         </div>
       </template>
-      <div class="interval" v-else>{{number}}秒</div>
+      <div class="interval" v-else>{{ number }}秒</div>
     </template>
   </div>
 </template>
@@ -59,18 +59,7 @@ export default {
   methods: {
     // 获取数据
     getGameData: function() {
-      let eng = [
-        "zero",
-        "one",
-        "two",
-        "three",
-        "four",
-        "five",
-        "six",
-        "seven",
-        "eight",
-        "nine"
-      ];
+      let eng = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
       this.numberList = this.$store.state.ruleList.list.map(e => {
         return eng[e];
       });
@@ -86,17 +75,18 @@ export default {
         success: function(res) {
           console.log("succ tts", res.filename);
           that.canPlay = true;
+          that.innerAudioContext.src = res.filename;
           //记忆前的倒计时
           that.interval = setInterval(() => {
             that.number--;
             if (that.number <= 0) {
+              console.log("1111");
               that.showInterval = false;
               that.isPlay = true;
               that.innerAudioContext.play();
               clearInterval(that.interval);
             }
           }, 1000);
-          that.innerAudioContext.src = res.filename;
         },
         fail: function(res) {
           console.log("fail tts", res);

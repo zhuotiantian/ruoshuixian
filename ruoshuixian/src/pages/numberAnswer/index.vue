@@ -3,11 +3,11 @@
     <p class="info" v-if="!showKeybord">加载中...</p>
     <div class="fog" v-if="showFog"></div>
     <alertBox :text="text" v-if="showFog" @hideFog="hideFog" @confirm="confirm"></alertBox>
-    <GameTitle :showIntervalTime='showKeybord' :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
+    <GameTitle v-if="showKeybord" :showIntervalTime="showKeybord" :showFinishAnwserBtn="true" @finishAnwser="finishAnwser"></GameTitle>
     <div class="list">
-      <div class="row" v-for="(rows,_index) in number" :key="_index">
-        <span :class="{item:true,selected:item.selected}" v-for="(item,index) in rows" :key="index" @click="selected(_index,index)">{{item.number}}</span>
-        <span style="width:50px">row&nbsp;&nbsp;{{_index+1}}</span>
+      <div class="row" v-for="(rows, _index) in getNumbers" :key="_index">
+        <span :class="{ item: true, selected: item.selected }" v-for="(item, index) in rows" :key="index" @click="selected(_index, index)">{{ item.number }}</span>
+        <span style="width:50px">row&nbsp;&nbsp;{{ _index + 1 }}</span>
       </div>
     </div>
     <Keybord :showKeybord="showKeybord" @selectNumber="selectNumber" @deleteNumber="deleteNumber"></Keybord>
@@ -39,8 +39,20 @@ export default {
       rowIndex: 0,
       columnIndex: 0,
       gameName: "",
-      count: 10
+      count: 10,
+      lastIndex: 10
     };
+  },
+  onReachBottom: function(e) {
+    if (this.lastIndex < this.number.length) {
+      // 获取滚动条当前位置
+      this.lastIndex += 10;
+    }
+  },
+  computed: {
+    getNumbers: function() {
+      return this.number.slice(0, this.lastIndex);
+    }
   },
   methods: {
     init: function() {
@@ -121,17 +133,10 @@ export default {
         current.number = data;
       }
       this.$set(this.number[this.rowIndex], this.columnIndex, current);
-      this.$set(
-        this.number[this.rowIndex][this.columnIndex],
-        "selected",
-        false
-      );
+      this.$set(this.number[this.rowIndex][this.columnIndex], "selected", false);
       if (this.columnIndex < this.number[this.rowIndex].length - 1) {
         this.columnIndex++;
-      } else if (
-        this.rowIndex < this.number.length - 1 &&
-        this.columnIndex == this.number[this.rowIndex].length - 1
-      ) {
+      } else if (this.rowIndex < this.number.length - 1 && this.columnIndex == this.number[this.rowIndex].length - 1) {
         this.rowIndex++;
         this.columnIndex = 0;
       }
@@ -163,11 +168,7 @@ export default {
     },
     // 退格
     backSpace: function() {
-      this.$set(
-        this.number[this.rowIndex][this.columnIndex],
-        "selected",
-        false
-      );
+      this.$set(this.number[this.rowIndex][this.columnIndex], "selected", false);
       if (this.columnIndex === 0 && this.rowIndex > 0) {
         this.rowIndex--;
         this.columnIndex == this.number[this.rowIndex].length - 1;
