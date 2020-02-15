@@ -1,13 +1,19 @@
 <template>
   <div class="container">
     <GameTitle :isResult="true" :showCorrectAnswerBtn="showCorrectBtn" :showMyAnswer="showMyAnswer" @showCorrectAnswer="showCorrectAnswer" @showMyAnswerHandler="showMyAnswerHandler"></GameTitle>
-    <div class="list">
-      <div class="pocker-wrapper" :style="{ width: (correct_result.length - 1) * 20 + 124 + 'px' }" v-if="isShowCorrectAnswer">
-        <image class="pocker" ref="pocker" v-for="(item, index) in correct_result" :style="{ left: index * 20 + 'px', 'z-index': index }" :key="index" :src="'/static/images/pocker/' + item.index + '-' + item.color + '.png'" />
-      </div>
-      <div class="pocker-wrapper" :style="{ width: (pocker.length - 1) * 20 + 124 + 'px' }" v-else>
-        <image class="pocker" :class="{ trueResult: item.trueResult, wrong: !item.trueResult }" ref="pocker" v-for="(item, index) in pocker" :style="{ left: index * 20 + 'px', 'z-index': index }" :key="index" :src="'/static/images/pocker/' + item.index + '-' + item.color + '.png'" />
-      </div>
+    <div class="list" v-if="isShowCorrectAnswer">
+      <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
+        <div class="pocker-wrapper" :style="{width:(pocker.length<52?((pocker.length-1)*20+124+'px'):'97%'),'max-width':'97%'}">
+          <image class="pocker" ref="pocker" v-for="(item, index) in correct_result" :style="{ left: index * 20 + 'px', 'z-index': index }" :key="index" :src="'/static/images/pocker/' + item.index + '-' + item.color + '.png'" />
+        </div>
+      </scroll-view>
+    </div>
+    <div class="list" v-else>
+      <scroll-view :style="{width:'78%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true">
+        <div class="pocker-wrapper" :style="{width:(pocker.length<52?((pocker.length-1)*20+124+'px'):'97%'),'max-width':'97%'}">
+          <image class="pocker" :class="{ trueResult: item.trueResult, wrong: !item.trueResult }" ref="pocker" v-for="(item, index) in pocker" :style="{ left: index * 20 + 'px', 'z-index': index }" :key="index" :src="'/static/images/pocker/' + item.index + '-' + item.color + '.png'" />
+        </div>
+      </scroll-view>
     </div>
   </div>
 </template>
@@ -34,13 +40,19 @@ export default {
     let userInfo = this.$store.state.userInfo;
     this.userid = userInfo.id;
     this.pockerNumber = this.$store.state.pockerNumber;
-    this.correct_result = this.$store.state.result.correct_result.slice(0, this.pockerNumber);
+    this.correct_result = this.$store.state.result.correct_result.slice(
+      0,
+      this.pockerNumber
+    );
     let user_result = this.$store.state.result.right_and_wrong_results;
     this.pocker = user_result;
     this.isShowCorrectAnswer = false;
     this.pocker.forEach((e, _index) => {
       e.trueResult = false;
-      if (e.index === this.correct_result[_index].index && e.color === this.correct_result[_index].color) {
+      if (
+        e.index === this.correct_result[_index].index &&
+        e.color === this.correct_result[_index].color
+      ) {
         e.trueResult = true;
       }
     });
@@ -75,7 +87,7 @@ export default {
 .list {
   text-align: center;
   position: relative;
-  height: tovmin(30);
+  height: 60vmin;
   display: flex;
   justify-content: center;
   margin: 0 15vmin;

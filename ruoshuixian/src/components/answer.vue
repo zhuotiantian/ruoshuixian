@@ -9,9 +9,9 @@
         <div class="btn default-btn" @click="back">退回</div>
       </template>
     </div>
-    <div class="result-div" v-if="result.length>0">
+    <div class="result-div" v-if="result&&result.length>0">
       <em class="arrow arrow-left" style="flex:1;"></em>
-      <scroll-view :style="{width:'80%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true" :scroll-left="101+(result.length-1)*20+'px'">
+      <scroll-view :style="{width:'80%','height':'100%','white-space':'nowrap','margin':'0 auto','flex':'10'}" scroll-x="true" :scroll-anchoring="true" :scroll-left="101+(scollLeft-1)*20+'px'">
         <div class="result" :style="{width:101+(result.length-1)*20+'px'}">
           <image @click="selectSelectedPocker(index,item)" :class="{pocker:true,active:item.selected}" :style="{right:(result.length-index)*20+'px'}" v-for="(item,index) in result" :key="index" :src="item.url" ref="pocker" />
         </div>
@@ -68,7 +68,8 @@ export default {
       pages: [], //分组后的
       currentIndex: 0,
       currentPage: 0,
-      groupPage: []
+      groupPage: [],
+      scollLeft: 0
     };
   },
   onLoad(options) {
@@ -174,6 +175,7 @@ export default {
 
         this.clearStatus();
       }
+      this.scollLeft = this.result.length;
       if (this.gameName === "马拉松扑克牌") {
         this.allResult[this.currentIndex] = this.result;
       }
@@ -188,12 +190,15 @@ export default {
     },
     //选择/取消选择已选择区域的扑克牌
     selectSelectedPocker: function(index, item) {
-      this.result.forEach((e, _index) => {
-        if (_index !== index) {
+      let result = this.result.concat();
+      result.forEach((e, _index) => {
+        if (_index === index) {
+          e.selected = !e.selected;
+        } else {
           e.selected = false;
         }
       });
-      this.$set(this.result[index], "selected", !this.result[index].selected);
+      this.result = result;
       this.hasToOperationPocker = this.result.some(e => {
         return e.selected;
       });

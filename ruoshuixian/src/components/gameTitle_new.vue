@@ -56,24 +56,17 @@
     <template v-if="showShowTypePannel">
       <div>
         <div class="fog" @click="showShowTypePannel = false"></div>
-        <div
-          :class="{
+        <div :class="{
             pannel: true,
             down: showShowTypePannel,
             up: !showShowTypePannel
-          }"
-        >
+          }">
           <div class="pannel-title" style="font-size:24px;height:50px;line-height:50px">显示方式</div>
           <template v-if="showShowType && gameName !== '二进制数字'">
-            <div>
-              <p
-                v-for="(item, index) in pannelContent"
-                :key="index"
-                @click.stop="group(item, index)"
-                :class="{
+            <div style="height:calc(100% - 50px);overflow-y:auto">
+              <p v-for="(item, index) in pannelContent" :key="index" @click.stop="group(item, index)" :class="{
                   active: item == (pockerNumber === 52 ? 'All' : pockerNumber)
-                }"
-              >
+                }">
                 {{ item }}
               </p>
             </div>
@@ -171,6 +164,10 @@ export default {
     showMyAnswer: {
       type: Boolean,
       default: false
+    },
+    canplay: {
+      type: Boolean,
+      default: false
     }
   },
   onUnload: function() {
@@ -191,8 +188,12 @@ export default {
     } else {
       this.pannelContent = ["1", "2", "4", "8", "All"];
     }
-    this.showGameLevel = this.gameName !== "闪视扑克牌" && this.showFinishMemoryBtn;
-    if ((this.showFinishMemoryBtn || this.isRecall || this.showFinishAnwserBtn) && this.showIntervalTime) {
+    this.showGameLevel =
+      this.gameName !== "闪视扑克牌" && this.showFinishMemoryBtn;
+    if (
+      (this.showFinishMemoryBtn || this.isRecall || this.showFinishAnwserBtn) &&
+      this.showIntervalTime
+    ) {
       clearInterval(this.timer);
       this.interval();
     }
@@ -200,7 +201,13 @@ export default {
   computed: {
     //返回所耗时长
     getPayedTime: function() {
-      return this.result && Math.round(this.result.game_time / 60) + "分" + Math.floor(this.result.game_time % 60) + "秒";
+      return (
+        this.result &&
+        Math.round(this.result.game_time / 60) +
+          "分" +
+          Math.floor(this.result.game_time % 60) +
+          "秒"
+      );
     },
     // 返回当前游戏等级文本
     returnCurrentGameLevel: function() {
@@ -224,8 +231,14 @@ export default {
       shouwOperationTips: false,
       showType: "显示方式",
       gameName: "",
-      showPrevPage: false
+      showPrevPage: false,
+      canPlay: false
     };
+  },
+  watch: {
+    canplay: function() {
+      this.playInterval(this.time);
+    }
   },
   methods: {
     //倒计时定时器
@@ -241,6 +254,12 @@ export default {
         time = this.$getGameInfo("answerTime");
       }
       this.getTime(time);
+      this.time = time;
+      if (this.gameName !== "听记数字") {
+        this.playInterval(time);
+      }
+    },
+    playInterval: function(time) {
       this.timer = setInterval(() => {
         time--;
         if (time === 0) {

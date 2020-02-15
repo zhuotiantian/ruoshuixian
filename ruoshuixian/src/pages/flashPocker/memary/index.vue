@@ -15,16 +15,16 @@
   </div>
 </template>
 <script>
-import GameTitle from "@/components/gameTitle_new"
+import GameTitle from "@/components/gameTitle_new";
 export default {
   components: {
     GameTitle
   },
-  onLoad () {
-    Object.assign(this.$data, this.$options.data())
+  onLoad() {
+    Object.assign(this.$data, this.$options.data());
     this.init();
   },
-  data () {
+  data() {
     return {
       pockerCount: 0,
       bg: 23,
@@ -33,22 +33,22 @@ export default {
       pockerNumber: 0,
       showInterval: true,
       number: 3,
-      showFinishMemoryBtn: false,
-    }
+      showFinishMemoryBtn: false
+    };
   },
   computed: {
-    bgCounts: function () {
+    bgCounts: function() {
       let bgCounts = [];
-      let left0 = this.pockerCount == 23 ? 100 : (290 - 10 * this.bg);
+      let left0 = this.pockerCount == 23 ? 100 : 290 - 10 * this.bg;
       for (let i = 0; i < this.bg; i++) {
         let left = left0 + 20 * i;
-        bgCounts.push(left)
-      };
+        bgCounts.push(left);
+      }
       return bgCounts;
-    },
+    }
   },
   methods: {
-    init: function () {
+    init: function() {
       //记忆前的倒计时
       let interval = setInterval(() => {
         this.number--;
@@ -60,23 +60,24 @@ export default {
         }
       }, 1000);
     },
-    start: function () {
-      let list = this.$store.state.ruleList.list, time_long = this.$store.state.memoryTime * 1000;
-      this.pockerNumber = this.$store.state.pockerNumber
+    start: function() {
+      let list = this.$store.state.ruleList.list,
+        time_long = this.$store.state.memoryTime * 1000;
+      this.pockerNumber = this.$store.state.pockerNumber;
       this.pocker = list.slice(0, this.pockerNumber);
       this.finishMemary_timer = setTimeout(() => {
         clearTimeout(this.finishMemary_timer);
-        // this.finishMemary();
-      }, time_long)
+        this.finishMemary();
+      }, time_long);
     },
-    finishMemary: function () {
+    finishMemary: function() {
       clearTimeout(this.finishMemary_timer);
       wx.reLaunch({
         url: "../answer/main"
-      })
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .list {
