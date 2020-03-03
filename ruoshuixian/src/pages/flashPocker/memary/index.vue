@@ -2,29 +2,31 @@
   <div class="container">
     <GameTitle :showFinishMemoryBtn="showFinishMemoryBtn" @finishMemary="finishMemary" />
     <div class="list">
-      <template v-if="pocker.length==0">
-        <image class="pocker-bg" v-for="(item,index) in bgCounts" :key="index" :style="{'left':item+'px'}" :src="'/static/images/firstPage/pockerbg.png'" />
+      <template v-if="pocker.length == 0">
+        <div class="pocker-wrapper" :style="{width: (bgCounts.length - 1) * 20 + 124 + 'px'}">
+          <image class="pocker-bg" v-for="(item, index) in bgCounts" :key="index" :style="{ left: item + 'px' }" :src="'/static/images/firstPage/pockerbg.png'" />
+        </div>
       </template>
       <template v-else>
-        <div class="pocker-wrapper" :style="{width:(pockerNumber-1)*40+124+'px'}">
-          <image class="pocker" ref="pocker" v-for="(item,index) in pocker" :style="{left:index*40+'px','z-index':index}" :key="index" :src="'/static/images/pocker/'+(item.index)+'-'+item.color+'.png'" />
+        <div class="pocker-wrapper" :style="{ width: (pockerNumber - 1) * 40 + 124 + 'px' }">
+          <image class="pocker" ref="pocker" v-for="(item, index) in pocker" :style="{ left: index * 40 + 'px', 'z-index': index }" :key="index" :src="'/static/images/pocker/' + item.index + '-' + item.color + '.png'" />
         </div>
       </template>
     </div>
-    <div class="interval" v-if="showInterval">{{number}}秒</div>
+    <div class="interval" v-if="showInterval">{{ number }}秒</div>
   </div>
 </template>
 <script>
-import GameTitle from "@/components/gameTitle_new"
+import GameTitle from "@/components/gameTitle_new";
 export default {
   components: {
     GameTitle
   },
-  onLoad () {
-    Object.assign(this.$data, this.$options.data())
+  onLoad() {
+    Object.assign(this.$data, this.$options.data());
     this.init();
   },
-  data () {
+  data() {
     return {
       pockerCount: 0,
       bg: 23,
@@ -33,50 +35,50 @@ export default {
       pockerNumber: 0,
       showInterval: true,
       number: 3,
-      showFinishMemoryBtn: false,
-    }
+      showFinishMemoryBtn: false
+    };
   },
   computed: {
-    bgCounts: function () {
+    bgCounts: function() {
       let bgCounts = [];
-      let left0 = this.pockerCount == 23 ? 100 : (290 - 10 * this.bg);
       for (let i = 0; i < this.bg; i++) {
-        let left = left0 + 20 * i;
-        bgCounts.push(left)
-      };
+        let left = 20 * i;
+        bgCounts.push(left);
+      }
       return bgCounts;
-    },
+    }
   },
   methods: {
-    init: function () {
+    init: function() {
       //记忆前的倒计时
       let interval = setInterval(() => {
         this.number--;
         if (this.number <= 0) {
           this.showInterval = false;
           this.showFinishMemoryBtn = true;
-          this.start();
+          // this.start();
           clearInterval(interval);
         }
       }, 1000);
     },
-    start: function () {
-      let list = this.$store.state.ruleList.list, time_long = this.$store.state.memoryTime * 1000;
-      this.pockerNumber = this.$store.state.pockerNumber
+    start: function() {
+      let list = this.$store.state.ruleList.list,
+        time_long = this.$store.state.memoryTime * 1000;
+      this.pockerNumber = this.$store.state.pockerNumber;
       this.pocker = list.slice(0, this.pockerNumber);
       this.finishMemary_timer = setTimeout(() => {
         clearTimeout(this.finishMemary_timer);
-        // this.finishMemary();
-      }, time_long)
+        this.finishMemary();
+      }, time_long);
     },
-    finishMemary: function () {
+    finishMemary: function() {
       clearTimeout(this.finishMemary_timer);
       wx.reLaunch({
         url: "../answer/main"
-      })
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .list {
