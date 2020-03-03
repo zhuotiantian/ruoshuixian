@@ -41,9 +41,8 @@ export default {
   computed: {
     bgCounts: function() {
       let bgCounts = [];
-      let left0 = this.pockerCount == 23 ? 100 : 290 - 10 * this.bg;
       for (let i = 0; i < this.bg; i++) {
-        let left = left0 + 20 * i;
+        let left = 20 * i;
         bgCounts.push(left);
       }
       return bgCounts;
