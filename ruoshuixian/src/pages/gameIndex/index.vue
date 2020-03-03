@@ -1,7 +1,7 @@
 <template>
   <div class="game-container">
     <GameTitle />
-    <AlertBoxNoBth :rule="rule" :show="show" />
+    <AlertBoxNoBth :rule="rule" v-if="show" />
     <!-- 扑克牌游戏首页 -->
     <div v-if="gameType === 'pocker'" class="content">
       <template v-if="page === 'first'">
@@ -78,10 +78,7 @@ export default {
     AlertBoxNoBth
   },
   onLoad(options) {
-    if (options.type === "playAgain") {
-      this.show = false;
-    }
-    this.init();
+    this.init(options.type);
   },
   data() {
     return {
@@ -101,7 +98,10 @@ export default {
     returnHourAndMinutes: function() {
       let minutes = Math.floor(this.memoryTime / 60);
       let seconds = this.memoryTime - minutes * 60;
-      return (minutes !== 0 ? minutes + "分钟" : "") + (seconds !== 0 ? seconds + "秒" : "");
+      return (
+        (minutes !== 0 ? minutes + "分钟" : "") +
+        (seconds !== 0 ? seconds + "秒" : "")
+      );
     }
   },
   mounted() {
@@ -110,7 +110,7 @@ export default {
     });
   },
   methods: {
-    init: function() {
+    init: function(type) {
       let level = this.$store.state.level;
       let rule = this.$store.state.rule.rules_of_the_game.filter(e => {
         return e.game_level == level;
@@ -121,10 +121,17 @@ export default {
       this.rule = this.$getGameInfo("rule");
 
       this.page = this.currentPage !== "flashPocker" ? "first" : "second";
-      if (this.currentPage === "flashPocker" || this.currentPage === "fastPocker" || this.currentPage === "marathonPocker") {
+      if (
+        this.currentPage === "flashPocker" ||
+        this.currentPage === "fastPocker" ||
+        this.currentPage === "marathonPocker"
+      ) {
         this.gameType = "pocker";
       } else {
         this.gameType = "other";
+      }
+      if (type === "playAgain") {
+        this.show = false;
       }
       this.activeNum = 4;
     },
@@ -133,8 +140,14 @@ export default {
       if (this.currentPage === "flashPocker") {
         this.$store.commit("setMemoryTime", this.activeTime);
         this.$store.commit("setPockerNumber", this.activeNum);
-      } else if (this.currentPage === "marathonPocker" || this.currentPage === "fastPocker") {
-        this.$store.commit("setPockerNumber", this.activeNum === "All" ? 52 : this.activeNum);
+      } else if (
+        this.currentPage === "marathonPocker" ||
+        this.currentPage === "fastPocker"
+      ) {
+        this.$store.commit(
+          "setPockerNumber",
+          this.activeNum === "All" ? 52 : this.activeNum
+        );
       }
       this.getGameList();
     },

@@ -61,9 +61,9 @@
             down: showShowTypePannel,
             up: !showShowTypePannel
           }">
-          <div class="pannel-title" style="font-size:24px;line-height:80px">显示方式</div>
+          <div class="pannel-title" style="font-size:24px;height:50px;line-height:50px">显示方式</div>
           <template v-if="showShowType && gameName !== '二进制数字'">
-            <div>
+            <div style="height:calc(100% - 50px);overflow-y:auto">
               <p v-for="(item, index) in pannelContent" :key="index" @click.stop="group(item, index)" :class="{
                   active: item == (pockerNumber === 52 ? 'All' : pockerNumber)
                 }">
@@ -164,6 +164,10 @@ export default {
     showMyAnswer: {
       type: Boolean,
       default: false
+    },
+    canplay: {
+      type: Boolean,
+      default: false
     }
   },
   onUnload: function() {
@@ -227,8 +231,14 @@ export default {
       shouwOperationTips: false,
       showType: "显示方式",
       gameName: "",
-      showPrevPage: false
+      showPrevPage: false,
+      canPlay: false
     };
+  },
+  watch: {
+    canplay: function() {
+      this.playInterval(this.time);
+    }
   },
   methods: {
     //倒计时定时器
@@ -244,6 +254,12 @@ export default {
         time = this.$getGameInfo("answerTime");
       }
       this.getTime(time);
+      this.time = time;
+      if (this.gameName !== "听记数字") {
+        this.playInterval(time);
+      }
+    },
+    playInterval: function(time) {
       this.timer = setInterval(() => {
         time--;
         if (time === 0) {
@@ -393,7 +409,7 @@ p {
   z-index: 10001;
   bottom: tovmin(-1000);
   text-align: center;
-  // height: 100%;
+  height: 100%;
 }
 .pannel p:first-child {
   height: 35px;

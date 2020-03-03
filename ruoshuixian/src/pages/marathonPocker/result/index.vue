@@ -36,6 +36,7 @@ export default {
     this.correct_result = this.$store.state.result.correct_result;
     this.user_result = this.$store.state.result.right_and_wrong_results;
     this.pockerNumber = this.$store.state.pockerNumber;
+    this.pages = [];
     for (var i = 1; i <= this.correct_result.length; i++) {
       this.pages.push({
         number: i,
@@ -98,8 +99,8 @@ export default {
       this.user_result[currentIndex].forEach((e, _index) => {
         e.trueResult = false;
         if (
-          e.index === this.correct_result[_index].index &&
-          e.color === this.correct_result[_index].color
+          e.index === this.correct_result[currentIndex][_index].index &&
+          e.color === this.correct_result[currentIndex][_index].color
         ) {
           e.trueResult = true;
         }

@@ -1,6 +1,6 @@
 <template>
   <div class="contanier">
-    <GameTitle :showIntervalTime='true' ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
+    <GameTitle :canplay="canPlay" :showIntervalTime="true" ref="title" :showFinishMemoryBtn="true" @finishMemary="finishMemary"></GameTitle>
     <div v-if="!canPlay">
       <p class="info">正在加载音频文件...</p>
     </div>
@@ -17,7 +17,7 @@
           <p class="text" v-else>播放暂停</p>
         </div>
       </template>
-      <div class="interval" v-else>{{number}}秒</div>
+      <div class="interval" v-else>{{ number }}秒</div>
     </template>
   </div>
 </template>
@@ -85,7 +85,7 @@ export default {
         content: this.numberList.join(","),
         success: function(res) {
           console.log("succ tts", res.filename);
-          that.canPlay = true;
+          that.innerAudioContext.src = res.filename;
           //记忆前的倒计时
           that.interval = setInterval(() => {
             that.number--;
@@ -93,10 +93,10 @@ export default {
               that.showInterval = false;
               that.isPlay = true;
               that.innerAudioContext.play();
+              that.canPlay = true;
               clearInterval(that.interval);
             }
           }, 1000);
-          that.innerAudioContext.src = res.filename;
         },
         fail: function(res) {
           console.log("fail tts", res);

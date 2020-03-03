@@ -170,9 +170,9 @@ page {
 }
 
 .list {
-  margin-top: tovmin(200);
   margin-left: tovmin(180);
   margin-top: tovmin(180);
+  margin-bottom: 24vmin;
 }
 
 .row {

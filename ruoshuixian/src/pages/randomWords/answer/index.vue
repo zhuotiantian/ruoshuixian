@@ -142,7 +142,8 @@ export default {
   justify-content: center;
   align-items: center;
   color: $grey-text;
-  margin: tovmin(120) tovmin(30) tovmin(30) tovmin(30);
+  margin: 16vmin 4vmin 6vmin 4vmin;
+  padding-bottom: 15px;
 }
 .item-list {
   display: grid;

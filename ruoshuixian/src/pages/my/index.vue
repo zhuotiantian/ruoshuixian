@@ -90,6 +90,11 @@ export default {
       code: null
     };
   },
+  mounted() {
+    wx.setNavigationBarTitle({
+      title: "若水轩"
+    });
+  },
   onShareAppMessage: function(res) {
     let path = "pages/firstPage/main?id=" + this.userid;
     return {

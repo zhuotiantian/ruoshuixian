@@ -1,68 +1,10 @@
 {
-  "pages": [
-    "pages/firstPage/main",
-    "pages/gameIndex/main",
-    "pages/recall/main",
-    "pages/numberResult/main",
-    "pages/numberAnswer/main",
-    "pages/auth/main",
-    "pages/my/main",
-    "pages/my/hongbao/getCash/main",
-    "pages/my/record/main",
-    "pages/my/message/main",
-    "pages/my/ranking/main",
-    "pages/my/hongbao/main",
-
-    "pages/record/main",
-    "pages/record/details/main",
-    "pages/ranking/main",
-    "pages/hongbao/main",
-
-    "pages/history/main",
-    "pages/help/main",
-
-    "pages/abstractPic/memary/main",
-    "pages/abstractPic/result/main",
-    "pages/abstractPic/answer/main",
-
-    "pages/peoplePic/memary/main",
-    "pages/peoplePic/result/main",
-    "pages/peoplePic/answer/main",
-
-    "pages/randomWords/memary/main",
-    "pages/randomWords/result/main",
-    "pages/randomWords/answer/main",
-
-    "pages/fastNumber/memary/main",
-
-    "pages/virtualEvents/result/main",
-    "pages/virtualEvents/answer/main",
-    "pages/virtualEvents/memary/main",
-
-    "pages/binaryNumber/memary/main",
-
-    "pages/listenAndRemember/memary/main",
-
-    "pages/flashPocker/answer/main",
-    "pages/flashPocker/memary/main",
-    "pages/flashPocker/result/main",
-
-    "pages/fastPocker/memary/main",
-    "pages/fastPocker/result/main",
-    "pages/fastPocker/answer/main",
-
-    "pages/marathonPocker/memary/main",
-    "pages/marathonPocker/answer/main",
-    "pages/marathonPocker/result/main",
-
-    "pages/marathonNumber/memary/main"
-  ],
+  "pages": ["pages/firstPage/main", "pages/gameIndex/main", "pages/recall/main", "pages/numberResult/main", "pages/numberAnswer/main", "pages/auth/main", "pages/my/main", "pages/my/hongbao/getCash/main", "pages/my/record/main", "pages/my/message/main", "pages/my/ranking/main", "pages/my/hongbao/main", "pages/record/main", "pages/record/details/main", "pages/ranking/main", "pages/hongbao/main", "pages/history/main", "pages/help/main", "pages/abstractPic/memary/main", "pages/abstractPic/result/main", "pages/abstractPic/answer/main", "pages/peoplePic/memary/main", "pages/peoplePic/result/main", "pages/peoplePic/answer/main", "pages/randomWords/memary/main", "pages/randomWords/result/main", "pages/randomWords/answer/main", "pages/fastNumber/memary/main", "pages/virtualEvents/result/main", "pages/virtualEvents/answer/main", "pages/virtualEvents/memary/main", "pages/binaryNumber/memary/main", "pages/listenAndRemember/memary/main", "pages/flashPocker/answer/main", "pages/flashPocker/memary/main", "pages/flashPocker/result/main", "pages/fastPocker/memary/main", "pages/fastPocker/result/main", "pages/fastPocker/answer/main", "pages/marathonPocker/memary/main", "pages/marathonPocker/answer/main", "pages/marathonPocker/result/main", "pages/marathonNumber/memary/main"],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#173771",
-    "navigationBarTitleText": "若水轩",
     "navigationBarTextStyle": "white",
-    "enablePullDownRefresh": true
+    "enablePullDownRefresh": false
   },
   "permission": {
     "scope.userLocation": {

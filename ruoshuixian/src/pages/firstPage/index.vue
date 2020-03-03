@@ -67,70 +67,74 @@ export default {
   components: {
     CardFooter
   },
-  onShow () {
+  onShow() {
     wx.hideTabBar();
     this.getIndexData();
     let that = this;
-    let userInfo = this.$store.state.userInfo
-    !userInfo && wx.login({
-      success: function (res) {
-        that.$http.post({
-          url: "/api/wxapp.user/login",
-          data: {
-            code: res.code,
-            type: "user"
-          }
-        }).then(result => {
-          if (typeof result.data.userInfo !== 'object' || !result.data) {
-
-          } else {
-            that.$store.commit("setUserInfo", result.data.userInfo);
-            that.userInfo = result.data.userInfo;
-            that.token = result.data.userInfo.token;
-            that.userid = result.data.userInfo.id;
-            that.getRedPocket();
-
-            that.$http.post({
-              url: "/api/wxapp.user/sweepCode",
+    let userInfo = this.$store.state.userInfo;
+    !userInfo &&
+      wx.login({
+        success: function(res) {
+          that.$http
+            .post({
+              url: "/api/wxapp.user/login",
               data: {
-                id: that.user_id,
-                group_id: that.user_id,
-                school_id: that.school_id
-              },
-              header: {
-                token: that.token
+                code: res.code,
+                type: "user"
               }
-            }).then(res => {
-              // wx.showToast({
-              //   title: "扫码接口参数：user_id:" + that.user_id + "  group_id:" + that.group_id + "  school_id:" + that.school_id,
-              //   icon: "none"
-              // });
             })
-          }
-        })
-      }
-    })
+            .then(result => {
+              if (typeof result.data.userInfo !== "object" || !result.data) {
+              } else {
+                that.$store.commit("setUserInfo", result.data.userInfo);
+                that.userInfo = result.data.userInfo;
+                that.token = result.data.userInfo.token;
+                that.userid = result.data.userInfo.id;
+                that.getRedPocket();
+
+                that.$http
+                  .post({
+                    url: "/api/wxapp.user/sweepCode",
+                    data: {
+                      id: that.user_id,
+                      group_id: that.user_id,
+                      school_id: that.school_id
+                    },
+                    header: {
+                      token: that.token
+                    }
+                  })
+                  .then(res => {
+                    // wx.showToast({
+                    //   title: "扫码接口参数：user_id:" + that.user_id + "  group_id:" + that.group_id + "  school_id:" + that.school_id,
+                    //   icon: "none"
+                    // });
+                  });
+              }
+            });
+        }
+      });
   },
-  onLoad (options) {
+  onLoad(options) {
     Object.assign(this.$data, this.$options.data());
     if (options.id) this.inviter_id = options.id;
     if (options.user_id) this.user_id = options.user_id;
     if (options.group_id) this.group_id = options.group_id;
     if (options.school_id) this.school_id = options.school_id;
   },
-  onShareAppMessage: function (res) {
+  onShareAppMessage: function(res) {
     return {
       path: "/pages/firstPage/main?id=" + this.userid,
       title: "11种脑力游戏，一起来玩吧！",
-      success: function () {
+      success: function() {
         console.log("分享成功");
       },
-      error: function () {
+      error: function() {
         console.log("分享失败");
       }
     };
   },
-  data () {
+  data() {
     return {
       games: [],
       domain: this.$http.domain,
@@ -149,24 +153,29 @@ export default {
       details: "",
       user_id: null,
       group_id: null,
-      school_id: null,
+      school_id: null
     };
   },
+  mounted() {
+    wx.setNavigationBarTitle({
+      title: "若水轩"
+    });
+  },
   methods: {
-    showDetails: function (item) {
+    showDetails: function(item) {
       this.showDetailsFog = true;
       this.details = item.description;
     },
-    hideFog: function () {
+    hideFog: function() {
       this.showFog = false;
     },
-    hideFog1: function () {
+    hideFog1: function() {
       this.showFog1 = false;
     },
-    showRedPocket: function () {
+    showRedPocket: function() {
       this.showFog = true;
     },
-    getIndexData: function () {
+    getIndexData: function() {
       this.$http
         .get({
           url: "/api/wxapp.index/index",
@@ -186,9 +195,25 @@ export default {
             ["记忆人名头像，越多越好", "作答时将人名和头像正确搭配"],
             ["记忆抽象图形，越多越好", "作答时将每行正确次序标注出来"],
             ["按照播放数字顺序记忆并作答所听数字", "记得越多越好"],
-            ["记忆虚拟事件和日期，越多越好", "作答时将所记日期输入到所记历史事件前"]
+            [
+              "记忆虚拟事件和日期，越多越好",
+              "作答时将所记日期输入到所记历史事件前"
+            ]
           ];
-          let answerTime = [0, 300, 7200, 1800, 900, 7200, 1800, 1800, 1800, 1800, 300, 900];
+          let answerTime = [
+            0,
+            300,
+            7200,
+            1800,
+            900,
+            7200,
+            1800,
+            1800,
+            1800,
+            1800,
+            300,
+            900
+          ];
           result.data.game_list.forEach((e, index) => {
             e.rule = rules[index];
             e.answerTime = answerTime[index];
@@ -198,74 +223,88 @@ export default {
           this.imgUrls = result.data.rotary_planting_map;
         });
     },
-    toGame: function (item) {
+    toGame: function(item) {
       if (this.userInfo) {
         this.$toGame(item.id, item.wxapp_url);
       } else {
         let that = this;
         wx.login({
-          success: function (res) {
-            that.$http.post({
-              url: "/api/wxapp.user/login",
-              data: {
-                code: res.code,
-                type: "user"
-              }
-            }).then(result => {
-              if (typeof result.data.userInfo !== 'object' || !result.data) {
-                wx.showToast({
-                  title: result.msg,
-                  icon: "none"
-                });
-                wx.navigateTo({
-                  url: "/pages/auth/main?inviterid=" + that.inviter_id + "&user_id=" + that.user_id + "&school_id=" + that.school_id + "&group_id=" + that.group_id
-                })
-              } else {
-                that.$store.commit("setUserInfo", result.data.userInfo);
-                that.$toGame(item.id, item.wxapp_url);
-              }
-            })
+          success: function(res) {
+            that.$http
+              .post({
+                url: "/api/wxapp.user/login",
+                data: {
+                  code: res.code,
+                  type: "user"
+                }
+              })
+              .then(result => {
+                if (typeof result.data.userInfo !== "object" || !result.data) {
+                  wx.showToast({
+                    title: result.msg,
+                    icon: "none"
+                  });
+                  wx.navigateTo({
+                    url:
+                      "/pages/auth/main?inviterid=" +
+                      that.inviter_id +
+                      "&user_id=" +
+                      that.user_id +
+                      "&school_id=" +
+                      that.school_id +
+                      "&group_id=" +
+                      that.group_id
+                  });
+                } else {
+                  that.$store.commit("setUserInfo", result.data.userInfo);
+                  that.$toGame(item.id, item.wxapp_url);
+                }
+              });
           }
-        })
-
+        });
       }
     },
-    toRanking: function () {
+    toRanking: function() {
       let url = "../ranking/main";
       wx.navigateTo({
         url
       });
     },
-    getRedPocket: function () {
-      this.$http.get({
-        url: "/api/wxapp.red_envelopes/getRegisterToShareRedEnvelopes",
-        header: {
-          token: this.token
-        }
-      }).then(result => {
-        this.red_envelopes = result.data.red_envelopes;
-        this.registPocket = result.data.red_envelopes.filter(e => {
-          return e.name == '注册'
-        });
-        this.sharePocket = result.data.red_envelopes.filter(e => {
-          return e.name !== '注册'
-        });
+    getRedPocket: function() {
+      this.$http
+        .get({
+          url: "/api/wxapp.red_envelopes/getRegisterToShareRedEnvelopes",
+          header: {
+            token: this.token
+          }
+        })
+        .then(result => {
+          this.red_envelopes = result.data.red_envelopes;
+          this.registPocket = result.data.red_envelopes.filter(e => {
+            return e.name == "注册";
+          });
+          this.sharePocket = result.data.red_envelopes.filter(e => {
+            return e.name !== "注册";
+          });
 
-        if (this.registPocket.length > 0) {
-          this.showFog = true;
-          this.$store.commit("setIsNew", true);
-        };
-        if (this.sharePocket.length > 0) {
-          this.showFog1 = true;
-        };
-      })
+          if (this.registPocket.length > 0) {
+            this.showFog = true;
+            this.$store.commit("setIsNew", true);
+          }
+          if (this.sharePocket.length > 0) {
+            this.showFog1 = true;
+          }
+        });
     },
-    toGetRedPocket: function (type) {
+    toGetRedPocket: function(type) {
       this.$http
         .post({
           url: "/api/wxapp.red_envelopes/getARedEnvelope",
           data: {
-            red_envelopes_id: type == 'regist' ? this.registPocket[0].id : this.sharePocket[0].id,
+            red_envelopes_id:
+              type == "regist"
+                ? this.registPocket[0].id
+                : this.sharePocket[0].id,
             game_classification_id: 0
           },
           header: {
@@ -286,40 +325,43 @@ export default {
         });
     }
   },
-  toRanking: function () {
+  toRanking: function() {
     let url = "../ranking/main";
     wx.navigateTo({
       url
     });
   },
-  getRedPocket: function () {
-    this.$http.get({
-      url: "/api/wxapp.red_envelopes/getRegisterToShareRedEnvelopes",
-      header: {
-        token: this.token
-      }
-    }).then(result => {
-      this.red_envelopes = result.data.red_envelopes;
-      this.registPocket = result.data.red_envelopes.filter(e => {
-        return e.name == '注册'
+  getRedPocket: function() {
+    this.$http
+      .get({
+        url: "/api/wxapp.red_envelopes/getRegisterToShareRedEnvelopes",
+        header: {
+          token: this.token
+        }
+      })
+      .then(result => {
+        this.red_envelopes = result.data.red_envelopes;
+        this.registPocket = result.data.red_envelopes.filter(e => {
+          return e.name == "注册";
+        });
+        this.sharePocket = result.data.red_envelopes.filter(e => {
+          return e.name !== "注册";
+        });
+        if (this.registPocket.length > 0) {
+          this.showFog = true;
+        }
+        if (this.sharePocket.length > 0) {
+          this.showFog1 = true;
+        }
       });
-      this.sharePocket = result.data.red_envelopes.filter(e => {
-        return e.name !== '注册'
-      });
-      if (this.registPocket.length > 0) {
-        this.showFog = true;
-      };
-      if (this.sharePocket.length > 0) {
-        this.showFog1 = true;
-      };
-    })
   },
-  toGetRedPocket: function (type) {
+  toGetRedPocket: function(type) {
     this.$http
       .post({
         url: "/api/wxapp.red_envelopes/getARedEnvelope",
         data: {
-          red_envelopes_id: type == 'regist' ? this.registPocket[0].id : this.sharePocket[0].id,
+          red_envelopes_id:
+            type == "regist" ? this.registPocket[0].id : this.sharePocket[0].id,
           game_classification_id: 0
         },
         header: {
@@ -339,7 +381,7 @@ export default {
         }
       });
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .content {
